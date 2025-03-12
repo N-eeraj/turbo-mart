@@ -1,6 +1,6 @@
 {
-  "name": "e-commerce-ui",
-  "version": "0.1.0",
+  "name": "store-ui",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "PORT=4000 next dev --turbopack",
@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@turbo-mart/utils": "*",
+    "@turbo-mart/schema-types": "*",
     "next": "15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@turbo-mart/schema-types": "*",
     "@tailwindcss/postcss": "^4.0.13",
     "@types/node": "^20",
     "@types/react": "^19",

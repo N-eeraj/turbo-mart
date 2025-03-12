@@ -1,0 +1,17 @@
+{
+  "name": "catalogue-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch app.ts",
+    "build": "echo 'No build step defined for Node.js apps'"
+  },
+  "dependencies": {
+    "@turbo-mart/schema-types": "*",
+    "@turbo-mart/utils": "*",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0"
+  }
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { test } from "@turbo-mart/utils/index"
 import "./globals.css"
+import { test } from "@turbo-mart/utils/test"
 
 export const metadata: Metadata = {
   title: "Create Next App",
