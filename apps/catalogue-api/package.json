@@ -11,6 +11,7 @@
   },
   "imports": {
     "#src/*": "./src/*.ts",
-    "#routes/*": "./src/routes/*.ts"
+    "#routes/*": "./src/routes/*.ts",
+    "#utils/*": "./src/utils/*.ts"
   }
 }

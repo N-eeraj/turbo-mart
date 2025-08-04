@@ -1,0 +1,30 @@
+body {
+  display: flex;
+  justify-content: center;
+  height: 100svh;
+  background-color: var(--mine-shaft);
+  padding: 32px;
+
+  .status-code, .text-message {
+    height: 28px;
+    color: var(--goblin);
+    font-size: 20px;
+    font-weight: 400;
+    align-content: center;
+  }
+
+  .status-code {
+    padding-right: 16px;
+    border-right: 0.75px solid var(--mantis);
+  }
+
+  .text-message {
+    padding-left: 16px;
+    border-left: 0.75px solid var(--mantis);
+    text-transform: uppercase;
+  }
+
+  @media screen and (orientation: landscape) {
+    align-items: center;
+  }
+}

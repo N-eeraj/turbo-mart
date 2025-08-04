@@ -1,20 +1,13 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: ui-sans-serif, system-ui, "system-ui", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  box-sizing: border-box;
 }
 
 :root {
-  --background: #333333;
-  --foreground: #6cc24a;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100svh;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-size: clamp(20px, 3vw, 36px);
+  --everglade: #215732;
+  --mantis: #6cc24a;
+  --goblin: #44883e;
+  --mine-shaft: #333333;
 }
