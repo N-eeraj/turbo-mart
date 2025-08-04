@@ -1,8 +1,0 @@
-{
-  "name": "@turbo-mart/utils",
-  "version": "1.0.0",
-  "private": true,
-  "exports": {
-    "./*": "./*.ts"
-  }
-}

@@ -1,3 +1,3 @@
 # Catalogue UI
 
-Build using Nuxt.js
+To be build using Nuxt.js

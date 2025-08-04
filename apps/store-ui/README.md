@@ -1,3 +1,3 @@
 # Store UI
 
-Build using Next.js
+To be build using Next.js

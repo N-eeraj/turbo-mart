@@ -1,3 +1,3 @@
-# Catalogue UI
+# Catalogue API
 
-Build using Express.js
+To be build using Express.js

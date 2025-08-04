@@ -1,17 +1,16 @@
 {
   "name": "catalogue-api",
   "version": "1.0.0",
+  "description": "Catalogue API build using Express.js",
+  "license": "ISC",
+  "author": "N-eeraj",
   "type": "module",
+  "main": "app.ts",
   "scripts": {
-    "dev": "node --watch app.ts",
-    "build": "echo 'No build step defined for Node.js apps'"
+    "dev": "node --watch --env-file=.env src/app.ts"
   },
-  "dependencies": {
-    "@turbo-mart/schema-types": "*",
-    "@turbo-mart/utils": "*",
-    "express": "^4.21.2"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.0"
+  "imports": {
+    "#src/*": "./src/*.ts",
+    "#routes/*": "./src/routes/*.ts"
   }
 }

@@ -2,4 +2,4 @@
 
 E-commerce monorepo using [Turborepo](https://turbo.build/)
 
-> Requires node.js v23+
+> Requires node.js v24+
