@@ -8,6 +8,9 @@ import router from "#routes/index"
 
 const app = express()
 app.use(express.static(PUBLIC_PATH))
+app.use(express.urlencoded({
+  extended: true,
+}))
 app.use(router)
 
 app.listen(PORT, () => {
