@@ -1,10 +1,12 @@
 {
-  "name": "nuxt-app",
+  "name": "catalogue-ui",
+  "version": "1.0.0",
+  "description": "Catalogue UI build using Nuxt.js",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host --port=3001",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
