@@ -7,12 +7,14 @@
   "type": "module",
   "main": "app.ts",
   "scripts": {
-    "dev": "node --watch --env-file=.env src/app.ts"
+    "dev": "node --watch --env-file=.env src/app.ts",
+    "command": "node --env-file=.env src/commands/index.ts"
   },
   "imports": {
     "#src/*": "./src/*.ts",
     "#routes/*": "./src/routes/*.ts",
-    "#utils/*": "./src/utils/*.ts"
+    "#utils/*": "./src/utils/*.ts",
+    "#commands/*": "./src/commands/*.ts"
   },
   "dependencies": {
     "morgan": "^1.10.1"
