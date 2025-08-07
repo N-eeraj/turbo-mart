@@ -4,10 +4,11 @@ import apiRoutes from "#routes/api/index"
 import {
   withPublicPath,
 } from "#utils/pathUtils"
+import corsMiddleware from "#middlewares/cors"
 
 const router = express.Router()
 
-router.use("/api", apiRoutes)
+router.use("/api", corsMiddleware, apiRoutes)
 
 router.get("/", (_req, res) => {
   res.sendFile(withPublicPath("html/index.html"))

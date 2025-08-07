@@ -6,8 +6,8 @@ import {
   PUBLIC_PATH,
 } from "#src/config/server"
 import router from "#routes/index"
-import logger from "#src/logger"
-import rateLimiter from "#src/rateLimiter"
+import logger from "#middlewares/logger"
+import rateLimiter from "#middlewares/rateLimiter"
 
 const app = express()
 
