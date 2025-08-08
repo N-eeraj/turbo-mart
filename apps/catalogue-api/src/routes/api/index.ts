@@ -1,19 +1,23 @@
 import express from "express"
 
+import {
+  sendErrorResponse,
+  sendSuccessResponse,
+} from "#src/utils/response"
+
 const apiRouter = express.Router()
 
 apiRouter.get("/ping", (_req, res) => {
-  res.send({
-    success: true,
-    message: "pong",
+  sendSuccessResponse(res, {
+    data: "pong",
+    message: "Reached Server",
   })
 })
 
 apiRouter.use((_req, res) => {
-  res.statusCode = 404
-  res.send({
-    error: "Not Found",
-    success: false,
+  sendErrorResponse(res, {
+    status: 404,
+    errors: "Not Found",
     message: "Cannot find the URL",
   })
 })
