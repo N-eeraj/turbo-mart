@@ -11,11 +11,12 @@
     "command": "node --env-file=.env src/commands/index.ts"
   },
   "imports": {
-    "#src/*": "./src/*.ts",
     "#routes/*": "./src/routes/*.ts",
-    "#utils/*": "./src/utils/*.ts",
     "#middlewares/*": "./src/middlewares/*.ts",
-    "#commands/*": "./src/commands/*.ts"
+    "#controllers/*": "./src/controllers/*.ts",
+    "#utils/*": "./src/utils/*.ts",
+    "#commands/*": "./src/commands/*.ts",
+    "#src/*": "./src/*.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
