@@ -1,8 +1,14 @@
 import rateLimit from "express-rate-limit"
 
+/**
+ * Express middleware to rate limit incoming requests and mitigate basic DDoS attacks.
+ * 
+ * Allows up to 60 requests per minute per IP.
+ * Responds with HTTP 429 if the limit is exceeded.
+ */
 const rateLimiter = rateLimit({
   windowMs: 60_000, // 1 minute
-  max: 60, // limit to 60 minutes per minute
+  max: 60, // limit to 60 requests per minute
   standardHeaders: true,
   legacyHeaders: false, 
   handler: (_req, res) => {
