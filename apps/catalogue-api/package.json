@@ -16,17 +16,23 @@
     "#controllers/*": "./src/controllers/*.ts",
     "#utils/*": "./src/utils/*.ts",
     "#commands/*": "./src/commands/*.ts",
-    "#src/*": "./src/*.ts"
+    "#src/*": "./src/*.ts",
+    "#app/*": "./*"
   },
   "dependencies": {
+    "express": "^5.1.0",
     "cors": "^2.8.5",
     "express-rate-limit": "^8.0.1",
     "helmet": "^8.1.0",
     "mongoose": "^8.17.1",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/morgan": "^1.9.10"
+    "@types/morgan": "^1.9.10",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8"
   }
 }

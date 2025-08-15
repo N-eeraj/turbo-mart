@@ -1,6 +1,7 @@
 import express from "express"
 
 import apiRoutes from "#routes/api/index"
+import docRoutes from "#routes/docs"
 import StaticController from "#controllers/StaticController"
 
 /**
@@ -12,6 +13,7 @@ import StaticController from "#controllers/StaticController"
 const router = express.Router()
 
 router.use("/api", apiRoutes)
+router.use(docRoutes)
 router.get("/", StaticController.getHome)
 router.use(StaticController.handlePageNotFound)
 
