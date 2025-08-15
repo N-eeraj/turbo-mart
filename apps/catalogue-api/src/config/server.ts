@@ -1,5 +1,7 @@
 import path from "path"
-import { fileURLToPath } from "url"
+import {
+  fileURLToPath,
+} from "url"
 
 // server port configuration
 export const PORT = Number(process.env.PORT)

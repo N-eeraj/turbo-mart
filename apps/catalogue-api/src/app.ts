@@ -5,6 +5,7 @@ import {
   PORT,
   PUBLIC_PATH,
 } from "#src/config/server"
+import connectMongoDB from "#src/config/database"
 import router from "#routes/index"
 import logger from "#middlewares/logger"
 import rateLimiter from "#middlewares/rateLimiter"
@@ -21,7 +22,8 @@ app.use(rateLimiter)
 app.use(logger)
 app.use(router)
 
-
-app.listen(PORT, () => {
-  console.log(`Running on port: ${PORT}`)
+connectMongoDB(() => {
+  app.listen(PORT, () => {
+    console.log(`Running on port: ${PORT}`)
+  })
 })
