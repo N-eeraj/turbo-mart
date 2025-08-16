@@ -1,13 +1,17 @@
 import fs from "fs"
 
+import User from "#models/User"
 import {
   withStoragePath,
 } from "#utils/pathUtils"
+import connectMongoDB from "#src/config/database"
 
 const LOG_PATH = withStoragePath("logs")
 
 /**
- * Class to handle setup tasks, such as ensuring the necessary directories exist.
+ * Setup class to perform initial application setup tasks,
+ * such as ensuring required directories exist and
+ * creating a super admin user if missing.
  */
 export default class Setup {
   /**
@@ -31,10 +35,45 @@ export default class Setup {
   }
 
   /**
-   * Executes the setup by ensuring the required directories exist.
-   * In this case, it ensures the `LOG_PATH` directory exists.
+   * Ensures a super admin exists; creates one using env vars if missing.
+   * Connects to MongoDB, checks by email, and inserts if not found.
+   */
+  private static createSuperAdmin() {
+    connectMongoDB(async (connection) => {
+      try {
+        if (!connection.db) {
+          throw new Error("Database not found")
+        }
+        const superAdmin = await User.findOne({
+          email: process.env.SUPER_ADMIN_EMAIL,
+        })
+        if (superAdmin) {
+          console.log("Super Admin already exists")
+        } else {
+          const superAdmin = new User({
+            name: process.env.SUPER_ADMIN_NAME,
+            email: process.env.SUPER_ADMIN_EMAIL,
+            role: "SUPER_ADMIN",
+            password: process.env.SUPER_ADMIN_PASSWORD,
+          })
+          await superAdmin.save()
+          console.log("Created Super Admin!")
+        }
+      } catch (error) {
+        console.error("Failed to create super admin", error)
+      } finally {
+        connection.close()
+      }
+    })
+  }
+
+  /**
+   * Runs all setup tasks:
+   * - Ensures required directories (e.g., logs) exist.
+   * - Ensures a super admin user exists in the database.
    */
   static execute(): void {
     this.ensureDirectory(LOG_PATH)
+    this.createSuperAdmin()
   }
 }

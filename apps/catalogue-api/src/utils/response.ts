@@ -8,7 +8,7 @@ interface BaseResponse {
 }
 
 export interface SuccessResponse extends BaseResponse {
-  data: any
+  data?: any
 }
 
 export interface ErrorResponse extends BaseResponse {
