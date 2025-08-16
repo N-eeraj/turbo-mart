@@ -7,7 +7,9 @@ import {
 } from "#src/config/server"
 import connectMongoDB from "#src/config/database"
 import router from "#routes/index"
-import logger from "#middlewares/logger"
+import {
+  httpLogger,
+} from "#middlewares/logger"
 import rateLimiter from "#middlewares/rateLimiter"
 
 const app = express()
@@ -20,7 +22,7 @@ app.use(express.json())
 app.use(helmet())
 
 app.use(rateLimiter)
-app.use(logger)
+app.use(httpLogger)
 app.use(router)
 
 connectMongoDB(() => {
