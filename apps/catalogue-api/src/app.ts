@@ -7,10 +7,8 @@ import {
 } from "#src/config/server"
 import connectMongoDB from "#src/config/database"
 import router from "#routes/index"
-import {
-  httpLogger,
-} from "#middlewares/logger"
 import rateLimiter from "#middlewares/rateLimiter"
+import httpLogger from "#middlewares/logger"
 
 const app = express()
 

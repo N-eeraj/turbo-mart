@@ -3,30 +3,28 @@ import {
   type Response,
 } from "express"
 
-import {
-  withPublicPath,
-} from "#utils/pathUtils"
+import BaseController from "#controllers/BaseController"
 
 /**
  * Controller for serving static HTML pages.
  */
-export default class StaticController {
+export default class StaticController extends BaseController {
   /**
-   * Serves the home page (`index.html`).
-   *
    * @route GET /
+   *
+   * Serves the home page (`index.html`).
    */
   static getHome(_req: Request, res: Response) {
-    res.sendFile(withPublicPath("html/index.html"))
+    super.sendPublicFile(res, "html/index.html")
   }
 
   /**
-   * Serves the 404 Not Found page (`404.html`).
-   *
    * @route ALL * (when no other route matches)
+   *
+   * Serves the 404 Not Found page (`404.html`).
    */
   static handlePageNotFound(_req: Request, res: Response) {
     res.statusCode = 404
-    res.sendFile(withPublicPath("html/404.html"))
+    super.sendPublicFile(res, "html/404.html")
   }
 }

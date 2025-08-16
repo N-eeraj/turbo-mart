@@ -11,3 +11,8 @@
   --goblin: #44883e;
   --mine-shaft: #333333;
 }
+
+::selection {
+  background-color: rgb(from var(--everglade) r g b / 50%);
+  color: var(--mantis);
+}

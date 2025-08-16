@@ -7,11 +7,11 @@ interface BaseResponse {
   message?: string
 }
 
-interface SuccessResponse extends BaseResponse {
+export interface SuccessResponse extends BaseResponse {
   data: any
 }
 
-interface ErrorResponse extends BaseResponse {
+export interface ErrorResponse extends BaseResponse {
   errors: any
 }
 

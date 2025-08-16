@@ -3,34 +3,31 @@ import {
   type Response,
 } from "express"
 
-import {
-  sendErrorResponse,
-  sendSuccessResponse,
-} from "#src/utils/response"
+import BaseController from "#controllers/BaseController"
 
 /**
  * Controller for general, non-domain-specific API routes.
  */
-export default class GeneralController {
+export default class GeneralController extends BaseController {
   /**
-   * Health check endpoint to verify server status.
-   *
    * @route GET /api/ping
+   *
+   * Health check endpoint to verify server status.
    */
   static ping(_req: Request, res: Response) {
-    sendSuccessResponse(res, {
+    super.sendSuccess(res, {
       data: "pong",
       message: "Reached Server",
     })
   }
 
   /**
-   * Handles unmatched API routes and returns a 404 error response.
-   *
    * @route ALL /api/*
+   *
+   * Handles unmatched API routes and returns a 404 error response.
    */
   static handleRouteNotFound(_req: Request, res: Response) {
-    sendErrorResponse(res, {
+    super.sendError(res, {
       status: 404,
       errors: "Not Found",
       message: "Cannot find the URL",

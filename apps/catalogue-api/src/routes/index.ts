@@ -7,7 +7,7 @@ import StaticController from "#controllers/StaticController"
 /**
  * Root application router.
  *
- * Combines and mounts all API and web routes.
+ * Combines and mounts all API, docs and web routes.
  * Used as the base router in `src/app.ts` via `app.use(router)`.
  */
 const router = express.Router()

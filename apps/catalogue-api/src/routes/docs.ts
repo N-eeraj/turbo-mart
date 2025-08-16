@@ -15,14 +15,14 @@ import {
 const docRouter = express.Router()
 
 /**
- * GET /docs/file.json
+ * @route GET /docs/file.json
  * 
  * Returns the OpenAPI specification in JSON format.
  */
 docRouter.get("/docs.json", documentationJSON)
 
 /**
- * GET /docs
+ * @route GET /docs
  * 
  * Serves the Swagger UI documentation page.
  */
