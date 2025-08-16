@@ -1,6 +1,7 @@
 import express from "express"
 
 import corsMiddleware from "#middlewares/cors"
+import authRouter from "#routes/api/auth"
 import GeneralController from "#controllers/GeneralController"
 
 /**
@@ -13,6 +14,8 @@ const apiRouter = express.Router()
 
 // Enable CORS for all API routes
 apiRouter.use(corsMiddleware)
+
+apiRouter.use("/auth", authRouter)
 
 apiRouter.get("/ping", GeneralController.ping)
 apiRouter.use(GeneralController.handleRouteNotFound)

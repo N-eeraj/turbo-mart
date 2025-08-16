@@ -1,6 +1,9 @@
 import {
   type Response,
 } from "express"
+import {
+  type ZodObject,
+} from "zod"
 
 import {
   sendErrorResponse,
@@ -17,7 +20,7 @@ export type LogLevel = "info" | "warn" | "error" | "fatal"
 
 /**
  * BaseController class provides static utility methods for handling common 
- * operations in controllers like sending responses, logging, and sending files.
+ * operations in controllers like sending responses, validating requests, logging, and sending files.
  */
 export default class BaseController {
   /**
@@ -51,6 +54,33 @@ export default class BaseController {
    */
   static sendPublicFile(res: Response, filePath: string) {
     res.sendFile(withPublicPath(filePath))
+  }
+
+  /**
+   * Validates incoming data against a Zod schema.
+   *
+   * @param schema - A Zod object schema to validate against.
+   * @param data - The input data to validate (e.g., req.body).
+   * @returns The parsed and validated data.
+   * @throws An object with status 422 and validation field errors if validation fails.
+   */
+  static validateRequest(schema: ZodObject<Record<string, any>>, data: unknown) {
+    const {
+      data: parsedData,
+      error,
+    } = schema.safeParse(data)
+    if (error) {
+      const {
+        fieldErrors,
+      } = error.flatten()
+      throw {
+        status: 422,
+        message: "Validation Error",
+        ...fieldErrors,
+      }
+    }
+
+    return parsedData
   }
 
   /**
