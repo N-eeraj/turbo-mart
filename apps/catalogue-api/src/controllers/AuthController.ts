@@ -4,6 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
+import User from "#models/User"
 import {
   loginSchema,
 } from "#schemas/auth"
@@ -17,10 +18,18 @@ export default class AuthController extends BaseController {
    */
   static async login({ body }: Request, res: Response) {
     try {
-      const data = super.validateRequest(loginSchema, body)
+      const credentials = super.validateRequest(loginSchema, body)
+
+      const user = await User.authenticate(credentials)
+      if (!user) {
+        throw {
+          status: 401,
+        }
+      }
+      console.log(user)
+
       super.sendSuccess(res, {
         message: "Logged In Successfully",
-        data,
       })
     } catch ({ status, message, ...error}) {
       super.log(message, "error")

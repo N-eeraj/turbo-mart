@@ -11,7 +11,9 @@ import {
 import {
   withPublicPath,
 } from "#utils/pathUtils"
-import validateData from "#utils/validateData"
+import validateData, {
+  type SchemaShape,
+} from "#utils/validateData"
 import logger from "#utils/logger"
 
 export type LogLevel = "info" | "warn" | "error" | "fatal"
@@ -67,7 +69,7 @@ export default class BaseController {
    * @example
    * const data = BaseController.validateRequest(schema, req.body)
    */
-  static validateRequest(...args: Parameters<typeof validateData>) {
+  static validateRequest<T extends SchemaShape>(...args: Parameters<typeof validateData<T>>) {
     try {
       return validateData(...args)
     } catch (error) {
