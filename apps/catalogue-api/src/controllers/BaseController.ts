@@ -1,9 +1,6 @@
 import {
   type Response,
 } from "express"
-import {
-  type ZodObject,
-} from "zod"
 
 import {
   sendErrorResponse,
@@ -14,6 +11,7 @@ import {
 import {
   withPublicPath,
 } from "#utils/pathUtils"
+import validateData from "#utils/validateData"
 import logger from "#utils/logger"
 
 export type LogLevel = "info" | "warn" | "error" | "fatal"
@@ -58,29 +56,27 @@ export default class BaseController {
 
   /**
    * Validates incoming data against a Zod schema.
+   * 
+   * Wraps `validateData` to standardize validation error responses.
    *
    * @param schema - A Zod object schema to validate against.
    * @param data - The input data to validate (e.g., req.body).
    * @returns The parsed and validated data.
    * @throws An object with status 422 and validation field errors if validation fails.
+   * 
+   * @example
+   * const data = BaseController.validateRequest(schema, req.body)
    */
-  static validateRequest(schema: ZodObject<Record<string, any>>, data: unknown) {
-    const {
-      data: parsedData,
-      error,
-    } = schema.safeParse(data)
-    if (error) {
-      const {
-        fieldErrors,
-      } = error.flatten()
+  static validateRequest(...args: Parameters<typeof validateData>) {
+    try {
+      return validateData(...args)
+    } catch (error) {
       throw {
         status: 422,
         message: "Validation Error",
-        ...fieldErrors,
+        ...error,
       }
     }
-
-    return parsedData
   }
 
   /**

@@ -1,9 +1,16 @@
-import { z } from "zod"
+import {
+  z,
+} from "zod"
+
+import {
+  EMAIL,
+  PASSWORD,
+} from "#constants/validationMessages"
 
 export const loginSchema = z.object({
-  email: z.string({ message: "Please enter an email" })
-    .nonempty("Please enter an email")
-    .email("Please enter a valid email"),
-  password: z.string({ message: "Please enter a password" })
-    .nonempty("Please enter a password"),
+  email: z.string({ message: EMAIL.required })
+    .nonempty(EMAIL.required)
+    .email(EMAIL.valid),
+  password: z.string({ message: PASSWORD.required })
+    .nonempty(PASSWORD.required),
 })
