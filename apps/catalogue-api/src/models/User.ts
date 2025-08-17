@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
-type User = mongoose.InferSchemaType<typeof UserSchema>
+type User = mongoose.InferSchemaType<typeof UserSchema> & mongoose.Document
 
 interface UserModel extends mongoose.Model<User> {
   /**
@@ -11,8 +11,8 @@ interface UserModel extends mongoose.Model<User> {
    * password with the stored hashed password using bcrypt.
    *
    * @param credentials - The login credentials.
-   * - email - The user's email.
-   * - password - The user's password.
+   * - `email` - The user's email.
+   * - `password` - The user's password.
    * @returns - Returns the user document if authentication succeeds, otherwise null.
    *
    * @example
@@ -33,7 +33,7 @@ const SALT_ROUNDS = 10
 
 /**
  * Mongoose schema for admin users.
- * Includes name, unique email, hashed password, role, and timestamps.
+ * Stores name, unique email, hashed password, role, and timestamps.
  */
 const UserSchema = new mongoose.Schema({
   name: {

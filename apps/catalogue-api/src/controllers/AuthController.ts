@@ -5,6 +5,7 @@ import {
 
 import BaseController from "#controllers/BaseController"
 import User from "#models/User"
+import Token from "#models/Token"
 import {
   loginSchema,
 } from "#schemas/auth"
@@ -21,15 +22,27 @@ export default class AuthController extends BaseController {
       const credentials = super.validateRequest(loginSchema, body)
 
       const user = await User.authenticate(credentials)
+
+      // throw validation error if user is not found
       if (!user) {
         throw {
           status: 401,
+          message: "Invalid email or password",
         }
       }
-      console.log(user)
+
+      // Token
+      const authToken = await Token.addToken(user.toObject()._id)
+      if (!authToken) {
+        throw {}
+      }
 
       super.sendSuccess(res, {
         message: "Logged In Successfully",
+        data: {
+          ...user.toObject(),
+          ...authToken.toObject(),
+        },
       })
     } catch ({ status, message, ...error}) {
       super.log(message, "error")

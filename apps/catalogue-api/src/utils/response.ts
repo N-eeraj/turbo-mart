@@ -12,41 +12,32 @@ export interface SuccessResponse extends BaseResponse {
 }
 
 export interface ErrorResponse extends BaseResponse {
-  errors: any
+  errors?: any
 }
 
 /**
- * Sends a standardized success response to the client.
+ * Sends a standardized JSON response.
  *
  * @param res - Express response object.
- * @param response - Configuration for the success response.
- *   - `status` (default: 200): HTTP status code.
- *   - `message` (default: "OK"): Message to send.
- *   - `data` (default: null): Payload to return.
+ * @param success - Whether the response is a success (`true`) or an error (`false`).
+ * @param status - HTTP status code.
+ * @param message - Description of the response.
+ * @param info - Optional data (on success) or errors (on failure).
+ *
+ * @example
+ * sendResponse(res, true, { status: 200, message: "OK" }, { id: 1 })
+ * sendResponse(res, false, { status: 400, message: "Bad Request" }, { field: "Invalid" })
  */
-export function sendSuccessResponse(res: Response, { status = 200, message = "OK", data = null }: SuccessResponse) {
-  res.statusCode = status
-  res.send({
-    success: true,
-    data,
+export function sendResponse(res: Response, success: boolean, { status, message }: Required<BaseResponse>, info = null) {
+  const response = {
+    success,
     message,
-  })
-}
+  }
 
-/**
- * Sends a standardized error response to the client.
- *
- * @param res - Express response object.
- * @param response - Configuration for the error response.
- *   - `status` (default: 500): HTTP status code.
- *   - `message` (default: "Oops! Something went wrong"): Error message.
- *   - `errors` (default: null): Error details or metadata.
- */
-export function sendErrorResponse(res: Response, { status = 500, message = "Oops! Something went wrong", errors = null }: ErrorResponse) {
+  if (typeof info !== "object" || (info !== null && Object.keys(info).length)) {
+    response[success ? "data" : "error"] = info
+  }
+
   res.statusCode = status
-  res.send({
-    success: false,
-    errors,
-    message,
-  })
+  res.send(response)
 }

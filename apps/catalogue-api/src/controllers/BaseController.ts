@@ -3,8 +3,7 @@ import {
 } from "express"
 
 import {
-  sendErrorResponse,
-  sendSuccessResponse,
+  sendResponse,
   type SuccessResponse,
   type ErrorResponse,
 } from "#src/utils/response"
@@ -30,8 +29,12 @@ export default class BaseController {
    * @param res - The Express response object.
    * @param response - The success response data.
    */
-  static sendSuccess(res: Response, response: SuccessResponse) {
-    sendSuccessResponse(res, response)
+  static sendSuccess(res: Response, {
+    status = 200,
+    message = "OK",
+    data,
+  }: SuccessResponse) {
+    sendResponse(res, true, { status, message }, data)
   }
 
   /**
@@ -41,8 +44,12 @@ export default class BaseController {
    * @param res - The Express response object.
    * @param response - The error response details.
    */
-  static sendError(res: Response, response: ErrorResponse) {
-    sendErrorResponse(res, response)
+  static sendError(res: Response, {
+    status = 500,
+    message = "Oops! Something went wrong",
+    errors,
+  }: ErrorResponse) {
+    sendResponse(res, false, { status, message }, errors)
   }
 
   /**
