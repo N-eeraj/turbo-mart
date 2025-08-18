@@ -68,6 +68,7 @@ export default class BaseController {
    * 
    * Wraps `validateData` to standardize validation error responses.
    *
+   * @static
    * @param schema - A Zod object schema to validate against.
    * @param data - The input data to validate (e.g., req.body).
    * @returns The parsed and validated data.
