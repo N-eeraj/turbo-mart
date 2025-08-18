@@ -14,3 +14,5 @@ export const loginSchema = z.object({
   password: z.string({ message: PASSWORD.required })
     .nonempty(PASSWORD.required),
 })
+
+export type LoginData = z.infer<typeof loginSchema>

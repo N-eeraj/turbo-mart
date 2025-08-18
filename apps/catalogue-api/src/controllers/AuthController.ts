@@ -4,8 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import User from "#models/User"
-import Token from "#models/Token"
+import AuthService from "#src/services/AuthService"
 import {
   loginSchema,
 } from "#schemas/auth"
@@ -16,33 +15,18 @@ import {
 export default class AuthController extends BaseController {
   /**
    * @route POST /api/auth/login
+   * 
+   * Validates login credentials and logs in the user.
    */
   static async login({ body }: Request, res: Response) {
     try {
       const credentials = super.validateRequest(loginSchema, body)
 
-      const user = await User.authenticate(credentials)
-
-      // throw validation error if user is not found
-      if (!user) {
-        throw {
-          status: 401,
-          message: "Invalid email or password",
-        }
-      }
-
-      // Token
-      const authToken = await Token.addToken(user.toObject()._id)
-      if (!authToken) {
-        throw {}
-      }
+      const data = AuthService.login(credentials)
 
       super.sendSuccess(res, {
         message: "Logged In Successfully",
-        data: {
-          ...user.toObject(),
-          ...authToken.toObject(),
-        },
+        data,
       })
     } catch ({ status, message, ...error}) {
       super.log(message, "error")

@@ -18,7 +18,7 @@ function validateData<T extends SchemaShape>(schema: ZodObject<T>, data: unknown
   const {
     data: parsedData,
     error,
-  } = schema.safeParse(data)
+  } = schema.safeParse(data ?? {})
   if (error) {
     const {
       fieldErrors,
