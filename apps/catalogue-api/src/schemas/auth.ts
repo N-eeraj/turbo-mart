@@ -8,10 +8,11 @@ import {
 } from "#constants/validationMessages"
 
 export const loginSchema = z.object({
-  email: z.string({ message: EMAIL.required })
-    .nonempty(EMAIL.required)
-    .email(EMAIL.valid),
-  password: z.string({ message: PASSWORD.required })
+  email: z.email({ error: (issue) => {
+    if (!issue.input) return EMAIL.required
+    return EMAIL.valid
+  } }),
+  password: z.string({ error: PASSWORD.required })
     .nonempty(PASSWORD.required),
 })
 

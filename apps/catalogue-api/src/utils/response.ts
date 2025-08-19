@@ -35,7 +35,7 @@ export function sendResponse(res: Response, success: boolean, { status, message 
   }
 
   if (typeof info !== "object" || (info !== null && Object.keys(info).length)) {
-    response[success ? "data" : "error"] = info
+    response[success ? "data" : "errors"] = info
   }
 
   res.statusCode = status

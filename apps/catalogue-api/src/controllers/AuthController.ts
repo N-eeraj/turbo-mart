@@ -22,10 +22,10 @@ export default class AuthController extends BaseController {
     try {
       const credentials = super.validateRequest(loginSchema, body)
 
-      const data = AuthService.login(credentials)
+      const data = await AuthService.login(credentials)
 
       super.sendSuccess(res, {
-        message: "Logged In Successfully",
+        message: "Login successful",
         data,
       })
     } catch ({ status, message, ...error}) {
