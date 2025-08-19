@@ -1,4 +1,5 @@
 import {
+  flattenError,
   type z,
   type ZodObject,
   type ZodRawShape,
@@ -22,7 +23,7 @@ function validateData<T extends SchemaShape>(schema: ZodObject<T>, data: unknown
   if (error) {
     const {
       fieldErrors,
-    } = error.flatten()
+    } = flattenError(error)
     throw fieldErrors
   }
 
