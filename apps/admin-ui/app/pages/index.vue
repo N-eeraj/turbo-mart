@@ -1,3 +1,3 @@
 <template>
-  Catalogue UI
+  Admin UI
 </template>

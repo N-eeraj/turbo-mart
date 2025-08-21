@@ -21,10 +21,10 @@ const OPEN_API_DOCS = {
   components: null,
 }
 
+const docsPath = withAppPath("docs")
 
 // Function to load and merge multiple YAML files from docs folder
 function loadSwaggerDocs() {
-  const docsPath = withAppPath("docs")
   const files = fs.readdirSync(docsPath)
 
   // Loop through all YAML files in the docs folder

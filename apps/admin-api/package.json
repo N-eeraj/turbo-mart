@@ -1,7 +1,7 @@
 {
-  "name": "catalogue-api",
+  "name": "admin-api",
   "version": "1.0.0",
-  "description": "Catalogue API build using Express.js",
+  "description": "Admin API build using Express.js",
   "license": "ISC",
   "author": "N-eeraj",
   "type": "module",

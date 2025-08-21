@@ -1,4 +1,4 @@
-# Catalogue API
+# Admin API
 
 Built using Express.js
 

@@ -4,10 +4,10 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "dev:ui": "turbo run dev --filter=store-ui --filter=catalogue-ui --parallel",
-    "dev:api": "turbo run dev --filter=store-api --filter=catalogue-api --parallel",
+    "dev:ui": "turbo run dev --filter=store-ui --filter=admin-ui --parallel",
+    "dev:api": "turbo run dev --filter=store-api --filter=admin-api --parallel",
     "dev:store": "turbo run dev --filter=store-ui --filter=store-api --parallel",
-    "dev:catalogue": "turbo run dev --filter=catalogue-ui --filter=catalogue-api --parallel",
+    "dev:admin": "turbo run dev --filter=admin-ui --filter=admin-api --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
