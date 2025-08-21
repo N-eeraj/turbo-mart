@@ -1,7 +1,7 @@
 {
-  "name": "catalogue-ui",
+  "name": "admin-ui",
   "version": "1.0.0",
-  "description": "Catalogue UI build using Nuxt.js",
+  "description": "Admin UI build using Nuxt.js",
   "private": true,
   "type": "module",
   "scripts": {
