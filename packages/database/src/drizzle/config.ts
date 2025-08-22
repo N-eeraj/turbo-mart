@@ -2,6 +2,9 @@ import {
   defineConfig,
 } from "drizzle-kit"
 
+// relative path from app root to drizzle database package
+const DRIZZLE_PATH = "../../packages/database/src/drizzle"
+
 /**
  * Creates a Drizzle Kit configuration object for a MySQL database.
  *
@@ -14,8 +17,8 @@ function defineDrizzleConfig(url: string) {
   }
 
   return defineConfig({
-    out: "./drizzle",
-    schema: "./schemas/index.ts",
+    out: `${DRIZZLE_PATH}/migrations`,
+    schema: `${DRIZZLE_PATH}/schemas/*`,
     dialect: "mysql",
     dbCredentials: {
       url,
