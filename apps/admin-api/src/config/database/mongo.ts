@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import connect from "@app/database/mongoose/connect.ts"
 
 // mongo db uri configuration
 export const MONGODB_URI = process.env.MONGODB_URI
@@ -8,17 +8,13 @@ export const MONGODB_URI = process.env.MONGODB_URI
  *
  * @param callback - A function to be executed once the connection is successfully established.
  */
-async function connectMongoDB(callback?: (connection: mongoose.Connection) => unknown) {
+async function connectMongoDB(callback?: Parameters<typeof connect>[1]) {
   try {
     if (!MONGODB_URI) {
       throw new Error("MONGODB_URI environment variable is not defined.")
     }
-    console.log("Trying to connect to database")
-    const { connection } = await mongoose.connect(MONGODB_URI)
-    console.log(`Database Connected: ${connection.host}`)
-    await callback?.(connection)
+    connect(MONGODB_URI, callback)
   } catch (error) {
-    console.error("Failed to connect to database\n", error)
     throw error
   }
 }
