@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 /**
- * Establishes a connection to the database.
+ * Establishes a connection to the mongo database.
  *
  * @param mongodbUri - The MongoDB connection URI
  * @param callback - An optional function to be executed once the connection is successfully established.

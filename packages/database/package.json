@@ -8,6 +8,11 @@
     "./*": "./src/*"
   },
   "dependencies": {
-    "mongoose": "^8.18.0"
+    "drizzle-orm": "^0.44.4",
+    "mongoose": "^8.18.0",
+    "mysql2": "^3.14.3"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.4"
   }
 }

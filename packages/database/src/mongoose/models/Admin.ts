@@ -1,27 +1,27 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
-type User = mongoose.InferSchemaType<typeof UserSchema> & mongoose.Document
+type Admin = mongoose.InferSchemaType<typeof AdminSchema> & mongoose.Document
 
-interface UserModel extends mongoose.Model<User> {
+interface AdminModel extends mongoose.Model<Admin> {
   /**
-   * Authenticates a user by email and password.
+   * Authenticates an admin by email and password.
    *
-   * This static method looks up a user by their email and compares the provided
+   * This static method looks up a admin by their email and compares the provided
    * password with the stored hashed password using bcrypt.
    *
    * @param credentials - The login credentials.
-   * - `email` - The user's email.
-   * - `password` - The user's password.
-   * @returns - Returns the user document if authentication succeeds, otherwise null.
+   * - `email` - The admin's email.
+   * - `password` - The admin's password.
+   * @returns - Returns the admin document if authentication succeeds, otherwise null.
    *
    * @example
-   * const user = await User.authenticate({ email: "admin@example.com", password: "secret" });
-   * if (!user) {
+   * const admin = await Admin.authenticate({ email: "admin@example.com", password: "secret" });
+   * if (!admin) {
    *   // handle invalid login
    * }
    */
-  authenticate(credentials: LoginCredentials): Promise<User | null>
+  authenticate(credentials: LoginCredentials): Promise<Admin | null>
 }
 
 interface LoginCredentials {
@@ -35,7 +35,7 @@ const SALT_ROUNDS = 10
  * Mongoose schema for admin users.
  * Stores name, unique email, hashed password, role, and timestamps.
  */
-const UserSchema = new mongoose.Schema({
+const AdminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -66,7 +66,7 @@ const UserSchema = new mongoose.Schema({
  * Hashes password before save if modified.
  * Prevents storing plain-text passwords.
  */
-UserSchema.pre("save", async function(next) {
+AdminSchema.pre("save", async function(next) {
   if (!this.isModified("password")) return next()
 
   try {
@@ -78,19 +78,19 @@ UserSchema.pre("save", async function(next) {
   }
 })
 
-UserSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {
-  const user = await this.findOne({
+AdminSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {
+  const admin = await this.findOne({
     email,
   })
-  if (!user) return null
+  if (!admin) return null
 
-  const isMatch = await bcrypt.compare(password, user.password)
-  return isMatch ? user : null
+  const isMatch = await bcrypt.compare(password, admin.password)
+  return isMatch ? admin : null
 }
 
 /**
- * Mongoose model for the User schema.
+ * Mongoose model for the Admin schema.
  */
-const User = mongoose.model<User, UserModel>("user", UserSchema)
+const Admin = mongoose.model<Admin, AdminModel>("Admin", AdminSchema)
 
-export default User
+export default Admin

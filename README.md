@@ -106,8 +106,11 @@ E-commerce monorepo using [Turborepo](https://turbo.build/)
 - `cms`/banners (content management system data like banners and pages)
 
 #### 🐬 MySQL Tables
-- `users` (sellers + delivery people)
-- `user_tokens`
+- `sellers`
+- `seller_documents`
+- `seller_tokens`
+- `delivery_persons`
+- `delivery_person_tokens`
 - `seller_products` (including current seller offers and return period)
 - `seller_product_items`
 - `payments` (handle both payment & settlements)

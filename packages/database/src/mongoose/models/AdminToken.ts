@@ -1,16 +1,16 @@
 import mongoose from "mongoose"
 import crypto from "crypto"
 
-type Token = mongoose.InferSchemaType<typeof TokenSchema> & mongoose.Document
+type AdminToken = mongoose.InferSchemaType<typeof AdminTokenSchema> & mongoose.Document
 
-interface TokenModel extends mongoose.Model<Token> {
+interface AdminTokenModel extends mongoose.Model<AdminToken> {
   /**
    * Creates and saves a new token document for a given user.
    *
-   * @param userId - The ID of the user to associate the token with.
+   * @param adminId - The ID of the user to associate the token with.
    * @returns The saved token document.
    */
-  addToken(userId: Token["userId"]): Promise<Token | null>
+  addToken(adminId: AdminToken["adminId"]): Promise<AdminToken | null>
 }
 
 const EXPIRY_TIME = 2_59_20_00_000 // 30 days
@@ -19,8 +19,8 @@ const EXPIRY_TIME = 2_59_20_00_000 // 30 days
  * Mongoose schema for user tokens.
  * Stores user reference, token string, IP address, expiry date, and timestamps.
  */
-const TokenSchema = new mongoose.Schema({
-  userId: {
+const AdminTokenSchema = new mongoose.Schema({
+  adminId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -41,14 +41,14 @@ const TokenSchema = new mongoose.Schema({
  * TTL index to auto-delete documents after `expiresAt`.
  * Documents expire immediately after the `expiresAt` date.
  */
-TokenSchema.index({ expiresAt: 1 }, {
+AdminTokenSchema.index({ expiresAt: 1 }, {
   expireAfterSeconds: 0,
 })
 
-TokenSchema.statics.addToken = async function(userId: Token["userId"]) {
+AdminTokenSchema.statics.addToken = async function(adminId: AdminToken["adminId"]) {
   const token = crypto.randomBytes(32).toString("hex")
   const userToken = new this({
-    userId,
+    adminId,
     token,
     expiresAt: new Date(Date.now() + EXPIRY_TIME),
   })
@@ -57,8 +57,8 @@ TokenSchema.statics.addToken = async function(userId: Token["userId"]) {
 }
 
 /**
- * Mongoose model for the Token schema.
+ * Mongoose model for the AdminToken schema.
  */
-const Token = mongoose.model<Token, TokenModel>("token", TokenSchema)
+const AdminToken = mongoose.model<AdminToken, AdminTokenModel>("AdminToken", AdminTokenSchema, "adminTokens")
 
-export default Token
+export default AdminToken
