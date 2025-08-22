@@ -8,7 +8,8 @@
   "main": "app.ts",
   "scripts": {
     "dev": "node --watch --env-file=.env src/app.ts",
-    "command": "node --env-file=.env src/commands/index.ts"
+    "command": "node --env-file=.env src/commands/index.ts",
+    "drizzle:push": "npx drizzle-kit push --config ./src/config/database/mysql.ts"
   },
   "imports": {
     "#mongodDb/*": "@app/database/mongoose/*",

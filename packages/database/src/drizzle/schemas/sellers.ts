@@ -17,7 +17,7 @@ export const statuses = mysqlEnum("status", [
   "suspended",
 ])
 
-const sellersTable = mysqlTable("sellers", {
+const seller = mysqlTable("sellers", {
   id: serial("id")
     .primaryKey(),
 
@@ -38,7 +38,8 @@ const sellersTable = mysqlTable("sellers", {
     precision: 3,
     scale: 2,
   })
-    .default("0.00"),
+    .default("0.00")
+    .notNull(),
 
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
@@ -49,4 +50,4 @@ const sellersTable = mysqlTable("sellers", {
     .notNull(),
 })
 
-export default sellersTable
+export default seller
