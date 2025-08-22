@@ -1,4 +1,4 @@
-import connect from "@app/database/mongoose/connect.ts"
+import connect from "#mongodDb/connect.ts"
 
 // mongo db uri configuration
 export const MONGODB_URI = process.env.MONGODB_URI

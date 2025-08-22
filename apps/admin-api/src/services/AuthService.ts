@@ -1,5 +1,6 @@
-import User from "#models/User"
-import Token from "#models/Token"
+import User from "#mongodDb/models/User.ts"
+import Token from "#mongodDb/models/Token.ts"
+
 import {
   type LoginData,
 } from "#schemas/auth"
