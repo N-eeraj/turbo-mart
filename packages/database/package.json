@@ -1,0 +1,12 @@
+{
+  "name": "@app/database",
+  "version": "1.0.0",
+  "description": "Database",
+  "scripts": {},
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "mongoose": "^8.18.0"
+  }
+}

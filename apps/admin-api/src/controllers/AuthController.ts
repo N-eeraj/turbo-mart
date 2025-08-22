@@ -7,7 +7,7 @@ import BaseController from "#controllers/BaseController"
 import AuthService from "#src/services/AuthService"
 import {
   loginSchema,
-} from "#schemas/mongoose/auth"
+} from "#schemas/auth"
 
 /**
  * Controller for all authentication related APIs routes.
