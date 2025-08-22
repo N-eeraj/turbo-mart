@@ -1,6 +1,6 @@
 import fs from "fs"
 
-import User from "#mongodDb/models/User.ts"
+import User from "#mongodDb/models/Admin.ts"
 
 import {
   withStoragePath,

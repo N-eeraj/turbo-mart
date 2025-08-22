@@ -12,6 +12,7 @@
   },
   "imports": {
     "#mongodDb/*": "@app/database/mongoose/*",
+    "#mysqlDb/*": "@app/database/drizzle/*",
     "#routes/*": "./src/routes/*.ts",
     "#middlewares/*": "./src/middlewares/*.ts",
     "#controllers/*": "./src/controllers/*.ts",
