@@ -11,10 +11,10 @@
     "command": "node --env-file=.env src/commands/index.ts"
   },
   "imports": {
+    "#mongodDb/*": "@app/database/mongoose/*",
     "#routes/*": "./src/routes/*.ts",
     "#middlewares/*": "./src/middlewares/*.ts",
     "#controllers/*": "./src/controllers/*.ts",
-    "#models/*": "./src/models/*.ts",
     "#commands/*": "./src/commands/*.ts",
     "#schemas/*": "./src/schemas/*.ts",
     "#utils/*": "./src/utils/*.ts",

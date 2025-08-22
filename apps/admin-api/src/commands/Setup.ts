@@ -1,6 +1,7 @@
 import fs from "fs"
 
-import User from "#models/User"
+import User from "#mongodDb/models/User.ts"
+
 import {
   withStoragePath,
 } from "#utils/pathUtils"

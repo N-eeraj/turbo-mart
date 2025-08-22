@@ -2,6 +2,7 @@
   "name": "@app/database",
   "version": "1.0.0",
   "description": "Database",
+  "type": "module",
   "scripts": {},
   "exports": {
     "./*": "./src/*"
