@@ -4,7 +4,7 @@ import User from "#models/User"
 import {
   withStoragePath,
 } from "#utils/pathUtils"
-import connectMongoDB from "#src/config/database"
+import connectMongoDB from "#src/config/database/mongo"
 
 const LOG_PATH = withStoragePath("logs")
 
@@ -72,7 +72,7 @@ export default class Setup {
    * - Ensures required directories (e.g., logs) exist.
    * - Ensures a super admin user exists in the database.
    */
-  static execute(): void {
+  static execute(..._args: Array<unknown>): void {
     this.ensureDirectory(LOG_PATH)
     this.createSuperAdmin()
   }

@@ -5,7 +5,7 @@ const args = process.argv.slice(3)
 
 switch (command) {
   case "setup":
-    Setup.execute()
+    Setup.execute(args)
     break
   default:
     console.error(`Invalid Command: ${command}`)

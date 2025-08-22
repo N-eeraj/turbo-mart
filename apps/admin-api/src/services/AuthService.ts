@@ -2,7 +2,7 @@ import User from "#models/User"
 import Token from "#models/Token"
 import {
   type LoginData,
-} from "#schemas/auth"
+} from "#schemas/mongoose/auth"
 
 export default class AuthService {
   /**
