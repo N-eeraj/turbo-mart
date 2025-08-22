@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-// database uri configuration
+// mongo db uri configuration
 export const MONGODB_URI = process.env.MONGODB_URI
 
 /**
