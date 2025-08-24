@@ -1,18 +1,28 @@
-import db from "@app/database/drizzle/db.ts"
-import { lt } from "drizzle-orm"
+import db, {
+  connection,
+} from "@app/database/drizzle/db.ts"
 import sellers from "@app/database/drizzle/schemas/sellers.ts"
 
 export default class Temporary {
-  static async testDrizzle() {
+  static async getSellers() {
     const data = await db.select()
       .from(sellers)
-      .where(lt(sellers.rating, "3"))
-      .limit(1)
-      .offset(1)
     console.log(data)
   }
 
-  static execute(..._args: Array<unknown>): void {
-    this.testDrizzle()
+  static async createSeller() {
+    await db.insert(sellers)
+      .values({
+        email: "seller@turbo.com",
+        name: "Seller",
+        phone: "9874124819",
+      })
+  }
+
+  static async execute(..._args: Array<unknown>) {
+    await this.getSellers()
+    await this.createSeller()
+    await this.getSellers()
+    connection.end()
   }
 }
