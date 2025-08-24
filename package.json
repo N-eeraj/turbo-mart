@@ -8,6 +8,7 @@
     "dev:api": "turbo run dev --filter=store-api --filter=admin-api --parallel",
     "dev:store": "turbo run dev --filter=store-ui --filter=store-api --parallel",
     "dev:admin": "turbo run dev --filter=admin-ui --filter=admin-api --parallel",
+    "drizzle:push": "npx --env-file=.env drizzle-kit push --config ./packages/database/src/drizzle/config.ts",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"

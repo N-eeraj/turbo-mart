@@ -1,11 +1,11 @@
 import fs from "fs"
 
-import User from "#mongodDb/models/Admin.ts"
+import User from "@app/database/mongoose/models/Admin.ts"
 
 import {
   withStoragePath,
 } from "#utils/pathUtils"
-import connectMongoDB from "#mongodDb/connect.ts"
+import connectMongoDB from "@app/database/mongoose/connect.ts"
 
 const LOG_PATH = withStoragePath("logs")
 

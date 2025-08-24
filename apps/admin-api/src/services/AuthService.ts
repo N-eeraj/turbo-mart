@@ -1,5 +1,5 @@
-import User from "#mongodDb/models/Admin.ts"
-import Token from "#mongodDb/models/AdminToken.ts"
+import User from "@app/database/mongoose/models/Admin.ts"
+import Token from "@app/database/mongoose/models/AdminToken.ts"
 
 import {
   type LoginData,

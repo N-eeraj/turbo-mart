@@ -1,7 +1,7 @@
 import express from "express"
 import helmet from "helmet"
 
-import connectMongoDB from "#mongodDb/connect.ts"
+import connectMongoDB from "@app/database/mongoose/connect.ts"
 
 import {
   PORT,
