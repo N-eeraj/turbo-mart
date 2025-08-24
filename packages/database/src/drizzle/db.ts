@@ -2,9 +2,9 @@ import {
   drizzle,
 } from "drizzle-orm/mysql2"
 
-export const MYSQL_DB_URI = process.env.MYSQL_DB_URI
+import env from "@app/load-env"
 
-if (!MYSQL_DB_URI) {
+if (!env.MYSQL_DB_URI) {
   throw new Error("MySQL url is not defined.")
 }
 
@@ -13,6 +13,6 @@ if (!MYSQL_DB_URI) {
  *
  * @returns A drizzle database instance
  */
-export const db = drizzle(MYSQL_DB_URI)
+export const db = drizzle(env.MYSQL_DB_URI)
 
 export default db

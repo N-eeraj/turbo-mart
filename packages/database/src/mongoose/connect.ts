@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 
-// mongo db uri configuration
-export const MONGODB_URI = process.env.MONGODB_URI
+import env from "@app/load-env"
 
 /**
  * Establishes a connection to the mongo database.
@@ -10,11 +9,11 @@ export const MONGODB_URI = process.env.MONGODB_URI
  */
 async function connect(callback?: (connection: mongoose.Connection) => unknown) {
   try {
-    if (!MONGODB_URI) {
+    if (!env.MONGODB_URI) {
       throw new Error("MONGODB_URI environment variable is not defined.")
     }
     console.log("Trying to connect to database")
-    const { connection } = await mongoose.connect(MONGODB_URI)
+    const { connection } = await mongoose.connect(env.MONGODB_URI)
     console.log(`Database Connected: ${connection.host}`)
     await callback?.(connection)
   } catch (error) {

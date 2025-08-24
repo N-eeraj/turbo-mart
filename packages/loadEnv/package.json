@@ -1,0 +1,9 @@
+{
+  "name": "@app/load-env",
+  "version": "1.0.0",
+  "description": "Custom root .env loader",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

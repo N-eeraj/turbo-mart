@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Database",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "drizzle:push": "npx drizzle-kit push --config ./src/drizzle/config.ts"
+  },
   "exports": {
     "./*": "./src/*"
   },

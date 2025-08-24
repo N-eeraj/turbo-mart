@@ -2,28 +2,17 @@ import {
   defineConfig,
 } from "drizzle-kit"
 
-// relative path from app root to drizzle database package
-const DRIZZLE_PATH = "../../packages/database/src/drizzle"
+const MYSQL_DB_URI = process.env.MYSQL_DB_URI
 
-/**
- * Creates a Drizzle Kit configuration object for a MySQL database.
- *
- * @param url - The MySQL connection URI.
- * @returns A Drizzle Kit configuration object used for schema generation and migrations.
- */
-function defineDrizzleConfig(url: string) {
-  if (!url) {
-    throw new Error("MySQL url is not defined.")
-  }
-
-  return defineConfig({
-    out: `${DRIZZLE_PATH}/migrations`,
-    schema: `${DRIZZLE_PATH}/schemas/*`,
-    dialect: "mysql",
-    dbCredentials: {
-      url,
-    },
-  })
+if (!MYSQL_DB_URI) {
+  throw new Error("MySQL url is not defined.")
 }
 
-export default defineDrizzleConfig
+export default defineConfig({
+  out: "./packages/database/src/drizzle/migrations",
+  schema: "./packages/database/src/drizzle/schemas/*",
+  dialect: "mysql",
+  dbCredentials: {
+    url: MYSQL_DB_URI,
+  },
+})
