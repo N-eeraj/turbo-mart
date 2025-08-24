@@ -5,7 +5,7 @@ import User from "#mongodDb/models/Admin.ts"
 import {
   withStoragePath,
 } from "#utils/pathUtils"
-import connectMongoDB from "#src/config/database/mongo"
+import connectMongoDB from "#mongodDb/connect.ts"
 
 const LOG_PATH = withStoragePath("logs")
 

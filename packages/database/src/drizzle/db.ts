@@ -2,14 +2,17 @@ import {
   drizzle,
 } from "drizzle-orm/mysql2"
 
+export const MYSQL_DB_URI = process.env.MYSQL_DB_URI
+
+if (!MYSQL_DB_URI) {
+  throw new Error("MySQL url is not defined.")
+}
+
 /**
  * Get drizzle db object.
  *
- * @param mysqlUri - The MySQL connection URI
  * @returns A drizzle database instance
  */
-function getDatabase(mysqlUri: string) {
-  return drizzle(mysqlUri)
-}
+export const db = drizzle(MYSQL_DB_URI)
 
-export default getDatabase
+export default db

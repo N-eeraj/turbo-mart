@@ -1,11 +1,12 @@
 import express from "express"
 import helmet from "helmet"
 
+import connectMongoDB from "#mongodDb/connect.ts"
+
 import {
   PORT,
   PUBLIC_PATH,
 } from "#src/config/server"
-import connectMongoDB from "#src/config/database/mongo"
 import router from "#routes/index"
 import rateLimiter from "#middlewares/rateLimiter"
 import httpLogger from "#middlewares/logger"
