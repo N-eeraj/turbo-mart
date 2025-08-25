@@ -45,6 +45,15 @@ AdminTokenSchema.index({ expiresAt: 1 }, {
   expireAfterSeconds: 0,
 })
 
+AdminTokenSchema.set("toObject", {
+  transform: function (_doc, { token, expiresAt }) {
+    return {
+      value: token,
+      expiresAt,
+    }
+  }
+})
+
 AdminTokenSchema.statics.addToken = async function(adminId: AdminToken["adminId"]) {
   const token = crypto.randomBytes(32).toString("hex")
   const userToken = new this({

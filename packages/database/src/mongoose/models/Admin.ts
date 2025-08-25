@@ -78,6 +78,17 @@ AdminSchema.pre("save", async function(next) {
   }
 })
 
+AdminSchema.set("toObject", {
+  transform: function (_doc, { _id, email, name, role }) {
+    return {
+      email,
+      name,
+      id: _id.toString(),
+      role,
+    }
+  }
+})
+
 AdminSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {
   const admin = await this.findOne({
     email,
