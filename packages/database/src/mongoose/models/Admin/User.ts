@@ -78,12 +78,15 @@ AdminSchema.pre("save", async function(next) {
   }
 })
 
+/**
+ * Set toObject transformer to return only required values
+ */
 AdminSchema.set("toObject", {
   transform: function (_doc, { _id, email, name, role }) {
     return {
+      id: _id.toString(),
       email,
       name,
-      id: _id.toString(),
       role,
     }
   }

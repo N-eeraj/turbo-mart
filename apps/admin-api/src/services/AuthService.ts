@@ -1,5 +1,5 @@
-import Admin from "@app/database/mongoose/models/Admin.ts"
-import AdminToken from "@app/database/mongoose/models/AdminToken.ts"
+import AdminUser from "@app/database/mongoose/models/Admin/User.ts"
+import AdminToken from "@app/database/mongoose/models/Admin/Token.ts"
 
 import {
   type LoginData,
@@ -15,7 +15,7 @@ export default class AuthService {
    * @throws If token generation fails.
    */
   static async login(credentials: LoginData) {
-    const admin = await Admin.authenticate(credentials)
+    const admin = await AdminUser.authenticate(credentials)
 
     // throw validation error if admin is not found
     if (!admin) {

@@ -1,8 +1,12 @@
+# Auth APIs
+
 openapi: 3.1.1
 info:
   title: Auth API Documentation
   version: 1.0.0
 paths:
+
+  # Login API
   /api/auth/login:
     post:
       tags:

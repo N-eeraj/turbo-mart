@@ -1,6 +1,6 @@
 import fs from "fs"
 
-import User from "@app/database/mongoose/models/Admin.ts"
+import AdminUser from "@app/database/mongoose/models/Admin/User.ts"
 
 import {
   withStoragePath,
@@ -45,13 +45,13 @@ export default class Setup {
         if (!connection.db) {
           throw new Error("Database not found")
         }
-        const superAdmin = await User.findOne({
+        const superAdmin = await AdminUser.findOne({
           email: process.env.SUPER_ADMIN_EMAIL,
         })
         if (superAdmin) {
           console.log("Super Admin already exists")
         } else {
-          const superAdmin = new User({
+          const superAdmin = new AdminUser({
             name: process.env.SUPER_ADMIN_NAME,
             email: process.env.SUPER_ADMIN_EMAIL,
             role: "SUPER_ADMIN",

@@ -1,8 +1,12 @@
+# General APIs
+
 openapi: 3.1.1
 info:
   title: General API Documentation
   version: 1.0.0
 paths:
+
+  # Health Check API
   /api/ping:
     get:
       tags:
@@ -24,6 +28,7 @@ paths:
                     type: string
                     example: Reached Server
 
+  # API 404
   /api/{anyPath}:
     get:
       tags:
