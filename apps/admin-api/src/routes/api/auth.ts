@@ -10,5 +10,6 @@ import AuthController from "#controllers/AuthController"
 const authRouter = express.Router()
 
 authRouter.post("/login", AuthController.login)
+authRouter.post("/logout", AuthController.logout)
 
 export default authRouter

@@ -18,7 +18,20 @@ const OPEN_API_DOCS = {
     version: process.env.npm_package_version as string,
   },
   paths: {},
-  components: null,
+  components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  security: [
+    {
+      BearerAuth: [],
+    },
+  ],
 }
 
 const docsPath = withAppPath("docs")

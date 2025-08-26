@@ -131,3 +131,56 @@ paths:
                     type: string
                     example: Oops! Something went wrong
                     description: Error message.
+
+  # Logout API
+  /api/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout
+      description: Endpoint for users to logout.
+      responses:
+        "200":
+          description: Successfully logged out user and removed authentication token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Boolean indicating whether the request was successful.
+                  message:
+                    type: string
+                    description: Success message.
+                    example: "Logout successful"
+        "401":
+          description: Invalid auth token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    description: Indicates the request failed.
+                  message:
+                    type: string
+                    example: Invalid authentication token
+                    description: Error message.
+        "500":
+          description: Internal server error (unexpected error).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    description: Indicates the request failed.
+                  message:
+                    type: string
+                    example: Oops! Something went wrong
+                    description: Error message.

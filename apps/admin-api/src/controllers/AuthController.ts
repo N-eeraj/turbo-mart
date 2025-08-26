@@ -37,4 +37,31 @@ export default class AuthController extends BaseController {
       })
     }
   }
+
+  /**
+   * @route POST /api/auth/logout
+   * 
+   * Logs out the user.
+   */
+  static async logout({ headers }: Request, res: Response) {
+    try {
+      if (!headers.authorization) {
+        throw {
+          status: 400,
+          message: "Authorization header is required",
+        }
+      }
+
+      super.sendSuccess(res, {
+        message: "Logout successful",
+      })
+    } catch ({ status, message, ...error}) {
+      super.log(message, "error")
+      super.sendError(res, {
+        status: status ?? 500,
+        errors: error,
+        message,
+      })
+    }
+  }
 }
