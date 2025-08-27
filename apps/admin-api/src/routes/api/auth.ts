@@ -1,5 +1,6 @@
 import express from "express"
 
+import authMiddleware from "#middlewares/auth"
 import AuthController from "#controllers/AuthController"
 
 /**
@@ -10,6 +11,6 @@ import AuthController from "#controllers/AuthController"
 const authRouter = express.Router()
 
 authRouter.post("/login", AuthController.login)
-authRouter.post("/logout", AuthController.logout)
+authRouter.post("/logout", authMiddleware, AuthController.logout)
 
 export default authRouter

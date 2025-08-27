@@ -43,14 +43,11 @@ export default class AuthController extends BaseController {
    * 
    * Logs out the user.
    */
-  static async logout({ headers }: Request, res: Response) {
+  static async logout({ user }: Request, res: Response) {
     try {
-      if (!headers.authorization) {
-        throw {
-          status: 400,
-          message: "Authorization header is required",
-        }
-      }
+      console.log(user)
+
+      await AuthService.logout()
 
       super.sendSuccess(res, {
         message: "Logout successful",

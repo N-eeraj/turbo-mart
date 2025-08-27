@@ -10,7 +10,7 @@ interface AdminTokenModel extends mongoose.Model<AdminToken> {
    * @param adminId - The ID of the user to associate the token with.
    * @returns The saved token document.
    */
-  addToken(adminId: AdminToken["adminId"]): Promise<AdminToken | null>
+  addToken(adminId: AdminToken["admin"]): Promise<AdminToken | null>
 }
 
 const EXPIRY_TIME = 2_59_20_00_000 // 30 days
@@ -20,9 +20,9 @@ const EXPIRY_TIME = 2_59_20_00_000 // 30 days
  * Stores user reference, token string, IP address, expiry date, and timestamps.
  */
 const AdminTokenSchema = new mongoose.Schema({
-  adminId: {
+  admin: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Admin",
     required: true,
   },
   token: {
@@ -57,10 +57,10 @@ AdminTokenSchema.set("toObject", {
   }
 })
 
-AdminTokenSchema.statics.addToken = async function(adminId: AdminToken["adminId"]) {
+AdminTokenSchema.statics.addToken = async function(adminId: AdminToken["admin"]) {
   const token = crypto.randomBytes(32).toString("hex")
   const userToken = new this({
-    adminId,
+    admin: adminId,
     token,
     expiresAt: new Date(Date.now() + EXPIRY_TIME),
   })
