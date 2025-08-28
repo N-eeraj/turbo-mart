@@ -28,13 +28,11 @@ export default class AuthController extends BaseController {
         message: "Login successful",
         data,
       })
-    } catch ({ status, message, ...error}) {
-      super.log(message, "error")
-      super.sendError(res, {
-        status: status ?? 500,
-        errors: error,
-        message,
-      })
+    } catch (error) {
+      if (error && typeof error === "object" && "message" in error) {
+        super.log(error?.message, "error")
+      }
+      super.sendError(res, error)
     }
   }
 
@@ -52,13 +50,11 @@ export default class AuthController extends BaseController {
       super.sendSuccess(res, {
         message: "Logout successful",
       })
-    } catch ({ status, message, ...error}) {
-      super.log(message, "error")
-      super.sendError(res, {
-        status: status ?? 500,
-        errors: error,
-        message,
-      })
+    } catch (error) {
+      if (error && typeof error === "object" && "message" in error) {
+        super.log(error?.message, "error")
+      }
+      super.sendError(res, error)
     }
   }
 }

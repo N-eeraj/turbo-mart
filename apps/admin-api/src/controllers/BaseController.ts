@@ -44,11 +44,22 @@ export default class BaseController {
    * @param res - The Express response object.
    * @param response - The error response details.
    */
-  static sendError(res: Response, {
-    status = 500,
-    message = "Oops! Something went wrong",
-    errors,
-  }: ErrorResponse) {
+  static sendError(res: Response, error: unknown = {}) {
+    let status = 500
+    let message = "Oops! Something went wrong"
+    let errors
+
+    if (error && typeof error === "object") {
+      if ("status" in error && typeof error.status === "number") {
+        status = error.status
+      }
+      if ("message" in error && typeof error.message === "string") {
+        message = error.message
+      }
+      if ("errors" in error) {
+        errors = error.errors
+      }
+    }
     sendResponse(res, false, { status, message }, errors)
   }
 
@@ -84,7 +95,7 @@ export default class BaseController {
       throw {
         status: 422,
         message: "Validation Error",
-        ...error,
+        ...(error ?? {}),
       }
     }
   }

@@ -15,6 +15,13 @@ export interface ErrorResponse extends BaseResponse {
   errors?: any
 }
 
+type ApiResponse =
+  | SuccessResponse
+  | ErrorResponse
+  | {
+    success: boolean
+  }
+
 /**
  * Sends a standardized JSON response.
  *
@@ -28,14 +35,17 @@ export interface ErrorResponse extends BaseResponse {
  * sendResponse(res, true, { status: 200, message: "OK" }, { id: 1 })
  * sendResponse(res, false, { status: 400, message: "Bad Request" }, { field: "Invalid" })
  */
-export function sendResponse(res: Response, success: boolean, { status, message }: Required<BaseResponse>, info = null) {
-  const response = {
+export function sendResponse(res: Response, success: boolean, { status, message }: Required<BaseResponse>, info: any = null) {
+  const response: ApiResponse = {
     success,
     message,
   }
 
   if (typeof info !== "object" || (info !== null && Object.keys(info).length)) {
-    response[success ? "data" : "errors"] = info
+    Object.assign(
+      response,
+      { [success ? "data" : "errors"]: info }
+    )
   }
 
   res.statusCode = status
