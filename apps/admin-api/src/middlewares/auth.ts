@@ -8,30 +8,50 @@ import {
   sendResponse,
 } from "#utils/response"
 import AdminToken from "@app/database/mongoose/models/Admin/Token.ts"
+import {
+  type AdminObject,
+} from "@app/database/mongoose/models/Admin/User.ts"
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AdminObject
+    }
+  }
+}
 
 export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const token = (req.headers.authorization ?? "")
-    .replace(/^Bearer\s/, "")
+  try {
+    const token = (req.headers.authorization ?? "")
+      .replace(/^Bearer\s/, "")
 
-  if (!token) {
-    return sendResponse(res, false, {
-      status: 400,
-      message: "Authorization header is required",
+    if (!token) {
+      return sendResponse(res, false, {
+        status: 400,
+        message: "Authorization header is required",
+      })
+    }
+
+    const data = await AdminToken.findOne({
+      token,
     })
-  }
+      .populate("admin")
+      .lean<{ admin: AdminObject }>()
 
-  const data = await AdminToken.findOne({
-    token,
-  }).populate("admin")
+    if (!data?.admin) {
+      return sendResponse(res, false, {
+        status: 401,
+        message: "Unauthorized user",
+      })
+    }
 
-  if (!data) {
-    return sendResponse(res, false, {
+    req.user = data.admin
+
+    next()
+  } catch (error) {
+    sendResponse(res, false, {
       status: 401,
-      message: "Un-authorization user",
-    })
+      message: "Unauthorized user",
+    }, error)
   }
-
-  req.user = data.admin
-
-  next()
 }

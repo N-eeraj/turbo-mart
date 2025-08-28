@@ -1,7 +1,10 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
-type Admin = mongoose.InferSchemaType<typeof AdminSchema> & mongoose.Document
+export type Admin = mongoose.InferSchemaType<typeof AdminSchema> & mongoose.Document
+export type ObjectKeys = "id" | "email" | "name" | "role"
+export type AdminObject = Pick<Admin, ObjectKeys>
+
 
 interface AdminModel extends mongoose.Model<Admin> {
   /**
@@ -83,7 +86,7 @@ AdminSchema.pre("save", async function(next) {
  * Set toObject transformer to return only required values
  */
 AdminSchema.set("toObject", {
-  transform: function (_doc, { _id, email, name, role }) {
+  transform: function (_doc, { _id, email, name, role }): AdminObject {
     return {
       id: _id.toString(),
       email,
