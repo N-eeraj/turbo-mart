@@ -1,10 +1,9 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
-export type Admin = mongoose.InferSchemaType<typeof AdminSchema> & mongoose.Document
-export type ObjectKeys = "id" | "email" | "name" | "role"
-export type AdminObject = Pick<Admin, ObjectKeys>
-
+export type Admin = mongoose.HydratedDocument<mongoose.InferSchemaType<typeof AdminSchema>>
+export type ObjectKeys = "email" | "name" | "role" | "createdAt"
+export type AdminObject = Pick<Admin, ObjectKeys> & { id: mongoose.Types.ObjectId }
 
 interface AdminModel extends mongoose.Model<Admin> {
   /**
@@ -78,7 +77,7 @@ AdminSchema.pre("save", async function(next) {
     this.password = hashed
     next()
   } catch (error) {
-    next(error)
+    next(error as mongoose.CallbackError)
   }
 })
 
@@ -86,12 +85,13 @@ AdminSchema.pre("save", async function(next) {
  * Set toObject transformer to return only required values
  */
 AdminSchema.set("toObject", {
-  transform: function (_doc, { _id, email, name, role }): AdminObject {
+  transform: function (_doc, { _id, email, name, role, createdAt }): AdminObject {
     return {
-      id: _id.toString(),
+      id: _id,
       email,
       name,
       role,
+      createdAt,
     }
   }
 })

@@ -41,12 +41,10 @@ export function sendResponse(res: Response, success: boolean, { status, message 
     message,
   }
 
-  if (typeof info !== "object" || (info !== null && Object.keys(info).length)) {
-    Object.assign(
-      response,
-      { [success ? "data" : "errors"]: info }
-    )
-  }
+  Object.assign(
+    response,
+    { [success ? "data" : "errors"]: info }
+  )
 
   res.statusCode = status
   res.send(response)

@@ -9,13 +9,14 @@ import {
 } from "#utils/response"
 import AdminToken from "@app/database/mongoose/models/Admin/Token.ts"
 import {
+  type Admin,
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
 declare global {
   namespace Express {
     interface Request {
-      user?: AdminObject
+      user: AdminObject
     }
   }
 }
@@ -36,7 +37,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       token,
     })
       .populate("admin")
-      .lean<{ admin: AdminObject }>()
+      .lean<{ admin: Admin }>()
 
     if (!data?.admin) {
       return sendResponse(res, false, {
@@ -45,7 +46,13 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       })
     }
 
-    req.user = data.admin
+    req.user = {
+      id: data.admin._id,
+      name: data.admin.name,
+      email: data.admin.email,
+      role: data.admin.role,
+      createdAt: data.admin.createdAt,
+    } satisfies AdminObject
 
     next()
   } catch (error) {

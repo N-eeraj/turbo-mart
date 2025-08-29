@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import crypto from "crypto"
 
-export type AdminToken = mongoose.InferSchemaType<typeof AdminTokenSchema> & mongoose.Document
+export type AdminToken = mongoose.HydratedDocument<mongoose.InferSchemaType<typeof AdminTokenSchema>>
 
 interface AdminTokenModel extends mongoose.Model<AdminToken> {
   /**

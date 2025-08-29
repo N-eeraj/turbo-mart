@@ -44,8 +44,7 @@ export default class AuthController extends BaseController {
   static async logout({ user }: Request, res: Response) {
     try {
       console.log(user)
-
-      await AuthService.logout()
+      await AuthService.logout(user.id)
 
       super.sendSuccess(res, {
         message: "Logout successful",
