@@ -4,23 +4,40 @@ import {
   type NextFunction,
 } from "express"
 
+import AdminToken, {
+  type Token,
+} from "@app/database/mongoose/models/Admin/Token.ts"
+import {
+  type Admin,
+} from "@app/database/mongoose/models/Admin/User.ts"
+
 import {
   sendResponse,
 } from "#utils/response"
-import AdminToken from "@app/database/mongoose/models/Admin/Token.ts"
-import {
-  type Admin,
-  type AdminObject,
-} from "@app/database/mongoose/models/Admin/User.ts"
 
 declare global {
   namespace Express {
     interface Request {
-      user: AdminObject
+      user: Admin
+      token: Token
     }
   }
 }
 
+export interface UserToken extends Token {
+  admin: Admin
+}
+
+/**
+ * Middleware to handle authentication and authorization. It typically checks for a token in the request headers,
+ * validates it, and attaches the authenticated user's data to the request object before calling the next middleware.
+ *
+ * If authentication fails, it'll send an error response with 401 status code.
+ * 
+ * @param req - The Express request object.
+ * @param res - The Express response object.
+ * @param next - The Express next middleware function.
+ */
 export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     const token = (req.headers.authorization ?? "")
@@ -37,7 +54,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       token,
     })
       .populate("admin")
-      .lean<{ admin: Admin }>()
+      .lean<UserToken>()
 
     if (!data?.admin) {
       return sendResponse(res, false, {
@@ -46,13 +63,13 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       })
     }
 
-    req.user = {
-      id: data.admin._id,
-      name: data.admin.name,
-      email: data.admin.email,
-      role: data.admin.role,
-      createdAt: data.admin.createdAt,
-    } satisfies AdminObject
+    const {
+      admin,
+      ...authToken
+    } = data
+    req.user = admin
+
+    req.token = authToken
 
     next()
   } catch (error) {

@@ -38,13 +38,11 @@ export default class AuthController extends BaseController {
 
   /**
    * @route POST /api/auth/logout
-   * 
-   * Logs out the user.
+   * Logs out the user by removing the authentication token.
    */
-  static async logout({ user }: Request, res: Response) {
+  static async logout({ token }: Request, res: Response) {
     try {
-      console.log(user)
-      await AuthService.logout(user.id)
+      await AuthService.logout(token)
 
       super.sendSuccess(res, {
         message: "Logout successful",

@@ -1,9 +1,7 @@
-import {
-  type Types,
-} from "mongoose"
-
 import AdminUser from "@app/database/mongoose/models/Admin/User.ts"
-import AdminToken from "@app/database/mongoose/models/Admin/Token.ts"
+import AdminToken, {
+  type Token,
+} from "@app/database/mongoose/models/Admin/Token.ts"
 
 import {
   type LoginData,
@@ -12,7 +10,7 @@ import {
 export default class AuthService {
   /**
    * Authenticates an admin with provided credentials and returns admin data along with an auth token.
-   * 
+   *
    * @param credentials - Login credentials (email and password).
    * @returns - The authenticated admin data along with the generated auth token.
    * @throws 401 error if admin is not found or credentials are invalid.
@@ -40,11 +38,12 @@ export default class AuthService {
   }
 
   /**
-   * Logs out the user.
-   * 
-   * @param userId - Login credentials (email and password).
+   * Removes the token of an authenticated user.
+   *
+   * @param token - Token mongoose object.
+   * @throws If token deletion fails.
    */
-  static async logout(userId: Types.ObjectId) {
-    // console.log(userId)
+  static async logout(token: Token) {
+    await AdminToken.findByIdAndDelete(token._id)
   }
 }
