@@ -65,7 +65,7 @@ paths:
                         properties:
                           value:
                             type: string
-                            description: JWT token for the authenticated session.
+                            description: Bearer token for the authenticated session.
                           expiresAt:
                             type: string
                             format: date-time
@@ -142,19 +142,6 @@ paths:
                     description: Success message.
                     example: "Logout successful"
         "401":
-          description: Invalid auth token.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                    description: Indicates the request failed.
-                  message:
-                    type: string
-                    example: Invalid authentication token
-                    description: Error message.
+          $ref: "#/components/responses/UnauthorizedUser"
         "500":
           $ref: "#/components/responses/InternalServerError"

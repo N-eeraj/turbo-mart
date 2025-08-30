@@ -27,6 +27,53 @@ const OPEN_API_DOCS = {
       },
     },
     responses: {
+      UnauthorizedUser: {
+        description: "Unauthorized User",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                success: {
+                  type: "boolean",
+                  example: false,
+                  description: "Indicates the request failed."
+                },
+                message: {
+                  oneOf: [
+                    {
+                      type: "string",
+                      example: "Missing authentication token",
+                      description: "Error message: Missing authentication token."
+                    },
+                    {
+                      type: "string",
+                      example: "Invalid authentication token",
+                      description: "Error message: Invalid authentication token."
+                    }
+                  ]
+                }
+              }
+            },
+            examples: {
+              MissingAuthToken: {
+                summary: "Missing Authentication Token",
+                value: {
+                  success: false,
+                  message: "Missing authentication token"
+                }
+              },
+              InvalidAuthToken: {
+                summary: "Invalid Authentication Token",
+                value: {
+                  success: false,
+                  message: "Invalid authentication token"
+                }
+              }
+            }
+          }
+        }
+      },
       InternalServerError: {
         description: "Internal server error (unexpected error).",
         content: {
@@ -101,9 +148,3 @@ export function documentationJSON(_req: Request, res: Response) {
   res.setHeader("Content-Type", "application/json")
   res.send(swaggerSpec)
 }
-
-// {
-//   "success": false,
-//   "message": "Authorization header is required",
-//   "errors": null
-// }

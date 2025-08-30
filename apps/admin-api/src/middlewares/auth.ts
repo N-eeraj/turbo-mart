@@ -49,7 +49,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
     if (!token) {
       throw {
         status: 401,
-        message: "Missing or invalid authentication token",
+        message: "Missing authentication token",
       }
     }
 
@@ -62,7 +62,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
     if (!data?.admin) {
       throw {
         status: 401,
-        message: "Missing or invalid authentication token",
+        message: "Invalid authentication token",
       }
     }
 
