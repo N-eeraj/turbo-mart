@@ -9,7 +9,7 @@ export type SchemaShape = ZodRawShape
 
 /**
  * Validates given data against a Zod schema.
- *
+ * 
  * @param schema - A Zod object schema to validate against.
  * @param data - The data to validate.
  * @returns The parsed and validated data.

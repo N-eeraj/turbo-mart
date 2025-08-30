@@ -8,15 +8,15 @@ export type AdminObject = Pick<Admin, ObjectKeys> & { id: mongoose.Types.ObjectI
 interface AdminModel extends mongoose.Model<Admin> {
   /**
    * Authenticates an admin by email and password.
-   *
+   * 
    * This static method looks up a admin by their email and compares the provided
    * password with the stored hashed password using bcrypt.
-   *
+   * 
    * @param credentials - The login credentials.
    * - `email` - The admin's email.
    * - `password` - The admin's password.
    * @returns - Returns the admin document if authentication succeeds, otherwise null.
-   *
+   * 
    * @example
    * const admin = await Admin.authenticate({ email: "admin@example.com", password: "secret" });
    * if (!admin) {

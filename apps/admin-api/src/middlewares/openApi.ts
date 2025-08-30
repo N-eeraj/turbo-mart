@@ -26,6 +26,30 @@ const OPEN_API_DOCS = {
         bearerFormat: "JWT",
       },
     },
+    responses: {
+      InternalServerError: {
+        description: "Internal server error (unexpected error).",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                success: {
+                  type: "boolean",
+                  example: false,
+                  description: "Indicates the request failed.",
+                },
+                message: {
+                  type: "string",
+                  example: "Oops! Something went wrong",
+                  description: "Error message.",
+                },
+              },
+            }
+          },
+        },
+      },
+    },
   },
   security: [
     {
@@ -77,3 +101,9 @@ export function documentationJSON(_req: Request, res: Response) {
   res.setHeader("Content-Type", "application/json")
   res.send(swaggerSpec)
 }
+
+// {
+//   "success": false,
+//   "message": "Authorization header is required",
+//   "errors": null
+// }

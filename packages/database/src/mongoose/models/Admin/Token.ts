@@ -7,7 +7,7 @@ export type Token = Omit<AdminToken, "admin">
 interface AdminTokenModel extends mongoose.Model<AdminToken> {
   /**
    * Creates and saves a new token document for a given user.
-   *
+   * 
    * @param adminId - The ID of the user to associate the token with.
    * @returns The saved token document.
    */

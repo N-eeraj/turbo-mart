@@ -14,6 +14,9 @@ import {
 import {
   sendResponse,
 } from "#utils/response"
+import {
+  formatError,
+} from "#utils/formatter"
 
 declare global {
   namespace Express {
@@ -31,7 +34,7 @@ export interface UserToken extends Token {
 /**
  * Middleware to handle authentication and authorization. It typically checks for a token in the request headers,
  * validates it, and attaches the authenticated user's data to the request object before calling the next middleware.
- *
+ * 
  * If authentication fails, it'll send an error response with 401 status code.
  * 
  * @param req - The Express request object.
@@ -44,10 +47,10 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       .replace(/^Bearer\s/, "")
 
     if (!token) {
-      return sendResponse(res, false, {
-        status: 400,
-        message: "Authorization header is required",
-      })
+      throw {
+        status: 401,
+        message: "Missing or invalid authentication token",
+      }
     }
 
     const data = await AdminToken.findOne({
@@ -57,10 +60,10 @@ export default async function authMiddleware(req: Request, res: Response, next: 
       .lean<UserToken>()
 
     if (!data?.admin) {
-      return sendResponse(res, false, {
+      throw {
         status: 401,
-        message: "Unauthorized user",
-      })
+        message: "Missing or invalid authentication token",
+      }
     }
 
     const {
@@ -73,9 +76,12 @@ export default async function authMiddleware(req: Request, res: Response, next: 
 
     next()
   } catch (error) {
-    sendResponse(res, false, {
-      status: 401,
-      message: "Unauthorized user",
-    }, error)
+    const {
+      status,
+      message,
+      errors,
+    } = formatError(error)
+    
+    sendResponse(res, false, { status, message }, errors)
   }
 }

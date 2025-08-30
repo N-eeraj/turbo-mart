@@ -27,6 +27,8 @@ paths:
                   message:
                     type: string
                     example: Reached Server
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # API 404
   /api/{anyPath}:
@@ -59,3 +61,5 @@ paths:
                   message:
                     type: string
                     example: Cannot find the URL
+        "500":
+          $ref: "#/components/responses/InternalServerError"

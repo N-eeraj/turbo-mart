@@ -4,7 +4,7 @@ import env from "@app/load-env"
 
 /**
  * Establishes a connection to the mongo database.
- *
+ * 
  * @param callback - An optional function to be executed once the connection is successfully established.
  */
 async function connect(callback?: (connection: mongoose.Connection) => unknown) {

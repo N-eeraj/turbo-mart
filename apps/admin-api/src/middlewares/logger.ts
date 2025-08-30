@@ -9,7 +9,7 @@ import logger from "#utils/logger"
 
 /**
  * Pino HTTP middleware for logging Express requests.
- *
+ * 
  * - Logs method, URL, status code, and response time.
  * - Uses `customLogLevel` to determine severity based on response status.
  * - Serializes request to include only method and URL.
@@ -25,7 +25,7 @@ const httpLogger = pinoHttp({
   serializers: {
     /**
      * Custom request serializer to log only method and URL.
-     *
+     * 
      * @param req - Express request object
      * @returns simplified log object
      */

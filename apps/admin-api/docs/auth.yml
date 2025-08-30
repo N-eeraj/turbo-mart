@@ -117,20 +117,7 @@ paths:
                         example: ["Please enter your password"]
                         description: Validation errors for the password field.
         "500":
-          description: Internal server error (unexpected error).
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                    description: Indicates the request failed.
-                  message:
-                    type: string
-                    example: Oops! Something went wrong
-                    description: Error message.
+          $ref: "#/components/responses/InternalServerError"
 
   # Logout API
   /api/auth/logout:
@@ -170,17 +157,4 @@ paths:
                     example: Invalid authentication token
                     description: Error message.
         "500":
-          description: Internal server error (unexpected error).
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                    description: Indicates the request failed.
-                  message:
-                    type: string
-                    example: Oops! Something went wrong
-                    description: Error message.
+          $ref: "#/components/responses/InternalServerError"

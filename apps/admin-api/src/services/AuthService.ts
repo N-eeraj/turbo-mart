@@ -10,7 +10,7 @@ import {
 export default class AuthService {
   /**
    * Authenticates an admin with provided credentials and returns admin data along with an auth token.
-   *
+   * 
    * @param credentials - Login credentials (email and password).
    * @returns - The authenticated admin data along with the generated auth token.
    * @throws 401 error if admin is not found or credentials are invalid.
@@ -39,7 +39,7 @@ export default class AuthService {
 
   /**
    * Removes the token of an authenticated user.
-   *
+   * 
    * @param token - Token mongoose object.
    * @throws If token deletion fails.
    */

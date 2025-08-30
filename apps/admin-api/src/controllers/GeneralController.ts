@@ -11,7 +11,7 @@ import BaseController from "#controllers/BaseController"
 export default class GeneralController extends BaseController {
   /**
    * @route GET /api/ping
-   *
+   * 
    * Health check endpoint to verify server status.
    */
   static ping(_req: Request, res: Response) {
@@ -23,7 +23,7 @@ export default class GeneralController extends BaseController {
 
   /**
    * @route ALL /api/*
-   *
+   * 
    * Handles unmatched API routes and returns a 404 error response.
    */
   static handleRouteNotFound(_req: Request, res: Response) {

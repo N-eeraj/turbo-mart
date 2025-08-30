@@ -5,7 +5,6 @@ import {
 import {
   sendResponse,
   type SuccessResponse,
-  type ErrorResponse,
 } from "#src/utils/response"
 import {
   withPublicPath,
@@ -14,6 +13,9 @@ import validateData, {
   type SchemaShape,
 } from "#utils/validateData"
 import logger from "#utils/logger"
+import {
+  formatError,
+} from "#utils/formatter"
 
 export type LogLevel = "info" | "warn" | "error" | "fatal"
 
@@ -42,24 +44,15 @@ export default class BaseController {
    * 
    * @static
    * @param res - The Express response object.
-   * @param response - The error response details.
+   * @param error - The error response details.
    */
   static sendError(res: Response, error: unknown = {}) {
-    let status = 500
-    let message = "Oops! Something went wrong"
-    let errors
-
-    if (error && typeof error === "object") {
-      if ("status" in error && typeof error.status === "number") {
-        status = error.status
-      }
-      if ("message" in error && typeof error.message === "string") {
-        message = error.message
-      }
-      if ("errors" in error) {
-        errors = error.errors
-      }
-    }
+    const {
+      status,
+      message,
+      errors,
+    } = formatError(error)
+    
     sendResponse(res, false, { status, message }, errors)
   }
 
@@ -78,7 +71,7 @@ export default class BaseController {
    * Validates incoming data against a Zod schema.
    * 
    * Wraps `validateData` to standardize validation error responses.
-   *
+   * 
    * @static
    * @param schema - A Zod object schema to validate against.
    * @param data - The input data to validate (e.g., req.body).

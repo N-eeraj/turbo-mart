@@ -6,7 +6,7 @@ import GeneralController from "#controllers/GeneralController"
 
 /**
  * Root API router.
- *
+ * 
  * Mounts all domain-specific API routes.
  * Used in the base router (`src/routes/index.ts`) via `router.use("/api", apiRoutes)`.
  */

@@ -11,7 +11,7 @@ import BaseController from "#controllers/BaseController"
 export default class StaticController extends BaseController {
   /**
    * @route GET /
-   *
+   * 
    * Serves the home page (`index.html`).
    */
   static getHome(_req: Request, res: Response) {
@@ -20,7 +20,7 @@ export default class StaticController extends BaseController {
 
   /**
    * @route ALL * (when no other route matches)
-   *
+   * 
    * Serves the 404 Not Found page (`404.html`).
    */
   static handlePageNotFound(_req: Request, res: Response) {

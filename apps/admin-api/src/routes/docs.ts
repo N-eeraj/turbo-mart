@@ -8,7 +8,7 @@ import {
 
 /**
  * Documentation router.
- *
+ * 
  * Serves the API documentation routes, including the raw JSON spec
  * and the interactive Swagger UI.
  */

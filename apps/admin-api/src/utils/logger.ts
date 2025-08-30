@@ -6,7 +6,7 @@ import {
 
 /**
  * Configured Pino logger instance.
- *
+ * 
  * - Logs to both console (`pino-pretty`) and daily log file (`logs/YYYY-MM-DD.txt`)
  * - Console logs are colorized.
  * - File logs include response time and status code.
@@ -40,7 +40,7 @@ const logger = pino({
   formatters: {
     /**
      * Custom log formatter to include status code and response time.
-     *
+     * 
      * @param logData - Partial log object
      * @returns formatted log object with optional statusCode and responseTime
      */

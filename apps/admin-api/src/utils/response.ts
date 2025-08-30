@@ -24,13 +24,13 @@ type ApiResponse =
 
 /**
  * Sends a standardized JSON response.
- *
+ * 
  * @param res - Express response object.
  * @param success - Whether the response is a success (`true`) or an error (`false`).
  * @param status - HTTP status code.
  * @param message - Description of the response.
  * @param info - Optional data (on success) or errors (on failure).
- *
+ * 
  * @example
  * sendResponse(res, true, { status: 200, message: "OK" }, { id: 1 })
  * sendResponse(res, false, { status: 400, message: "Bad Request" }, { field: "Invalid" })

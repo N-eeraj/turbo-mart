@@ -11,7 +11,7 @@ if (!env.MYSQL_DB_URI) {
 
 /**
  * Get drizzle db object.
- *
+ * 
  * @returns A drizzle database instance
  */
 // export const db = drizzle(env.MYSQL_DB_URI)
