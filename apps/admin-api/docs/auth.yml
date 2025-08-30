@@ -18,15 +18,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                  description: User's email address.
-                password:
-                  type: string
-                  description: User's password.
+              $ref: "#/components/schemas/LoginSchema"
       responses:
         "200":
           description: Successfully logged in and received authentication token.
