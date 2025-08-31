@@ -4,17 +4,14 @@ import {
   type Response,
 } from "express"
 
-import loadOpenApiDocs from "#src/config/openApi"
-
-// Load the merged Swagger documentation from YAML files
-const openApiSpec = loadOpenApiDocs()
+import OPEN_API_CONFIG from "#src/config/openApi"
 
 // Set up Swagger UI
 export const swaggerUIServer = swaggerUI.serve
-export const swaggerSetup = swaggerUI.setup(openApiSpec)
+export const swaggerSetup = swaggerUI.setup(OPEN_API_CONFIG)
 
 // Endpoint to serve Swagger JSON directly
 export function documentationJSON(_req: Request, res: Response) {
   res.setHeader("Content-Type", "application/json")
-  res.send(openApiSpec)
+  res.send(OPEN_API_CONFIG)
 }

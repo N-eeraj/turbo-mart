@@ -1,9 +1,5 @@
-import path from "path"
-import YAML from "yamljs"
-import fs from "fs"
-import {
-  withAppPath,
-} from "#utils/pathUtils"
+import general from "#docs/general" with { type: "json" }
+import auth from "#docs/auth" with { type: "json" }
 
 import {
   loginJSONSchema,
@@ -91,7 +87,10 @@ const OPEN_API_CONFIG = {
     title: process.env.npm_package_name as string,
     version: process.env.npm_package_version as string,
   },
-  paths: {},
+  paths: {
+    ...auth.paths,
+    ...general.paths,
+  },
   components: {
     securitySchemes: {
       BearerAuth: {
@@ -110,35 +109,4 @@ const OPEN_API_CONFIG = {
   ],
 }
 
-const docsPath = withAppPath("docs")
-
-// Function to load and merge multiple YAML files from docs folder
-function loadOpenApiDocs() {
-  const files = fs.readdirSync(docsPath)
-
-  // Loop through all YAML files in the docs folder
-  files.forEach(file => {
-    if (file.endsWith(".yml") || file.endsWith(".yaml")) {
-      const filePath = path.join(docsPath, file)
-      const yamlDoc = YAML.load(filePath)
-
-      // Merge paths from each YAML file into the main OPEN_API_CONFIG object
-      if (yamlDoc.paths) {
-        Object.assign(OPEN_API_CONFIG.paths, yamlDoc.paths)
-      }
-
-      // Optionally merge components or other sections if needed
-      if (yamlDoc.components) {
-        if (!OPEN_API_CONFIG.components) {
-          OPEN_API_CONFIG.components = yamlDoc.components
-        } else {
-          Object.assign(OPEN_API_CONFIG.components, yamlDoc.components)
-        }
-      }
-    }
-  })
-
-  return OPEN_API_CONFIG
-}
-
-export default loadOpenApiDocs
+export default OPEN_API_CONFIG
