@@ -41,7 +41,7 @@ export interface UserToken extends Token {
  * @param res - The Express response object.
  * @param next - The Express next middleware function.
  */
-export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function authenticationMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     const token = (req.headers.authorization ?? "")
       .replace(/^Bearer\s/, "")

@@ -1,5 +1,6 @@
 import general from "#docs/general" with { type: "json" }
 import auth from "#docs/auth" with { type: "json" }
+import superAdmin from "#docs/superAdmin" with { type: "json" }
 
 import {
   loginJSONSchema,
@@ -10,8 +11,8 @@ const schemas = {
 }
 
 const responses = {
-  UnauthorizedUser: {
-    description: "Unauthorized User",
+  UnauthenticatedUser: {
+    description: "Unauthenticated User",
     content: {
       "application/json": {
         schema: {
@@ -57,6 +58,28 @@ const responses = {
       }
     }
   },
+  UnauthorizedSuperAdminUser: {
+    description: "Unauthorized super admin",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: false,
+              description: "Indicates whether the request was successful."
+            },
+            message: {
+              type: "string",
+              example: "Super admin access required",
+              description: "Error message: Action is restricted to super admin users."
+            }
+          }
+        }
+      }
+    }
+  },
   InternalServerError: {
     description: "Internal server error (unexpected error).",
     content: {
@@ -88,8 +111,9 @@ const OPEN_API_CONFIG = {
     version: process.env.npm_package_version as string,
   },
   paths: {
-    ...auth.paths,
     ...general.paths,
+    ...auth.paths,
+    ...superAdmin.paths,
   },
   components: {
     securitySchemes: {

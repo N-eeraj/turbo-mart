@@ -18,6 +18,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Boolean indicating whether the request was successful."
+                    },
                     "data": {
                       "type": "string",
                       "example": "pong"
@@ -61,9 +65,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 404
+                    "success": {
+                      "type": "boolean",
+                      "description": "Boolean indicating whether the request was successful."
                     },
                     "errors": {
                       "type": "string",

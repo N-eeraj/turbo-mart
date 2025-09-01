@@ -1,0 +1,44 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "General API Documentation",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/super-admin/admin": {
+      "get": {
+        "tags": ["Super Admin"],
+        "summary": "List admins",
+        "description": "Endpoint to list all admins.",
+        "responses": {
+          "200": {
+            "description": "Fetched list of admins",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": "pong"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reached Server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/UnauthorizedSuperAdminUser"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  }
+}

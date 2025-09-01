@@ -2,6 +2,7 @@ import express from "express"
 
 import corsMiddleware from "#middlewares/cors"
 import authRouter from "#routes/api/auth"
+import superAdminRouter from "#routes/api/superAdmin"
 import GeneralController from "#controllers/GeneralController"
 
 /**
@@ -16,6 +17,7 @@ const apiRouter = express.Router()
 apiRouter.use(corsMiddleware)
 
 apiRouter.use("/auth", authRouter)
+apiRouter.use("/super-admin", superAdminRouter)
 
 apiRouter.get("/ping", GeneralController.ping)
 apiRouter.use(GeneralController.handleRouteNotFound)
