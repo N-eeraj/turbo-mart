@@ -7,7 +7,7 @@
   "paths": {
     "/api/super-admin/admin": {
       "get": {
-        "tags": ["Super Admin"],
+        "tags": ["Admin Management"],
         "summary": "List admins",
         "description": "Endpoint to list all admins.",
         "responses": {

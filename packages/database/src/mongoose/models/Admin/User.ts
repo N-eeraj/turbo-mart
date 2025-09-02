@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
 export type Admin = mongoose.HydratedDocument<mongoose.InferSchemaType<typeof AdminSchema>>
-export type ObjectKeys = "email" | "name" | "role" | "createdAt"
+export type ObjectKeys = "email" | "name" | "role" | "permissions" | "createdAt"
 export type AdminObject = Pick<Admin, ObjectKeys> & { id: mongoose.Types.ObjectId }
 
 interface AdminModel extends mongoose.Model<Admin> {
@@ -34,8 +34,40 @@ interface LoginCredentials {
 const SALT_ROUNDS = 10
 
 /**
+ * Admin roles used for authorization and access control.
+ *
+ * @readonly
+ * @enum
+ * @property SUPER_ADMIN - Highest level admin with full privileges.
+ * @property ADMIN - Standard admin with permission based access.
+ */
+export enum Roles {
+  SUPER_ADMIN,
+  ADMIN,
+}
+
+/**
+ * Permission levels representing different management roles and access rights.
+ *
+ * @readonly
+ * @enum
+ * @property RETAILER_MANAGER - Permission to manage retailers.
+ * @property CATALOGUE_MANAGER - Permission to manage product catalogues.
+ * @property DELIVERY_PERSON_MANAGER - Permission to manage delivery personnel.
+ * @property FINANCE_MANAGER - Permission to manage financial operations.
+ * @property DATA_ANALYST - Permission to analyze data and generate reports.
+ */
+export enum Permissions {
+  RETAILER_MANAGER,
+  CATALOGUE_MANAGER,
+  DELIVERY_PERSON_MANAGER,
+  FINANCE_MANAGER,
+  DATA_ANALYST,
+}
+
+/**
  * Mongoose schema for admin users.
- * Stores name, unique email, hashed password, role, and timestamps.
+ * Stores name, unique email, hashed password, role, permissions, and timestamps.
  */
 const AdminSchema = new mongoose.Schema({
   name: {
@@ -53,13 +85,19 @@ const AdminSchema = new mongoose.Schema({
     required: true,
   },
   role: {
-    type: String,
-    enum: [
-      "SUPER_ADMIN",
-      "ADMIN",
-    ],
+    type: Number,
+    enum: Object.values(Roles).map(Number),
     required: true,
     default: "ADMIN"
+  },
+  permissions: {
+    type: [
+      {
+        type: Number,
+        enum: Object.values(Permissions).map(Number),
+      }
+    ],
+    default: undefined,
   },
 }, {
   timestamps: true,
@@ -87,12 +125,13 @@ AdminSchema.pre("save", async function(next) {
  * @param admin - The admin object to transform.
  * @returns The transformed admin object.
  */
-export function transformUser({ _id, email, name, role, createdAt }: Admin): AdminObject {
+export function transformUser({ _id, email, name, role, permissions, createdAt }: Admin): AdminObject {
   return {
     id: _id,
     email,
     name,
     role,
+    permissions,
     createdAt,
   }
 }

@@ -7,7 +7,7 @@
   "type": "module",
   "main": "app.ts",
   "scripts": {
-    "dev": "node --watch --env-file=.env src/app.ts",
+    "dev": "node --watch --env-file=.env --import tsx src/app.ts",
     "command": "node --env-file=.env src/commands/index.ts"
   },
   "imports": {

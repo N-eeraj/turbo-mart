@@ -39,8 +39,8 @@ export default class Setup {
    * Ensures a super admin exists; creates one using env vars if missing.
    * Connects to MongoDB, checks by email, and inserts if not found.
    */
-  private static createSuperAdmin() {
-    connectMongoDB(async (connection) => {
+  private static async createSuperAdmin() {
+    await connectMongoDB(async (connection) => {
       try {
         if (!connection.db) {
           throw new Error("Database not found")
@@ -73,8 +73,9 @@ export default class Setup {
    * - Ensures required directories (e.g., logs) exist.
    * - Ensures a super admin user exists in the database.
    */
-  static execute(..._args: Array<unknown>): void {
+  static async execute(..._args: Array<unknown>): Promise<void> {
     this.ensureDirectory(LOG_PATH)
-    this.createSuperAdmin()
+    await this.createSuperAdmin()
+    process.exit(0)
   }
 }
