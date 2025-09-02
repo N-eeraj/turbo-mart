@@ -4,7 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import AuthService from "#src/services/AuthService"
+import AuthService from "#services/AuthService"
 import {
   loginSchema,
 } from "#schemas/auth"
@@ -38,6 +38,7 @@ export default class AuthController extends BaseController {
 
   /**
    * @route POST /api/auth/logout
+   * 
    * Logs out the user by removing the authentication token.
    */
   static async logout({ token }: Request, res: Response) {

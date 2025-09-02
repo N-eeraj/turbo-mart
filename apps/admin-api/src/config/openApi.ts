@@ -1,6 +1,6 @@
 import general from "#docs/general" with { type: "json" }
 import auth from "#docs/auth" with { type: "json" }
-import superAdmin from "#docs/superAdmin" with { type: "json" }
+import adminManagement from "#docs/superAdmin/adminManagement" with { type: "json" }
 
 import {
   loginJSONSchema,
@@ -113,7 +113,7 @@ const OPEN_API_CONFIG = {
   paths: {
     ...general.paths,
     ...auth.paths,
-    ...superAdmin.paths,
+    ...adminManagement.paths,
   },
   components: {
     securitySchemes: {

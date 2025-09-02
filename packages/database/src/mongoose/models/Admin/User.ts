@@ -82,17 +82,27 @@ AdminSchema.pre("save", async function(next) {
 })
 
 /**
+ * Transforms an Admin object by mapping internal `_id` to external `id` and returning only the required fields.
+ * 
+ * @param admin - The admin object to transform.
+ * @returns The transformed admin object.
+ */
+export function transformUser({ _id, email, name, role, createdAt }: Admin): AdminObject {
+  return {
+    id: _id,
+    email,
+    name,
+    role,
+    createdAt,
+  }
+}
+
+/**
  * Set toObject transformer to return only required values
  */
 AdminSchema.set("toObject", {
-  transform: function (_doc, { _id, email, name, role, createdAt }): AdminObject {
-    return {
-      id: _id,
-      email,
-      name,
-      role,
-      createdAt,
-    }
+  transform: function (_doc, ret): AdminObject {
+    return transformUser(ret as Admin)
   }
 })
 

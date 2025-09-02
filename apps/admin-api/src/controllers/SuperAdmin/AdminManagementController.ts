@@ -4,22 +4,23 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
+import AdminManagementService from "#services/SuperAdmin/AdminManagementService"
 
 /**
- * Controller for all super admin related APIs routes.
+ * Controller for all admin management related APIs routes.
  */
-export default class SuperAdminController extends BaseController {
+export default class AdminManagementController extends BaseController {
   /**
    * @route GET /api/super-admin/admin
    * 
-   * Validates login credentials and logs in the user.
+   * Returns a list of admin users.
    */
   static async getAllAdmins(_req: Request, res: Response) {
     try {
-      const data = []!
+      const data = await AdminManagementService.getAllAdmins()
 
       super.sendSuccess(res, {
-        message: "Fetched all super admins",
+        message: "Fetched all admins",
         data,
       })
     } catch (error) {

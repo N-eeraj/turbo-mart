@@ -2,7 +2,7 @@ import express from "express"
 
 import corsMiddleware from "#middlewares/cors"
 import authRouter from "#routes/api/auth"
-import superAdminRouter from "#routes/api/superAdmin"
+import superAdminRouter from "#routes/api/superAdmin/index"
 import GeneralController from "#controllers/GeneralController"
 
 /**

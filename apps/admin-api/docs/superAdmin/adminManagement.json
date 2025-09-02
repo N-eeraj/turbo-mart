@@ -18,9 +18,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Boolean indicating whether the request was successful."
+                    },
                     "data": {
-                      "type": "string",
-                      "example": "pong"
+                      "type": "array",
+                      "example": "[]"
                     },
                     "message": {
                       "type": "string",
