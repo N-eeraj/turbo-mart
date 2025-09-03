@@ -21,5 +21,6 @@ adminManagementRouter.route("/")
     superAdminAuthorizationMiddleware,
   ])
   .get(AdminManagementController.getAllAdmins)
+  .post(AdminManagementController.createAdmin)
 
 export default adminManagementRouter

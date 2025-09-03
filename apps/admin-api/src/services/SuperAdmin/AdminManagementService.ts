@@ -8,7 +8,7 @@ export default class AdminManagementService {
    * 
    * @throws If database lookup fails.
    */
-  static async getAllAdmins() {
+  static async fetchAllAdmins() {
     const admins = await Admin.find({
       role: "ADMIN"
     })

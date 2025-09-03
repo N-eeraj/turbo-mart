@@ -1,6 +1,6 @@
 import express from "express"
 
-import adminManagementRouter from "#routes/api/superAdmin/admin"
+import adminManagementRouter from "#routes/api/superAdmin/adminManagement"
 
 /**
  * Super Admin APIs router.
