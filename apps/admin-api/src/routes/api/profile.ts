@@ -12,6 +12,10 @@ import ProfileController from "#controllers/ProfileController"
  */
 const profileRouter = express.Router()
 
-profileRouter.get("/", authenticationMiddleware, ProfileController.getUserDetails)
+profileRouter.route("/")
+  .all([
+    authenticationMiddleware,
+  ])
+  .get(ProfileController.getUserDetails)
 
 export default profileRouter

@@ -1,7 +1,7 @@
-import general from "#docs/general" with { type: "json" }
-import auth from "#docs/auth" with { type: "json" }
-import profile from "#docs/profile" with { type: "json" }
-import adminManagement from "#docs/superAdmin/adminManagement" with { type: "json" }
+import generalPaths from "#docs/general" with { type: "json" }
+import authPaths from "#docs/auth" with { type: "json" }
+import profilePaths from "#docs/profile" with { type: "json" }
+import adminManagementPaths from "#docs/superAdmin/adminManagement" with { type: "json" }
 
 import {
   loginJSONSchema,
@@ -112,10 +112,10 @@ const OPEN_API_CONFIG = {
     version: process.env.npm_package_version as string,
   },
   paths: {
-    ...general.paths,
-    ...auth.paths,
-    ...adminManagement.paths,
-    ...profile.paths,
+    ...generalPaths,
+    ...authPaths,
+    ...profilePaths,
+    ...adminManagementPaths,
   },
   components: {
     securitySchemes: {

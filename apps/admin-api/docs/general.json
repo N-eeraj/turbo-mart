@@ -1,90 +1,83 @@
 {
-  "openapi": "3.1.1",
-  "info": {
-    "title": "General API Documentation",
-    "version": "1.0.0"
-  },
-  "paths": {
-    "/api/ping": {
-      "get": {
-        "tags": ["General"],
-        "summary": "Health check",
-        "description": "Health check endpoint to verify server status.",
-        "responses": {
-          "200": {
-            "description": "Server is reachable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Boolean indicating whether the request was successful."
-                    },
-                    "data": {
-                      "type": "string",
-                      "example": "pong"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Reached Server"
-                    }
+  "/api/ping": {
+    "get": {
+      "tags": ["General"],
+      "summary": "Health check",
+      "description": "Health check endpoint to verify server status.",
+      "responses": {
+        "200": {
+          "description": "Server is reachable",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "string",
+                    "example": "pong"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Reached Server"
                   }
                 }
               }
             }
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
         }
       }
-    },
-    "/api/{anyPath}": {
-      "get": {
-        "tags": ["General"],
-        "summary": "Catch-all 404 handler",
-        "description": "Handles unmatched API routes.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "anyPath",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Any unmatched route"
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Boolean indicating whether the request was successful."
-                    },
-                    "errors": {
-                      "type": "string",
-                      "example": "Not Found"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Cannot find the URL"
-                    }
+    }
+  },
+  "/api/{anyPath}": {
+    "get": {
+      "tags": ["General"],
+      "summary": "Catch-all 404 handler",
+      "description": "Handles unmatched API routes.",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "anyPath",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Any unmatched route"
+        }
+      ],
+      "responses": {
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "errors": {
+                    "type": "string",
+                    "example": "Not Found"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Cannot find the URL"
                   }
                 }
               }
             }
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
         }
       }
     }

@@ -1,63 +1,61 @@
 {
-  "openapi": "3.1.1",
-  "info": {
-    "title": "Profile API Documentation",
-    "version": "1.0.0"
-  },
-  "paths": {
-    "/api/profile": {
-      "get": {
-        "tags": ["Profile"],
-        "summary": "Profile Details",
-        "description": "Get details of the logged in user.",
-        "responses": {
-          "200": {
-            "description": "Retrieved the user details successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Boolean indicating whether the request was successful."
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "Unique user ID."
-                        },
-                        "email": {
-                          "type": "string",
-                          "description": "User's email address."
-                        },
-                        "name": {
-                          "type": "string",
-                          "description": "User's full name."
-                        },
-                        "role": {
-                          "type": "string",
-                          "description": "User's role (e.g., \"SUPER_ADMIN\", \"ADMIN\")."
-                        }
+  "/api/profile": {
+    "get": {
+      "tags": ["Profile"],
+      "summary": "Profile Details",
+      "description": "Get details of the logged in user.",
+      "responses": {
+        "200": {
+          "description": "Retrieved the user details successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Unique user ID."
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "User's email address."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "User's full name."
+                      },
+                      "role": {
+                        "type": "string",
+                        "description": "User's role (e.g., \"SUPER_ADMIN\", \"ADMIN\")."
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp when the user was created. Follows ISO 8601 format."
                       }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Fetched User Details"
                     }
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched User Details"
                   }
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthenticatedUser"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
         }
       }
     }
