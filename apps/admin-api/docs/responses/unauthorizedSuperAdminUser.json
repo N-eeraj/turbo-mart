@@ -1,0 +1,22 @@
+{
+  "description": "Unauthorized super admin",
+  "content": {
+    "application/json": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indicates whether the request was successful."
+          },
+          "message": {
+            "type": "string",
+            "example": "Super admin access required",
+            "description": "Error message: Action is restricted to super admin users."
+          }
+        }
+      }
+    }
+  }
+}

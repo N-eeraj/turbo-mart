@@ -1,0 +1,47 @@
+{
+  "description": "Unauthenticated User",
+  "content": {
+    "application/json": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indicates the request failed."
+          },
+          "message": {
+            "oneOf": [
+              {
+                "type": "string",
+                "example": "Missing authentication token",
+                "description": "Error message: Missing authentication token."
+              },
+              {
+                "type": "string",
+                "example": "Invalid authentication token",
+                "description": "Error message: Invalid authentication token."
+              }
+            ]
+          }
+        }
+      },
+      "examples": {
+        "MissingAuthToken": {
+          "summary": "Missing Authentication Token",
+          "value": {
+            "success": false,
+            "message": "Missing authentication token"
+          }
+        },
+        "InvalidAuthToken": {
+          "summary": "Invalid Authentication Token",
+          "value": {
+            "success": false,
+            "message": "Invalid authentication token"
+          }
+        }
+      }
+    }
+  }
+}

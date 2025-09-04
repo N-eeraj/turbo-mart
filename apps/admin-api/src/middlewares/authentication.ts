@@ -8,7 +8,9 @@ import AdminToken, {
   type Token,
 } from "@app/database/mongoose/models/Admin/Token.ts"
 import {
+  transformUser,
   type AdminObject,
+  type Admin as AdminType,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
 import {
@@ -28,7 +30,7 @@ declare global {
 }
 
 export interface UserToken extends Token {
-  admin: AdminObject
+  admin: AdminType
 }
 
 /**
@@ -70,7 +72,7 @@ export async function authenticationMiddleware(req: Request, res: Response, next
       admin,
       ...authToken
     } = data
-    req.user = admin
+    req.user = transformUser(admin)
 
     req.token = authToken
 

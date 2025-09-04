@@ -1,6 +1,8 @@
 import fs from "fs"
 
-import AdminUser from "@app/database/mongoose/models/Admin/User.ts"
+import AdminUser, {
+  Roles,
+} from "@app/database/mongoose/models/Admin/User.ts"
 
 import {
   withStoragePath,
@@ -54,7 +56,7 @@ export default class Setup {
           const superAdmin = new AdminUser({
             name: process.env.SUPER_ADMIN_NAME,
             email: process.env.SUPER_ADMIN_EMAIL,
-            role: "SUPER_ADMIN",
+            role: Roles.SUPER_ADMIN,
             password: process.env.SUPER_ADMIN_PASSWORD,
           })
           await superAdmin.save()

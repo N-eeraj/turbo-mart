@@ -1,5 +1,6 @@
 import Admin, {
   transformUser,
+  type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
 export default class AdminManagementService {
@@ -8,7 +9,7 @@ export default class AdminManagementService {
    * 
    * @throws If database lookup fails.
    */
-  static async fetchAllAdmins() {
+  static async fetchAllAdmins(): Promise<Array<AdminObject>> {
     const admins = await Admin.find({
       role: "ADMIN"
     })

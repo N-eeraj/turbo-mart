@@ -1,0 +1,22 @@
+{
+  "description": "Internal server error (unexpected error).",
+  "content": {
+    "application/json": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indicates the request failed."
+          },
+          "message": {
+            "type": "string",
+            "example": "Oops! Something went wrong",
+            "description": "Error message."
+          }
+        }
+      }
+    }
+  }
+}

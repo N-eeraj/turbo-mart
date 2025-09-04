@@ -136,15 +136,6 @@ export function transformUser({ _id, email, name, role, permissions, createdAt }
   }
 }
 
-/**
- * Set toObject transformer to return only required values
- */
-AdminSchema.set("toObject", {
-  transform: function (_doc, ret): AdminObject {
-    return transformUser(ret as Admin)
-  }
-})
-
 AdminSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {
   const admin = await this.findOne({
     email,

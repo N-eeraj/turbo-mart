@@ -7,7 +7,7 @@ import BaseController from "#controllers/BaseController"
 import AdminManagementService from "#services/SuperAdmin/AdminManagementService"
 import {
   adminSchema,
-} from "#schemas/superAdmin/admin"
+} from "#schemas/user"
 
 /**
  * Controller for all admin management related APIs routes.

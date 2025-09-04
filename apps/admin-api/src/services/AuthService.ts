@@ -1,4 +1,7 @@
-import AdminUser from "@app/database/mongoose/models/Admin/User.ts"
+import AdminUser, {
+  transformUser,
+  type AdminObject,
+} from "@app/database/mongoose/models/Admin/User.ts"
 import AdminToken, {
   type Token,
 } from "@app/database/mongoose/models/Admin/Token.ts"
@@ -6,6 +9,14 @@ import AdminToken, {
 import {
   type LoginData,
 } from "#schemas/auth"
+
+interface LoginResponse {
+  user: AdminObject
+  token: {
+    value: string
+    expiresAt: NativeDate
+  }
+}
 
 export default class AuthService {
   /**
@@ -16,7 +27,7 @@ export default class AuthService {
    * @throws 401 error if admin is not found or credentials are invalid.
    * @throws If token generation fails.
    */
-  static async login(credentials: LoginData) {
+  static async login(credentials: LoginData): Promise<LoginResponse> {
     const admin = await AdminUser.authenticate(credentials)
 
     // throw validation error if admin is not found
@@ -32,8 +43,11 @@ export default class AuthService {
     if (!authToken) throw {}
 
     return {
-      user: admin.toObject(),
-      token: authToken.toObject(),
+      user: transformUser(admin),
+      token: {
+        value: authToken.token,
+        expiresAt: authToken.expiresAt,
+      },
     }
   }
 
@@ -43,7 +57,7 @@ export default class AuthService {
    * @param token - Token object from the request.
    * @throws If token deletion fails.
    */
-  static async logout(token: Token) {
+  static async logout(token: Token): Promise<void> {
     await AdminToken.findByIdAndDelete(token._id)
   }
 }

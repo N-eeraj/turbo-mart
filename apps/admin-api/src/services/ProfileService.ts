@@ -1,11 +1,11 @@
-import Admin, {
-  type AdminObject,
+import AdminUser, {
   transformUser,
+  type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
 import {
   type ProfileUpdateData,
-} from "#schemas/superAdmin/admin"
+} from "#schemas/user"
 
 export default class ProfileService {
   /**
@@ -21,16 +21,13 @@ export default class ProfileService {
   /**
    * Updates the admin user data.
    * 
-   * @param user - Admin user object.
+   * @param userId - Admin user id.
    * @param data - Fields to be updated.
    * @throws 404 error if admin is not found.
    * @throws If the admin user update fails.
    */
-  static async updateUserDetails(user: AdminObject["id"], data: ProfileUpdateData): Promise<AdminObject> {
-    const updatedUser = await Admin.findByIdAndUpdate(user, {
-      ...user,
-      ...data,
-    })
+  static async updateUserDetails(userId: AdminObject["id"], data: ProfileUpdateData): Promise<AdminObject> {
+    const updatedUser = await AdminUser.findByIdAndUpdate(userId, data)
 
     // throw validation error if admin is not found
     if (!updatedUser) {

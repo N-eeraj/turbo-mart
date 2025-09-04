@@ -7,7 +7,7 @@ import BaseController from "#controllers/BaseController"
 import ProfileService from "#services/ProfileService"
 import {
   profileUpdateSchema,
-} from "#schemas/superAdmin/admin"
+} from "#schemas/user"
 
 /**
  * Controller for all profile related APIs routes.

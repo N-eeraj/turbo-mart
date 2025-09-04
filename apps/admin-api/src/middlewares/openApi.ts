@@ -4,7 +4,7 @@ import {
   type Response,
 } from "express"
 
-import OPEN_API_CONFIG from "#src/config/openApi"
+import OPEN_API_CONFIG from "#src/config/openApi/index"
 
 // Set up Swagger UI
 export const swaggerUIServer = swaggerUI.serve
