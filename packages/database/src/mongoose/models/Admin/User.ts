@@ -3,7 +3,7 @@ import bcrypt from "bcrypt"
 
 export type Admin = mongoose.HydratedDocument<mongoose.InferSchemaType<typeof AdminSchema>>
 export type ObjectKeys = "email" | "name" | "role" | "permissions" | "createdAt"
-export type AdminObject = Pick<Admin, ObjectKeys> & { id: mongoose.Types.ObjectId }
+export type AdminObject = Pick<Admin, ObjectKeys> & { id: Admin["_id"] }
 
 interface AdminModel extends mongoose.Model<Admin> {
   /**
@@ -38,8 +38,8 @@ const SALT_ROUNDS = 10
  *
  * @readonly
  * @enum
- * @property SUPER_ADMIN - Highest level admin with full privileges.
- * @property ADMIN - Standard admin with permission based access.
+ * @property SUPER_ADMIN = 0 - Highest level admin with full privileges.
+ * @property ADMIN = 1 - Standard admin with permission based access.
  */
 export enum Roles {
   SUPER_ADMIN,
@@ -51,11 +51,11 @@ export enum Roles {
  *
  * @readonly
  * @enum
- * @property RETAILER_MANAGER - Permission to manage retailers.
- * @property CATALOGUE_MANAGER - Permission to manage product catalogues.
- * @property DELIVERY_PERSON_MANAGER - Permission to manage delivery personnel.
- * @property FINANCE_MANAGER - Permission to manage financial operations.
- * @property DATA_ANALYST - Permission to analyze data and generate reports.
+ * @property RETAILER_MANAGER = 0 - Permission to manage retailers.
+ * @property CATALOGUE_MANAGER = 1 - Permission to manage product catalogues.
+ * @property DELIVERY_PERSON_MANAGER = 2 - Permission to manage delivery personnel.
+ * @property FINANCE_MANAGER = 3 - Permission to manage financial operations.
+ * @property DATA_ANALYST = 4 - Permission to analyze data and generate reports.
  */
 export enum Permissions {
   RETAILER_MANAGER,

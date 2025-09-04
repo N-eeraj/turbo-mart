@@ -17,5 +17,6 @@ profileRouter.route("/")
     authenticationMiddleware,
   ])
   .get(ProfileController.getUserDetails)
+  .put(ProfileController.updateUserDetails)
 
 export default profileRouter

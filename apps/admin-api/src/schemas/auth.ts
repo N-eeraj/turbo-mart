@@ -11,7 +11,8 @@ export const loginSchema = z.object({
   email: z.email({ error: (issue) => {
     if (!issue.input) return EMAIL.required
     return EMAIL.valid
-  }}).meta({
+  }})
+  .meta({
     description: "User's email address",
     example: "user@example.com",
   }),

@@ -8,7 +8,7 @@ import AdminToken, {
   type Token,
 } from "@app/database/mongoose/models/Admin/Token.ts"
 import {
-  type Admin,
+  type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
 import {
@@ -21,14 +21,14 @@ import {
 declare global {
   namespace Express {
     interface Request {
-      user: Admin
+      user: AdminObject
       token: Token
     }
   }
 }
 
 export interface UserToken extends Token {
-  admin: Admin
+  admin: AdminObject
 }
 
 /**
