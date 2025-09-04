@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "General API Documentation",
+    "title": "Admin Management API Documentation",
     "version": "1.0.0"
   },
   "paths": {
@@ -34,6 +34,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthenticatedUser"
           },
           "403": {
             "$ref": "#/components/responses/UnauthorizedSuperAdminUser"

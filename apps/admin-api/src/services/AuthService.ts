@@ -40,7 +40,7 @@ export default class AuthService {
   /**
    * Removes the token of an authenticated user.
    * 
-   * @param token - Token mongoose object.
+   * @param token - Token object from the request.
    * @throws If token deletion fails.
    */
   static async logout(token: Token) {
