@@ -3,7 +3,9 @@ import Admin, {
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
-export default class AdminManagementService {
+import BaseService from "#services/BaseService"
+
+export default class AdminManagementService extends BaseService {
   /**
    * Fetch the admin users with the "ADMIN" role.
    * 

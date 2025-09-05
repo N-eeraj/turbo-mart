@@ -144,6 +144,27 @@
             }
           }
         },
+        "409": {
+          "description": "Email already in use.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Email already in use"
+                  }
+                }
+              }
+            }
+          }
+        },
         "500": {
           "$ref": "#/components/responses/InternalServerError"
         }

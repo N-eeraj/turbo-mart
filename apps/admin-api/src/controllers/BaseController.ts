@@ -12,16 +12,16 @@ import {
 import validateData, {
   type SchemaShape,
 } from "#utils/validateData"
-import logger from "#utils/logger"
 import {
   formatError,
 } from "#utils/formatter"
-
-export type LogLevel = "info" | "warn" | "error" | "fatal"
+import BaseService, {
+  type LogLevel,
+} from "#services/BaseService"
 
 /**
  * BaseController class provides static utility methods for handling common 
- * operations in controllers like sending responses, validating requests, logging, and sending files.
+ * operations in controllers like sending responses, validating requests, and sending files.
  */
 export default class BaseController {
   /**
@@ -101,6 +101,6 @@ export default class BaseController {
    * @param level (default: "info") - The log level.
    */
   static log(message: unknown, level: LogLevel = "info") {
-    logger[level](message)
+    BaseService.log(message, level)
   }
 }

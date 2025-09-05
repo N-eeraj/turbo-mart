@@ -6,6 +6,7 @@ import AdminToken, {
   type Token,
 } from "@app/database/mongoose/models/Admin/Token.ts"
 
+import BaseService from "#services/BaseService"
 import {
   type LoginData,
 } from "#schemas/auth"
@@ -18,7 +19,7 @@ interface LoginResponse {
   }
 }
 
-export default class AuthService {
+export default class AuthService extends BaseService {
   /**
    * Authenticates an admin with provided credentials and returns admin data along with an auth token.
    * 
