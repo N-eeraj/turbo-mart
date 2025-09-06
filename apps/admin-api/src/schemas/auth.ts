@@ -12,10 +12,11 @@ export const loginSchema = z.object({
     if (!issue.input) return EMAIL.required
     return EMAIL.valid
   }})
-  .meta({
-    description: "User's email address",
-    example: "user@example.com",
-  }),
+    .trim()
+    .meta({
+      description: "User's email address",
+      example: "user@example.com",
+    }),
   password: z.string({ error: PASSWORD.required })
     .nonempty(PASSWORD.required)
     .meta({

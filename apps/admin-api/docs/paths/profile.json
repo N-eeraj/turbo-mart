@@ -165,6 +165,50 @@
             }
           }
         },
+        "422": {
+          "description": "Validation error (if request body is missing required fields).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "email": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter an email"],
+                        "description": "Validation errors for the email field."
+                      },
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a name"],
+                        "description": "Validation errors for the name field."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "500": {
           "$ref": "#/components/responses/InternalServerError"
         }
@@ -187,8 +231,75 @@
         }
       },
       "responses": {
+        "200": {
+          "description": "Updated the user details successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "null"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Updated Password"
+                  }
+                }
+              }
+            }
+          }
+        },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "422": {
+          "description": "Validation error (if request body is missing required fields).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "password": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a password"],
+                        "description": "Validation errors for the password field."
+                      },
+                      "newPassword": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a password"],
+                        "description": "Validation errors for the new password field."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         "500": {
           "$ref": "#/components/responses/InternalServerError"

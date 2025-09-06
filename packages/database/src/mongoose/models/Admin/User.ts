@@ -88,7 +88,7 @@ const AdminSchema = new mongoose.Schema({
     type: Number,
     enum: Object.values(Roles).map(Number),
     required: true,
-    default: "ADMIN"
+    default: Roles.ADMIN,
   },
   permissions: {
     type: [
@@ -136,6 +136,12 @@ export function transformUser({ _id, email, name, role, permissions, createdAt }
   }
 }
 
+/**
+ * Static model method to authenticate a user login.
+ * 
+ * @param credentials - User credentials
+ * @returns The admin user if credentials are valid, else null
+ */
 AdminSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {
   const admin = await this.findOne({
     email,

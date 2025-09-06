@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt"
+
 import AdminUser, {
   transformUser,
   type AdminObject,
@@ -33,7 +35,7 @@ export default class ProfileService extends BaseService {
     try {
       const updatedUser = await AdminUser.findByIdAndUpdate(userId, { email, name }, { new: true })
 
-      // throw validation error if admin is not found
+      // throw error if admin is not found
       if (!updatedUser) {
         throw {
           status: 404,
@@ -55,7 +57,36 @@ export default class ProfileService extends BaseService {
     }
   }
 
-  static async updatePassword(user: AdminObject, { password, newPassword }: PasswordUpdateData) {
+  /**
+   * Updates the admin user password if the given password matches.
+   * 
+   * @param userId - Admin user id.
+   * @param passwords - Fields to be updated.
+   * @throws 401 error if password is incorrect.
+   * @throws 404 error if admin is not found.
+   */
+  static async updatePassword(userId: AdminObject["id"], { password, newPassword }: PasswordUpdateData): Promise<void> {
+    const user = await AdminUser.findById(userId)
 
+    // throw error if admin is not found
+    if (!user) {
+      throw {
+        status: 404,
+        message: "User not found",
+      }
+    }
+
+    // check if user password is correct
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) {
+      throw {
+        status: 401,
+        message: "Incorrect Password"
+      }
+    }
+
+    // update user password with newPassword
+    user.password = newPassword
+    await user.save()
   }
 }

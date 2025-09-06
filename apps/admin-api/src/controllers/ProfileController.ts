@@ -17,7 +17,7 @@ export default class ProfileController extends BaseController {
   /**
    * @route GET /api/profile
    * 
-   * Returns details of current logged in users.
+   * Returns details of the current logged in users.
    */
   static async getDetails({ user }: Request, res: Response) {
     try {
@@ -36,9 +36,9 @@ export default class ProfileController extends BaseController {
   }
 
   /**
-   * @route PUT /api/profile
+   * @route PATCH /api/profile
    * 
-   * Update certain details of current logged in users.
+   * Update certain details of the current logged in users.
    */
   static async updateDetails({ user, body }: Request, res: Response) {
     try {
@@ -57,10 +57,15 @@ export default class ProfileController extends BaseController {
     }
   }
 
+  /**
+   * @route PUT /api/profile/password
+   * 
+   * Update password of the current logged in users.
+   */
   static async updatePassword({ user, body }: Request, res: Response) {
     try {
       const passwords = super.validateRequest(passwordUpdateSchema, body)
-      await ProfileService.updatePassword(user, passwords)
+      await ProfileService.updatePassword(user.id, passwords)
 
       super.sendSuccess(res, {
         message: "Updated Password",

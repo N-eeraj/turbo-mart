@@ -19,14 +19,16 @@ import {
 export const adminSchema = z.object({
   name: z.string({ error: USER_NAME.required })
     .nonempty(USER_NAME.required)
+    .trim()
     .meta({
       description: "User's name",
       example: "John Doe",
     }),
   email: z.email({ error: (issue) => {
-      if (!issue.input) return EMAIL.required
-      return EMAIL.valid
+    if (!issue.input) return EMAIL.required
+    return EMAIL.valid
   }})
+    .trim()
     .meta({
       description: "User's email address",
       example: "user@example.com",
@@ -80,7 +82,7 @@ export const passwordUpdateSchema = z.object({
     }})
     .meta({
       description: "User's new password",
-      example: "new-string",
+      example: "NewString123",
     }),
 })
 
@@ -91,7 +93,3 @@ export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
 export type AdminData = z.infer<typeof adminSchema>
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
 export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
-
-export type AdminFormFields = keyof AdminData
-export type ProfileUpdateFormFields = keyof ProfileUpdateData
-export type PasswordUpdateFormFields = keyof PasswordUpdateData

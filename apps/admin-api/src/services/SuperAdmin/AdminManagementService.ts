@@ -1,4 +1,5 @@
 import Admin, {
+  Roles,
   transformUser,
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
@@ -13,7 +14,7 @@ export default class AdminManagementService extends BaseService {
    */
   static async fetchAllAdmins(): Promise<Array<AdminObject>> {
     const admins = await Admin.find({
-      role: "ADMIN"
+      role: Roles.ADMIN
     })
       .lean()
 
