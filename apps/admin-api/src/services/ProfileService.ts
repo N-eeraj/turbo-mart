@@ -4,6 +4,9 @@ import AdminUser, {
   transformUser,
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
+import Token, {
+  type Token as TokenType,
+} from "@app/database/mongoose/models/Admin/Token.ts"
 
 import BaseService from "#services/BaseService"
 import {
@@ -58,14 +61,17 @@ export default class ProfileService extends BaseService {
   }
 
   /**
-   * Updates the admin user password if the given password matches.
+   * Updates the admin user password if the given password matches
+   * along with deleting all the other authentication token except the current one.
    * 
    * @param userId - Admin user id.
    * @param passwords - Fields to be updated.
    * @throws 401 error if password is incorrect.
    * @throws 404 error if admin is not found.
+   * @throws If the admin user update fails.
+   * @throws If the token deletion fails.
    */
-  static async updatePassword(userId: AdminObject["id"], { password, newPassword }: PasswordUpdateData): Promise<void> {
+  static async updatePassword(userId: AdminObject["id"], token: TokenType["token"], { password, newPassword }: PasswordUpdateData): Promise<void> {
     const user = await AdminUser.findById(userId)
 
     // throw error if admin is not found
@@ -81,12 +87,18 @@ export default class ProfileService extends BaseService {
     if (!isMatch) {
       throw {
         status: 401,
-        message: "Incorrect Password"
+        message: "Incorrect password"
       }
     }
 
     // update user password with newPassword
     user.password = newPassword
     await user.save()
+
+    // delete all the user tokens except the current one
+    await Token.deleteMany({
+      admin: userId,
+      token: { $ne: token }
+    })
   }
 }

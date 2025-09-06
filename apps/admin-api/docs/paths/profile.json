@@ -255,7 +255,28 @@
           }
         },
         "401": {
-          "$ref": "#/components/responses/UnauthenticatedUser"
+          "$ref": "#/components/responses/IncorrectPassword"
+        },
+        "404": {
+          "description": "User not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "User not found"
+                  }
+                }
+              }
+            }
+          }
         },
         "422": {
           "description": "Validation error (if request body is missing required fields).",

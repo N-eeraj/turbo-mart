@@ -62,10 +62,10 @@ export default class ProfileController extends BaseController {
    * 
    * Update password of the current logged in users.
    */
-  static async updatePassword({ user, body }: Request, res: Response) {
+  static async updatePassword({ user, token, body }: Request, res: Response) {
     try {
       const passwords = super.validateRequest(passwordUpdateSchema, body)
-      await ProfileService.updatePassword(user.id, passwords)
+      await ProfileService.updatePassword(user.id, token.token, passwords)
 
       super.sendSuccess(res, {
         message: "Updated Password",
