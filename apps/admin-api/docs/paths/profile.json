@@ -59,7 +59,7 @@
         }
       }
     },
-    "put": {
+    "patch": {
       "tags": ["Profile"],
       "summary": "Profile Update",
       "description": "Update profile details of logged in user.",
@@ -164,6 +164,31 @@
               }
             }
           }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  },
+  "/api/profile/password": {
+    "put": {
+      "tags": ["Profile"],
+      "summary": "Password Update",
+      "description": "Update password of logged in user.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PasswordUpdateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
         },
         "500": {
           "$ref": "#/components/responses/InternalServerError"

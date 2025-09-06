@@ -6,6 +6,7 @@ import AdminUser, {
 import BaseService from "#services/BaseService"
 import {
   type ProfileUpdateData,
+  type PasswordUpdateData,
 } from "#schemas/user"
 
 export default class ProfileService extends BaseService {
@@ -15,7 +16,7 @@ export default class ProfileService extends BaseService {
    * @param user - User object from the request.
    * @throws If the data transformation fails.
    */
-  static async getUserDetails(user: AdminObject): Promise<AdminObject> {
+  static async getDetails(user: AdminObject): Promise<AdminObject> {
     return user
   }
 
@@ -28,7 +29,7 @@ export default class ProfileService extends BaseService {
    * @throws 409 error if email is already in use.
    * @throws If the admin user update fails.
    */
-  static async updateUserDetails(userId: AdminObject["id"], { email, name }: ProfileUpdateData): Promise<AdminObject> {
+  static async updateDetails(userId: AdminObject["id"], { email, name }: ProfileUpdateData): Promise<AdminObject> {
     try {
       const updatedUser = await AdminUser.findByIdAndUpdate(userId, { email, name }, { new: true })
 
@@ -52,5 +53,9 @@ export default class ProfileService extends BaseService {
 
       throw error
     }
+  }
+
+  static async updatePassword(user: AdminObject, { password, newPassword }: PasswordUpdateData) {
+
   }
 }

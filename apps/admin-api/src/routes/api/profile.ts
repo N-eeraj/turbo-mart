@@ -16,7 +16,11 @@ profileRouter.route("/")
   .all([
     authenticationMiddleware,
   ])
-  .get(ProfileController.getUserDetails)
-  .put(ProfileController.updateUserDetails)
+  .get(ProfileController.getDetails)
+  .patch(ProfileController.updateDetails)
+
+profileRouter.put("/password", [
+  authenticationMiddleware,
+], ProfileController.updatePassword)
 
 export default profileRouter

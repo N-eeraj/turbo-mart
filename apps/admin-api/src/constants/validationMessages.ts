@@ -4,7 +4,16 @@ export const EMAIL = {
 }
 
 export const PASSWORD = {
-  required: "Please enter a password",
+  required: "Please enter a password"
+}
+
+export const NEW_PASSWORD = {
+  ...PASSWORD,
+  minLength: "Please enter at least 6 characters",
+  lowercaseRequired: "Please include at least 1 lowercase",
+  uppercaseRequired: "Please include at least 1 uppercase",
+  numberRequired: "Please include at least 1 number",
+  format: "Invalid password format"
 }
 
 export const USER_NAME = {

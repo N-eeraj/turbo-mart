@@ -12,6 +12,8 @@ import {
   USER_NAME,
   ROLE,
   PERMISSIONS,
+  PASSWORD,
+  NEW_PASSWORD,
 } from "#constants/validationMessages"
 
 export const adminSchema = z.object({
@@ -58,11 +60,38 @@ export const profileUpdateSchema = adminSchema.pick({
   email: true,
 })
 
+export const passwordUpdateSchema = z.object({
+  password: z.string({ error: PASSWORD.required })
+    .nonempty(PASSWORD.required)
+    .meta({
+      description: "User's password",
+      example: "string",
+    }),
+  newPassword: z.string({ error: NEW_PASSWORD.required })
+    .nonempty(NEW_PASSWORD.required)
+    .min(6, NEW_PASSWORD.minLength)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { error: (issue) => {
+      if (issue.input) {
+        if (!/[a-z]/.test(issue.input)) return NEW_PASSWORD.lowercaseRequired
+        if (!/[A-Z]/.test(issue.input)) return NEW_PASSWORD.uppercaseRequired
+        if (!/\d/.test(issue.input)) return NEW_PASSWORD.numberRequired
+      }
+      return NEW_PASSWORD.format
+    }})
+    .meta({
+      description: "User's new password",
+      example: "new-string",
+    }),
+})
+
 export const adminJSONSchema = z.toJSONSchema(adminSchema)
 export const profileUpdateJSONSchema = z.toJSONSchema(profileUpdateSchema)
+export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
 
 export type AdminData = z.infer<typeof adminSchema>
-export type AdminFormFields = keyof AdminData
-
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
+export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
+
+export type AdminFormFields = keyof AdminData
 export type ProfileUpdateFormFields = keyof ProfileUpdateData
+export type PasswordUpdateFormFields = keyof PasswordUpdateData

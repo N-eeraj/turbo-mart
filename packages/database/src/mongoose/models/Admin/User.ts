@@ -131,7 +131,7 @@ export function transformUser({ _id, email, name, role, permissions, createdAt }
     email,
     name,
     role,
-    permissions,
+    permissions: permissions ?? [],
     createdAt,
   }
 }
