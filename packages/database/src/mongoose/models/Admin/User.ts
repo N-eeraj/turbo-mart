@@ -1,8 +1,9 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
-export type Admin = mongoose.HydratedDocument<mongoose.InferSchemaType<typeof AdminSchema>>
-export type ObjectKeys = "email" | "name" | "role" | "permissions" | "createdAt"
+export type InferredAdminSchemaType = mongoose.InferSchemaType<typeof AdminSchema>
+export type Admin = mongoose.HydratedDocument<InferredAdminSchemaType>
+export type ObjectKeys = Exclude<keyof InferredAdminSchemaType, "password" | "updatedAt">
 export type AdminObject = Pick<Admin, ObjectKeys> & { id: Admin["_id"] }
 
 interface AdminModel extends mongoose.Model<Admin> {
@@ -98,6 +99,9 @@ const AdminSchema = new mongoose.Schema({
       }
     ],
     default: undefined,
+  },
+  profilePicture: {
+    type: String,
   },
 }, {
   timestamps: true,

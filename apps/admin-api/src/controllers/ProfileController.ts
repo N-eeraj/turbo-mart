@@ -8,6 +8,7 @@ import ProfileService from "#services/ProfileService"
 import {
   profileUpdateSchema,
   passwordUpdateSchema,
+  profilePictureSchema,
 } from "#schemas/user"
 
 /**
@@ -69,6 +70,30 @@ export default class ProfileController extends BaseController {
 
       super.sendSuccess(res, {
         message: "Updated Password",
+      })
+    } catch (error) {
+      if (error && typeof error === "object" && "message" in error) {
+        super.log(error?.message, "error")
+      }
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route PUT /api/profile/picture
+   * 
+   * Update profile picture of the current logged in users.
+   */
+  static async updateProfilePicture({ user, body }: Request, res: Response) {
+    try {
+      const {
+        profilePicture,
+      } = super.validateRequest(profilePictureSchema, body)
+
+      await ProfileService.updateProfilePicture(user.id, profilePicture)
+    
+      super.sendSuccess(res, {
+        message: "Updated Profile Picture",
       })
     } catch (error) {
       if (error && typeof error === "object" && "message" in error) {

@@ -15,6 +15,7 @@ import {
   PASSWORD,
   NEW_PASSWORD,
 } from "#constants/validationMessages"
+import P from "pino"
 
 export const adminSchema = z.object({
   name: z.string({ error: USER_NAME.required })
@@ -86,10 +87,26 @@ export const passwordUpdateSchema = z.object({
     }),
 })
 
+export const profilePictureSchema = z.object({
+  profilePicture: z.file()
+    .max(1_048_576, { error: "Please use a smaller file (Max 1MB)" })
+    .mime([
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/heic",
+    ])
+    .meta({
+      description: "User's profile picture",
+    })
+})
+
 export const adminJSONSchema = z.toJSONSchema(adminSchema)
 export const profileUpdateJSONSchema = z.toJSONSchema(profileUpdateSchema)
 export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
+export const profilePictureJSONSchema = z.toJSONSchema(profilePictureSchema)
 
 export type AdminData = z.infer<typeof adminSchema>
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
 export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
+export type ProfilePictureData = z.infer<typeof profilePictureSchema>

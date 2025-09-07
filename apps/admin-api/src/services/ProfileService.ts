@@ -68,7 +68,7 @@ export default class ProfileService extends BaseService {
    * @param passwords - Fields to be updated.
    * @throws 401 error if password is incorrect.
    * @throws 404 error if admin is not found.
-   * @throws If the admin user update fails.
+   * @throws If the password update fails.
    * @throws If the token deletion fails.
    */
   static async updatePassword(userId: AdminObject["id"], token: TokenType["token"], { password, newPassword }: PasswordUpdateData): Promise<void> {
@@ -100,5 +100,29 @@ export default class ProfileService extends BaseService {
       admin: userId,
       token: { $ne: token }
     })
+  }
+
+  /**
+   * Updates the admin user's profile picture and
+   * deletes if another one already exists.
+   * 
+   * @param userId - Admin user id.
+   * @param passwords - Fields to be updated.
+   * @throws 401 error if password is incorrect.
+   * @throws 404 error if admin is not found.
+   * @throws If the profile picture update fails.
+   */
+  static async updateProfilePicture(userId: AdminObject["id"], picture: any): Promise<void> {
+    const user = await AdminUser.findById(userId)
+
+    // throw error if admin is not found
+    if (!user) {
+      throw {
+        status: 404,
+        message: "User not found",
+      }
+    }
+
+    console.log(picture)
   }
 }
