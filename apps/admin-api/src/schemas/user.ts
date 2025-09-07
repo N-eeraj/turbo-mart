@@ -95,7 +95,7 @@ export const profilePictureSchema = z.object({
       "image/png",
       "image/webp",
       "image/heic",
-    ])
+    ], { error: "Invalid file format (jpeg, png, webp, heic)" })
     .meta({
       description: "User's profile picture",
     })

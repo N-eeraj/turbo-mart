@@ -84,11 +84,15 @@ export default class ProfileController extends BaseController {
    * 
    * Update profile picture of the current logged in users.
    */
-  static async updateProfilePicture({ user, body }: Request, res: Response) {
+  static async updateProfilePicture({ user, file }: Request, res: Response) {
     try {
+      const payload = {
+        profilePicture: super.multerToFile(file)
+      }
+
       const {
         profilePicture,
-      } = super.validateRequest(profilePictureSchema, body)
+      } = super.validateRequest(profilePictureSchema, payload)
 
       await ProfileService.updateProfilePicture(user.id, profilePicture)
     

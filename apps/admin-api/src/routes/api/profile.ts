@@ -3,6 +3,7 @@ import express from "express"
 import {
   authenticationMiddleware,
 } from "#middlewares/authentication"
+import upload from "#middlewares/multer"
 import ProfileController from "#controllers/ProfileController"
 
 /**
@@ -25,6 +26,7 @@ profileRouter.put("/password", [
 
 profileRouter.put("/picture", [
   authenticationMiddleware,
+  upload.single("profilePicture")
 ], ProfileController.updateProfilePicture)
 
 export default profileRouter

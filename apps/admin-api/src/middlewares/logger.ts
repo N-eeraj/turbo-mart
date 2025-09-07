@@ -2,8 +2,10 @@ import {
   pinoHttp,
 } from "pino-http"
 import {
-  type ServerResponse,
-} from "http"
+  type Request,
+  type Response,
+  type RequestHandler,
+} from "express"
 
 import logger from "#utils/logger"
 
@@ -16,7 +18,7 @@ import logger from "#utils/logger"
  */
 const httpLogger = pinoHttp({
   logger,
-  customLogLevel: (res: ServerResponse, err: Error | null) => {
+  customLogLevel: (res: Response, err: Error | null) => {
     if (!res.statusCode) return "info"
     if (res.statusCode >= 500 || err) return "error"
     if (res.statusCode >= 400) return "warn"
@@ -29,7 +31,7 @@ const httpLogger = pinoHttp({
      * @param req - Express request object
      * @returns simplified log object
      */
-    req: ({ url, method }: Record<string, any>) => {
+    req: ({ url, method }: Request) => {
       return {
         url,
         method,
@@ -38,4 +40,4 @@ const httpLogger = pinoHttp({
   },
 })
 
-export default httpLogger
+export default httpLogger as unknown as RequestHandler

@@ -1,7 +1,9 @@
 import logger from "#utils/logger"
+import {
+  multerToFile,
+} from "#utils/files"
 
 export type LogLevel = "info" | "warn" | "error" | "fatal"
-
 
 /**
  * BaseService class provides static utility methods for handling common
@@ -22,6 +24,7 @@ export default class BaseService {
   /**
    * Checks if the given error is a MongoDB duplicate key error (codeName: "DuplicateKey").
    * 
+   * @static
    * @param error - The error object to check.
    * @returns `true` if the error is a duplicate key error, otherwise `false`.
    */
@@ -32,5 +35,16 @@ export default class BaseService {
       "codeName" in error &&
       error.codeName === "DuplicateKey"
     )
+  }
+
+  /**
+   * Converts the multer file object to native file (if file exists).
+   * 
+   * @static
+   * @param file - Multer file object to be converted to file.
+   * @returns File or null.
+   */
+  static multerToFile(file: Parameters<typeof multerToFile>[0]) {
+    return multerToFile(file)
   }
 }

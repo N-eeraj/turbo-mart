@@ -103,4 +103,15 @@ export default class BaseController {
   static log(message: unknown, level: LogLevel = "info") {
     BaseService.log(message, level)
   }
+
+  /**
+   * Convert multer file to native file.
+   * 
+   * @static
+   * @param file - Multer file object to be converted to file.
+   * @returns File or null.
+   */
+  static multerToFile(...file: Parameters<typeof BaseService.multerToFile>) {
+    return BaseService.multerToFile(...file)
+  }
 }
