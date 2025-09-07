@@ -24,9 +24,13 @@ profileRouter.put("/password", [
   authenticationMiddleware,
 ], ProfileController.updatePassword)
 
-profileRouter.put("/picture", [
-  authenticationMiddleware,
-  upload.single("profilePicture")
-], ProfileController.updateProfilePicture)
+profileRouter.route("/picture")
+  .all([
+    authenticationMiddleware,
+  ])
+  .put([
+    upload.single("profilePicture"),
+  ], ProfileController.updateProfilePicture)
+  .delete(ProfileController.removeProfilePicture)
 
 export default profileRouter

@@ -3,8 +3,8 @@ import bcrypt from "bcrypt"
 
 export type InferredAdminSchemaType = mongoose.InferSchemaType<typeof AdminSchema>
 export type Admin = mongoose.HydratedDocument<InferredAdminSchemaType>
-export type ObjectKeys = Exclude<keyof InferredAdminSchemaType, "password" | "updatedAt">
-export type AdminObject = Pick<Admin, ObjectKeys> & { id: Admin["_id"] }
+export type ObjectKeys = Exclude<keyof InferredAdminSchemaType, "password" | "profilePicture" | "updatedAt">
+export type AdminObject = Pick<Admin, ObjectKeys> & { id: Admin["_id"] } & { profilePicture?: string | null }
 
 interface AdminModel extends mongoose.Model<Admin> {
   /**
@@ -101,7 +101,8 @@ const AdminSchema = new mongoose.Schema({
     default: undefined,
   },
   profilePicture: {
-    type: String,
+    publicPath: String,
+    fileLocation: String,
   },
 }, {
   timestamps: true,
@@ -129,8 +130,8 @@ AdminSchema.pre("save", async function(next) {
  * @param admin - The admin object to transform.
  * @returns The transformed admin object.
  */
-export function transformUser({ _id, email, name, role, permissions, createdAt }: Admin): AdminObject {
-  return {
+export function transformUser({ _id, email, name, role, permissions, profilePicture, createdAt }: Admin): AdminObject {
+  const userDetails: AdminObject = {
     id: _id,
     email,
     name,
@@ -138,6 +139,12 @@ export function transformUser({ _id, email, name, role, permissions, createdAt }
     permissions: permissions ?? [],
     createdAt,
   }
+
+  if (profilePicture) {
+    userDetails.profilePicture = profilePicture.publicPath
+  }
+
+  return userDetails
 }
 
 /**

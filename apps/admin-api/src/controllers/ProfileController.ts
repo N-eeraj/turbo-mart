@@ -107,4 +107,25 @@ export default class ProfileController extends BaseController {
       super.sendError(res, error)
     }
   }
+
+  /**
+   * @route DELETE /api/profile/picture
+   * 
+   * Remove profile picture of the current logged in users.
+   */
+  static async removeProfilePicture({ user }: Request, res: Response) {
+    try {
+      const data = await ProfileService.removeProfilePicture(user.id)
+
+      super.sendSuccess(res, {
+        data,
+        message: "Removed Profile Picture",
+      })
+    } catch (error) {
+      if (error && typeof error === "object" && "message" in error) {
+        super.log(error?.message, "error")
+      }
+      super.sendError(res, error)
+    }
+  }
 }

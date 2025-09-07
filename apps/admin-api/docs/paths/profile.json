@@ -367,9 +367,6 @@
             }
           }
         },
-        "401": {
-          "$ref": "#/components/responses/IncorrectPassword"
-        },
         "404": {
           "description": "User not found.",
           "content": {
@@ -421,6 +418,60 @@
                         "description": "Validation errors for the profile picture field."
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    },
+    "delete": {
+      "tags": ["Profile"],
+      "summary": "Profile Picture Removal",
+      "description": "Remove profile picture of logged in user.",
+      "responses": {
+        "200": {
+          "description": "Removed the profile picture successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "null"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Removed Profile Picture"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "User not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "User not found"
                   }
                 }
               }

@@ -107,13 +107,23 @@ export default class ProfileService extends BaseService {
    * replaces if another one already exists.
    * 
    * @param userId - Admin user id.
-   * @param passwords - Fields to be updated.
-   * @throws 401 error if password is incorrect.
+   * @param picture - File to set as the profile picture.
    * @throws 404 error if admin is not found.
    * @throws If the profile picture update fails.
    */
   static async updateProfilePicture(userId: AdminObject["id"], picture: File): Promise<string> {
-    const user = await AdminUser.findById(userId)
+    const fileName = `${userId}.${super.getFileExtension(picture)}`
+    const {
+      publicPath,
+      relativePath,
+    } = await super.storeFileToStorage(picture, fileName, "/profile-pictures/", true)
+
+    const user = await AdminUser.findByIdAndUpdate(userId, {
+      profilePicture: {
+        publicPath,
+        fileLocation: relativePath,
+      },
+    })
 
     // throw error if admin is not found
     if (!user) {
@@ -123,11 +133,33 @@ export default class ProfileService extends BaseService {
       }
     }
 
-    const fileName = `${user.id}.${super.getFileExtension(picture)}`
-    const {
-      publicPath,
-    } = await super.storeFileToStorage(picture, fileName, "/profile-pictures/", true)
-
     return publicPath
+  }
+
+  /**
+   * Removes the admin user's profile picture.
+   * 
+   * @param userId - Admin user id.
+   * @throws 404 error if admin is not found.
+   * @throws If the profile picture update fails.
+   */
+  static async removeProfilePicture(userId: AdminObject["id"]): Promise<void> {
+    const user = await AdminUser.findByIdAndUpdate(userId, {
+      $unset: {
+        profilePicture: "",
+      },
+    })
+
+    // throw error if admin is not found
+    if (!user) {
+      throw {
+        status: 404,
+        message: "User not found",
+      }
+    }
+
+    if (user.profilePicture?.fileLocation) {
+      super.removeFileFromStorage(user.profilePicture.fileLocation)
+    }
   }
 }

@@ -14,6 +14,7 @@ import {
 import {
   withPrivateFileStoragePath,
   withPublicFileStoragePath,
+  withStoragePath,
 } from "#utils/pathUtils"
 
 export type LogLevel = "info" | "warn" | "error" | "fatal"
@@ -23,7 +24,6 @@ export interface FilePath<IsPublic> {
   relativePath: string
   publicPath: IsPublic extends true ? string : null
 }
-
 
 /**
  * BaseService class provides static utility methods for handling common
@@ -106,7 +106,7 @@ export default class BaseService {
     await fs.writeFile(filePath, buffer)
 
     // different file paths
-    const relativePath = filePath.substring(filePath.indexOf(STORAGE_DIR_NAME))
+    const relativePath = filePath.substring(filePath.indexOf(STORAGE_DIR_NAME) + STORAGE_DIR_NAME.length)
     const publicPath = (
       isPublic ?
         APP_URL + filePath.slice(
@@ -131,5 +131,9 @@ export default class BaseService {
    */
   static getFileExtension(file: File): string {
     return getFileExtension(file)
+  }
+
+  static async removeFileFromStorage(path: string) {
+    await fs.rm(withStoragePath(path))
   }
 }
