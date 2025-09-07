@@ -94,9 +94,10 @@ export default class ProfileController extends BaseController {
         profilePicture,
       } = super.validateRequest(profilePictureSchema, payload)
 
-      await ProfileService.updateProfilePicture(user.id, profilePicture)
+      const data = await ProfileService.updateProfilePicture(user.id, profilePicture)
     
       super.sendSuccess(res, {
+        data,
         message: "Updated Profile Picture",
       })
     } catch (error) {

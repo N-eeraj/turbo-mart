@@ -15,7 +15,6 @@ import {
   PASSWORD,
   NEW_PASSWORD,
 } from "#constants/validationMessages"
-import P from "pino"
 
 export const adminSchema = z.object({
   name: z.string({ error: USER_NAME.required })

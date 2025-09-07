@@ -3,11 +3,15 @@ import fs from "fs"
 import AdminUser, {
   Roles,
 } from "@app/database/mongoose/models/Admin/User.ts"
+import connectMongoDB from "@app/database/mongoose/connect.ts"
 
+import {
+  PRIVATE_FILE_STORAGE_PATH,
+  PUBLIC_FILE_STORAGE_PATH,
+} from "#src/config/server"
 import {
   withStoragePath,
 } from "#utils/pathUtils"
-import connectMongoDB from "@app/database/mongoose/connect.ts"
 
 const LOG_PATH = withStoragePath("logs")
 
@@ -77,6 +81,8 @@ export default class Setup {
    */
   static async execute(..._args: Array<unknown>): Promise<void> {
     this.ensureDirectory(LOG_PATH)
+    this.ensureDirectory(PUBLIC_FILE_STORAGE_PATH)
+    this.ensureDirectory(PRIVATE_FILE_STORAGE_PATH)
     await this.createSuperAdmin()
     process.exit(0)
   }

@@ -3,6 +3,8 @@ import {
   APP_PATH,
   STORAGE_PATH,
   PUBLIC_PATH,
+  PUBLIC_FILE_STORAGE_PATH,
+  PRIVATE_FILE_STORAGE_PATH,
 } from "#src/config/server"
 
 /**
@@ -33,4 +35,24 @@ export const withStoragePath = (relativePath: string): string => {
  */
 export const withPublicPath = (relativePath: string): string => {
   return path.join(PUBLIC_PATH, relativePath)
+}
+
+/**
+ * Resolves the given relative path to an absolute path within the public fil storage directory.
+ * 
+ * @param relativePath - The relative path to be joined with the public file storage directory path.
+ * @returns The resolved absolute path.
+ */
+export const withPublicFileStoragePath = (relativePath: string): string => {
+  return path.join(PUBLIC_FILE_STORAGE_PATH, relativePath)
+}
+
+/**
+ * Resolves the given relative path to an absolute path within the private fil storage directory.
+ * 
+ * @param relativePath - The relative path to be joined with the private file storage directory path.
+ * @returns The resolved absolute path.
+ */
+export const withPrivateFileStoragePath = (relativePath: string): string => {
+  return path.join(PRIVATE_FILE_STORAGE_PATH, relativePath)
 }

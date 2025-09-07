@@ -13,3 +13,13 @@ export function multerToFile(file: Express.Multer.File | undefined): File | null
     { type: file.mimetype }
   )
 }
+
+/**
+ * Extracts the file extension from a file name.
+ *
+ * @param file - The file object.
+ * @returns The file extension (e.g., "pdf", "png"). Returns the full name if no dot is present.
+ */
+export function getFileExtension({ name }: File) {
+  return name.slice(name.lastIndexOf(".") + 1)
+}

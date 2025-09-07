@@ -104,7 +104,7 @@ export default class ProfileService extends BaseService {
 
   /**
    * Updates the admin user's profile picture and
-   * deletes if another one already exists.
+   * replaces if another one already exists.
    * 
    * @param userId - Admin user id.
    * @param passwords - Fields to be updated.
@@ -112,7 +112,7 @@ export default class ProfileService extends BaseService {
    * @throws 404 error if admin is not found.
    * @throws If the profile picture update fails.
    */
-  static async updateProfilePicture(userId: AdminObject["id"], picture: File): Promise<void> {
+  static async updateProfilePicture(userId: AdminObject["id"], picture: File): Promise<string> {
     const user = await AdminUser.findById(userId)
 
     // throw error if admin is not found
@@ -123,6 +123,11 @@ export default class ProfileService extends BaseService {
       }
     }
 
-    console.log(picture)
+    const fileName = `${user.id}.${super.getFileExtension(picture)}`
+    const {
+      publicPath,
+    } = await super.storeFileToStorage(picture, fileName, "/profile-pictures/", true)
+
+    return publicPath
   }
 }
