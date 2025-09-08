@@ -29,9 +29,6 @@ export default class AuthController extends BaseController {
         data,
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }
@@ -49,9 +46,6 @@ export default class AuthController extends BaseController {
         message: "Logout successful",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }

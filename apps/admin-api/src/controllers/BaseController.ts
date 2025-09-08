@@ -25,6 +25,17 @@ import BaseService, {
  */
 export default class BaseController {
   /**
+   * Logs a message with the specified log level.
+   * 
+   * @static
+   * @param message - The message to log.
+   * @param level (default: "info") - The log level.
+   */
+  static log(message: unknown, level: LogLevel = "info") {
+    BaseService.log(message, level)
+  }
+
+  /**
    * Sends a success response with the provided data.
    * 
    * @static
@@ -52,7 +63,8 @@ export default class BaseController {
       message,
       errors,
     } = formatError(error)
-    
+
+    BaseController.log(message, "error")
     sendResponse(res, false, { status, message }, errors)
   }
 
@@ -91,17 +103,6 @@ export default class BaseController {
         ...(error ?? {}),
       }
     }
-  }
-
-  /**
-   * Logs a message with the specified log level.
-   * 
-   * @static
-   * @param message - The message to log.
-   * @param level (default: "info") - The log level.
-   */
-  static log(message: unknown, level: LogLevel = "info") {
-    BaseService.log(message, level)
   }
 
   /**

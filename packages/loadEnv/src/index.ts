@@ -6,12 +6,12 @@ const lines = envFile.replaceAll(" = ", "=").split("\n")
 const env = lines.reduce((env, line) => {
     const [key, value] = line.split("=")
     if (key && value) {
-      env[key] = value
+      env[key as keyof typeof env] = value
     }
     return env
   }, {
-    MYSQL_DB_URI: null,
-    MONGODB_URI: null,
+    MYSQL_DB_URI: "",
+    MONGODB_URI: "",
   })
 
 export default env

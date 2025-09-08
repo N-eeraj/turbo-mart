@@ -29,9 +29,6 @@ export default class ProfileController extends BaseController {
         message: "Fetched User Details",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }
@@ -51,9 +48,6 @@ export default class ProfileController extends BaseController {
         message: "Updated User Details",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }
@@ -72,9 +66,6 @@ export default class ProfileController extends BaseController {
         message: "Updated Password",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }
@@ -101,9 +92,6 @@ export default class ProfileController extends BaseController {
         message: "Updated Profile Picture",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }
@@ -122,9 +110,24 @@ export default class ProfileController extends BaseController {
         message: "Removed Profile Picture",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route GET /api/profile/notifications
+   * 
+   * Get the user notifications.
+   */
+  static async getNotifications({ user }: Request, res: Response) {
+    try {
+      const data = await ProfileService.getNotifications(user.id)
+
+      super.sendSuccess(res, {
+        data,
+        message: "Fetched User Notifications",
+      })
+    } catch (error) {
       super.sendError(res, error)
     }
   }

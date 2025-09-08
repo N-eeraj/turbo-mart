@@ -16,7 +16,7 @@ import {
 
 export default class ProfileService extends BaseService {
   /**
-   * Transforms the authenticated user.
+   * Return the user object.
    * 
    * @param user - User object from the request.
    * @throws If the data transformation fails.
@@ -161,5 +161,15 @@ export default class ProfileService extends BaseService {
     if (user.profilePicture?.fileLocation) {
       super.removeFileFromStorage(user.profilePicture.fileLocation)
     }
+  }
+
+  /**
+   * Returns the list of notifications of the admin user.
+   * 
+   * @param userId - Admin user id.
+   * @throws If fetching the notifications failed.
+   */
+  static async getNotifications(userId: AdminObject["id"]): Promise<Array<any>> {
+    return []
   }
 }

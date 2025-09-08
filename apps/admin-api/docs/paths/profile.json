@@ -483,5 +483,40 @@
         }
       }
     }
+  },
+  "/api/profile/notifications": {
+    "get": {
+      "tags": ["Profile"],
+      "summary": "Profile Notifications",
+      "description": "List of the notifications of logged in user.",
+      "responses": {
+        "200": {
+          "description": "Fetched the user notifications successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "null"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched User Notifications"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
   }
 }

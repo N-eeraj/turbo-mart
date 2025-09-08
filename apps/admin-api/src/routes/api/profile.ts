@@ -33,4 +33,8 @@ profileRouter.route("/picture")
   ], ProfileController.updateProfilePicture)
   .delete(ProfileController.removeProfilePicture)
 
+profileRouter.get("/notifications", [
+  authenticationMiddleware,
+], ProfileController.getNotifications)
+
 export default profileRouter

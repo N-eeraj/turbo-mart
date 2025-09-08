@@ -27,9 +27,6 @@ export default class AdminManagementController extends BaseController {
         data,
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }
@@ -48,9 +45,6 @@ export default class AdminManagementController extends BaseController {
         message: "Fetched all admins",
       })
     } catch (error) {
-      if (error && typeof error === "object" && "message" in error) {
-        super.log(error?.message, "error")
-      }
       super.sendError(res, error)
     }
   }

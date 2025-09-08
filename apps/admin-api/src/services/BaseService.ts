@@ -133,6 +133,12 @@ export default class BaseService {
     return getFileExtension(file)
   }
 
+  /**
+   * Remove the file from the local storage directory.
+   * 
+   * @static
+   * @param path - The relative file path from `storage` directory to delete the file.
+   */
   static async removeFileFromStorage(path: string) {
     await fs.rm(withStoragePath(path))
   }

@@ -14,6 +14,7 @@ import {
   PERMISSIONS,
   PASSWORD,
   NEW_PASSWORD,
+  PROFILE_PICTURE,
 } from "#constants/validationMessages"
 
 export const adminSchema = z.object({
@@ -87,14 +88,14 @@ export const passwordUpdateSchema = z.object({
 })
 
 export const profilePictureSchema = z.object({
-  profilePicture: z.file()
-    .max(1_048_576, { error: "Please use a smaller file (Max 1MB)" })
+  profilePicture: z.file({ error: PROFILE_PICTURE.required })
+    .max(1_048_576, { error: PROFILE_PICTURE.maxSize })
     .mime([
       "image/jpeg",
       "image/png",
       "image/webp",
       "image/heic",
-    ], { error: "Invalid file format (jpeg, png, webp, heic)" })
+    ], { error: PROFILE_PICTURE.valid })
     .meta({
       description: "User's profile picture",
     })

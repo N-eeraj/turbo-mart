@@ -30,3 +30,9 @@ export const PERMISSIONS = {
   valid: "Please select valid permissions",
   minLength: "Please select at least 1 permission",
 }
+
+export const PROFILE_PICTURE = {
+  required: "Please choose a file",
+  maxSize: "Please use a smaller file (Max 1MB)",
+  valid: "Invalid file format (jpeg, png, webp, heic)",
+}
