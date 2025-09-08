@@ -81,7 +81,7 @@ E-commerce monorepo using [Turborepo](https://turbo.build/)
 
 ### 📦 Order Lifecycle
 
-1.  Placed (by customer, payment collected).
+1. Placed (by customer, payment collected).
 2. Shipped (by seller, stock decremented).
 3. Delivered (by delivery person).
 4. Pickup (by delivery person, if returned).

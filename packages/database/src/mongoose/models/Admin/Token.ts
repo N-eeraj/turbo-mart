@@ -1,7 +1,8 @@
 import mongoose from "mongoose"
 import crypto from "crypto"
 
-export type AdminToken = mongoose.HydratedDocument<mongoose.InferSchemaType<typeof AdminTokenSchema>>
+export type InferredAdminTokenSchemaType = mongoose.InferSchemaType<typeof AdminTokenSchema>
+export type AdminToken = mongoose.HydratedDocument<InferredAdminTokenSchemaType>
 export type Token = Omit<AdminToken, "admin">
 
 interface AdminTokenModel extends mongoose.Model<AdminToken> {
@@ -17,7 +18,7 @@ interface AdminTokenModel extends mongoose.Model<AdminToken> {
 const EXPIRY_TIME = 2_59_20_00_000 // 30 days
 
 /**
- * Mongoose schema for user tokens.
+ * Mongoose schema for admin user tokens.
  * Stores user reference, token string, IP address, expiry date, and timestamps.
  */
 const AdminTokenSchema = new mongoose.Schema({
