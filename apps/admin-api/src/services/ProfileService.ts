@@ -176,6 +176,11 @@ export default class ProfileService extends BaseService {
     })
       .lean()
 
-    return notifications
+    return notifications.map(({ _id, admin: _admin, __v, ...notification }) => {
+      return {
+        id: _id,
+        ...notification,
+      }
+    })
   }
 }

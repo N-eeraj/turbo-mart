@@ -33,8 +33,12 @@ profileRouter.route("/picture")
   ], ProfileController.updateProfilePicture)
   .delete(ProfileController.removeProfilePicture)
 
-profileRouter.get("/notifications", [
+const notificationRouter = express.Router()
+
+notificationRouter.get("/", [
   authenticationMiddleware,
 ], ProfileController.getNotifications)
+
+profileRouter.use("/notifications", notificationRouter)
 
 export default profileRouter
