@@ -1,8 +1,11 @@
 import UnauthenticatedUser from "#docs/responses/unauthenticatedUser" with { type: "json" }
+import UserNotFound from "#docs/responses/userNotFound" with { type: "json" }
 import UnauthorizedSuperAdminUser from "#docs/responses/unauthorizedSuperAdminUser" with { type: "json" }
 import InternalServerError from "#docs/responses/internalServerError" with { type: "json" }
 
-import incorrectPassword from "#docs/responses/incorrectPassword" with { type: "json" }
+// partial responses
+import incorrectPassword from "#docs/responses/partials/incorrectPassword" with { type: "json" }
+import notificationNotFound from "#docs/responses/partials/notificationNotFound" with { type: "json" }
 
 // extended response for password update from UnauthenticatedUser
 const {
@@ -33,11 +36,47 @@ const IncorrectPassword = {
   },
 }
 
+// extended response for password update from UserNotFoundSchema
+const {
+  schema: UserNotFoundSchema,
+} = UserNotFound.content["application/json"]
+const NotificationStateNotFound = {
+  ...UserNotFound,
+  content: {
+    "application/json": {
+      schema: {
+        type: UserNotFoundSchema.type,
+        properties: {
+          success: UserNotFoundSchema.properties.success,
+          message: {
+            oneOf: [
+              UserNotFoundSchema.properties.message,
+              notificationNotFound.message,
+            ],
+          },
+        },
+      },
+      examples: {
+        UserNotFound: {
+          summary: "User Not Found",
+          value: Object.fromEntries(
+            Object.entries(UserNotFoundSchema.properties)
+              .map(([ key, { example } ]) => ([key, example]))
+          )
+        },
+        ...notificationNotFound.examples,
+      },
+    },
+  },
+}
+
 const responses = {
   UnauthenticatedUser,
+  UserNotFound,
   UnauthorizedSuperAdminUser,
   InternalServerError,
   IncorrectPassword,
+  NotificationStateNotFound,
 }
 
 export default responses

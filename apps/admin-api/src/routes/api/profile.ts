@@ -35,9 +35,15 @@ profileRouter.route("/picture")
 
 const notificationRouter = express.Router()
 
-notificationRouter.get("/", [
+notificationRouter.route("/")
+  .all([
+    authenticationMiddleware,
+  ])
+  .get(ProfileController.getNotifications)
+
+notificationRouter.patch("/:id", [
   authenticationMiddleware,
-], ProfileController.getNotifications)
+], ProfileController.setReadNotificationStatus)
 
 profileRouter.use("/notifications", notificationRouter)
 

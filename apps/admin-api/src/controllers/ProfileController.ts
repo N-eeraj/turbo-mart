@@ -9,6 +9,7 @@ import {
   profileUpdateSchema,
   passwordUpdateSchema,
   profilePictureSchema,
+  notificationReadStatusSchema,
 } from "#schemas/user"
 
 /**
@@ -126,6 +127,30 @@ export default class ProfileController extends BaseController {
       super.sendSuccess(res, {
         data,
         message: "Fetched User Notifications",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route PATCH /api/profile/notifications/:id
+   * 
+   * Set the notification read status.
+   */
+  static async setReadNotificationStatus({ user, params, body }: Request, res: Response) {
+    try {
+      const notificationId = params.id
+
+      const {
+        state,
+      } = super.validateRequest(notificationReadStatusSchema, body)
+
+      const data = await ProfileService.setReadNotificationStatus(user.id, state, [notificationId])
+
+      super.sendSuccess(res, {
+        data,
+        message: `Marked Notifications as ${state ? "read" : "unread"}`,
       })
     } catch (error) {
       super.sendError(res, error)

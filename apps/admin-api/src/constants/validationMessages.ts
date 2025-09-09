@@ -36,3 +36,8 @@ export const PROFILE_PICTURE = {
   maxSize: "Please use a smaller file (Max 1MB)",
   valid: "Invalid file format (jpeg, png, webp, heic)",
 }
+
+export const NOTIFICATION_STATE = {
+  required: "State value is required",
+  valid: "Invalid state value",
+}

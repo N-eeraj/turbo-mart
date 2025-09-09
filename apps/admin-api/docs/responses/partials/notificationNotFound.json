@@ -1,0 +1,16 @@
+{
+  "message": {
+    "type": "string",
+    "example": "Notification not found",
+    "description": "Error message: Couldn't find the notification"
+  },
+  "examples": {
+    "NotificationNotFound": {
+      "summary": "Notification Not Found",
+      "value": {
+        "success": false,
+        "message": "Notification not found"
+      }
+    }
+  }
+}

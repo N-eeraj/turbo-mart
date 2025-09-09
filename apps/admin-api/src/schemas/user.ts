@@ -15,6 +15,7 @@ import {
   PASSWORD,
   NEW_PASSWORD,
   PROFILE_PICTURE,
+  NOTIFICATION_STATE,
 } from "#constants/validationMessages"
 
 export const adminSchema = z.object({
@@ -101,12 +102,25 @@ export const profilePictureSchema = z.object({
     })
 })
 
+export const notificationReadStatusSchema = z.object({
+  state: z.boolean({ error: (issue) => {
+    if (issue.input === undefined) return NOTIFICATION_STATE.required
+    return NOTIFICATION_STATE.valid
+  }})
+    .meta({
+      description: "Flag to set the notification's read state.",
+      example: true,
+    }),
+})
+
 export const adminJSONSchema = z.toJSONSchema(adminSchema)
 export const profileUpdateJSONSchema = z.toJSONSchema(profileUpdateSchema)
 export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
 export const profilePictureJSONSchema = z.toJSONSchema(profilePictureSchema)
+export const notificationReadStatusJSONSchema = z.toJSONSchema(notificationReadStatusSchema)
 
 export type AdminData = z.infer<typeof adminSchema>
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
 export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
 export type ProfilePictureData = z.infer<typeof profilePictureSchema>
+export type NotificationReadStatusSchema = z.infer<typeof notificationReadStatusSchema>

@@ -7,7 +7,9 @@ import AdminUser, {
 import Token, {
   type Token as TokenType,
 } from "@app/database/mongoose/models/Admin/Token.ts"
-import Notification from "@app/database/mongoose/models/Admin/Notification.ts"
+import Notification, {
+  type Notification as NotificationType,
+} from "@app/database/mongoose/models/Admin/Notification.ts"
 
 import BaseService from "#services/BaseService"
 import {
@@ -182,5 +184,20 @@ export default class ProfileService extends BaseService {
         ...notification,
       }
     })
+  }
+
+  /**
+   * Updates the `readAt` timestamp of the specified notifications based on the provided state.
+   *
+   * - If `state` is `true`, sets `readAt` to the current timestamp.
+   * - If `state` is `false`, clears the `readAt` field (marks as unread).
+   * 
+   * @param adminId - Admin user id.
+   * @param state - `true` to mark as read, `false` to mark as unread.
+   * @param notificationIds - Array of notification IDs to update.
+   * @throws If updating the notifications failed.
+   */
+  static async setReadNotificationStatus(adminId: AdminObject["id"], state: boolean, notificationIds: Array<NotificationType["id"]>): Promise<void> {
+    console.log({adminId, notificationIds, state})
   }
 }

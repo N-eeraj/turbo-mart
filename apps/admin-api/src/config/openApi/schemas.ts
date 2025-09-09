@@ -5,6 +5,7 @@ import {
   profileUpdateJSONSchema,
   passwordUpdateJSONSchema,
   profilePictureJSONSchema,
+  notificationReadStatusJSONSchema,
 } from "#schemas/user"
 
 const schemas = {
@@ -12,6 +13,7 @@ const schemas = {
   ProfileUpdateSchema: profileUpdateJSONSchema,
   PasswordUpdateSchema: passwordUpdateJSONSchema,
   ProfilePictureSchema: profilePictureJSONSchema,
+  NotificationReadStatusSchema: notificationReadStatusJSONSchema,
 }
 
 export default schemas
