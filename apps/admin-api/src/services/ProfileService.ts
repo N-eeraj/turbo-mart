@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt"
+import type mongoose from "mongoose"
 
 import AdminUser, {
   transformUser,
@@ -9,6 +10,7 @@ import Token, {
 } from "@app/database/mongoose/models/Admin/Token.ts"
 import Notification, {
   type Notification as NotificationType,
+  type InferredNotificationSchemaType,
 } from "@app/database/mongoose/models/Admin/Notification.ts"
 
 import BaseService from "#services/BaseService"
@@ -22,6 +24,7 @@ export default class ProfileService extends BaseService {
    * Return the user object.
    * 
    * @param user - User object from the request.
+   * 
    * @throws If the data transformation fails.
    */
   static async getDetails(user: AdminObject): Promise<AdminObject> {
@@ -33,6 +36,7 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * @param data - Fields to be updated.
+   * 
    * @throws 404 error if admin is not found.
    * @throws 409 error if email is already in use.
    * @throws If the admin user update fails.
@@ -69,6 +73,7 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * @param passwords - Fields to be updated.
+   * 
    * @throws 401 error if password is incorrect.
    * @throws 404 error if admin is not found.
    * @throws If the password update fails.
@@ -111,6 +116,7 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * @param picture - File to set as the profile picture.
+   * 
    * @throws 404 error if admin is not found.
    * @throws If the profile picture update fails.
    */
@@ -143,6 +149,7 @@ export default class ProfileService extends BaseService {
    * Removes the admin user's profile picture.
    * 
    * @param adminId - Admin user id.
+   * 
    * @throws 404 error if admin is not found.
    * @throws If the profile picture update fails.
    */
@@ -170,6 +177,7 @@ export default class ProfileService extends BaseService {
    * Returns the list of notifications of the admin user.
    * 
    * @param adminId - Admin user id.
+   * 
    * @throws If fetching the notifications failed.
    */
   static async getNotifications(adminId: AdminObject["id"]): Promise<Array<any>> {
@@ -194,10 +202,58 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * @param state - `true` to mark as read, `false` to mark as unread.
-   * @param notificationIds - Array of notification IDs to update.
+   * @param notificationIds - An optional array of notification IDs to update, if undefined all admin user notifications are selected.
+   * 
+   * @throws 400 error if notificationsIds is empty.
+   * @throws 404 error if notifications are not found for the admin user.
    * @throws If updating the notifications failed.
    */
-  static async setReadNotificationStatus(adminId: AdminObject["id"], state: boolean, notificationIds: Array<NotificationType["id"]>): Promise<void> {
-    console.log({adminId, notificationIds, state})
+  static async setReadNotificationStatus(adminId: AdminObject["id"], state: boolean, notificationIds?: Array<NotificationType["id"]>): Promise<void> {
+    if (notificationIds && !notificationIds.length) {
+      throw {
+        status: 400,
+        message: "Not notifications selected",
+      }
+    }
+
+    const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
+      ...(
+        notificationIds && {
+          _id: {
+            $in: notificationIds,
+          },
+        }
+      ),
+      admin: adminId,
+    }
+
+    const notifications = await Notification.find(filterQuery)
+      .select({ _id: 1 })
+      .lean()
+
+    if (notificationIds) {
+      const notificationIdsSet = new Set(notifications.map(({ _id }) => _id.toString()))
+
+      const notFoundNotifications = notificationIds.filter((id) => !notificationIdsSet.has(id))
+      if (notFoundNotifications.length) {
+        throw {
+          status: 404,
+          message: "Notification not found",
+          notifications: notFoundNotifications,
+        }
+      }
+    }
+
+    const updateQuery: mongoose.UpdateQuery<InferredNotificationSchemaType> = state ? {
+      $set: {
+        readAt: new Date(),
+      },
+    } : {
+      $unset: {
+        readAt: "",
+      }
+    }
+
+    await Notification.updateMany(filterQuery, updateQuery)
   }
 }
