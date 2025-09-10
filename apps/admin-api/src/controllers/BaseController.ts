@@ -1,6 +1,7 @@
 import {
   type Response,
 } from "express"
+import mongoose from "mongoose"
 
 import {
   sendResponse,
@@ -15,9 +16,7 @@ import validateData, {
 import {
   formatError,
 } from "#utils/formatter"
-import BaseService, {
-  type LogLevel,
-} from "#services/BaseService"
+import BaseService from "#services/BaseService"
 
 /**
  * BaseController class provides static utility methods for handling common 
@@ -28,17 +27,19 @@ export default class BaseController {
    * Logs a message with the specified log level.
    * 
    * @static
+   * 
    * @param message - The message to log.
    * @param level (default: "info") - The log level.
    */
-  static log(message: unknown, level: LogLevel = "info") {
-    BaseService.log(message, level)
+  static log(...params: Parameters<typeof BaseService.log>): ReturnType<typeof BaseService.log> {
+    BaseService.log(...params)
   }
 
   /**
    * Sends a success response with the provided data.
    * 
    * @static
+   * 
    * @param res - The Express response object.
    * @param response - The success response data.
    */
@@ -46,7 +47,7 @@ export default class BaseController {
     status = 200,
     message = "OK",
     data,
-  }: SuccessResponse) {
+  }: SuccessResponse): void {
     sendResponse(res, true, { status, message }, data)
   }
 
@@ -54,10 +55,11 @@ export default class BaseController {
    * Sends an error response with the provided error details.
    * 
    * @static
+   * 
    * @param res - The Express response object.
    * @param error - The error response details.
    */
-  static sendError(res: Response, error: unknown = {}) {
+  static sendError(res: Response, error: unknown = {}): void {
     const {
       status,
       message,
@@ -72,10 +74,11 @@ export default class BaseController {
    * Sends a public file to the client from the public folder.
    * 
    * @static
+   * 
    * @param res - The Express response object.
    * @param filePath - The file path relative to the public directory.
    */
-  static sendPublicFile(res: Response, filePath: string) {
+  static sendPublicFile(res: Response, filePath: string): void {
     res.sendFile(withPublicPath(filePath))
   }
 
@@ -85,17 +88,20 @@ export default class BaseController {
    * Wraps `validateData` to standardize validation error responses.
    * 
    * @static
+   * 
    * @param schema - A Zod object schema to validate against.
    * @param data - The input data to validate (e.g., req.body).
+   * 
    * @returns The parsed and validated data.
+   * 
    * @throws An object with status 422 and validation field errors if validation fails.
    * 
    * @example
    * const data = BaseController.validateRequest(schema, req.body)
    */
-  static validateRequest<T extends SchemaShape>(...args: Parameters<typeof validateData<T>>) {
+  static validateRequest<T extends SchemaShape>(...params: Parameters<typeof validateData<T>>): ReturnType<typeof validateData<T>> {
     try {
-      return validateData(...args)
+      return validateData(...params)
     } catch (error) {
       throw {
         status: 422,
@@ -106,13 +112,27 @@ export default class BaseController {
   }
 
   /**
+   * Parses and validates a given value as a Mongoose ObjectId.
+   *
+   * @param id - The value to validate and convert.
+   *
+   * @returns The transformed `ObjectId` if valid; otherwise, `null`.
+   */
+  static parseObjectId(id: string | mongoose.Types.ObjectId): mongoose.Types.ObjectId | null {
+    if (!mongoose.Types.ObjectId.isValid(id)) return null
+    return new mongoose.Types.ObjectId(id)
+  }
+
+  /**
    * Convert multer file to native file.
    * 
    * @static
+   * 
    * @param file - Multer file object to be converted to file.
+   * 
    * @returns File or null.
    */
-  static multerToFile(...file: Parameters<typeof BaseService.multerToFile>) {
+  static multerToFile(...file: Parameters<typeof BaseService.multerToFile>): ReturnType<typeof BaseService.multerToFile> {
     return BaseService.multerToFile(...file)
   }
 }

@@ -26,6 +26,7 @@ export default class Setup {
    * If it does not, it creates the directory (and any necessary parent directories).
    * 
    * @param directoryPath - The path of the directory to check/create.
+   * 
    * @throws If an error occurs during directory creation (e.g., permission issues).
    */
   private static ensureDirectory(directoryPath: string): void {

@@ -5,6 +5,10 @@ import {
 } from "express"
 
 import {
+  Roles,
+} from "@app/database/mongoose/models/Admin/User.js"
+
+import {
   sendResponse,
 } from "#utils/response"
 import {
@@ -20,7 +24,7 @@ import {
  */
 export async function superAdminAuthorizationMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
-    if (req.user.role !== "SUPER_ADMIN") {
+    if (req.user.role !== Roles.SUPER_ADMIN) {
       throw {
         status: 403,
         message: "Super admin access required",

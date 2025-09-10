@@ -2,6 +2,7 @@
  * Formats an error object into a consistent response format.
  * 
  * @param error - The error object to format. It can be any type, but it is expected to be an object with optional `status`, `message`, and `errors` properties.
+ * 
  * @returns The formatted error object with `status`, `message`, and `errors` properties.
  * 
  * @example

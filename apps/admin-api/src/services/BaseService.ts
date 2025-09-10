@@ -37,7 +37,7 @@ export default class BaseService {
    * @param message - The message to log.
    * @param level (default: "info") - The log level.
    */
-  static log(message: unknown, level: LogLevel = "info") {
+  static log(message: unknown, level: LogLevel = "info"): void {
     logger[level](message)
   }
 
@@ -46,9 +46,10 @@ export default class BaseService {
    * 
    * @static
    * @param error - The error object to check.
+   * 
    * @returns `true` if the error is a duplicate key error, otherwise `false`.
    */
-  static checkDuplicateKeyError(error: unknown) {
+  static checkDuplicateKeyError(error: unknown): boolean {
     return Boolean(
       error &&
       typeof error === "object" &&
@@ -62,9 +63,10 @@ export default class BaseService {
    * 
    * @static
    * @param file - Multer file object to be converted to file.
+   * 
    * @returns File or null.
    */
-  static multerToFile(file: Parameters<typeof multerToFile>[0]) {
+  static multerToFile(file: Parameters<typeof multerToFile>[0]): ReturnType<typeof multerToFile> {
     return multerToFile(file)
   }
 
@@ -139,7 +141,7 @@ export default class BaseService {
    * @static
    * @param path - The relative file path from `storage` directory to delete the file.
    */
-  static async removeFileFromStorage(path: string) {
+  static async removeFileFromStorage(path: string): Promise<void> {
     await fs.rm(withStoragePath(path))
   }
 }

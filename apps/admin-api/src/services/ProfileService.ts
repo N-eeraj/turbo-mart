@@ -43,7 +43,16 @@ export default class ProfileService extends BaseService {
    */
   static async updateDetails(adminId: AdminObject["id"], { email, name }: ProfileUpdateData): Promise<AdminObject> {
     try {
-      const updatedUser = await AdminUser.findByIdAndUpdate(adminId, { email, name }, { new: true })
+      const updatedUser = await AdminUser.findByIdAndUpdate(
+        adminId,
+        {
+          email,
+          name,
+        },
+        {
+          new: true,
+        }
+      )
 
       // throw error if admin is not found
       if (!updatedUser) {
@@ -79,7 +88,11 @@ export default class ProfileService extends BaseService {
    * @throws If the password update fails.
    * @throws If the token deletion fails.
    */
-  static async updatePassword(adminId: AdminObject["id"], token: TokenType["token"], { password, newPassword }: PasswordUpdateData): Promise<void> {
+  static async updatePassword(
+    adminId: AdminObject["id"],
+    token: TokenType["token"],
+    { password, newPassword }: PasswordUpdateData
+  ): Promise<void> {
     const user = await AdminUser.findById(adminId)
 
     // throw error if admin is not found
@@ -208,7 +221,12 @@ export default class ProfileService extends BaseService {
    * @throws 404 error if notifications are not found for the admin user.
    * @throws If updating the notifications failed.
    */
-  static async setReadNotificationStatus(adminId: AdminObject["id"], state: boolean, notificationIds?: Array<NotificationType["id"]>): Promise<void> {
+  static async setReadNotificationStatus(
+    adminId: AdminObject["id"],
+    state: boolean,
+    notificationIds?: Array<NotificationType["_id"]>
+  ): Promise<void> {
+    // ensure non empty array if notifications are passed
     if (notificationIds && !notificationIds.length) {
       throw {
         status: 400,
@@ -216,6 +234,11 @@ export default class ProfileService extends BaseService {
       }
     }
 
+    /**
+     * Filter query to be used to find the notifications.
+     * To be used to ensure the correct notifications ids are passed
+     * as well as selector to update the documents.
+     */
     const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
       ...(
         notificationIds && {
@@ -234,7 +257,7 @@ export default class ProfileService extends BaseService {
     if (notificationIds) {
       const notificationIdsSet = new Set(notifications.map(({ _id }) => _id.toString()))
 
-      const notFoundNotifications = notificationIds.filter((id) => !notificationIdsSet.has(id))
+      const notFoundNotifications = notificationIds.filter((id) => !notificationIdsSet.has(id.toString()))
       if (notFoundNotifications.length) {
         throw {
           status: 404,

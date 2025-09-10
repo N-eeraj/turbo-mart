@@ -42,6 +42,7 @@ const logger = pino({
      * Custom log formatter to include status code and response time.
      * 
      * @param logData - Partial log object
+     * 
      * @returns formatted log object with optional statusCode and responseTime
      */
     log: ({ res, responseTime }) => {

@@ -140,7 +140,13 @@ export default class ProfileController extends BaseController {
    */
   static async setReadNotificationStatus({ user, params, body }: Request, res: Response) {
     try {
-      const notificationId = params.id
+      const notificationId = super.parseObjectId(params.id)
+      if (notificationId === null) {
+        throw {
+          status: 400,
+          message: "Invalid notification id"
+        }
+      }
 
       const {
         state,

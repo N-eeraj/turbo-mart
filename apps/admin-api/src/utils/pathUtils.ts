@@ -11,6 +11,7 @@ import {
  * Resolves the given relative path to an absolute path within the application directory.
  * 
  * @param relativePath - The relative path to be joined with the application's root path.
+ * 
  * @returns The resolved absolute path.
  */
 export const withAppPath = (relativePath: string): string => {
@@ -21,6 +22,7 @@ export const withAppPath = (relativePath: string): string => {
  * Resolves the given relative path to an absolute path within the storage directory.
  * 
  * @param relativePath - The relative path to be joined with the storage path.
+ * 
  * @returns The resolved absolute path.
  */
 export const withStoragePath = (relativePath: string): string => {
@@ -31,6 +33,7 @@ export const withStoragePath = (relativePath: string): string => {
  * Resolves the given relative path to an absolute path within the public directory.
  * 
  * @param relativePath - The relative path to be joined with the public directory path.
+ * 
  * @returns The resolved absolute path.
  */
 export const withPublicPath = (relativePath: string): string => {
@@ -41,6 +44,7 @@ export const withPublicPath = (relativePath: string): string => {
  * Resolves the given relative path to an absolute path within the public fil storage directory.
  * 
  * @param relativePath - The relative path to be joined with the public file storage directory path.
+ * 
  * @returns The resolved absolute path.
  */
 export const withPublicFileStoragePath = (relativePath: string): string => {
@@ -51,6 +55,7 @@ export const withPublicFileStoragePath = (relativePath: string): string => {
  * Resolves the given relative path to an absolute path within the private fil storage directory.
  * 
  * @param relativePath - The relative path to be joined with the private file storage directory path.
+ * 
  * @returns The resolved absolute path.
  */
 export const withPrivateFileStoragePath = (relativePath: string): string => {

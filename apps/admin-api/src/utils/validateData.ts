@@ -12,7 +12,9 @@ export type SchemaShape = ZodRawShape
  * 
  * @param schema - A Zod object schema to validate against.
  * @param data - The data to validate.
+ * 
  * @returns The parsed and validated data.
+ * 
  * @throws The flattened field errors if validation fails.
  */
 function validateData<T extends SchemaShape>(schema: ZodObject<T>, data: unknown) {
@@ -27,7 +29,7 @@ function validateData<T extends SchemaShape>(schema: ZodObject<T>, data: unknown
     throw fieldErrors
   }
 
-  return parsedData as z.infer<typeof schema>
+  return parsedData
 }
 
 export default validateData

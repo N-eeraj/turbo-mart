@@ -29,6 +29,7 @@ const httpLogger = pinoHttp({
      * Custom request serializer to log only method and URL.
      * 
      * @param req - Express request object
+     * 
      * @returns simplified log object
      */
     req: ({ url, method }: Request) => {
