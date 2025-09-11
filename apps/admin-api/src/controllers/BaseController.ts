@@ -124,6 +124,34 @@ export default class BaseController {
   }
 
   /**
+   * Parses and validates a given value as a Mongoose SortOrder.
+   * 
+   * @param value - The value to validate and convert.
+   * 
+   * @returns The transformed `SortOrder` if valid; otherwise, `null`.
+   */
+  static parseSortValue(value: unknown): mongoose.SortOrder | null {
+    const VALID_SORT_VALUES: Array<mongoose.SortOrder> = [
+      "asc",
+      "ascending",
+      "desc",
+      "descending",
+      1,
+      -1,
+    ] as const
+
+    let normalizedValue = value
+
+    if (typeof normalizedValue === "string") {
+      normalizedValue = normalizedValue.toLowerCase()
+    }
+
+    const isValidSortOrder = VALID_SORT_VALUES.includes(normalizedValue as mongoose.SortOrder)
+
+    return isValidSortOrder ? normalizedValue as mongoose.SortOrder : null
+  }
+
+  /**
    * Convert multer file to native file.
    * 
    * @static

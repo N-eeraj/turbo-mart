@@ -122,8 +122,27 @@ export default class ProfileController extends BaseController {
    */
   static async getNotifications({ user, query }: Request, res: Response) {
     try {
-      const options = {
-        isRead: query.isRead?.length ? query.isRead === "true" : undefined,
+      const options: Parameters<typeof ProfileService.getNotifications>[1] = {}
+
+      // read status option
+      if (query.isRead === "true") {
+        options.isRead = true
+      } else if (query.isRead === "false") {
+        options.isRead = false
+      }
+
+      // sorting order
+      const parsedSortOrder = super.parseSortValue(query.order)
+      if (parsedSortOrder) {
+        options.order = parsedSortOrder
+      }
+
+      // pagination options
+      if (Number(query.limit) > 0) {
+        options.limit = Number(query.limit)
+      }
+      if (Number(query.skip) > 0) {
+        options.skip = Number(query.skip)
       }
 
       const data = await ProfileService.getNotifications(user.id, options)

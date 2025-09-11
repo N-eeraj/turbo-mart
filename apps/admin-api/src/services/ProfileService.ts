@@ -21,6 +21,15 @@ import {
 
 interface GetNotificationOptions {
   isRead?: boolean
+  limit?: number
+  skip?: number
+  order?: mongoose.SortOrder
+}
+
+const DEFAULT_NOTIFICATION_OPTIONS: GetNotificationOptions = {
+  limit: 10,
+  skip: 0,
+  order: "descending",
 }
 export default class ProfileService extends BaseService {
   /**
@@ -198,23 +207,35 @@ export default class ProfileService extends BaseService {
    */
   static async getNotifications(
     adminId: AdminObject["id"],
-    { isRead }: GetNotificationOptions
+    {
+      isRead,
+      limit = 10,
+      skip = 0,
+      order = "descending",
+    }: GetNotificationOptions = DEFAULT_NOTIFICATION_OPTIONS
   ): Promise<Array<any>> {
     /**
-     * Defines the query conditions for finding notifications based on various filter options.
+     * Defines the query conditions for finding notifications.
+     *
+     * - `adminId` - The admin user ID.
+     * - `isRead` - Checks if `readAt` field exists or doesn't exists if explicitly mentioned.
      */
     const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
       admin: adminId,
-      ...(
-        isRead !== undefined && ({
-          readAt: {
-            $exists: isRead,
-          }
-        })
-      ),
+    }
+    // add readAt filter if it exists
+    if (isRead !== undefined) {
+      filterQuery.readAt = {
+        $exists: isRead,
+      }
     }
 
     const notifications = await Notification.find(filterQuery)
+      .sort({
+        createdAt: order,
+      })
+      .skip(skip)
+      .limit(limit)
       .lean()
 
     return notifications.map(({ _id, admin: _admin, __v, ...notification }) => {

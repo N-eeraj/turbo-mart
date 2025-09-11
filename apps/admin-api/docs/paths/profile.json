@@ -430,7 +430,35 @@
           "required": false,
           "schema": {
             "type": "boolean",
-            "description": "Read status flag of the user notifications."
+            "description": "Read status flag of the user notifications to be retrieved."
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "description": "Number of notifications to be retrieved.",
+            "default": 10
+          }
+        },
+        {
+          "name": "skip",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "description": "Number of notifications to be skipped.",
+            "default": 0
+          }
+        },
+        {
+          "name": "order",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/SortOrderEnum"
           }
         }
       ],

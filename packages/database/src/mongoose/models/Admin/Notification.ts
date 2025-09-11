@@ -55,6 +55,7 @@ const NotificationSchema = new mongoose.Schema({
 NotificationSchema.index({
   admin: 1,
   readAt: 1,
+  createdAt: 1,
 })
 
 const Notification = mongoose.model("Notification", NotificationSchema)
