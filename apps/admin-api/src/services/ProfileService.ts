@@ -19,6 +19,9 @@ import {
   type PasswordUpdateData,
 } from "#schemas/user"
 
+interface GetNotificationOptions {
+  isRead?: boolean
+}
 export default class ProfileService extends BaseService {
   /**
    * Return the user object.
@@ -193,10 +196,25 @@ export default class ProfileService extends BaseService {
    * 
    * @throws If fetching the notifications failed.
    */
-  static async getNotifications(adminId: AdminObject["id"]): Promise<Array<any>> {
-    const notifications = await Notification.find({
+  static async getNotifications(
+    adminId: AdminObject["id"],
+    { isRead }: GetNotificationOptions
+  ): Promise<Array<any>> {
+    /**
+     * Defines the query conditions for finding notifications based on various filter options.
+     */
+    const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
       admin: adminId,
-    })
+      ...(
+        isRead !== undefined && ({
+          readAt: {
+            $exists: isRead,
+          }
+        })
+      ),
+    }
+
+    const notifications = await Notification.find(filterQuery)
       .lean()
 
     return notifications.map(({ _id, admin: _admin, __v, ...notification }) => {

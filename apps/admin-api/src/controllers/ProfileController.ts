@@ -120,9 +120,13 @@ export default class ProfileController extends BaseController {
    * 
    * Get the user notifications.
    */
-  static async getNotifications({ user }: Request, res: Response) {
+  static async getNotifications({ user, query }: Request, res: Response) {
     try {
-      const data = await ProfileService.getNotifications(user.id)
+      const options = {
+        isRead: query.isRead?.length ? query.isRead === "true" : undefined,
+      }
+
+      const data = await ProfileService.getNotifications(user.id, options)
 
       super.sendSuccess(res, {
         data,

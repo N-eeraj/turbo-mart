@@ -423,6 +423,17 @@
       "tags": ["Profile"],
       "summary": "Profile Notifications",
       "description": "List of the notifications of logged in user.",
+      "parameters": [
+        {
+          "name": "isRead",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "boolean",
+            "description": "Read status flag of the user notifications."
+          }
+        }
+      ],
       "responses": {
         "200": {
           "description": "Fetched the user notifications successfully.",
