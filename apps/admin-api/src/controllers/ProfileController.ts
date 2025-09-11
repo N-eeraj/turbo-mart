@@ -2,6 +2,7 @@ import {
   type Request,
   type Response,
 } from "express"
+import type mongoose from "mongoose"
 
 import BaseController from "#controllers/BaseController"
 import ProfileService from "#services/ProfileService"
@@ -10,6 +11,7 @@ import {
   passwordUpdateSchema,
   profilePictureSchema,
   notificationReadStatusSchema,
+  notificationReadStatusBulkSchema,
 } from "#schemas/user"
 
 /**
@@ -159,7 +161,7 @@ export default class ProfileController extends BaseController {
   /**
    * @route PATCH /api/profile/notifications/:id
    * 
-   * Set the notification read status.
+   * Set the read status for single notification.
    */
   static async setReadNotificationStatus({ user, params, body }: Request, res: Response) {
     try {
@@ -167,19 +169,64 @@ export default class ProfileController extends BaseController {
       if (notificationId === null) {
         throw {
           status: 400,
-          message: "Invalid notification id"
+          message: "Invalid notification id",
         }
       }
 
       const {
-        state,
+        read,
       } = super.validateRequest(notificationReadStatusSchema, body)
 
-      const data = await ProfileService.setReadNotificationStatus(user.id, state, [notificationId])
+      const data = await ProfileService.setReadNotificationStatus(user.id, read, [notificationId])
 
       super.sendSuccess(res, {
         data,
-        message: `Marked Notifications as ${state ? "read" : "unread"}`,
+        message: `Marked Notification as ${read ? "read" : "unread"}`,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route PATCH /api/profile/notifications
+   * 
+   * Set the read status for multiple notifications.
+   */
+  static async setReadNotificationStatusBulk({ user, body }: Request, res: Response) {
+    try {
+      const {
+        read,
+        notifications,
+      } = super.validateRequest(notificationReadStatusBulkSchema, body)
+
+      const {
+        notificationIds,
+        invalidIds,
+      } = notifications.reduce((map: { notificationIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> }, id) => {
+        const parsedId = super.parseObjectId(id)
+        parsedId ?
+          map.notificationIds.push(parsedId) :
+          map.invalidIds.push(id)
+        return map
+      }, {
+        notificationIds: [],
+        invalidIds: [],
+      })
+
+      if (invalidIds.length) {
+        throw {
+          status: 400,
+          message: "Invalid notification id",
+          invalidIds,
+        }
+      }
+
+      const data = await ProfileService.setReadNotificationStatus(user.id, read, notificationIds)
+
+      super.sendSuccess(res, {
+        data,
+        message: `Marked Notifications as ${read ? "read" : "unread"}`,
       })
     } catch (error) {
       super.sendError(res, error)

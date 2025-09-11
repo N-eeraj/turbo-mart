@@ -40,10 +40,13 @@ notificationRouter.route("/")
     authenticationMiddleware,
   ])
   .get(ProfileController.getNotifications)
+  .patch(ProfileController.setReadNotificationStatusBulk)
 
-notificationRouter.patch("/:id", [
-  authenticationMiddleware,
-], ProfileController.setReadNotificationStatus)
+notificationRouter.route("/:id")
+  .all([
+    authenticationMiddleware,
+  ])
+  .patch(ProfileController.setReadNotificationStatus)
 
 profileRouter.use("/notifications", notificationRouter)
 

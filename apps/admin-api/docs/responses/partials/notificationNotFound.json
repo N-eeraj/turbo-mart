@@ -9,7 +9,12 @@
       "summary": "Notification Not Found",
       "value": {
         "success": false,
-        "message": "Notification not found"
+        "message": "Notification not found",
+        "errors": {
+          "notifications": [
+            "01abcd091ab01a0123ab012a"
+          ]
+        }
       }
     }
   }

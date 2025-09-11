@@ -40,8 +40,9 @@ const IncorrectPassword = {
 const {
   schema: UserNotFoundSchema,
 } = UserNotFound.content["application/json"]
-const NotificationStateNotFound = {
+const NotificationStatusNotFound = {
   ...UserNotFound,
+  "description": "Not found error.",
   content: {
     "application/json": {
       schema: {
@@ -76,7 +77,7 @@ const responses = {
   UnauthorizedSuperAdminUser,
   InternalServerError,
   IncorrectPassword,
-  NotificationStateNotFound,
+  NotificationStatusNotFound,
 }
 
 export default responses

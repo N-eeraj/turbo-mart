@@ -17,6 +17,7 @@ import {
   NEW_PASSWORD,
   PROFILE_PICTURE,
   NOTIFICATION_STATE,
+  NOTIFICATION_IDS,
 } from "#constants/validationMessages"
 
 export const adminSchema = z.object({
@@ -104,13 +105,25 @@ export const profilePictureSchema = z.object({
 })
 
 export const notificationReadStatusSchema = z.object({
-  state: z.boolean({ error: (issue) => {
+  read: z.boolean({ error: (issue) => {
     if (issue.input === undefined) return NOTIFICATION_STATE.required
     return NOTIFICATION_STATE.valid
   }})
     .meta({
-      description: "Flag to set the notification's read state.",
+      description: "Flag to set the notification's read status.",
       example: true,
+    }),
+})
+
+export const notificationReadStatusBulkSchema = notificationReadStatusSchema.extend({
+  notifications: z.array(
+    z.string({ error: NOTIFICATION_IDS.individual.required })
+      .nonempty(NOTIFICATION_IDS.individual.required)
+      .trim()
+  )
+    .min(1, { error: NOTIFICATION_IDS.list.minLength })
+    .meta({
+      description: "List of notification id to set the read status"
     }),
 })
 
@@ -119,9 +132,11 @@ export const profileUpdateJSONSchema = z.toJSONSchema(profileUpdateSchema)
 export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
 export const profilePictureJSONSchema = z.toJSONSchema(profilePictureSchema)
 export const notificationReadStatusJSONSchema = z.toJSONSchema(notificationReadStatusSchema)
+export const notificationReadStatusBulkJSONSchema = z.toJSONSchema(notificationReadStatusBulkSchema)
 
 export type AdminData = z.infer<typeof adminSchema>
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
 export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
 export type ProfilePictureData = z.infer<typeof profilePictureSchema>
 export type NotificationReadStatusSchema = z.infer<typeof notificationReadStatusSchema>
+export type NotificationReadStatusBulkSchema = z.infer<typeof notificationReadStatusBulkSchema>

@@ -38,6 +38,15 @@ export const PROFILE_PICTURE = {
 }
 
 export const NOTIFICATION_STATE = {
-  required: "State value is required",
-  valid: "Invalid state value",
+  required: "Read value is required",
+  valid: "Invalid read value",
+}
+
+export const NOTIFICATION_IDS = {
+  individual: {
+    required: "Notification id is required",
+  },
+  list: {
+    minLength: "Please select at least 1 notification",
+  },
 }

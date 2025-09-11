@@ -8,6 +8,7 @@ import {
   passwordUpdateJSONSchema,
   profilePictureJSONSchema,
   notificationReadStatusJSONSchema,
+  notificationReadStatusBulkJSONSchema,
 } from "#schemas/user"
 
 const SortOrderEnum = {
@@ -36,6 +37,7 @@ const schemas = {
   PasswordUpdateSchema: passwordUpdateJSONSchema,
   ProfilePictureSchema: profilePictureJSONSchema,
   NotificationReadStatusSchema: notificationReadStatusJSONSchema,
+  NotificationReadStatusBulkSchema: notificationReadStatusBulkJSONSchema,
   ...UtilitySchemas
 }
 

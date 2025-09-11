@@ -247,13 +247,13 @@ export default class ProfileService extends BaseService {
   }
 
   /**
-   * Updates the `readAt` timestamp of the specified notifications based on the provided state.
+   * Updates the `readAt` timestamp of the specified notifications based on the provided read.
    *
-   * - If `state` is `true`, sets `readAt` to the current timestamp.
-   * - If `state` is `false`, clears the `readAt` field (marks as unread).
+   * - If `read` is `true`, sets `readAt` to the current timestamp.
+   * - If `read` is `false`, clears the `readAt` field (marks as unread).
    * 
    * @param adminId - Admin user id.
-   * @param state - `true` to mark as read, `false` to mark as unread.
+   * @param read - `true` to mark as read, `false` to mark as unread.
    * @param notificationIds - An optional array of notification IDs to update, if undefined all admin user notifications are selected.
    * 
    * @throws 400 error if notificationsIds is empty.
@@ -262,7 +262,7 @@ export default class ProfileService extends BaseService {
    */
   static async setReadNotificationStatus(
     adminId: AdminObject["id"],
-    state: boolean,
+    read: boolean,
     notificationIds?: Array<NotificationType["_id"]>
   ): Promise<void> {
     // ensure non empty array if notifications are passed
@@ -275,7 +275,7 @@ export default class ProfileService extends BaseService {
 
     /**
      * Filter query to be used to find the notifications.
-     * To be used to ensure the correct notifications ids are passed
+     * To be used to ensure the correct notifications id list is passed
      * as well as selector to update the documents.
      */
     const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
@@ -306,7 +306,7 @@ export default class ProfileService extends BaseService {
       }
     }
 
-    const updateQuery: mongoose.UpdateQuery<InferredNotificationSchemaType> = state ? {
+    const updateQuery: mongoose.UpdateQuery<InferredNotificationSchemaType> = read ? {
       $set: {
         readAt: new Date(),
       },
