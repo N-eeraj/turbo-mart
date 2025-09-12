@@ -260,7 +260,7 @@ export default class ProfileService extends BaseService {
    * @throws 404 error if notifications are not found for the admin user.
    * @throws If updating the notifications failed.
    */
-  static async setReadNotificationStatus(
+  static async setNotificationReadStatus(
     adminId: AdminObject["id"],
     read: boolean,
     notificationIds?: Array<NotificationType["_id"]>
@@ -317,5 +317,22 @@ export default class ProfileService extends BaseService {
     }
 
     await Notification.updateMany(filterQuery, updateQuery)
+  }
+
+  /**
+   * Deletes the specified notifications.
+   *
+   * @param adminId - Admin user id.
+   * @param notificationIds - An optional array of notification IDs to update, if undefined all admin user notifications are selected.
+   * 
+   * @throws 400 error if notificationsIds is empty.
+   * @throws 404 error if notifications are not found for the admin user.
+   * @throws If deleting the notifications failed.
+   */
+  static async deleteNotifications(
+    adminId: AdminObject["id"],
+    notificationIds?: Array<NotificationType["_id"]>
+  ): Promise<void> {
+
   }
 }

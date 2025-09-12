@@ -33,10 +33,11 @@ const notificationRouter = express.Router()
 
 notificationRouter.route("/")
   .get(ProfileController.getNotifications)
-  .patch(ProfileController.setReadNotificationStatusBulk)
+  .patch(ProfileController.setNotificationReadStatusBulk)
 
 notificationRouter.route("/:id")
-  .patch(ProfileController.setReadNotificationStatus)
+  .patch(ProfileController.setNotificationReadStatus)
+  .delete(ProfileController.deleteNotification)
 
 profileRouter.use("/notifications", notificationRouter)
 

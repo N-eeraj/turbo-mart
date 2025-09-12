@@ -163,7 +163,7 @@ export default class ProfileController extends BaseController {
    * 
    * Set the read status for single notification.
    */
-  static async setReadNotificationStatus({ user, params, body }: Request, res: Response) {
+  static async setNotificationReadStatus({ user, params, body }: Request, res: Response) {
     try {
       const notificationId = super.parseObjectId(params.id)
       if (notificationId === null) {
@@ -177,11 +177,11 @@ export default class ProfileController extends BaseController {
         read,
       } = super.validateRequest(notificationReadStatusSchema, body)
 
-      const data = await ProfileService.setReadNotificationStatus(user.id, read, [notificationId])
+      const data = await ProfileService.setNotificationReadStatus(user.id, read, [notificationId])
 
       super.sendSuccess(res, {
         data,
-        message: `Marked Notification as ${read ? "read" : "unread"}`,
+        message: `Marked Notification as ${read ? "Read" : "Unread"}`,
       })
     } catch (error) {
       super.sendError(res, error)
@@ -193,7 +193,7 @@ export default class ProfileController extends BaseController {
    * 
    * Set the read status for multiple notifications.
    */
-  static async setReadNotificationStatusBulk({ user, body }: Request, res: Response) {
+  static async setNotificationReadStatusBulk({ user, body }: Request, res: Response) {
     try {
       const {
         read,
@@ -222,11 +222,36 @@ export default class ProfileController extends BaseController {
         }
       }
 
-      const data = await ProfileService.setReadNotificationStatus(user.id, read, notificationIds)
+      const data = await ProfileService.setNotificationReadStatus(user.id, read, notificationIds)
 
       super.sendSuccess(res, {
         data,
-        message: `Marked Notifications as ${read ? "read" : "unread"}`,
+        message: `Marked Notifications as ${read ? "Read" : "Unread"}`,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route DELETE /api/profile/notifications/:id
+   * 
+   * Delete single notification.
+   */
+  static async deleteNotification({ user, params }: Request, res: Response) {
+    try {
+      const notificationId = super.parseObjectId(params.id)
+      if (notificationId === null) {
+        throw {
+          status: 400,
+          message: "Invalid notification id",
+        }
+      }
+
+      await ProfileService.deleteNotifications(user.id, [notificationId])
+
+      super.sendSuccess(res, {
+        message: "Deleted Notification",
       })
     } catch (error) {
       super.sendError(res, error)

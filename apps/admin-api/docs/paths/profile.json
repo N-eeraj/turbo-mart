@@ -797,6 +797,79 @@
           "$ref": "#/components/responses/InternalServerError"
         }
       }
+    },
+    "delete": {
+      "tags": ["Profile"],
+      "summary": "Delete Notification",
+      "description": "Delete the notification.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the notification",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Delete the notification successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "null"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Deleted Notification",
+                    "description": "Success message: Deleted Notification."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid data error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Invalid notification id",
+                    "description": "Error message."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "404": {
+          "$ref": "#/components/responses/NotificationStatusNotFound"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
     }
   }
 }
