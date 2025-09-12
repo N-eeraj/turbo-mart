@@ -122,6 +122,7 @@ export const notificationReadStatusBulkSchema = notificationReadStatusSchema.ext
       .trim()
   )
     .min(1, { error: NOTIFICATION_IDS.list.minLength })
+    .optional()
     .meta({
       description: "List of notification id to set the read status"
     }),

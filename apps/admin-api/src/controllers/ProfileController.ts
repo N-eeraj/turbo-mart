@@ -200,26 +200,31 @@ export default class ProfileController extends BaseController {
         notifications,
       } = super.validateRequest(notificationReadStatusBulkSchema, body)
 
-      const {
-        notificationIds,
-        invalidIds,
-      } = notifications.reduce((map: { notificationIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> }, id) => {
-        const parsedId = super.parseObjectId(id)
-        parsedId ?
-          map.notificationIds.push(parsedId) :
-          map.invalidIds.push(id)
-        return map
-      }, {
-        notificationIds: [],
-        invalidIds: [],
-      })
+      let notificationIds
 
-      if (invalidIds.length) {
-        throw {
-          status: 400,
-          message: "Invalid notification id",
+      if (notifications) {
+        const {
+          validIds,
           invalidIds,
+        } = notifications.reduce((map: { validIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> }, id) => {
+          const parsedId = super.parseObjectId(id)
+          parsedId ?
+            map.validIds.push(parsedId) :
+            map.invalidIds.push(id)
+          return map
+        }, {
+          validIds: [],
+          invalidIds: [],
+        })
+  
+        if (invalidIds.length) {
+          throw {
+            status: 400,
+            message: "Invalid notification id",
+            invalidIds,
+          }
         }
+        notificationIds = validIds
       }
 
       const data = await ProfileService.setNotificationReadStatus(user.id, read, notificationIds)

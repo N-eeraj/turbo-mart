@@ -33,9 +33,11 @@ const DEFAULT_NOTIFICATION_OPTIONS: GetNotificationOptions = {
 }
 export default class ProfileService extends BaseService {
   /**
-   * Return the user object.
+   * Return the admin user object.
    * 
    * @param user - User object from the request.
+   * 
+   * @returns the admin user object.
    * 
    * @throws If the data transformation fails.
    */
@@ -48,6 +50,8 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * @param data - Fields to be updated.
+   * 
+   * @returns the updated admin user object.
    * 
    * @throws 404 error if admin is not found.
    * @throws 409 error if email is already in use.
@@ -128,7 +132,7 @@ export default class ProfileService extends BaseService {
     user.password = newPassword
     await user.save()
 
-    // delete all the user tokens except the current one
+    // delete all the admin user tokens except the current one
     await Token.deleteMany({
       admin: adminId,
       token: { $ne: token }
@@ -141,6 +145,8 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * @param picture - File to set as the profile picture.
+   * 
+   * @returns the updated profile picture public path.
    * 
    * @throws 404 error if admin is not found.
    * @throws If the profile picture update fails.
@@ -203,6 +209,8 @@ export default class ProfileService extends BaseService {
    * 
    * @param adminId - Admin user id.
    * 
+   * @returns the list of notifications based on the options.
+   * 
    * @throws If fetching the notifications failed.
    */
   static async getNotifications(
@@ -247,24 +255,21 @@ export default class ProfileService extends BaseService {
   }
 
   /**
-   * Updates the `readAt` timestamp of the specified notifications based on the provided read.
-   *
-   * - If `read` is `true`, sets `readAt` to the current timestamp.
-   * - If `read` is `false`, clears the `readAt` field (marks as unread).
    * 
+    * Validates the notification Ids
+    * 
    * @param adminId - Admin user id.
-   * @param read - `true` to mark as read, `false` to mark as unread.
    * @param notificationIds - An optional array of notification IDs to update, if undefined all admin user notifications are selected.
    * 
-   * @throws 400 error if notificationsIds is empty.
+   * @returns Filter query to be used to handle the notification operations
+   * 
+   * @throws 400 error if notificationsIds exists and is empty.
    * @throws 404 error if notifications are not found for the admin user.
-   * @throws If updating the notifications failed.
    */
-  static async setNotificationReadStatus(
+  static async validateUserNotificationAndGetQuery(
     adminId: AdminObject["id"],
-    read: boolean,
     notificationIds?: Array<NotificationType["_id"]>
-  ): Promise<void> {
+  ): Promise<mongoose.FilterQuery<InferredNotificationSchemaType>> {
     // ensure non empty array if notifications are passed
     if (notificationIds && !notificationIds.length) {
       throw {
@@ -273,11 +278,6 @@ export default class ProfileService extends BaseService {
       }
     }
 
-    /**
-     * Filter query to be used to find the notifications.
-     * To be used to ensure the correct notifications id list is passed
-     * as well as selector to update the documents.
-     */
     const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
       ...(
         notificationIds && {
@@ -306,6 +306,28 @@ export default class ProfileService extends BaseService {
       }
     }
 
+    return filterQuery
+  }
+
+  /**
+   * Updates the `readAt` timestamp of the specified notifications based on the provided read.
+   *
+   * - If `read` is `true`, sets `readAt` to the current timestamp.
+   * - If `read` is `false`, clears the `readAt` field (marks as unread).
+   * 
+   * @param adminId - Admin user id.
+   * @param read - `true` to mark as read, `false` to mark as unread.
+   * @param notificationIds - An optional array of notification IDs to update, if undefined all admin user notifications are selected.
+   * 
+   * @throws If updating the notifications failed.
+   */
+  static async setNotificationReadStatus(
+    adminId: AdminObject["id"],
+    read: boolean,
+    notificationIds?: Array<NotificationType["_id"]>
+  ): Promise<void> {
+    const filterQuery = await ProfileService.validateUserNotificationAndGetQuery(adminId, notificationIds)
+
     const updateQuery: mongoose.UpdateQuery<InferredNotificationSchemaType> = read ? {
       $set: {
         readAt: new Date(),
@@ -323,16 +345,16 @@ export default class ProfileService extends BaseService {
    * Deletes the specified notifications.
    *
    * @param adminId - Admin user id.
-   * @param notificationIds - An optional array of notification IDs to update, if undefined all admin user notifications are selected.
+   * @param notificationIds - An optional array of notification IDs to delete, if undefined all admin user notifications are selected.
    * 
-   * @throws 400 error if notificationsIds is empty.
-   * @throws 404 error if notifications are not found for the admin user.
    * @throws If deleting the notifications failed.
    */
   static async deleteNotifications(
     adminId: AdminObject["id"],
     notificationIds?: Array<NotificationType["_id"]>
   ): Promise<void> {
+    const filterQuery = await ProfileService.validateUserNotificationAndGetQuery(adminId, notificationIds)
 
+    await Notification.deleteMany(filterQuery)
   }
 }
