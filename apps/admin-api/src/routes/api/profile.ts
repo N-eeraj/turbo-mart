@@ -13,21 +13,17 @@ import ProfileController from "#controllers/ProfileController"
  */
 const profileRouter = express.Router()
 
+profileRouter.use([
+  authenticationMiddleware,
+])
+
 profileRouter.route("/")
-  .all([
-    authenticationMiddleware,
-  ])
   .get(ProfileController.getDetails)
   .patch(ProfileController.updateDetails)
 
-profileRouter.put("/password", [
-  authenticationMiddleware,
-], ProfileController.updatePassword)
+profileRouter.put("/password", ProfileController.updatePassword)
 
 profileRouter.route("/picture")
-  .all([
-    authenticationMiddleware,
-  ])
   .put([
     upload.single("profilePicture"),
   ], ProfileController.updateProfilePicture)
@@ -36,16 +32,10 @@ profileRouter.route("/picture")
 const notificationRouter = express.Router()
 
 notificationRouter.route("/")
-  .all([
-    authenticationMiddleware,
-  ])
   .get(ProfileController.getNotifications)
   .patch(ProfileController.setReadNotificationStatusBulk)
 
 notificationRouter.route("/:id")
-  .all([
-    authenticationMiddleware,
-  ])
   .patch(ProfileController.setReadNotificationStatus)
 
 profileRouter.use("/notifications", notificationRouter)
