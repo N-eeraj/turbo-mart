@@ -206,17 +206,8 @@ export default class ProfileController extends BaseController {
         const {
           validIds,
           invalidIds,
-        } = notifications.reduce((map: { validIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> }, id) => {
-          const parsedId = super.parseObjectId(id)
-          parsedId ?
-            map.validIds.push(parsedId) :
-            map.invalidIds.push(id)
-          return map
-        }, {
-          validIds: [],
-          invalidIds: [],
-        })
-  
+        } = super.parseObjectIdBulk(notifications)
+
         if (invalidIds.length) {
           throw {
             status: 400,
@@ -224,6 +215,7 @@ export default class ProfileController extends BaseController {
             invalidIds,
           }
         }
+
         notificationIds = validIds
       }
 
@@ -257,6 +249,55 @@ export default class ProfileController extends BaseController {
 
       super.sendSuccess(res, {
         message: "Deleted Notification",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route DELETE /api/profile/notifications
+   * 
+   * Delete multiple notifications.
+   */
+  static async deleteNotificationBulk({ user, query }: Request, res: Response) {
+    try {
+      const notifications = query.ids
+
+      let notificationIds
+      if (Array.isArray(notifications)) {
+        const {
+          validIds,
+          invalidIds,
+        } = super.parseObjectIdBulk(notifications as Array<string>)
+
+        if (invalidIds.length) {
+          throw {
+            status: 400,
+            message: "Invalid notification id",
+            invalidIds,
+          }
+        }
+
+        notificationIds = validIds
+      } else if (typeof notifications === "string") {
+        const parsedId = super.parseObjectId(notifications)
+        if (parsedId === null) {
+          throw {
+            status: 400,
+            message: "Invalid notification id",
+            invalidIds: [
+              notifications,
+            ],
+          }
+        }
+        notificationIds = [parsedId]
+      }
+
+      await ProfileService.deleteNotifications(user.id, notificationIds)
+
+      super.sendSuccess(res, {
+        message: "Deleted Notifications",
       })
     } catch (error) {
       super.sendError(res, error)

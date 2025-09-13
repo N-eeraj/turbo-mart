@@ -1,5 +1,11 @@
 import express from "express"
 
+import {
+  authenticationMiddleware,
+} from "#middlewares/authentication"
+import {
+  superAdminAuthorizationMiddleware,
+} from "#middlewares/authorization"
 import AdminManagementController from "#controllers/SuperAdmin/AdminManagementController"
 
 /**
@@ -10,7 +16,13 @@ import AdminManagementController from "#controllers/SuperAdmin/AdminManagementCo
 const adminManagementRouter = express.Router()
 
 adminManagementRouter.route("/")
-  .get(AdminManagementController.getAllAdmins)
-  .post(AdminManagementController.createAdmin)
+  .get([
+    authenticationMiddleware,
+    superAdminAuthorizationMiddleware,
+  ], AdminManagementController.getAllAdmins)
+  .post([
+    authenticationMiddleware,
+    superAdminAuthorizationMiddleware,
+  ], AdminManagementController.createAdmin)
 
 export default adminManagementRouter

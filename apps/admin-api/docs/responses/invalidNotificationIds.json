@@ -1,0 +1,36 @@
+{
+  "description": "Invalid data error",
+  "content": {
+    "application/json": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indicates the request failed."
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid notification id",
+            "description": "Error message."
+          },
+          "errors": {
+            "type": "object",
+            "description": "Error details for the fields.",
+            "properties": {
+              "invalidIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": ["01abcd091ab01a0123ab012a"],
+                "description": "List of invalid ids."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

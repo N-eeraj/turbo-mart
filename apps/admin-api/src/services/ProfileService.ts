@@ -266,7 +266,7 @@ export default class ProfileService extends BaseService {
    * @throws 400 error if notificationsIds exists and is empty.
    * @throws 404 error if notifications are not found for the admin user.
    */
-  static async validateUserNotificationAndGetQuery(
+  private static async validateUserNotificationAndGetQuery(
     adminId: AdminObject["id"],
     notificationIds?: Array<NotificationType["_id"]>
   ): Promise<mongoose.FilterQuery<InferredNotificationSchemaType>> {

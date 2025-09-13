@@ -13,31 +13,47 @@ import ProfileController from "#controllers/ProfileController"
  */
 const profileRouter = express.Router()
 
-profileRouter.use([
-  authenticationMiddleware,
-])
-
 profileRouter.route("/")
-  .get(ProfileController.getDetails)
-  .patch(ProfileController.updateDetails)
+  .get([
+    authenticationMiddleware,
+  ], ProfileController.getDetails)
+  .patch([
+    authenticationMiddleware,
+  ], ProfileController.updateDetails)
 
-profileRouter.put("/password", ProfileController.updatePassword)
+profileRouter.put("/password", [
+  authenticationMiddleware,
+], ProfileController.updatePassword)
 
 profileRouter.route("/picture")
   .put([
+    authenticationMiddleware,
     upload.single("profilePicture"),
   ], ProfileController.updateProfilePicture)
-  .delete(ProfileController.removeProfilePicture)
+  .delete([
+    authenticationMiddleware,
+  ], ProfileController.removeProfilePicture)
 
 const notificationRouter = express.Router()
 
 notificationRouter.route("/")
-  .get(ProfileController.getNotifications)
-  .patch(ProfileController.setNotificationReadStatusBulk)
+  .get([
+    authenticationMiddleware,
+  ], ProfileController.getNotifications)
+  .patch([
+    authenticationMiddleware,
+  ], ProfileController.setNotificationReadStatusBulk)
+  .delete([
+    authenticationMiddleware,
+  ], ProfileController.deleteNotificationBulk)
 
 notificationRouter.route("/:id")
-  .patch(ProfileController.setNotificationReadStatus)
-  .delete(ProfileController.deleteNotification)
+  .patch([
+    authenticationMiddleware,
+  ], ProfileController.setNotificationReadStatus)
+  .delete([
+    authenticationMiddleware,
+  ], ProfileController.deleteNotification)
 
 profileRouter.use("/notifications", notificationRouter)
 

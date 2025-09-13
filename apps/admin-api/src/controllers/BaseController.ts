@@ -124,6 +124,27 @@ export default class BaseController {
   }
 
   /**
+   * 
+   * @param idList - The list of values to validate and convert.
+   *  
+   * @returns The a map of of valid and invalid ids
+   */
+  static parseObjectIdBulk(idList: Array<string>): { validIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> } {
+    const idMap = idList.reduce((map: { validIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> }, id) => {
+      const parsedId = BaseController.parseObjectId(id)
+      parsedId ?
+        map.validIds.push(parsedId) :
+        map.invalidIds.push(id)
+      return map
+    }, {
+      validIds: [],
+      invalidIds: [],
+    })
+
+    return idMap
+  }
+
+  /**
    * Parses and validates a given value as a Mongoose SortOrder.
    * 
    * @param value - The value to validate and convert.
