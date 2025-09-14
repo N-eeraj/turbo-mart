@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique user ID."
+    },
+    "email": {
+      "type": "string",
+      "description": "User's email address."
+    },
+    "name": {
+      "type": "string",
+      "description": "User's full name."
+    },
+    "role": {
+      "$ref": "#/components/schemas/RolesEnum"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/PermissionsEnum"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the user was created. Follows ISO 8601 format."
+    },
+    "profilePicture": {
+      "type": "string",
+      "description": "The URL to the user's profile picture if set."
+    }
+  }
+}

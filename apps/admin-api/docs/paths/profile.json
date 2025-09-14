@@ -17,34 +17,7 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Unique user ID."
-                      },
-                      "email": {
-                        "type": "string",
-                        "description": "User's email address."
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "User's full name."
-                      },
-                      "role": {
-                        "type": "number",
-                        "description": "User role enum, not applicable for the super admin."
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "Timestamp when the user was created. Follows ISO 8601 format."
-                      }
-                    },
-                    "profilePicture": {
-                      "type": "string",
-                      "description": "The URL to the user's profile picture if set."
-                    }
+                    "$ref": "#/components/schemas/ProfileSchema"
                   },
                   "message": {
                     "type": "string",
@@ -90,38 +63,11 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Unique user ID."
-                      },
-                      "email": {
-                        "type": "string",
-                        "description": "User's email address."
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "User's full name."
-                      },
-                      "role": {
-                        "type": "number",
-                        "description": "User role enum, not applicable for the super admin."
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "Timestamp when the user was created. Follows ISO 8601 format."
-                      }
-                    },
-                    "profilePicture": {
-                      "type": "string",
-                      "description": "The URL to the user's profile picture if set."
-                    }
+                    "$ref": "#/components/schemas/ProfileSchema"
                   },
                   "message": {
                     "type": "string",
-                    "example": "Fetched User Details"
+                    "example": "Updated User Details"
                   }
                 }
               }
@@ -485,34 +431,7 @@
                   "data": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "Unique notification ID."
-                        },
-                        "type": {
-                          "type": "number",
-                          "description": "Enum of notification type."
-                        },
-                        "title": {
-                          "type": "string",
-                          "description": "Title of the notification."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Message of the notification."
-                        },
-                        "data": {
-                          "type": "object",
-                          "description": "An optional data part of the notification."
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Timestamp when the notification was created. Follows ISO 8601 format."
-                        }
-                      }
+                      "$ref": "#/components/schemas/NotificationSchema"
                     }
                   },
                   "message": {
@@ -742,34 +661,7 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Unique notification ID."
-                      },
-                      "type": {
-                        "type": "number",
-                        "description": "Enum of notification type."
-                      },
-                      "title": {
-                        "type": "string",
-                        "description": "Title of the notification."
-                      },
-                      "message": {
-                        "type": "string",
-                        "description": "Message of the notification."
-                      },
-                      "data": {
-                        "type": "object",
-                        "description": "An optional data part of the notification."
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "Timestamp when the notification was created. Follows ISO 8601 format."
-                      }
-                    }
+                    "$ref": "#/components/schemas/NotificationSchema"
                   },
                   "message": {
                     "type": "string",
