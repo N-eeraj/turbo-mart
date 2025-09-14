@@ -4,7 +4,8 @@ import {
   authenticationMiddleware,
 } from "#middlewares/authentication"
 import upload from "#middlewares/multer"
-import ProfileController from "#controllers/ProfileController"
+import ProfileController from "#controllers/profile/UserController"
+import notificationRouter from "#routes/api/profile/notifications"
 
 /**
  * Profile APIs router.
@@ -33,30 +34,6 @@ profileRouter.route("/picture")
   .delete([
     authenticationMiddleware,
   ], ProfileController.removeProfilePicture)
-
-const notificationRouter = express.Router()
-
-notificationRouter.route("/")
-  .get([
-    authenticationMiddleware,
-  ], ProfileController.getNotifications)
-  .patch([
-    authenticationMiddleware,
-  ], ProfileController.setNotificationReadStatusBulk)
-  .delete([
-    authenticationMiddleware,
-  ], ProfileController.deleteNotificationBulk)
-
-notificationRouter.route("/:id")
-  .get([
-    authenticationMiddleware,
-  ], ProfileController.getNotificationsById)
-  .patch([
-    authenticationMiddleware,
-  ], ProfileController.setNotificationReadStatus)
-  .delete([
-    authenticationMiddleware,
-  ], ProfileController.deleteNotification)
 
 profileRouter.use("/notifications", notificationRouter)
 

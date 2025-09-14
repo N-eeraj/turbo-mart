@@ -2,121 +2,18 @@ import {
   type Request,
   type Response,
 } from "express"
-import type mongoose from "mongoose"
 
 import BaseController from "#controllers/BaseController"
-import ProfileService from "#services/ProfileService"
+import NotificationService from "#services/profile/NotificationService"
 import {
-  profileUpdateSchema,
-  passwordUpdateSchema,
-  profilePictureSchema,
   notificationReadStatusSchema,
   notificationReadStatusBulkSchema,
 } from "#schemas/user"
 
 /**
- * Controller for all profile related APIs routes.
+ * Controller for all notification related APIs routes.
  */
-export default class ProfileController extends BaseController {
-  /**
-   * @route GET /api/profile
-   * 
-   * Returns details of the current logged in users.
-   */
-  static async getDetails({ user }: Request, res: Response) {
-    try {
-      const data = await ProfileService.getDetails(user)
-  
-      super.sendSuccess(res, {
-        data,
-        message: "Fetched User Details",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
-  }
-
-  /**
-   * @route PATCH /api/profile
-   * 
-   * Update certain details of the current logged in users.
-   */
-  static async updateDetails({ user, body }: Request, res: Response) {
-    try {
-      const payload = super.validateRequest(profileUpdateSchema, body)
-      const data = await ProfileService.updateDetails(user.id, payload)
-
-      super.sendSuccess(res, {
-        data,
-        message: "Updated User Details",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
-  }
-
-  /**
-   * @route PUT /api/profile/password
-   * 
-   * Update password of the current logged in users.
-   */
-  static async updatePassword({ user, token, body }: Request, res: Response) {
-    try {
-      const passwords = super.validateRequest(passwordUpdateSchema, body)
-      await ProfileService.updatePassword(user.id, token.token, passwords)
-
-      super.sendSuccess(res, {
-        message: "Updated Password",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
-  }
-
-  /**
-   * @route PUT /api/profile/picture
-   * 
-   * Update profile picture of the current logged in users.
-   */
-  static async updateProfilePicture({ user, file }: Request, res: Response) {
-    try {
-      const payload = {
-        profilePicture: super.multerToFile(file)
-      }
-
-      const {
-        profilePicture,
-      } = super.validateRequest(profilePictureSchema, payload)
-
-      const data = await ProfileService.updateProfilePicture(user.id, profilePicture)
-    
-      super.sendSuccess(res, {
-        data,
-        message: "Updated Profile Picture",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
-  }
-
-  /**
-   * @route DELETE /api/profile/picture
-   * 
-   * Remove profile picture of the current logged in users.
-   */
-  static async removeProfilePicture({ user }: Request, res: Response) {
-    try {
-      const data = await ProfileService.removeProfilePicture(user.id)
-
-      super.sendSuccess(res, {
-        data,
-        message: "Removed Profile Picture",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
-  }
-
+export default class NotificationController extends BaseController {
   /**
    * @route GET /api/profile/notifications
    * 
@@ -124,7 +21,7 @@ export default class ProfileController extends BaseController {
    */
   static async getNotifications({ user, query }: Request, res: Response) {
     try {
-      const options: Parameters<typeof ProfileService.getNotifications>[1] = {}
+      const options: Parameters<typeof NotificationService.getNotifications>[1] = {}
 
       // read status option
       if (query.isRead === "true") {
@@ -147,7 +44,7 @@ export default class ProfileController extends BaseController {
         options.skip = Number(query.skip)
       }
 
-      const data = await ProfileService.getNotifications(user.id, options)
+      const data = await NotificationService.getNotifications(user.id, options)
 
       super.sendSuccess(res, {
         data,
@@ -173,7 +70,7 @@ export default class ProfileController extends BaseController {
         }
       }
 
-      const data = await ProfileService.getNotificationsById(user.id, notificationId)
+      const data = await NotificationService.getNotificationsById(user.id, notificationId)
 
       super.sendSuccess(res, {
         data,
@@ -202,7 +99,7 @@ export default class ProfileController extends BaseController {
         read,
       } = super.validateRequest(notificationReadStatusSchema, body)
 
-      const data = await ProfileService.setNotificationReadStatus(user.id, read, [notificationId])
+      const data = await NotificationService.setNotificationReadStatus(user.id, read, [notificationId])
 
       super.sendSuccess(res, {
         data,
@@ -244,7 +141,7 @@ export default class ProfileController extends BaseController {
         notificationIds = validIds
       }
 
-      const data = await ProfileService.setNotificationReadStatus(user.id, read, notificationIds)
+      const data = await NotificationService.setNotificationReadStatus(user.id, read, notificationIds)
 
       super.sendSuccess(res, {
         data,
@@ -270,7 +167,7 @@ export default class ProfileController extends BaseController {
         }
       }
 
-      await ProfileService.deleteNotifications(user.id, [notificationId])
+      await NotificationService.deleteNotifications(user.id, [notificationId])
 
       super.sendSuccess(res, {
         message: "Deleted Notification",
@@ -319,7 +216,7 @@ export default class ProfileController extends BaseController {
         notificationIds = [parsedId]
       }
 
-      await ProfileService.deleteNotifications(user.id, notificationIds)
+      await NotificationService.deleteNotifications(user.id, notificationIds)
 
       super.sendSuccess(res, {
         message: "Deleted Notifications",

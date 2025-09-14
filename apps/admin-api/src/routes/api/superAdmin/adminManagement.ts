@@ -6,7 +6,7 @@ import {
 import {
   superAdminAuthorizationMiddleware,
 } from "#middlewares/authorization"
-import AdminManagementController from "#controllers/SuperAdmin/AdminManagementController"
+import AdminManagementController from "#controllers/superAdmin/AdminManagementController"
 
 /**
  * Super Admin APIs router.

@@ -4,7 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import AdminManagementService from "#services/SuperAdmin/AdminManagementService"
+import AdminManagementService from "#services/superAdmin/AdminManagementService"
 import {
   adminSchema,
 } from "#schemas/user"
