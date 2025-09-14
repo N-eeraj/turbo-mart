@@ -9,7 +9,8 @@ import Token, {
   type Token as TokenType,
 } from "@app/database/mongoose/models/Admin/Token.ts"
 import Notification, {
-  type Notification as NotificationType,
+  transformNotification,
+  type NotificationObject,
   type InferredNotificationSchemaType,
 } from "@app/database/mongoose/models/Admin/Notification.ts"
 
@@ -221,7 +222,7 @@ export default class ProfileService extends BaseService {
       skip = 0,
       order = "descending",
     }: GetNotificationOptions = DEFAULT_NOTIFICATION_OPTIONS
-  ): Promise<Array<any>> {
+  ): Promise<Array<NotificationObject>> {
     /**
      * Defines the query conditions for finding notifications.
      *
@@ -244,14 +245,27 @@ export default class ProfileService extends BaseService {
       })
       .skip(skip)
       .limit(limit)
-      .lean()
 
-    return notifications.map(({ _id, admin: _admin, __v, ...notification }) => {
-      return {
-        id: _id,
-        ...notification,
-      }
+    return notifications.map(transformNotification)
+  }
+
+  static async getNotificationsById(
+    adminId: AdminObject["id"],
+    notificationId: NotificationObject["id"]
+  ): Promise<NotificationObject> {
+    const notification = await Notification.findOne({
+      _id: notificationId,
+      admin: adminId,
     })
+
+    if (!notification) {
+      throw {
+        status: 404,
+        message: "Notification not found",
+      }
+    }
+
+    return transformNotification(notification)
   }
 
   /**
@@ -268,7 +282,7 @@ export default class ProfileService extends BaseService {
    */
   private static async validateUserNotificationAndGetQuery(
     adminId: AdminObject["id"],
-    notificationIds?: Array<NotificationType["_id"]>
+    notificationIds?: Array<NotificationObject["id"]>
   ): Promise<mongoose.FilterQuery<InferredNotificationSchemaType>> {
     // ensure non empty array if notifications are passed
     if (notificationIds && !notificationIds.length) {
@@ -324,7 +338,7 @@ export default class ProfileService extends BaseService {
   static async setNotificationReadStatus(
     adminId: AdminObject["id"],
     read: boolean,
-    notificationIds?: Array<NotificationType["_id"]>
+    notificationIds?: Array<NotificationObject["id"]>
   ): Promise<void> {
     const filterQuery = await ProfileService.validateUserNotificationAndGetQuery(adminId, notificationIds)
 
@@ -351,7 +365,7 @@ export default class ProfileService extends BaseService {
    */
   static async deleteNotifications(
     adminId: AdminObject["id"],
-    notificationIds?: Array<NotificationType["_id"]>
+    notificationIds?: Array<NotificationObject["id"]>
   ): Promise<void> {
     const filterQuery = await ProfileService.validateUserNotificationAndGetQuery(adminId, notificationIds)
 

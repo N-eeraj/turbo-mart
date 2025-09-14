@@ -32,14 +32,18 @@
                         "description": "User's full name."
                       },
                       "role": {
-                        "type": "string",
-                        "description": "User's role (e.g., \"SUPER_ADMIN\", \"ADMIN\")."
+                        "type": "number",
+                        "description": "User role enum, not applicable for the super admin."
                       },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time",
                         "description": "Timestamp when the user was created. Follows ISO 8601 format."
                       }
+                    },
+                    "profilePicture": {
+                      "type": "string",
+                      "description": "The URL to the user's profile picture if set."
                     }
                   },
                   "message": {
@@ -101,14 +105,18 @@
                         "description": "User's full name."
                       },
                       "role": {
-                        "type": "string",
-                        "description": "User's role (e.g., \"SUPER_ADMIN\", \"ADMIN\")."
+                        "type": "number",
+                        "description": "User role enum, not applicable for the super admin."
                       },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time",
                         "description": "Timestamp when the user was created. Follows ISO 8601 format."
                       }
+                    },
+                    "profilePicture": {
+                      "type": "string",
+                      "description": "The URL to the user's profile picture if set."
                     }
                   },
                   "message": {
@@ -475,7 +483,37 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "null"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Unique notification ID."
+                        },
+                        "type": {
+                          "type": "number",
+                          "description": "Enum of notification type."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "Title of the notification."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Message of the notification."
+                        },
+                        "data": {
+                          "type": "object",
+                          "description": "An optional data part of the notification."
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Timestamp when the notification was created. Follows ISO 8601 format."
+                        }
+                      }
+                    }
                   },
                   "message": {
                     "type": "string",
@@ -676,6 +714,86 @@
     }
   },
   "/api/profile/notifications/{id}": {
+    "get": {
+      "tags": ["Profile"],
+      "summary": "Profile Notification",
+      "description": "Notifications of logged in user by id.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the notification",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetched the notification successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Unique notification ID."
+                      },
+                      "type": {
+                        "type": "number",
+                        "description": "Enum of notification type."
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "Title of the notification."
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Message of the notification."
+                      },
+                      "data": {
+                        "type": "object",
+                        "description": "An optional data part of the notification."
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp when the notification was created. Follows ISO 8601 format."
+                      }
+                    }
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched Notification"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidNotificationIds"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "404": {
+          "$ref": "#/components/responses/NotificationStatusNotFound"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    },
     "patch": {
       "tags": ["Profile"],
       "summary": "Update Notification Read Status",

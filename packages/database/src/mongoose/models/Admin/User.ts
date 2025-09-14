@@ -16,6 +16,7 @@ interface AdminModel extends mongoose.Model<Admin> {
    * @param credentials - The login credentials.
    * - `email` - The admin's email.
    * - `password` - The admin's password.
+   * 
    * @returns - Returns the admin document if authentication succeeds, otherwise null.
    * 
    * @example
@@ -128,6 +129,7 @@ AdminSchema.pre("save", async function(next) {
  * Transforms an Admin object by mapping internal `_id` to external `id` and returning only the required fields.
  * 
  * @param admin - The admin object to transform.
+ * 
  * @returns The transformed admin object.
  */
 export function transformUser({ _id, email, name, role, permissions, profilePicture, createdAt }: Admin): AdminObject {
@@ -151,6 +153,7 @@ export function transformUser({ _id, email, name, role, permissions, profilePict
  * Static model method to authenticate a user login.
  * 
  * @param credentials - User credentials
+ * k
  * @returns The admin user if credentials are valid, else null
  */
 AdminSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {

@@ -48,6 +48,9 @@ notificationRouter.route("/")
   ], ProfileController.deleteNotificationBulk)
 
 notificationRouter.route("/:id")
+  .get([
+    authenticationMiddleware,
+  ], ProfileController.getNotificationsById)
   .patch([
     authenticationMiddleware,
   ], ProfileController.setNotificationReadStatus)

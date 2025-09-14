@@ -159,6 +159,31 @@ export default class ProfileController extends BaseController {
   }
 
   /**
+   * @route GET /api/profile/notifications/:id
+   * 
+   * Get the user notification.
+   */
+  static async getNotificationsById({ user, params }: Request, res: Response) {
+    try {
+      const notificationId = super.parseObjectId(params.id)
+      if (notificationId === null) {
+        throw {
+          status: 400,
+          message: "Invalid notification id",
+        }
+      }
+
+      const data = await ProfileService.getNotificationsById(user.id, notificationId)
+
+      super.sendSuccess(res, {
+        data,
+        message: "Fetched Notification",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }}
+
+  /**
    * @route PATCH /api/profile/notifications/:id
    * 
    * Set the read status for single notification.
