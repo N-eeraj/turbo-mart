@@ -53,8 +53,8 @@ export default class BaseService {
     return Boolean(
       error &&
       typeof error === "object" &&
-      "codeName" in error &&
-      error.codeName === "DuplicateKey"
+      "code" in error &&
+      error.code === 11000
     )
   }
 

@@ -4,7 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import AdminManagementService from "#services/superAdmin/AdminManagementService"
+import SuperAdminService from "#services/superAdmin"
 import {
   adminSchema,
 } from "#schemas/user"
@@ -12,7 +12,7 @@ import {
 /**
  * Controller for all admin management related APIs routes.
  */
-export default class AdminManagementController extends BaseController {
+export default class SuperAdminController extends BaseController {
   /**
    * @route GET /api/super-admin/admin
    * 
@@ -20,7 +20,7 @@ export default class AdminManagementController extends BaseController {
    */
   static async getAllAdmins(_req: Request, res: Response) {
     try {
-      const data = await AdminManagementService.fetchAllAdmins()
+      const data = await SuperAdminService.fetchAllAdmins()
 
       super.sendSuccess(res, {
         message: "Fetched all admins",
@@ -34,15 +34,17 @@ export default class AdminManagementController extends BaseController {
   /**
    * @route POST /api/super-admin/admin
    * 
-   * Create a new admin.
+   * Create a new admin user.
    */
   static async createAdmin({ body }: Request, res: Response) {
     try {
       const admin = super.validateRequest(adminSchema, body)
 
+      const data = await SuperAdminService.createAdmin(admin)
+
       super.sendSuccess(res, {
-        data: admin,
-        message: "Fetched all admins",
+        data,
+        message: "Created Admins",
       })
     } catch (error) {
       super.sendError(res, error)

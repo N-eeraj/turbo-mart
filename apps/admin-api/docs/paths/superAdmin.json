@@ -1,0 +1,115 @@
+{
+  "/api/super-admin/admin": {
+    "get": {
+      "tags": ["Admin Management"],
+      "summary": "List admins",
+      "description": "List all admin users with \"Admin\" role.",
+      "responses": {
+        "200": {
+          "description": "Fetched list of admins",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "array",
+                    "example": "[]"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Reached Server"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedSuperAdminUser"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    },
+    "post": {
+      "tags": ["Admin Management"],
+      "summary": "Create admins",
+      "description": "Create new admin user.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AdminSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Fetched list of admins",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {}
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Reached Server"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedSuperAdminUser"
+        },
+        "409": {
+          "description": "Email already in use.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Email already in use"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  }
+}
