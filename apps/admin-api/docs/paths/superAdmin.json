@@ -18,11 +18,13 @@
                   },
                   "data": {
                     "type": "array",
-                    "example": "[]"
+                    "items": {
+                      "$ref": "#/components/schemas/ProfileSchema"
+                    }
                   },
                   "message": {
                     "type": "string",
-                    "example": "Reached Server"
+                    "example": "Fetched all admins"
                   }
                 }
               }
@@ -67,12 +69,11 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "object",
-                    "properties": {}
+                    "$ref": "#/components/schemas/ProfileSchema"
                   },
                   "message": {
                     "type": "string",
-                    "example": "Reached Server"
+                    "example": "Created Admin"
                   }
                 }
               }

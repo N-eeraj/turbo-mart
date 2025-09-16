@@ -3,15 +3,18 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "Unique user ID."
+      "description": "Unique user ID.",
+      "example": "01a0a0123a01a012a0a012a0"
     },
     "email": {
       "type": "string",
-      "description": "User's email address."
+      "description": "User's email address.",
+      "example": "user@example.com"
     },
     "name": {
       "type": "string",
-      "description": "User's full name."
+      "description": "User's full name.",
+      "name": "John Doe"
     },
     "role": {
       "$ref": "#/components/schemas/RolesEnum"
@@ -29,7 +32,8 @@
     },
     "profilePicture": {
       "type": "string",
-      "description": "The URL to the user's profile picture if set."
+      "description": "The URL to the user's profile picture if set.",
+      "example": "http://localhost:5001/profile-pictures/01a0a0123a01a012a0a012a0.png"
     }
   }
 }
