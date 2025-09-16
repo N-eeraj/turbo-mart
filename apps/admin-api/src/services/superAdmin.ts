@@ -8,6 +8,9 @@ import BaseService from "#services/BaseService"
 import {
   type AdminData,
 } from "#schemas/user"
+import {
+  generateRandomString,
+} from "#utils/random"
 
 export default class SuperAdminService extends BaseService {
   /**
@@ -38,7 +41,7 @@ export default class SuperAdminService extends BaseService {
    */
   static async createAdmin(admin: AdminData): Promise<AdminObject> {
     try {
-      const password = "abcABC123"
+      const password = generateRandomString(8)
 
       const data = {
         ...admin,
