@@ -20,7 +20,18 @@ import {
   adminCreationJSONSchema,
 } from "#schemas/user"
 
-const SortOrderEnum = {
+const LimitOptionSchema = {
+  "type": "number",
+  "description": "Number of records to be retrieved.",
+  "default": 10
+}
+const SkipOptionSchema = {
+  "type": "number",
+  "description": "Number of records to be skipped.",
+  "default": 0
+}
+
+const SortOrderSchema = {
   type: [
     "string",
     "number"
@@ -63,7 +74,9 @@ const ResponseSchemas = {
 }
 
 const UtilitySchemas = {
-  SortOrderEnum,
+  LimitOptionSchema,
+  SkipOptionSchema,
+  SortOrderSchema,
   RolesEnum,
   PermissionsEnum,
 }

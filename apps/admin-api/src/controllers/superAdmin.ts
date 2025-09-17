@@ -18,12 +18,28 @@ export default class SuperAdminController extends BaseController {
    * 
    * Fetch all admin users.
    */
-  static async getAllAdmins(_req: Request, res: Response) {
+  static async getAdmins({ query }: Request, res: Response) {
     try {
-      const data = await SuperAdminService.fetchAllAdmins()
+      const options: Parameters<typeof SuperAdminService.getAdmins>[0] = {}
+
+      // sorting order
+      const parsedSortOrder = super.parseSortValue(query.order)
+      if (parsedSortOrder) {
+        options.order = parsedSortOrder
+      }
+
+      // pagination options
+      if (Number(query.limit) > 0) {
+        options.limit = Number(query.limit)
+      }
+      if (Number(query.skip) > 0) {
+        options.skip = Number(query.skip)
+      }
+
+      const data = await SuperAdminService.getAdmins(options)
 
       super.sendSuccess(res, {
-        message: "Fetched All Admin Users",
+        message: "Fetched Admin Users",
         data,
       })
     } catch (error) {

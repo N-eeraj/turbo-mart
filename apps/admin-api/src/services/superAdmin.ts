@@ -1,3 +1,5 @@
+import type mongoose from "mongoose"
+
 import AdminUser, {
   Roles,
   transformUser,
@@ -12,6 +14,18 @@ import {
   generateRandomString,
 } from "#utils/random"
 
+interface GetAdminUsersOptions {
+  limit?: number
+  skip?: number
+  order?: mongoose.SortOrder
+}
+
+const DEFAULT_ADMIN_USERS_OPTIONS: Required<GetAdminUsersOptions> = {
+  limit: 10,
+  skip: 0,
+  order: "descending",
+}
+
 export default class SuperAdminService extends BaseService {
   /**
    * Fetch the admin users with the "ADMIN" role.
@@ -20,10 +34,19 @@ export default class SuperAdminService extends BaseService {
    * 
    * @throws If database lookup fails.
    */
-  static async fetchAllAdmins(): Promise<Array<AdminObject>> {
+  static async getAdmins({
+    limit = DEFAULT_ADMIN_USERS_OPTIONS.limit,
+    skip = DEFAULT_ADMIN_USERS_OPTIONS.skip,
+    order = DEFAULT_ADMIN_USERS_OPTIONS.order,
+  }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminObject>> {
     const admins = await AdminUser.find({
       role: Roles.ADMIN
     })
+      .sort({
+        createdAt: order,
+      })
+      .skip(skip)
+      .limit(limit)
       .lean()
 
     return admins.map(transformUser)
@@ -71,6 +94,7 @@ export default class SuperAdminService extends BaseService {
    * 
    * @returns admin user.
    * 
+   * @throws 404 error if admin user not found.
    * @throws If database lookup fails.
    */
   static async getAdminById(adminId: AdminObject["id"]): Promise<AdminObject> {

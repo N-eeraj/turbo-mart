@@ -7,7 +7,6 @@ import InvalidNotificationIds from "#docs/responses/invalidNotificationIds" with
 // partial responses
 import incorrectPassword from "#docs/responses/partials/incorrectPassword" with { type: "json" }
 import notificationNotFound from "#docs/responses/partials/notificationNotFound" with { type: "json" }
-import adminUserNotFound from "#docs/responses/partials/adminUserNotFound" with { type: "json" }
 
 // extended response for password update from UnauthenticatedUser
 const {
@@ -74,38 +73,6 @@ const NotificationStatusNotFound = {
   },
 }
 
-// extended response for admin user not found from UserNotFoundSchema
-const AdminUserNotFound = {
-  ...UserNotFound,
-  "description": "Not found error.",
-  content: {
-    "application/json": {
-      schema: {
-        type: UserNotFoundSchema.type,
-        properties: {
-          success: UserNotFoundSchema.properties.success,
-          message: {
-            oneOf: [
-              UserNotFoundSchema.properties.message,
-              adminUserNotFound.message,
-            ],
-          },
-        },
-      },
-      examples: {
-        UserNotFound: {
-          summary: "User Not Found",
-          value: Object.fromEntries(
-            Object.entries(UserNotFoundSchema.properties)
-              .map(([ key, { example } ]) => ([key, example]))
-          )
-        },
-        ...adminUserNotFound.examples,
-      },
-    },
-  },
-}
-
 const responses = {
   UnauthenticatedUser,
   UserNotFound,
@@ -114,7 +81,6 @@ const responses = {
   IncorrectPassword,
   NotificationStatusNotFound,
   InvalidNotificationIds,
-  AdminUserNotFound,
 }
 
 export default responses

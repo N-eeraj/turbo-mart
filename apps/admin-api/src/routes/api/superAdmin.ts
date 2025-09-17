@@ -27,7 +27,7 @@ adminManagementRouter.route("/")
   .get([
     authenticationMiddleware,
     superAdminAuthorizationMiddleware,
-  ], SuperAdminController.getAllAdmins)
+  ], SuperAdminController.getAdmins)
   .post([
     authenticationMiddleware,
     superAdminAuthorizationMiddleware,

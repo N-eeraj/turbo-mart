@@ -18,7 +18,7 @@ interface GetNotificationsOptions {
   order?: mongoose.SortOrder
 }
 
-const DEFAULT_NOTIFICATION_OPTIONS: GetNotificationsOptions = {
+const DEFAULT_NOTIFICATION_OPTIONS: Required<Omit<GetNotificationsOptions, "isRead">> = {
   limit: 10,
   skip: 0,
   order: "descending",
@@ -38,9 +38,9 @@ export default class NotificationService extends BaseService {
     adminId: AdminObject["id"],
     {
       isRead,
-      limit = 10,
-      skip = 0,
-      order = "descending",
+      limit = DEFAULT_NOTIFICATION_OPTIONS.limit,
+      skip = DEFAULT_NOTIFICATION_OPTIONS.skip,
+      order = DEFAULT_NOTIFICATION_OPTIONS.order,
     }: GetNotificationsOptions = DEFAULT_NOTIFICATION_OPTIONS
   ): Promise<Array<NotificationObject>> {
     /**

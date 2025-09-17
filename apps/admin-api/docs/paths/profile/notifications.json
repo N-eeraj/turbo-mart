@@ -19,9 +19,7 @@
           "in": "query",
           "required": false,
           "schema": {
-            "type": "number",
-            "description": "Number of notifications to be retrieved.",
-            "default": 10
+            "$ref": "#/components/schemas/LimitOptionSchema"
           }
         },
         {
@@ -29,9 +27,7 @@
           "in": "query",
           "required": false,
           "schema": {
-            "type": "number",
-            "description": "Number of notifications to be skipped.",
-            "default": 0
+            "$ref": "#/components/schemas/SkipOptionSchema"
           }
         },
         {
@@ -39,7 +35,7 @@
           "in": "query",
           "required": false,
           "schema": {
-            "$ref": "#/components/schemas/SortOrderEnum"
+            "$ref": "#/components/schemas/SortOrderSchema"
           }
         }
       ],
