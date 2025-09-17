@@ -33,6 +33,12 @@ adminManagementRouter.route("/")
     superAdminAuthorizationMiddleware,
   ], SuperAdminController.createAdmin)
 
+adminManagementRouter.route("/:id")
+  .get([
+    authenticationMiddleware,
+    superAdminAuthorizationMiddleware,
+  ], SuperAdminController.getAdminById)
+
 superAdminRouter.use("/admin", adminManagementRouter)
 
 export default superAdminRouter

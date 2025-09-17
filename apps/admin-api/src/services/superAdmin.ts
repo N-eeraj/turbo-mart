@@ -1,4 +1,4 @@
-import Admin, {
+import AdminUser, {
   Roles,
   transformUser,
   type AdminObject,
@@ -6,7 +6,7 @@ import Admin, {
 
 import BaseService from "#services/BaseService"
 import {
-  type AdminData,
+  type AdminCreationData,
 } from "#schemas/user"
 import {
   generateRandomString,
@@ -21,7 +21,7 @@ export default class SuperAdminService extends BaseService {
    * @throws If database lookup fails.
    */
   static async fetchAllAdmins(): Promise<Array<AdminObject>> {
-    const admins = await Admin.find({
+    const admins = await AdminUser.find({
       role: Roles.ADMIN
     })
       .lean()
@@ -39,16 +39,17 @@ export default class SuperAdminService extends BaseService {
    * @throws 409 error if email is already in use.
    * @throws If user creation fails.
    */
-  static async createAdmin(admin: AdminData): Promise<AdminObject> {
+  static async createAdmin(admin: AdminCreationData): Promise<AdminObject> {
     try {
       const password = generateRandomString(8)
+      console.log("Password", password)
 
       const data = {
         ...admin,
         password,
       }
 
-      const adminUser = await Admin.create(data)
+      const adminUser = await AdminUser.create(data)
       return transformUser(adminUser)
     } catch (error) {
       const isDuplicateKeyError = super.checkDuplicateKeyError(error)
@@ -61,5 +62,31 @@ export default class SuperAdminService extends BaseService {
 
       throw error
     }
+  }
+
+  /**
+   * Fetches the details of admin user by id.
+   * 
+   * @param adminId - Id of the admin user.
+   * 
+   * @returns admin user.
+   * 
+   * @throws If database lookup fails.
+   */
+  static async getAdminById(adminId: AdminObject["id"]): Promise<AdminObject> {
+    const admin = await AdminUser.findOne({
+      _id: adminId,
+      role: Roles.ADMIN,
+    })
+      .lean()
+
+    if (!admin) {
+      throw {
+        status: 404,
+        message: "Admin user not found",
+      }
+    }
+
+    return transformUser(admin)
   }
 }

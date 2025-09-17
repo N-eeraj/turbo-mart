@@ -127,12 +127,17 @@ export const notificationReadStatusBulkSchema = notificationReadStatusSchema.ext
     }),
 })
 
+export const adminCreationSchema = adminSchema.omit({
+  role: true,
+})
+
 export const adminJSONSchema = z.toJSONSchema(adminSchema)
 export const profileUpdateJSONSchema = z.toJSONSchema(profileUpdateSchema)
 export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
 export const profilePictureJSONSchema = z.toJSONSchema(profilePictureSchema)
 export const notificationReadStatusJSONSchema = z.toJSONSchema(notificationReadStatusSchema)
 export const notificationReadStatusBulkJSONSchema = z.toJSONSchema(notificationReadStatusBulkSchema)
+export const adminCreationJSONSchema = z.toJSONSchema(adminCreationSchema)
 
 export type AdminData = z.infer<typeof adminSchema>
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
@@ -140,3 +145,4 @@ export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
 export type ProfilePictureData = z.infer<typeof profilePictureSchema>
 export type NotificationReadStatusSchema = z.infer<typeof notificationReadStatusSchema>
 export type NotificationReadStatusBulkSchema = z.infer<typeof notificationReadStatusBulkSchema>
+export type AdminCreationData = z.infer<typeof adminCreationSchema>

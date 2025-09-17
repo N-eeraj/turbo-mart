@@ -24,7 +24,7 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Fetched all admins"
+                    "example": "Fetched All Admin Users"
                   }
                 }
               }
@@ -44,21 +44,21 @@
     },
     "post": {
       "tags": ["Admin Management"],
-      "summary": "Create admins",
+      "summary": "Create Admins",
       "description": "Create new admin user.",
       "requestBody": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/AdminSchema"
+              "$ref": "#/components/schemas/AdminCreationSchema"
             }
           }
         }
       },
       "responses": {
         "200": {
-          "description": "Fetched list of admins",
+          "description": "Created new admin",
           "content": {
             "application/json": {
               "schema": {
@@ -73,7 +73,7 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Created Admin"
+                    "example": "Created Admin User"
                   }
                 }
               }
@@ -106,6 +106,61 @@
               }
             }
           }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  },
+  "/api/super-admin/admin/{id}": {
+    "get": {
+      "tags": ["Admin Management"],
+      "summary": "Fetch Single Admin",
+      "description": "Fetch admin by id.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the admin user",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetched admin.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/ProfileSchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched Admin User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedSuperAdminUser"
+        },
+        "404": {
+          "$ref": "#/components/responses/AdminUserNotFound"
         },
         "500": {
           "$ref": "#/components/responses/InternalServerError"

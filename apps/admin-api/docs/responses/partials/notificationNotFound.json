@@ -2,7 +2,7 @@
   "message": {
     "type": "string",
     "example": "Notification not found",
-    "description": "Error message: Couldn't find the notification"
+    "description": "Error message: Couldn't find the notification."
   },
   "examples": {
     "NotificationNotFound": {
