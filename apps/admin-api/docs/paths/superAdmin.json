@@ -28,6 +28,14 @@
           "schema": {
             "$ref": "#/components/schemas/SortOrderSchema"
           }
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "responses": {

@@ -36,6 +36,12 @@ export default class SuperAdminController extends BaseController {
         options.skip = Number(query.skip)
       }
 
+      // search query
+      if (typeof query.search === "string") {
+        options.search = query.search
+      }
+
+
       const data = await SuperAdminService.getAdmins(options)
 
       super.sendSuccess(res, {

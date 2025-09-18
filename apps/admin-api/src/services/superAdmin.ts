@@ -17,6 +17,7 @@ import {
 interface GetAdminUsersOptions {
   limit?: number
   skip?: number
+  search?: string
   order?: mongoose.SortOrder
 }
 
@@ -24,6 +25,7 @@ const DEFAULT_ADMIN_USERS_OPTIONS: Required<GetAdminUsersOptions> = {
   limit: 10,
   skip: 0,
   order: "descending",
+  search: "",
 }
 
 export default class SuperAdminService extends BaseService {
@@ -38,9 +40,22 @@ export default class SuperAdminService extends BaseService {
     limit = DEFAULT_ADMIN_USERS_OPTIONS.limit,
     skip = DEFAULT_ADMIN_USERS_OPTIONS.skip,
     order = DEFAULT_ADMIN_USERS_OPTIONS.order,
+    search = DEFAULT_ADMIN_USERS_OPTIONS.search,
   }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminObject>> {
     const admins = await AdminUser.find({
-      role: Roles.ADMIN
+      role: Roles.ADMIN,
+      $or: [
+        {
+          name: {
+            $regex: new RegExp(search, "i"),
+          }
+        },
+        {
+          email: {
+            $regex: new RegExp(search, "i"),
+          }
+        },
+      ],
     })
       .sort({
         createdAt: order,
