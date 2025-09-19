@@ -98,4 +98,29 @@ export default class SuperAdminController extends BaseController {
       super.sendError(res, error)
     }
   }
+
+  /**
+   * @route DELETE /api/super-admin/admin/:id
+   * 
+   * Delete admin user by id.
+   */
+  static async deleteAdmin({ params }: Request, res: Response) {
+    try {
+      const adminId = super.parseObjectId(params.id)
+      if (!adminId) {
+        throw {
+          status: 400,
+          message: "Invalid admin id",
+        }
+      }
+
+      await SuperAdminService.deleteAdmin(adminId)
+
+      super.sendSuccess(res, {
+        message: "Deleted Admin User",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
 }

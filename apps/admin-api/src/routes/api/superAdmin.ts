@@ -38,6 +38,10 @@ adminManagementRouter.route("/:id")
     authenticationMiddleware,
     superAdminAuthorizationMiddleware,
   ], SuperAdminController.getAdminById)
+  .delete([
+    authenticationMiddleware,
+    superAdminAuthorizationMiddleware,
+  ], SuperAdminController.deleteAdmin)
 
 superAdminRouter.use("/admin", adminManagementRouter)
 

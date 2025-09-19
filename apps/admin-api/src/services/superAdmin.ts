@@ -128,4 +128,30 @@ export default class SuperAdminService extends BaseService {
 
     return transformUser(admin)
   }
+
+  /**
+   * Deletes the of admin user document.
+   * 
+   * @param adminId - Id of the admin user.
+   * 
+   * @returns admin user.
+   * 
+   * @throws 404 error if admin user not found.
+   * @throws If deleting the admin user failed.
+   */
+  static async deleteAdmin(adminId: AdminObject["id"]): Promise<void> {
+    const admin = await AdminUser.findOne({
+      _id: adminId,
+      role: Roles.ADMIN,
+    })
+
+    if (!admin) {
+      throw {
+        status: 404,
+        message: "Admin user not found",
+      }
+    }
+
+    await admin.deleteOne()
+  }
 }

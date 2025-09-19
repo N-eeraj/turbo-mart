@@ -219,6 +219,75 @@
           "$ref": "#/components/responses/InternalServerError"
         }
       }
+    },
+    "delete": {
+      "tags": ["Admin Management"],
+      "summary": "Delete Admin",
+      "description": "Delete admin by id.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the admin user",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Deleted admin successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Deleted Admin User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedSuperAdminUser"
+        },
+        "404": {
+          "description": "Admin user not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Admin user not found",
+                    "description": "Error message: Couldn't find the admin user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
     }
   }
 }
