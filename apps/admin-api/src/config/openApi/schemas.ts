@@ -18,6 +18,7 @@ import {
   notificationReadStatusBulkJSONSchema,
   adminJSONSchema,
   adminCreationJSONSchema,
+  adminUpdateJSONSchema,
 } from "#schemas/user"
 
 const LimitOptionSchema = {
@@ -90,6 +91,7 @@ const schemas = {
   NotificationReadStatusBulkSchema: notificationReadStatusBulkJSONSchema,
   AdminSchema: adminJSONSchema,
   AdminCreationSchema: adminCreationJSONSchema,
+  AdminUpdateSchema: adminUpdateJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

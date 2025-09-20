@@ -9,6 +9,7 @@ import AdminUser, {
 import BaseService from "#services/BaseService"
 import {
   type AdminCreationData,
+  type AdminUpdateData,
 } from "#schemas/user"
 import {
   generateRandomString,
@@ -127,6 +128,50 @@ export default class SuperAdminService extends BaseService {
     }
 
     return transformUser(admin)
+  }
+
+  /**
+   * Update the admin user document by id.
+   * 
+   * @param adminId - Id of the admin user.
+   * @param data - Data for the new user.
+   * 
+   * @throws 404 error if admin user not found.
+   * @throws 409 error if email is already in use.
+   * @throws If user update fails.
+   */
+  static async updateAdmin(adminId: AdminObject["id"], data: AdminUpdateData): Promise<AdminObject> {
+    try {
+      const updatedAdmin = await AdminUser.findOneAndUpdate(
+        {
+          _id: adminId,
+          role: Roles.ADMIN,
+        },
+        data,
+        {
+          new: true,
+        }
+      )
+
+      if (!updatedAdmin) {
+        throw {
+          status: 404,
+          message: "Admin user not found",
+        }
+      }
+
+      return transformUser(updatedAdmin)
+    } catch (error) {
+      const isDuplicateKeyError = super.checkDuplicateKeyError(error)
+      if (isDuplicateKeyError) {
+        throw {
+          status: 409,
+          message: "Email already in use"
+        }
+      }
+
+      throw error
+    }
   }
 
   /**

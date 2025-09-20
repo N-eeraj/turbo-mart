@@ -38,6 +38,10 @@ adminManagementRouter.route("/:id")
     authenticationMiddleware,
     superAdminAuthorizationMiddleware,
   ], SuperAdminController.getAdminById)
+  .patch([
+    authenticationMiddleware,
+    superAdminAuthorizationMiddleware,
+  ], SuperAdminController.updateAdmin)
   .delete([
     authenticationMiddleware,
     superAdminAuthorizationMiddleware,

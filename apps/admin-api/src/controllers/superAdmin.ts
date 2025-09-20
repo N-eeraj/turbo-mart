@@ -7,6 +7,7 @@ import BaseController from "#controllers/BaseController"
 import SuperAdminService from "#services/superAdmin"
 import {
   adminCreationSchema,
+  adminUpdateSchema,
 } from "#schemas/user"
 
 /**
@@ -93,6 +94,34 @@ export default class SuperAdminController extends BaseController {
       super.sendSuccess(res, {
         data,
         message: "Fetched Admin User",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route PATCH /api/super-admin/admin/:id
+   * 
+   * Update admin user by id.
+   */
+  static async updateAdmin({ params, body }: Request, res: Response) {
+    try {
+      const adminId = super.parseObjectId(params.id)
+      if (!adminId) {
+        throw {
+          status: 400,
+          message: "Invalid admin id",
+        }
+      }
+
+      const admin = super.validateRequest(adminUpdateSchema, body)
+
+      const data = await SuperAdminService.updateAdmin(adminId, admin)
+
+      super.sendSuccess(res, {
+        data,
+        message: "Updated Admin User",
       })
     } catch (error) {
       super.sendError(res, error)
