@@ -5,6 +5,7 @@ import AdminUser, {
   transformUser,
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
+import sendMail from "@app/mailer"
 
 import BaseService from "#services/BaseService"
 import {
@@ -81,7 +82,6 @@ export default class SuperAdminService extends BaseService {
   static async createAdmin(admin: AdminCreationData): Promise<AdminObject> {
     try {
       const password = generateRandomString(8)
-      console.log("Password", password)
 
       const data = {
         ...admin,
@@ -89,6 +89,16 @@ export default class SuperAdminService extends BaseService {
       }
 
       const adminUser = await AdminUser.create(data)
+
+      await sendMail({
+        recipients: [{
+          email: admin.email,
+        }],
+        category: "Admin Creation",
+        subject: "Admin Creation",
+        text: `Your password is ${password}`
+      })
+
       return transformUser(adminUser)
     } catch (error) {
       const isDuplicateKeyError = super.checkDuplicateKeyError(error)

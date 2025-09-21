@@ -12,6 +12,9 @@ const env = lines.reduce((env, line) => {
   }, {
     MYSQL_DB_URI: "",
     MONGODB_URI: "",
+    MAIL_TRAP_TOKEN: "",
+    EMAIL_SENDER_EMAIL: "",
+    EMAIL_SENDER_NAME: "",
   })
 
 export default env

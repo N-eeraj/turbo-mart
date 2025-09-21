@@ -1,7 +1,7 @@
 {
   "/api/super-admin/admin": {
     "get": {
-      "tags": ["Admin Management"],
+      "tags": ["Super Admin"],
       "summary": "List admins",
       "description": "List admin users with \"Admin\" role.",
       "parameters": [
@@ -77,7 +77,7 @@
       }
     },
     "post": {
-      "tags": ["Admin Management"],
+      "tags": ["Super Admin"],
       "summary": "Create Admins",
       "description": "Create new admin user.",
       "requestBody": {
@@ -149,7 +149,7 @@
   },
   "/api/super-admin/admin/{id}": {
     "get": {
-      "tags": ["Admin Management"],
+      "tags": ["Super Admin"],
       "summary": "Fetch Single Admin",
       "description": "Fetch admin by id.",
       "parameters": [
@@ -221,7 +221,7 @@
       }
     },
     "patch": {
-      "tags": ["Admin Management"],
+      "tags": ["Super Admin"],
       "summary": "Update Admin Details",
       "description": "Update admin details.",
       "parameters": [
@@ -324,7 +324,7 @@
       }
     },
     "delete": {
-      "tags": ["Admin Management"],
+      "tags": ["Super Admin"],
       "summary": "Delete Admin",
       "description": "Delete admin by id.",
       "parameters": [

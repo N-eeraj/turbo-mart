@@ -1,0 +1,9 @@
+{
+  "name": "@app/mailer",
+  "version": "1.0.0",
+  "description": "Mailtrap Wrapper",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
