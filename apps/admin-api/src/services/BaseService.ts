@@ -1,5 +1,6 @@
 import fs from "fs/promises"
 import path from "path"
+import ejs from "ejs"
 
 import {
   APP_URL,
@@ -15,6 +16,7 @@ import {
   withPrivateFileStoragePath,
   withPublicFileStoragePath,
   withStoragePath,
+  withTemplatePath,
 } from "#utils/pathUtils"
 
 export type LogLevel = "info" | "warn" | "error" | "fatal"
@@ -143,5 +145,19 @@ export default class BaseService {
    */
   static async removeFileFromStorage(path: string): Promise<void> {
     await fs.rm(withStoragePath(path))
+  }
+
+  /**
+   * Render the ejs template file with passed values.
+   * 
+   * @param relativePath - Relative path from the template directory.
+   * @param data - Data to be passed to the ejs template.
+   * 
+   * @returns the rendered HTML string.
+   */
+  static async renderTemplate(relativePath: string, data: any): Promise<string> {
+    const templatePath = withTemplatePath(relativePath)
+    const html = await ejs.renderFile(templatePath, data)
+    return html as string
   }
 }

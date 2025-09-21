@@ -16,6 +16,7 @@ import {
   generateRandomString,
 } from "#utils/random"
 
+
 interface GetAdminUsersOptions {
   limit?: number
   skip?: number
@@ -89,14 +90,17 @@ export default class SuperAdminService extends BaseService {
       }
 
       const adminUser = await AdminUser.create(data)
-
+      const mailContent = await super.renderTemplate("adminCreation.ejs", data)
       await sendMail({
         recipients: [{
           email: admin.email,
         }],
         category: "Admin Creation",
         subject: "Admin Creation",
-        text: `Your password is ${password}`
+        body: {
+          type: "html",
+          content: mailContent,
+        }
       })
 
       return transformUser(adminUser)

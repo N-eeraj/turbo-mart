@@ -5,6 +5,7 @@ import {
   PUBLIC_PATH,
   PUBLIC_FILE_STORAGE_PATH,
   PRIVATE_FILE_STORAGE_PATH,
+  TEMPLATE_PATH,
 } from "#src/config/server"
 
 /**
@@ -41,7 +42,7 @@ export const withPublicPath = (relativePath: string): string => {
 }
 
 /**
- * Resolves the given relative path to an absolute path within the public fil storage directory.
+ * Resolves the given relative path to an absolute path within the public file storage directory.
  * 
  * @param relativePath - The relative path to be joined with the public file storage directory path.
  * 
@@ -52,7 +53,7 @@ export const withPublicFileStoragePath = (relativePath: string): string => {
 }
 
 /**
- * Resolves the given relative path to an absolute path within the private fil storage directory.
+ * Resolves the given relative path to an absolute path within the private file storage directory.
  * 
  * @param relativePath - The relative path to be joined with the private file storage directory path.
  * 
@@ -60,4 +61,15 @@ export const withPublicFileStoragePath = (relativePath: string): string => {
  */
 export const withPrivateFileStoragePath = (relativePath: string): string => {
   return path.join(PRIVATE_FILE_STORAGE_PATH, relativePath)
+}
+
+/**
+ * Resolves the given relative path to an absolute path within the html/ejs template directory.
+ * 
+ * @param relativePath - The relative path to be joined with the html/ejs template directory path.
+ * 
+ * @returns The resolved absolute path.
+ */
+export const withTemplatePath = (relativePath: string): string => {
+  return path.join(TEMPLATE_PATH, relativePath)
 }

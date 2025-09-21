@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Account Created</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+    }
+
+    .credentials-box {
+      background-color: #ecf0f1;
+      padding: 20px;
+      border-radius: 5px;
+      font-size: 18px;
+      color: #2c3e50;
+      word-wrap: break-word;
+      text-align: center;
+    }
+
+    .credentials-box > strong {
+      color: #07c;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #95a5a6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>New Account Created</h1>
+    <p>Hi, <%= name %></p>
+
+    <p>Your <strong>Turbo Mart</strong> admin account has been created, glad to have you on board. Below are the details for the newly created account:</p>
+
+    <div class="credentials-box">
+      <small>Email:</small> <strong><%= email %></strong>
+      <br />
+      <small>Password:</small> <strong><%= password %></strong>
+    </div>
+
+    <div class="footer">
+      <p>&copy; <%= new Date().getFullYear() %> Turbo Mart. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
