@@ -21,30 +21,9 @@ export default class NotificationController extends BaseController {
    */
   static async getNotifications({ user, query }: Request, res: Response) {
     try {
-      const options: Parameters<typeof NotificationService.getNotifications>[1] = {}
+      const paginationQueries: Parameters<typeof NotificationService.getNotifications>[1] = super.parsePaginationQueries(query)
 
-      // read status option
-      if (query.isRead === "true") {
-        options.isRead = true
-      } else if (query.isRead === "false") {
-        options.isRead = false
-      }
-
-      // sorting order
-      const parsedSortOrder = super.parseSortValue(query.order)
-      if (parsedSortOrder) {
-        options.order = parsedSortOrder
-      }
-
-      // pagination options
-      if (Number(query.limit) > 0) {
-        options.limit = Number(query.limit)
-      }
-      if (Number(query.skip) > 0) {
-        options.skip = Number(query.skip)
-      }
-
-      const data = await NotificationService.getNotifications(user.id, options)
+      const data = await NotificationService.getNotifications(user.id, paginationQueries)
 
       super.sendSuccess(res, {
         data,

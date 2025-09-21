@@ -11,7 +11,7 @@ import {
 } from "#schemas/user"
 
 /**
- * Controller for all admin management related APIs routes.
+ * Controller for all super admin related APIs routes.
  */
 export default class SuperAdminController extends BaseController {
   /**
@@ -21,29 +21,9 @@ export default class SuperAdminController extends BaseController {
    */
   static async getAdmins({ query }: Request, res: Response) {
     try {
-      const options: Parameters<typeof SuperAdminService.getAdmins>[0] = {}
+      const paginationQueries: Parameters<typeof SuperAdminService.getAdmins>[0] = super.parsePaginationQueries(query)
 
-      // sorting order
-      const parsedSortOrder = super.parseSortValue(query.order)
-      if (parsedSortOrder) {
-        options.order = parsedSortOrder
-      }
-
-      // pagination options
-      if (Number(query.limit) > 0) {
-        options.limit = Number(query.limit)
-      }
-      if (Number(query.skip) > 0) {
-        options.skip = Number(query.skip)
-      }
-
-      // search query
-      if (typeof query.search === "string") {
-        options.search = query.search
-      }
-
-
-      const data = await SuperAdminService.getAdmins(options)
+      const data = await SuperAdminService.getAdmins(paginationQueries)
 
       super.sendSuccess(res, {
         message: "Fetched Admin Users",

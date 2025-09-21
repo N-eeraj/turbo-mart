@@ -1,4 +1,5 @@
 import {
+  type Request,
   type Response,
 } from "express"
 import mongoose from "mongoose"
@@ -17,6 +18,18 @@ import {
   formatError,
 } from "#utils/formatter"
 import BaseService from "#services/BaseService"
+
+interface ParsedObjectId {
+  validIds: Array<mongoose.Types.ObjectId>
+  invalidIds: Array<string>
+}
+
+export type PaginationQueries = Partial<{
+  limit: number
+  skip: number
+  order: mongoose.SortOrder
+  search: string
+}>
 
 /**
  * BaseController class provides static utility methods for handling common 
@@ -129,7 +142,7 @@ export default class BaseController {
    *  
    * @returns The a map of of valid and invalid ids
    */
-  static parseObjectIdBulk(idList: Array<string>): { validIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> } {
+  static parseObjectIdBulk(idList: Array<string>): ParsedObjectId {
     const idMap = idList.reduce((map: { validIds: Array<mongoose.Types.ObjectId>, invalidIds: Array<string> }, id) => {
       const parsedId = BaseController.parseObjectId(id)
       parsedId ?
@@ -170,6 +183,31 @@ export default class BaseController {
     const isValidSortOrder = VALID_SORT_VALUES.includes(normalizedValue as mongoose.SortOrder)
 
     return isValidSortOrder ? normalizedValue as mongoose.SortOrder : null
+  }
+
+  static parsePaginationQueries(query: Request["query"]): PaginationQueries {
+    const paginationQueries: PaginationQueries = {}
+
+    // sorting order
+    const parsedSortOrder = BaseController.parseSortValue(query.order)
+    if (parsedSortOrder) {
+      paginationQueries.order = parsedSortOrder
+    }
+
+    // pagination
+    if (Number(query.limit) > 0) {
+      paginationQueries.limit = Number(query.limit)
+    }
+    if (Number(query.skip) > 0) {
+      paginationQueries.skip = Number(query.skip)
+    }
+
+    // search query
+    if (typeof query.search === "string") {
+      paginationQueries.search = query.search
+    }
+
+    return paginationQueries
   }
 
   /**
