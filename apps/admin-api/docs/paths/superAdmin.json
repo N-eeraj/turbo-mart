@@ -141,6 +141,58 @@
             }
           }
         },
+        "422": {
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a name"],
+                        "description": "Validation errors for the name field."
+                      },
+                      "email": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter an email"],
+                        "description": "Validation errors for the email field."
+                      },
+                      "permissions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please select at least 1 permission"],
+                        "description": "Validation errors for the permissions field."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "500": {
           "$ref": "#/components/responses/InternalServerError"
         }
@@ -312,6 +364,58 @@
                   "message": {
                     "type": "string",
                     "example": "Email already in use"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Validation error (if request body has invalid field values).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a name"],
+                        "description": "Validation errors for the name field."
+                      },
+                      "email": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter an email"],
+                        "description": "Validation errors for the email field."
+                      },
+                      "permissions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please select at least 1 permission"],
+                        "description": "Validation errors for the permissions field."
+                      }
+                    }
                   }
                 }
               }

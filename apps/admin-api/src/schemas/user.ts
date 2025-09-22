@@ -48,7 +48,7 @@ export const adminSchema = z.object({
     z.enum(Permissions, { error: (issue) => {
       if (!issue.input) return PERMISSIONS.required
       return PERMISSIONS.valid
-    }})
+    }}), { error: PERMISSIONS.valid }
   )
     .min(1, { error: PERMISSIONS.minLength })
     .meta({

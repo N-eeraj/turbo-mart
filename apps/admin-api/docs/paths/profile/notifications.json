@@ -150,7 +150,7 @@
           "$ref": "#/components/responses/NotificationStatusNotFound"
         },
         "422": {
-          "description": "Validation error (if request body is missing required fields).",
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
           "content": {
             "application/json": {
               "schema": {
@@ -396,7 +396,7 @@
           "$ref": "#/components/responses/NotificationStatusNotFound"
         },
         "422": {
-          "description": "Validation error (if request body is missing required fields).",
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
           "content": {
             "application/json": {
               "schema": {
