@@ -4,7 +4,7 @@ import helmet from "helmet"
 import connectMongoDB from "@app/database/mongoose/connect.ts"
 
 import {
-  PORT,
+  APP_PORT,
   PUBLIC_PATH,
   PUBLIC_FILE_STORAGE_PATH,
 } from "#src/config/server"
@@ -28,7 +28,7 @@ app.use(httpLogger)
 app.use(router)
 
 connectMongoDB(() => {
-  app.listen(PORT, () => {
-    console.log(`Running on port: ${PORT}`)
+  app.listen(APP_PORT, () => {
+    console.log(`Running on port: ${APP_PORT}`)
   })
 })

@@ -18,4 +18,6 @@ authRouter.post("/logout", [
   authenticationMiddleware,
 ], AuthController.logout)
 
+authRouter.post("/forgot-password", AuthController.forgotPassword)
+
 export default authRouter

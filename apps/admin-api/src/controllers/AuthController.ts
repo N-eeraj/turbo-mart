@@ -49,4 +49,21 @@ export default class AuthController extends BaseController {
       super.sendError(res, error)
     }
   }
+
+  /**
+   * @route POST /api/auth/forgot-password
+   * 
+   * Sends the password reset email.
+   */
+  static async forgotPassword({ body }: Request, res: Response) {
+    try {
+      await AuthService.forgotPassword()
+
+      super.sendSuccess(res, {
+        message: "Password Reset email sent",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
 }

@@ -58,9 +58,22 @@ export default class AuthService extends BaseService {
    * Removes the token of an authenticated user.
    * 
    * @param token - Token object from the request.
+   * 
    * @throws If token deletion fails.
    */
   static async logout(token: Token): Promise<void> {
     await AdminToken.findByIdAndDelete(token._id)
+  }
+
+  /**
+   * Check for the user with the provided email and send mail to reset password.
+   * 
+   * @param token - Token object from the request.
+   * 
+   * @throws 404 error if user not found.
+   * @throws if db look up or email sending fails
+   */
+  static async forgotPassword() {
+    
   }
 }

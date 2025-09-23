@@ -3,14 +3,18 @@ import {
   fileURLToPath,
 } from "url"
 
-// app url configuration
+// url configurations
 export const APP_URL = process.env.APP_URL
+export const ADMIN_UI_URL = process.env.ADMIN_UI_URL
 
 // server port configuration
-export const PORT = Number(process.env.PORT)
+export const APP_PORT = Number(process.env.APP_PORT)
 
 // allowed origins configuration
-export const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? "").split(",")
+export const ALLOWED_ORIGINS = [
+  APP_URL,
+  ADMIN_UI_URL,
+]
 
 // all folder names
 export const STORAGE_DIR_NAME = "/storage"
