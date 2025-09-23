@@ -9,6 +9,7 @@ import NotificationSchema from "#docs/schemas/notification" with { type: "json" 
 import ProfileSchema from "#docs/schemas/profile" with { type: "json" }
 import {
   loginJSONSchema,
+  forgotPasswordJSONSchema,
 } from "#schemas/auth"
 import {
   profileUpdateJSONSchema,
@@ -84,6 +85,7 @@ const UtilitySchemas = {
 
 const schemas = {
   LoginSchema: loginJSONSchema,
+  ForgotPasswordSchema: forgotPasswordJSONSchema,
   ProfileUpdateSchema: profileUpdateJSONSchema,
   PasswordUpdateSchema: passwordUpdateJSONSchema,
   ProfilePictureSchema: profilePictureJSONSchema,

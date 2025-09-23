@@ -7,6 +7,7 @@ import BaseController from "#controllers/BaseController"
 import AuthService from "#services/AuthService"
 import {
   loginSchema,
+  forgotPasswordSchema,
 } from "#schemas/auth"
 
 /**
@@ -57,7 +58,9 @@ export default class AuthController extends BaseController {
    */
   static async forgotPassword({ body }: Request, res: Response) {
     try {
-      await AuthService.forgotPassword()
+      const payload = super.validateRequest(forgotPasswordSchema, body)
+
+      await AuthService.forgotPassword(payload)
 
       super.sendSuccess(res, {
         message: "Password Reset email sent",

@@ -78,6 +78,7 @@ export default class NotificationService extends BaseService {
       admin: adminId,
     })
 
+    // throw not found error if notification is not found
     if (!notification) {
       throw {
         status: 404,
@@ -131,6 +132,7 @@ export default class NotificationService extends BaseService {
       const notificationIdsSet = new Set(notifications.map(({ _id }) => _id.toString()))
 
       const notFoundNotifications = notificationIds.filter((id) => !notificationIdsSet.has(id.toString()))
+      // throw not found error if notification is not found
       if (notFoundNotifications.length) {
         throw {
           status: 404,

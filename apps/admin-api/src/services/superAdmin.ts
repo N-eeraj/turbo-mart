@@ -106,6 +106,7 @@ export default class SuperAdminService extends BaseService {
       return transformUser(adminUser)
     } catch (error) {
       const isDuplicateKeyError = super.checkDuplicateKeyError(error)
+      // throw conflict error if email is already taken
       if (isDuplicateKeyError) {
         throw {
           status: 409,
@@ -134,6 +135,7 @@ export default class SuperAdminService extends BaseService {
     })
       .lean()
 
+    // throw not found error if admin is not found
     if (!admin) {
       throw {
         status: 404,
@@ -167,6 +169,7 @@ export default class SuperAdminService extends BaseService {
         }
       )
 
+      // throw not found error if admin is not found
       if (!updatedAdmin) {
         throw {
           status: 404,
@@ -177,6 +180,7 @@ export default class SuperAdminService extends BaseService {
       return transformUser(updatedAdmin)
     } catch (error) {
       const isDuplicateKeyError = super.checkDuplicateKeyError(error)
+      // throw conflict error if email is already taken
       if (isDuplicateKeyError) {
         throw {
           status: 409,
@@ -204,6 +208,7 @@ export default class SuperAdminService extends BaseService {
       role: Roles.ADMIN,
     })
 
+    // throw not found error if admin is not found
     if (!admin) {
       throw {
         status: 404,

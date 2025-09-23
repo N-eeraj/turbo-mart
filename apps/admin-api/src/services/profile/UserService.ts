@@ -64,6 +64,7 @@ export default class ProfileService extends BaseService {
       return transformUser(updatedUser)
     } catch (error) {
       const isDuplicateKeyError = super.checkDuplicateKeyError(error)
+      // throw conflict error if email is already taken
       if (isDuplicateKeyError) {
         throw {
           status: 409,
@@ -94,7 +95,7 @@ export default class ProfileService extends BaseService {
   ): Promise<void> {
     const user = await AdminUser.findById(adminId)
 
-    // throw error if admin is not found
+    // throw not found error if admin is not found
     if (!user) {
       throw {
         status: 404,
@@ -104,6 +105,7 @@ export default class ProfileService extends BaseService {
 
     // check if user password is correct
     const isMatch = await bcrypt.compare(password, user.password)
+    // throw unauthenticated error if admin is not found
     if (!isMatch) {
       throw {
         status: 401,

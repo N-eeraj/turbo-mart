@@ -9,6 +9,7 @@ import AdminToken, {
 import BaseService from "#services/BaseService"
 import {
   type LoginData,
+  type ForgotPasswordData,
 } from "#schemas/auth"
 
 interface LoginResponse {
@@ -33,7 +34,7 @@ export default class AuthService extends BaseService {
   static async login(credentials: LoginData): Promise<LoginResponse> {
     const admin = await AdminUser.authenticate(credentials)
 
-    // throw validation error if admin is not found
+    // throw unauthenticated error if admin is not found
     if (!admin) {
       throw {
         status: 401,
@@ -73,7 +74,19 @@ export default class AuthService extends BaseService {
    * @throws 404 error if user not found.
    * @throws if db look up or email sending fails
    */
-  static async forgotPassword() {
-    
+  static async forgotPassword({ email }: ForgotPasswordData): Promise<void> {
+    const admin = await AdminUser.findOne({
+      email,
+    })
+
+    // throw not found error if admin is not found
+    if (!admin) {
+      throw {
+        status: 404,
+        message: "User not found",
+      }
+    }
+
+    console.log(admin.id)
   }
 }
