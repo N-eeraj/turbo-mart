@@ -10,17 +10,16 @@ import {
   timestamp,
 } from "drizzle-orm/mysql-core"
 
-export const statuses = mysqlEnum("status", [
-  "pending",
-  "approved",
-  "declined",
-  "suspended",
-])
+export enum SellerStatus {
+  PENDING = "pending",
+  APPROVED = "approved",
+  DECLINED = "declined",
+  SUSPENDED = "suspended",
+}
 
 const seller = mysqlTable("sellers", {
   id: serial("id")
     .primaryKey(),
-
   name: varchar("name", { length: 255 })
     .notNull(),
   email: varchar("email", { length: 255 })
@@ -29,18 +28,15 @@ const seller = mysqlTable("sellers", {
   phone: varchar("phone", { length: 20 })
     .notNull()
     .unique(),
-
-  status: statuses
+  status: mysqlEnum("status", SellerStatus)
     .notNull()
-    .default("pending"),
-
+    .default(SellerStatus.PENDING),
   rating: decimal("rating", {
     precision: 3,
     scale: 2,
   })
     .default("0.00")
     .notNull(),
-
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

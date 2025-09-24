@@ -1,0 +1,36 @@
+import {
+  sql,
+} from "drizzle-orm"
+import {
+  mysqlTable,
+  serial,
+  varchar,
+  mysqlEnum,
+  timestamp,
+} from "drizzle-orm/mysql-core"
+
+export enum UserType {
+  ADMIN = "admin",
+  SELLER = "seller",
+  DELIVERY_PERSON = "delivery_person",
+  CUSTOMER = "customer",
+}
+
+const resetPassword = mysqlTable("reset_password", {
+  id: serial("id")
+    .primaryKey(),
+  token: varchar("token", { length: 255 })
+    .notNull()
+    .unique(),
+  userType: mysqlEnum("user_type", UserType),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  expiresAt: timestamp("expires_at"),
+  updatedAt: timestamp("updated_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .onUpdateNow()
+    .notNull(),
+})
+
+export default resetPassword
