@@ -22,7 +22,10 @@ const resetPassword = mysqlTable("reset_password", {
   token: varchar("token", { length: 255 })
     .notNull()
     .unique(),
-  userType: mysqlEnum("user_type", UserType),
+  userId: varchar("user_id", { length: 255 })
+    .notNull(),
+  userType: mysqlEnum("user_type", UserType)
+    .notNull(),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

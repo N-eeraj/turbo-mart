@@ -1,3 +1,5 @@
+import crypto from "crypto"
+
 import AdminUser, {
   transformUser,
   type AdminObject,
@@ -5,6 +7,10 @@ import AdminUser, {
 import AdminToken, {
   type Token,
 } from "@app/database/mongoose/models/Admin/Token.ts"
+import db from "@app/database/drizzle/db.ts"
+import resetPassword, {
+  UserType,
+} from "@app/database/drizzle/schemas/resetPassword.ts"
 
 import BaseService from "#services/BaseService"
 import {
@@ -21,6 +27,8 @@ interface LoginResponse {
 }
 
 export default class AuthService extends BaseService {
+  private static RESET_PASSWORD_TOKEN_VALIDITY = 9_00_000 as const // 15 minutes in ms
+
   /**
    * Authenticates an admin with provided credentials and returns admin data along with an auth token.
    * 
@@ -87,6 +95,12 @@ export default class AuthService extends BaseService {
       }
     }
 
-    console.log(admin.id)
+    await db.insert(resetPassword)
+      .values({
+        userId: admin.id,
+        userType: UserType.ADMIN,
+        token: crypto.randomBytes(32).toString("hex"),
+        expiresAt: new Date(Date.now() + this.RESET_PASSWORD_TOKEN_VALIDITY),
+      })
   }
 }
