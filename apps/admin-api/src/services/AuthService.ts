@@ -11,6 +11,7 @@ import db from "@app/database/drizzle/db.ts"
 import resetPassword, {
   UserType,
 } from "@app/database/drizzle/schemas/resetPassword.ts"
+import sendMail from "@app/mailer"
 
 import BaseService from "#services/BaseService"
 import {
@@ -95,12 +96,29 @@ export default class AuthService extends BaseService {
       }
     }
 
+    const token = crypto.randomBytes(32).toString("hex")
+
     await db.insert(resetPassword)
       .values({
         userId: admin.id,
         userType: UserType.ADMIN,
-        token: crypto.randomBytes(32).toString("hex"),
+        token,
         expiresAt: new Date(Date.now() + this.RESET_PASSWORD_TOKEN_VALIDITY),
       })
+
+    const resetUrl = `token=${token}`
+
+    const mailContent = await super.renderTemplate("passwordReset.ejs", { resetUrl })
+    await sendMail({
+      recipients: [{
+        email: admin.email,
+      }],
+      category: "Password Reset",
+      subject: "Password Reset",
+      body: {
+        type: "html",
+        content: mailContent,
+      }
+    })
   }
 }
