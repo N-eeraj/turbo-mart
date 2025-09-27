@@ -37,6 +37,11 @@ export const PROFILE_PICTURE = {
   valid: "Invalid file format (jpeg, png, webp, heic)",
 }
 
+export const RESET_PASSWORD_URL = {
+  required: "Redirect URL is required",
+  valid: "Invalid URL format",
+}
+
 export const NOTIFICATION_STATE = {
   required: "Read value is required",
   valid: "Invalid read value",

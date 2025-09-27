@@ -1,11 +1,11 @@
 import {
-  email,
   z,
 } from "zod"
 
 import {
   EMAIL,
   PASSWORD,
+  RESET_PASSWORD_URL,
 } from "#constants/validationMessages"
 
 const userEmail = z.email({ error: (issue) => {
@@ -30,6 +30,15 @@ export const loginSchema = z.object({
 
 export const forgotPasswordSchema = z.object({
   email: userEmail,
+  redirectUrl: z.url({ error: (issue) => {
+    if (!issue.input) return RESET_PASSWORD_URL.required
+    return RESET_PASSWORD_URL.valid
+  }})
+    .trim()
+    .meta({
+      description: "URL directed to in reset password email",
+      example: "https://example.com/reset-password",
+    }),
 })
 
 export const loginJSONSchema = z.toJSONSchema(loginSchema)

@@ -83,7 +83,7 @@ export default class AuthService extends BaseService {
    * @throws 404 error if user not found.
    * @throws if db look up or email sending fails
    */
-  static async forgotPassword({ email }: ForgotPasswordData): Promise<void> {
+  static async forgotPassword({ email, redirectUrl }: ForgotPasswordData): Promise<void> {
     const admin = await AdminUser.findOne({
       email,
     })
@@ -106,7 +106,7 @@ export default class AuthService extends BaseService {
         expiresAt: new Date(Date.now() + this.RESET_PASSWORD_TOKEN_VALIDITY),
       })
 
-    const resetUrl = `token=${token}`
+    const resetUrl = `${redirectUrl}?token=${token}`
 
     const mailContent = await super.renderTemplate("passwordReset.ejs", { resetUrl })
     await sendMail({
