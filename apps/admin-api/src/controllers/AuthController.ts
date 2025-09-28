@@ -8,6 +8,7 @@ import AuthService from "#services/AuthService"
 import {
   loginSchema,
   forgotPasswordSchema,
+  resetPasswordSchema,
 } from "#schemas/auth"
 
 /**
@@ -63,7 +64,26 @@ export default class AuthController extends BaseController {
       await AuthService.forgotPassword(payload)
 
       super.sendSuccess(res, {
-        message: "Password Reset email sent",
+        message: "Requested Password Reset",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route POST /api/auth/reset-password
+   * 
+   * Update the user password.
+   */
+  static async resetPassword({ body }: Request, res: Response) {
+    try {
+      const payload = super.validateRequest(resetPasswordSchema, body)
+
+      await AuthService.resetPassword(payload)
+
+      super.sendSuccess(res, {
+        message: "Password Reset",
       })
     } catch (error) {
       super.sendError(res, error)

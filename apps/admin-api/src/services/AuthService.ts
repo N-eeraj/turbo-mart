@@ -17,6 +17,7 @@ import BaseService from "#services/BaseService"
 import {
   type LoginData,
   type ForgotPasswordData,
+  type ResetPasswordData,
 } from "#schemas/auth"
 
 interface LoginResponse {
@@ -108,7 +109,9 @@ export default class AuthService extends BaseService {
 
     const resetUrl = `${redirectUrl}?token=${token}`
 
-    const mailContent = await super.renderTemplate("passwordReset.ejs", { resetUrl })
+    const mailContent = await super.renderTemplate("passwordReset.ejs", {
+      resetUrl,
+    })
     await sendMail({
       recipients: [{
         email: admin.email,
@@ -120,5 +123,9 @@ export default class AuthService extends BaseService {
         content: mailContent,
       }
     })
+  }
+
+  static async resetPassword({ token, password }: ResetPasswordData): Promise<void> {
+
   }
 }

@@ -10,6 +10,7 @@ import ProfileSchema from "#docs/schemas/profile" with { type: "json" }
 import {
   loginJSONSchema,
   forgotPasswordJSONSchema,
+  resetPasswordJSONSchema,
 } from "#schemas/auth"
 import {
   profileUpdateJSONSchema,
@@ -86,6 +87,7 @@ const UtilitySchemas = {
 const schemas = {
   LoginSchema: loginJSONSchema,
   ForgotPasswordSchema: forgotPasswordJSONSchema,
+  ResetPasswordSchema: resetPasswordJSONSchema,
   ProfileUpdateSchema: profileUpdateJSONSchema,
   PasswordUpdateSchema: passwordUpdateJSONSchema,
   ProfilePictureSchema: profilePictureJSONSchema,

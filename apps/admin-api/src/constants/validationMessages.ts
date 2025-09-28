@@ -42,6 +42,10 @@ export const RESET_PASSWORD_URL = {
   valid: "Invalid URL format",
 }
 
+export const PASSWORD_RESET_TOKEN = {
+  required: "Toke is required",
+}
+
 export const NOTIFICATION_STATE = {
   required: "Read value is required",
   valid: "Invalid read value",

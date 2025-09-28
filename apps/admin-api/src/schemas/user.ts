@@ -8,12 +8,14 @@ import {
 } from "@app/database/mongoose/models/Admin/User.ts"
 
 import {
-  EMAIL,
+  userEmail,
+  newPassword,
+} from "#schemas/common"
+import {
   USER_NAME,
   ROLE,
   PERMISSIONS,
   PASSWORD,
-  NEW_PASSWORD,
   PROFILE_PICTURE,
   NOTIFICATION_STATE,
   NOTIFICATION_IDS,
@@ -24,24 +26,16 @@ export const adminSchema = z.object({
     .nonempty(USER_NAME.required)
     .trim()
     .meta({
-      description: "User's name",
+      description: "User's name.",
       example: "John Doe",
     }),
-  email: z.email({ error: (issue) => {
-    if (!issue.input) return EMAIL.required
-    return EMAIL.valid
-  }})
-    .trim()
-    .meta({
-      description: "User's email address",
-      example: "user@example.com",
-    }),
+  email: userEmail,
   role: z.enum(Roles, { error: (issue) => {
     if (!issue.input) return ROLE.required
     return ROLE.valid
   }})
     .meta({
-      description: "User role",
+      description: "User role.",
       example: Roles.ADMIN,
     }),
   permissions: z.array(
@@ -52,7 +46,7 @@ export const adminSchema = z.object({
   )
     .min(1, { error: PERMISSIONS.minLength })
     .meta({
-      description: "User permissions",
+      description: "User permissions.",
       example: [
         Permissions.CATALOGUE_MANAGER,
         Permissions.DATA_ANALYST,
@@ -69,24 +63,10 @@ export const passwordUpdateSchema = z.object({
   password: z.string({ error: PASSWORD.required })
     .nonempty(PASSWORD.required)
     .meta({
-      description: "User's password",
+      description: "User's password.",
       example: "string",
     }),
-  newPassword: z.string({ error: NEW_PASSWORD.required })
-    .nonempty(NEW_PASSWORD.required)
-    .min(6, NEW_PASSWORD.minLength)
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { error: (issue) => {
-      if (issue.input) {
-        if (!/[a-z]/.test(issue.input)) return NEW_PASSWORD.lowercaseRequired
-        if (!/[A-Z]/.test(issue.input)) return NEW_PASSWORD.uppercaseRequired
-        if (!/\d/.test(issue.input)) return NEW_PASSWORD.numberRequired
-      }
-      return NEW_PASSWORD.format
-    }})
-    .meta({
-      description: "User's new password",
-      example: "NewString123",
-    }),
+  newPassword,
 })
 
 export const profilePictureSchema = z.object({
@@ -99,7 +79,7 @@ export const profilePictureSchema = z.object({
       "image/heic",
     ], { error: PROFILE_PICTURE.valid })
     .meta({
-      description: "User's profile picture",
+      description: "User's profile picture.",
     })
 })
 
@@ -123,7 +103,7 @@ export const notificationReadStatusBulkSchema = notificationReadStatusSchema.ext
     .min(1, { error: NOTIFICATION_IDS.list.minLength })
     .optional()
     .meta({
-      description: "List of notification id to set the read status"
+      description: "List of notification id to set the read status.",
     }),
 })
 
