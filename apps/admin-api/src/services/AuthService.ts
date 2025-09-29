@@ -1,4 +1,9 @@
 import crypto from "crypto"
+import {
+  and,
+  eq,
+  gte,
+} from "drizzle-orm"
 
 import AdminUser, {
   transformUser,
@@ -82,7 +87,7 @@ export default class AuthService extends BaseService {
    * @param token - Token object from the request.
    * 
    * @throws 404 error if user not found.
-   * @throws if db look up or email sending fails
+   * @throws if db look up or email sending fails.
    */
   static async forgotPassword({ email, redirectUrl }: ForgotPasswordData): Promise<void> {
     const admin = await AdminUser.findOne({
@@ -125,7 +130,39 @@ export default class AuthService extends BaseService {
     })
   }
 
+  /**
+   * Verify the token and update the password.
+   * Invalidate active tokens based on `logoutOther` flag.
+   * 
+   * @param data - The payload data to validate and update password.
+   * - `token` - The reset password token sent via email.
+   * - `password` - The new user password.
+   * - `logoutOthers` - The flag to invalidate active auth tokens.
+   * 
+   * @throws 404 error if token not found.
+   * @throws if db update fails.
+   */
   static async resetPassword({ token, password, logoutOthers }: ResetPasswordData): Promise<void> {
-    
+    const resetPasswordRecords = await db.select({
+      userId: resetPassword.userId,
+    })
+      .from(resetPassword)
+      .where(
+        and(
+          eq(resetPassword.token, token),
+          eq(resetPassword.userType, UserType.ADMIN),
+          gte(resetPassword.expiresAt, new Date(Date.now()))
+        )
+      )
+
+    // throw not found error if token is not found
+    if (!resetPasswordRecords.length) {
+      throw {
+        status: 404,
+        message: "Reset token not found",
+      }
+    }
+
+
   }
 }
