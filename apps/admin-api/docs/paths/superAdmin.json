@@ -260,7 +260,7 @@
                   "message": {
                     "type": "string",
                     "example": "Admin user not found",
-                    "description": "Error message: Couldn't find the admin user"
+                    "description": "Error message: Couldn't find the admin user."
                   }
                 }
               }

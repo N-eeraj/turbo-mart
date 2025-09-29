@@ -125,7 +125,7 @@ export default class AuthService extends BaseService {
     })
   }
 
-  static async resetPassword({ token, password }: ResetPasswordData): Promise<void> {
-
+  static async resetPassword({ token, password, logoutOthers }: ResetPasswordData): Promise<void> {
+    
   }
 }

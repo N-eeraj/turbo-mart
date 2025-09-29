@@ -43,7 +43,12 @@ export const RESET_PASSWORD_URL = {
 }
 
 export const PASSWORD_RESET_TOKEN = {
-  required: "Toke is required",
+  required: "Token is required",
+  valid: "Invalid token",
+}
+
+export const LOGOUT_OTHERS_ON_RESET = {
+  valid: "Invalid logoutOthers value"
 }
 
 export const NOTIFICATION_STATE = {

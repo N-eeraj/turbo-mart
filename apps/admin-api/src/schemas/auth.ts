@@ -11,6 +11,7 @@ import {
   PASSWORD,
   RESET_PASSWORD_URL,
   PASSWORD_RESET_TOKEN,
+  LOGOUT_OTHERS_ON_RESET,
 } from "#constants/validationMessages"
 
 export const loginSchema = z.object({
@@ -39,12 +40,20 @@ export const forgotPasswordSchema = z.object({
 export const resetPasswordSchema = z.object({
   token: z.string({ error: PASSWORD_RESET_TOKEN.required })
     .nonempty(PASSWORD_RESET_TOKEN.required)
+    .length(64, { error: PASSWORD_RESET_TOKEN.valid })
+    .regex(/^[a-f0-9]+$/i, { message: PASSWORD_RESET_TOKEN.valid })
     .trim()
     .meta({
       description: "Password reset token send via email.",
       example: "012a01ab01ab0abcd0ab0a0123456a01234a0abcde01abc01234567abc0a0a12",
     }),
   password: newPassword,
+  logoutOthers: z.boolean({ error: LOGOUT_OTHERS_ON_RESET.valid })
+    .optional()
+    .meta({
+      description: "Log out from other devices after password reset.",
+      example: true,
+    }),
 })
 
 export const loginJSONSchema = z.toJSONSchema(loginSchema)

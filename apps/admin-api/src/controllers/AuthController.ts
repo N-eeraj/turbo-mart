@@ -83,7 +83,7 @@ export default class AuthController extends BaseController {
       await AuthService.resetPassword(payload)
 
       super.sendSuccess(res, {
-        message: "Password Reset",
+        message: "Password Reset Successfully",
       })
     } catch (error) {
       super.sendError(res, error)
