@@ -102,6 +102,14 @@ export default class AuthService extends BaseService {
       }
     }
 
+    await db.delete(resetPassword)
+      .where(
+        and(
+          eq(resetPassword.userId, admin.id),
+          eq(resetPassword.userType, UserType.ADMIN),
+        )
+      )
+
     const token = crypto.randomBytes(32).toString("hex")
 
     await db.insert(resetPassword)
@@ -144,6 +152,7 @@ export default class AuthService extends BaseService {
    */
   static async resetPassword({ token, password, logoutOthers }: ResetPasswordData): Promise<void> {
     const resetPasswordRecords = await db.select({
+      resetPasswordId: resetPassword.id,
       userId: resetPassword.userId,
     })
       .from(resetPassword)
@@ -151,7 +160,7 @@ export default class AuthService extends BaseService {
         and(
           eq(resetPassword.token, token),
           eq(resetPassword.userType, UserType.ADMIN),
-          gte(resetPassword.expiresAt, new Date(Date.now()))
+          gte(resetPassword.expiresAt, new Date(Date.now())),
         )
       )
 
@@ -163,6 +172,28 @@ export default class AuthService extends BaseService {
       }
     }
 
+    const {
+      userId,
+      resetPasswordId,
+    } = resetPasswordRecords[0]
 
+    const user = await AdminUser.findById(userId)
+
+    // throw not found error if user is not found
+    if (!user) {
+      throw {
+        status: 404,
+        message: "User not found",
+      }
+    }
+
+    user.password = password
+
+    await user.save()
+
+    await db.delete(resetPassword)
+      .where(
+        eq(resetPassword.id, resetPasswordId)
+      )
   }
 }
