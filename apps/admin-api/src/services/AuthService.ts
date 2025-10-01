@@ -177,23 +177,29 @@ export default class AuthService extends BaseService {
       resetPasswordId,
     } = resetPasswordRecords[0]
 
-    const user = await AdminUser.findById(userId)
+    const admin = await AdminUser.findById(userId)
 
-    // throw not found error if user is not found
-    if (!user) {
+    // throw not found error if admin user is not found
+    if (!admin) {
       throw {
         status: 404,
         message: "User not found",
       }
     }
 
-    user.password = password
+    admin.password = password
 
-    await user.save()
+    await admin.save()
 
     await db.delete(resetPassword)
       .where(
         eq(resetPassword.id, resetPasswordId)
       )
+
+    if (logoutOthers) {
+      await AdminToken.deleteMany({
+        admin: admin._id,
+      })
+    }
   }
 }

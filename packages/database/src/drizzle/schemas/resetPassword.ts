@@ -7,6 +7,7 @@ import {
   varchar,
   mysqlEnum,
   timestamp,
+  unique,
 } from "drizzle-orm/mysql-core"
 
 export enum UserType {
@@ -34,6 +35,10 @@ const resetPassword = mysqlTable("reset_password", {
     .default(sql`CURRENT_TIMESTAMP`)
     .onUpdateNow()
     .notNull(),
+}, (table) => {
+  return [
+    unique().on(table.userId, table.userType),
+  ]
 })
 
 export default resetPassword
