@@ -55,6 +55,24 @@ export default class SuperAdminController extends BaseController {
   }
 
   /**
+   * @route GET /api/super-admin/admin/permissions
+   * 
+   * Fetch admin permission list.
+   */
+  static async geAdminPermissions(_req: Request, res: Response) {
+    try {
+      const data = await SuperAdminService.geAdminPermissions()
+
+      super.sendSuccess(res, {
+        data,
+        message: "Fetched Admin Permissions",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
    * @route GET /api/super-admin/admin/:id
    * 
    * Fetch admin user by id.

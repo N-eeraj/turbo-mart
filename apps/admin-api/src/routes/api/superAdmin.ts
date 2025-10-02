@@ -33,6 +33,11 @@ adminManagementRouter.route("/")
     superAdminAuthorizationMiddleware,
   ], SuperAdminController.createAdmin)
 
+adminManagementRouter.get("/permissions", [
+  authenticationMiddleware,
+  superAdminAuthorizationMiddleware,
+], SuperAdminController.geAdminPermissions)
+
 adminManagementRouter.route("/:id")
   .get([
     authenticationMiddleware,

@@ -3,6 +3,7 @@ import type mongoose from "mongoose"
 import AdminUser, {
   Roles,
   transformUser,
+  Permissions,
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User.ts"
 import sendMail from "@app/mailer"
@@ -24,6 +25,11 @@ interface GetAdminUsersOptions {
   order?: mongoose.SortOrder
 }
 
+export interface PermissionMap {
+  name: typeof SuperAdminService.PERMISSIONS_MAP[Permissions]
+  value: Permissions
+}
+
 const DEFAULT_ADMIN_USERS_OPTIONS: Required<GetAdminUsersOptions> = {
   limit: 10,
   skip: 0,
@@ -32,6 +38,23 @@ const DEFAULT_ADMIN_USERS_OPTIONS: Required<GetAdminUsersOptions> = {
 }
 
 export default class SuperAdminService extends BaseService {
+  static PERMISSIONS_MAP = {
+    [Permissions.RETAILER_MANAGER]: "Retailer Manager",
+    [Permissions.CATALOGUE_MANAGER]: "Catalogue Manager",
+    [Permissions.DELIVERY_PERSON_MANAGER]: "Delivery Person Manager",
+    [Permissions.FINANCE_MANAGER]: "Finance Manager",
+    [Permissions.DATA_ANALYST]: "Data Analyst",
+  } as const
+
+  static PERMISSIONS_MAP_LIST: Array<PermissionMap> = Object.entries(this.PERMISSIONS_MAP)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([ value, name ]) => {
+      return {
+        name,
+        value: Number(value),
+      }
+    })
+
   /**
    * Fetch the admin users with the "ADMIN" role.
    * 
@@ -116,6 +139,15 @@ export default class SuperAdminService extends BaseService {
 
       throw error
     }
+  }
+
+  /**
+   * Fetch the list of admin permissions.
+   * 
+   * @returns the list of admin permissions.
+   */
+  static async geAdminPermissions(): Promise<Array<PermissionMap>> {
+    return this.PERMISSIONS_MAP_LIST
   }
 
   /**
