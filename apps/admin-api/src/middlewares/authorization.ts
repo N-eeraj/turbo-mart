@@ -2,6 +2,7 @@ import {
   type Request,
   type Response,
   type NextFunction,
+  type RequestHandler,
 } from "express"
 
 import {
@@ -55,7 +56,7 @@ export async function superAdminAuthorizationMiddleware(req: Request, res: Respo
  * If user doesn't have the required permission or is not super admin,
  * it'll send an error response with 403 status code.
  */
-export function permissionAuthorizationMiddleware(...requiredPermissions: Array<Permissions>): Function {
+export function permissionAuthorizationMiddleware(...requiredPermissions: Array<Permissions>): RequestHandler {
   return async function (req: Request, res: Response, next: NextFunction) {
     try {
       const hasPermission = (

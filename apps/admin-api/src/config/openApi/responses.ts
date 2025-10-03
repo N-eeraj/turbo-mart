@@ -1,6 +1,7 @@
 import UnauthenticatedUser from "#docs/responses/unauthenticatedUser" with { type: "json" }
 import UserNotFound from "#docs/responses/userNotFound" with { type: "json" }
 import UnauthorizedSuperAdminUser from "#docs/responses/unauthorizedSuperAdminUser" with { type: "json" }
+import UnauthorizedUser from "#docs/responses/unauthorizedUser" with { type: "json" }
 import InternalServerError from "#docs/responses/internalServerError" with { type: "json" }
 import InvalidNotificationIds from "#docs/responses/invalidNotificationIds" with { type: "json" }
 
@@ -77,6 +78,7 @@ const responses = {
   UnauthenticatedUser,
   UserNotFound,
   UnauthorizedSuperAdminUser,
+  UnauthorizedUser,
   InternalServerError,
   IncorrectPassword,
   NotificationStatusNotFound,

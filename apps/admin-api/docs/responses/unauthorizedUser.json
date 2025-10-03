@@ -1,5 +1,5 @@
 {
-  "description": "Unauthorized super admin.",
+  "description": "Unauthorized user, user lacks the required permission.",
   "content": {
     "application/json": {
       "schema": {
@@ -12,8 +12,8 @@
           },
           "message": {
             "type": "string",
-            "example": "Super admin access required",
-            "description": "Error message: Action is restricted to super admin users."
+            "example": "Unauthorized user",
+            "description": "Error message: Action is restricted to users lacking required permission(s)."
           }
         }
       }

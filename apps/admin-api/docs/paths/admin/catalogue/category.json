@@ -1,0 +1,54 @@
+{
+  "/api/admin/catalogue/category": {
+      "get": {
+      "tags": ["Category Management"],
+      "summary": "Catalogue List",
+      "description": "Fetches the list of catalogues.",
+      "parameters": [
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/LimitOptionSchema"
+          }
+        },
+        {
+          "name": "skip",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/SkipOptionSchema"
+          }
+        },
+        {
+          "name": "order",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/SortOrderSchema"
+          }
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  }
+}

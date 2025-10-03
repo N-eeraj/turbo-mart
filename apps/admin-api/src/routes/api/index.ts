@@ -4,6 +4,7 @@ import corsMiddleware from "#middlewares/cors"
 import authRouter from "#routes/api/auth"
 import profileRouter from "#routes/api/profile/index"
 import superAdminRouter from "#routes/api/superAdmin"
+import adminRouter from "#routes/api/admin/index"
 import GeneralController from "#controllers/GeneralController"
 
 /**
@@ -20,6 +21,7 @@ apiRouter.use(corsMiddleware)
 apiRouter.use("/auth", authRouter)
 apiRouter.use("/profile", profileRouter)
 apiRouter.use("/super-admin", superAdminRouter)
+apiRouter.use("/admin", adminRouter)
 
 apiRouter.get("/ping", GeneralController.ping)
 apiRouter.use(GeneralController.handleRouteNotFound)
