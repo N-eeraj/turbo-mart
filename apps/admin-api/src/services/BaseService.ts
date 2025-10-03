@@ -92,7 +92,7 @@ export default class BaseService {
     fileLocation: string,
     isPublic = false as IsPublic
   ): Promise<FilePath<IsPublic>> {
-    const destinationDir = isPublic ? 
+    const destinationDir = isPublic ?
       withPublicFileStoragePath(fileLocation) :
       withPrivateFileStoragePath(fileLocation)
 

@@ -79,7 +79,7 @@ export function permissionAuthorizationMiddleware(...requiredPermissions: Array<
         message,
         errors,
       } = formatError(error)
-  
+
       sendResponse(res, false, { status, message }, errors)
     }
   }

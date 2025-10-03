@@ -83,7 +83,7 @@ export async function authenticationMiddleware(req: Request, res: Response, next
       message,
       errors,
     } = formatError(error)
-    
+
     sendResponse(res, false, { status, message }, errors)
   }
 }

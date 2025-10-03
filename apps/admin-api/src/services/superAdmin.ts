@@ -18,7 +18,7 @@ import {
 } from "#utils/random"
 
 
-interface GetAdminUsersOptions {
+export interface GetAdminUsersOptions {
   limit?: number
   skip?: number
   search?: string
@@ -68,18 +68,18 @@ export default class SuperAdminService extends BaseService {
     order = DEFAULT_ADMIN_USERS_OPTIONS.order,
     search = DEFAULT_ADMIN_USERS_OPTIONS.search,
   }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminObject>> {
+    const searchRegex = {
+      $regex: new RegExp(search, "i"),
+    }
+
     const admins = await AdminUser.find({
       role: Roles.ADMIN,
       $or: [
         {
-          name: {
-            $regex: new RegExp(search, "i"),
-          }
+          name: searchRegex,
         },
         {
-          email: {
-            $regex: new RegExp(search, "i"),
-          }
+          email: searchRegex,
         },
       ],
     })

@@ -132,7 +132,15 @@ AdminSchema.pre("save", async function(next) {
  * 
  * @returns The transformed admin object.
  */
-export function transformUser({ _id, email, name, role, permissions, profilePicture, createdAt }: Admin): AdminObject {
+export function transformUser({
+  _id,
+  email,
+  name,
+  role,
+  permissions,
+  profilePicture,
+  createdAt,
+}: Admin): AdminObject {
   const userDetails: AdminObject = {
     id: _id,
     email,

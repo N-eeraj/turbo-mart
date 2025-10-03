@@ -7,7 +7,7 @@
  * 
  * @example
  * const formattedError = formatError(new Error)
- * console.log(formattedError) 
+ * console.log(formattedError)
  * // { status: 500, message: "Something went wrong", errors: undefined }
  * 
  * @example

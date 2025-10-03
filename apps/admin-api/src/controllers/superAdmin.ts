@@ -4,7 +4,9 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import SuperAdminService from "#services/superAdmin"
+import SuperAdminService, {
+  type GetAdminUsersOptions,
+} from "#services/superAdmin"
 import {
   adminCreationSchema,
   adminUpdateSchema,
@@ -21,7 +23,7 @@ export default class SuperAdminController extends BaseController {
    */
   static async getAdmins({ query }: Request, res: Response) {
     try {
-      const paginationQueries: Parameters<typeof SuperAdminService.getAdmins>[0] = super.parsePaginationQueries(query)
+      const paginationQueries: GetAdminUsersOptions = super.parsePaginationQueries(query)
 
       const data = await SuperAdminService.getAdmins(paginationQueries)
 

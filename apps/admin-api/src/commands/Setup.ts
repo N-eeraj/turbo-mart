@@ -22,7 +22,7 @@ const LOG_PATH = withStoragePath("logs")
  */
 export default class Setup {
   /**
-   * Ensures that a directory exists by checking if it exists. 
+   * Ensures that a directory exists by checking if it exists.
    * If it does not, it creates the directory (and any necessary parent directories).
    * 
    * @param directoryPath - The path of the directory to check/create.

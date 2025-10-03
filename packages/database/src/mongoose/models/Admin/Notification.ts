@@ -68,13 +68,13 @@ NotificationSchema.index({
  * @returns The transformed notification object.
  */
 export function transformNotification({
-  _id, 
+  _id,
   type,
   title,
   message,
   data,
   readAt,
-  createdAt
+  createdAt,
 }: Notification): NotificationObject {
   const notification: NotificationObject = {
     id: _id,

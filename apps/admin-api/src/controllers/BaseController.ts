@@ -32,7 +32,7 @@ export type PaginationQueries = Partial<{
 }>
 
 /**
- * BaseController class provides static utility methods for handling common 
+ * BaseController class provides static utility methods for handling common
  * operations in controllers like sending responses, validating requests, and sending files.
  */
 export default class BaseController {

@@ -10,7 +10,7 @@ const rateLimiter = rateLimit({
   windowMs: 60_000, // 1 minute
   max: 60, // limit to 60 requests per minute
   standardHeaders: true,
-  legacyHeaders: false, 
+  legacyHeaders: false,
   handler: (_req, res) => {
     res.statusCode = 429
     res.send({

@@ -4,7 +4,9 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import CategoryService from "#services/admin/catalogue/CategoryService"
+import CategoryService, {
+  type ListOptions,
+} from "#services/admin/catalogue/CategoryService"
 
 /**
  * Controller for all category related APIs routes.
@@ -15,9 +17,11 @@ export default class CategoryController extends BaseController {
    * 
    * Fetches the list of categories.
    */
-  static async list({  }: Request, res: Response) {
+  static async list({ query }: Request, res: Response) {
     try {
-      const data = await CategoryService.list()
+      const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+
+      const data = await CategoryService.list(paginationQueries)
 
       super.sendSuccess(res, {
         message: "Fetched Categories",

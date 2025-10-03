@@ -23,7 +23,7 @@ export default class ProfileController extends BaseController {
   static async getDetails({ user }: Request, res: Response) {
     try {
       const data = await ProfileService.getDetails(user)
-  
+
       super.sendSuccess(res, {
         data,
         message: "Fetched User Details",
