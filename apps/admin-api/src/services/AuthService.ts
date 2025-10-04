@@ -84,7 +84,9 @@ export default class AuthService extends BaseService {
   /**
    * Check for the user with the provided email and send mail to reset password.
    * 
-   * @param token - Token object from the request.
+   * @param forgotPassword - The request payload.
+   * - `email` - The user's email.
+   * - `redirectUrl` - The URL to redirect to.
    * 
    * @throws 404 error if user not found.
    * @throws if db look up or email sending fails.

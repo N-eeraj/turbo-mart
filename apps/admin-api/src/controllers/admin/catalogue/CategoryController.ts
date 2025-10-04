@@ -34,6 +34,7 @@ export default class CategoryController extends BaseController {
       super.sendError(res, error)
     }
   }
+
   /**
    * @route POST /api/admin/catalogue/category
    * 

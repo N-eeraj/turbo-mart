@@ -81,7 +81,7 @@
           "$ref": "#/components/responses/UserNotFound"
         },
         "409": {
-          "description": "Email already in use.",
+          "description": "Conflict error.",
           "content": {
             "application/json": {
               "schema": {
@@ -94,7 +94,16 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Email already in use"
+                    "example": "A user with the same unique field(s) already exists."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "example": "user@example.com"
+                      }
+                    }
                   }
                 }
               }

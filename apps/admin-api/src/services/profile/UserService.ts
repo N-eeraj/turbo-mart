@@ -63,12 +63,13 @@ export default class ProfileService extends BaseService {
 
       return transformUser(updatedUser)
     } catch (error) {
-      const isDuplicateKeyError = super.checkDuplicateKeyError(error)
-      // throw conflict error if email is already taken
+      const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
+      // throw conflict error
       if (isDuplicateKeyError) {
         throw {
           status: 409,
-          message: "Email already in use"
+          message: "A user with the same unique field(s) already exists",
+          ...conflicts,
         }
       }
 

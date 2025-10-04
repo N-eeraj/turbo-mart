@@ -67,16 +67,34 @@ export default class CategoryService extends BaseService {
   /**
    * Fetch the admin users with the "ADMIN" role.
    * 
+   * @params categoryData - The data for new the category.
+   * - `name` - Category Name.
+   * - `slug` - Category Slug.
+   * 
    * @returns array of admin users.
    * 
    * @throws If database lookup fails.
    */
   static async create({ name, slug }: CategoryData): Promise<CategoryObject> {
-    const category = await Category.create({
-      name,
-      slug,
-    })
+    try {
+      const category = await Category.create({
+        name,
+        slug,
+      })
 
-    return transformCategory(category)
+      return transformCategory(category)
+    } catch (error) {
+      const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
+      // throw conflict error
+      if (isDuplicateKeyError) {
+        throw {
+          status: 409,
+          message: "A category with the same unique field(s) already exists",
+          ...conflicts,
+        }
+      }
+
+      throw error
+    }
   }
 }

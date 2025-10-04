@@ -130,12 +130,13 @@ export default class SuperAdminService extends BaseService {
 
       return transformUser(adminUser)
     } catch (error) {
-      const isDuplicateKeyError = super.checkDuplicateKeyError(error)
-      // throw conflict error if email is already taken
+      const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
+      // throw conflict error
       if (isDuplicateKeyError) {
         throw {
           status: 409,
-          message: "Email already in use"
+          message: "An admin user with the same unique field(s) already exists",
+          ...conflicts,
         }
       }
 
@@ -213,12 +214,13 @@ export default class SuperAdminService extends BaseService {
 
       return transformUser(updatedAdmin)
     } catch (error) {
-      const isDuplicateKeyError = super.checkDuplicateKeyError(error)
-      // throw conflict error if email is already taken
+      const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
+      // throw conflict error
       if (isDuplicateKeyError) {
         throw {
           status: 409,
-          message: "Email already in use"
+          message: "An admin user with the same unique field(s) already exists",
+          ...conflicts,
         }
       }
 

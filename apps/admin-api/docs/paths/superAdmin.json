@@ -121,7 +121,7 @@
           "$ref": "#/components/responses/UnauthorizedSuperAdminUser"
         },
         "409": {
-          "description": "Email already in use.",
+          "description": "Conflict error.",
           "content": {
             "application/json": {
               "schema": {
@@ -134,7 +134,16 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Email already in use"
+                    "example": "An admin user with the same unique field(s) already exists"
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "example": "user@example.com"
+                      }
+                    }
                   }
                 }
               }
@@ -426,7 +435,7 @@
           }
         },
         "409": {
-          "description": "Email already in use.",
+          "description": "Conflict error.",
           "content": {
             "application/json": {
               "schema": {
@@ -439,7 +448,16 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Email already in use"
+                    "example": "An admin user with the same unique field(s) already exists"
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "example": "user@example.com"
+                      }
+                    }
                   }
                 }
               }

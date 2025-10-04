@@ -51,13 +51,36 @@ export default class BaseService {
    * 
    * @returns `true` if the error is a duplicate key error, otherwise `false`.
    */
-  static checkDuplicateKeyError(error: unknown): boolean {
-    return Boolean(
+  static checkDuplicateKeyError(error: unknown): [true, Record<string, string>] | [false] {
+    const isDuplicateKeyError = Boolean(
       error &&
       typeof error === "object" &&
       "code" in error &&
       error.code === 11000
     )
+
+    if (!isDuplicateKeyError) {
+      return [
+        false
+      ]
+    }
+
+    let errorKeys: Record<string, string> = {}
+    if (
+      error &&
+      typeof error === "object" &&
+      "keyPattern" in error &&
+      error.keyPattern &&
+      typeof error.keyPattern === "object"
+    ) {
+      Object.keys(error.keyPattern)
+        .forEach(key => errorKeys[key] = `${key} already in use`)
+    }
+
+    return [
+      isDuplicateKeyError,
+      errorKeys,
+    ]
   }
 
   /**
