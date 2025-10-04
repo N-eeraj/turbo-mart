@@ -58,6 +58,8 @@ export default class SuperAdminService extends BaseService {
   /**
    * Fetch the admin users with the "ADMIN" role.
    * 
+   * @param paginationQueries - Pagination query options.
+   * 
    * @returns array of admin users.
    * 
    * @throws If database lookup fails.

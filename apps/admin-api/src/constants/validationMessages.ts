@@ -64,3 +64,12 @@ export const NOTIFICATION_IDS = {
     minLength: "Please select at least 1 notification",
   },
 }
+
+export const CATEGORY = {
+  name: {
+    required: "Please enter a category name",
+  },
+  slug: {
+    required: "Please enter a category slug",
+  },
+}

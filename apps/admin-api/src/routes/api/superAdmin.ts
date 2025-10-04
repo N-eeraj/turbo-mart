@@ -23,33 +23,35 @@ const superAdminRouter = express.Router()
  */
 const adminManagementRouter = express.Router()
 
+/**
+ * Middleware list for admin management routes.
+ */
+const adminManagementMiddlewares = [
+  authenticationMiddleware,
+  superAdminAuthorizationMiddleware,
+]
+
 adminManagementRouter.route("/")
   .get([
-    authenticationMiddleware,
-    superAdminAuthorizationMiddleware,
+    ...adminManagementMiddlewares,
   ], SuperAdminController.getAdmins)
   .post([
-    authenticationMiddleware,
-    superAdminAuthorizationMiddleware,
+    ...adminManagementMiddlewares,
   ], SuperAdminController.createAdmin)
 
 adminManagementRouter.get("/permissions", [
-  authenticationMiddleware,
-  superAdminAuthorizationMiddleware,
+  ...adminManagementMiddlewares,
 ], SuperAdminController.geAdminPermissions)
 
 adminManagementRouter.route("/:id")
   .get([
-    authenticationMiddleware,
-    superAdminAuthorizationMiddleware,
+    ...adminManagementMiddlewares,
   ], SuperAdminController.getAdminById)
   .patch([
-    authenticationMiddleware,
-    superAdminAuthorizationMiddleware,
+    ...adminManagementMiddlewares,
   ], SuperAdminController.updateAdmin)
   .delete([
-    authenticationMiddleware,
-    superAdminAuthorizationMiddleware,
+    ...adminManagementMiddlewares,
   ], SuperAdminController.deleteAdmin)
 
 superAdminRouter.use("/admin", adminManagementRouter)

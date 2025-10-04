@@ -1,9 +1,9 @@
 {
   "/api/admin/catalogue/category": {
-      "get": {
+    "get": {
       "tags": ["Category Management"],
-      "summary": "Catalogue List",
-      "description": "Fetches the list of catalogues.",
+      "summary": "Category List",
+      "description": "Fetches the list of categories.",
       "parameters": [
         {
           "name": "limit",
@@ -78,6 +78,22 @@
           "$ref": "#/components/responses/InternalServerError"
         }
       }
+    },
+    "post": {
+      "tags": ["Category Management"],
+      "summary": "Create Category",
+      "description": "Create new category.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CategorySchema"
+            }
+          }
+        }
+      },
+      "responses": {}
     }
   }
 }

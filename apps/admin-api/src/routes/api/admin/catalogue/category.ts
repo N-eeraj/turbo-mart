@@ -19,9 +19,20 @@ import CategoryController from "#controllers/admin/catalogue/CategoryController"
  */
 const categoryRouter = express.Router()
 
-categoryRouter.get("/", [
+/**
+ * Middleware list for category management routes.
+ */
+const categoryManagementMiddlewares = [
   authenticationMiddleware,
   permissionAuthorizationMiddleware(Permissions.CATALOGUE_MANAGER),
+]
+
+categoryRouter.get("/", [
+  ...categoryManagementMiddlewares,
 ], CategoryController.list)
+
+categoryRouter.post("/", [
+  ...categoryManagementMiddlewares,
+], CategoryController.create)
 
 export default categoryRouter

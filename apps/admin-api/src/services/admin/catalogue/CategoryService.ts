@@ -1,11 +1,14 @@
 import type mongoose from "mongoose"
 
-import BaseService from "#services/BaseService"
-
 import Category, {
   transformCategory,
   type CategoryObject,
 } from "@app/database/mongoose/models/Catalogue/Category.ts"
+
+import BaseService from "#services/BaseService"
+import {
+  type CategoryData,
+} from "#schemas/admin/catalogue/category"
 
 export interface ListOptions {
   limit?: number
@@ -22,6 +25,15 @@ const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
 }
 
 export default class CategoryService extends BaseService {
+  /**
+   * Fetch the categories.
+   * 
+   * @param paginationQueries - Pagination query options.
+   * 
+   * @returns array of categories.
+   * 
+   * @throws If database lookup fails.
+   */
   static async list({
     limit = DEFAULT_LIST_OPTIONS.limit,
     skip = DEFAULT_LIST_OPTIONS.skip,
@@ -50,5 +62,21 @@ export default class CategoryService extends BaseService {
       .lean()
 
     return categories.map(transformCategory)
+  }
+
+  /**
+   * Fetch the admin users with the "ADMIN" role.
+   * 
+   * @returns array of admin users.
+   * 
+   * @throws If database lookup fails.
+   */
+  static async create({ name, slug }: CategoryData): Promise<CategoryObject> {
+    const category = await Category.create({
+      name,
+      slug,
+    })
+
+    return transformCategory(category)
   }
 }

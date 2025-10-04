@@ -29,6 +29,7 @@ export default class NotificationService extends BaseService {
    * Returns the list of notifications of the admin user.
    * 
    * @param adminId - Admin user id.
+   * @param paginationQueries - Pagination query options.
    * 
    * @returns the list of notifications based on the options.
    * 
