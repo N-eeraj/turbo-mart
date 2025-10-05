@@ -141,7 +141,7 @@
                     "properties": {
                       "email": {
                         "type": "string",
-                        "example": "user@example.com"
+                        "example": "email already in use"
                       }
                     }
                   }
@@ -455,7 +455,7 @@
                     "properties": {
                       "email": {
                         "type": "string",
-                        "example": "user@example.com"
+                        "example": "email already in use"
                       }
                     }
                   }

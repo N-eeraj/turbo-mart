@@ -14,7 +14,7 @@
     "name": {
       "type": "string",
       "description": "User's full name.",
-      "name": "John Doe"
+      "example": "John Doe"
     },
     "role": {
       "$ref": "#/components/schemas/RolesEnum"

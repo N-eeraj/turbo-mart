@@ -53,10 +53,7 @@
                   "data": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        
-                      }
+                      "$ref": "#/components/schemas/CategoryCreationSchema"
                     }
                   },
                   "message": {
@@ -88,12 +85,75 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CategorySchema"
+              "$ref": "#/components/schemas/CategoryCreationSchema"
             }
           }
         }
       },
-      "responses": {}
+      "responses": {
+        "200": {
+          "description": "Create category.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/CategoryCreationSchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Created Category"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "409": {
+          "description": "Conflict error.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "A category with the same unique field(s) already exists"
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "slug": {
+                        "type": "string",
+                        "example": "slug already in use"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
     }
   }
 }

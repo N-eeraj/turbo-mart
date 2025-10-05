@@ -65,15 +65,16 @@ export default class CategoryService extends BaseService {
   }
 
   /**
-   * Fetch the admin users with the "ADMIN" role.
+   * Creates a new category.
    * 
    * @params categoryData - The data for new the category.
    * - `name` - Category Name.
    * - `slug` - Category Slug.
    * 
-   * @returns array of admin users.
+   * @returns the newly created category.
    * 
-   * @throws If database lookup fails.
+   * @throws 409 error if slug is already in use.
+   * @throws If category creation fails.
    */
   static async create({ name, slug }: CategoryData): Promise<CategoryObject> {
     try {

@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique category ID.",
+      "example": "01a0a0123a01a012a0a012a0"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the category.",
+      "example": "Electronics"
+    },
+    "slug": {
+      "type": "string",
+      "description": "Unique and short name (slug) of the category.",
+      "slug": "elctx"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the category was created. Follows ISO 8601 format."
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the category was last updated. Follows ISO 8601 format."
+    }
+  }
+}
