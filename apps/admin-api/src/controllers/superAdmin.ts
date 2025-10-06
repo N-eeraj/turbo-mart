@@ -21,11 +21,11 @@ export default class SuperAdminController extends BaseController {
    * 
    * Fetch all admin users.
    */
-  static async getAdmins({ query }: Request, res: Response) {
+  static async listAdmins({ query }: Request, res: Response) {
     try {
       const paginationQueries: GetAdminUsersOptions = super.parsePaginationQueries(query)
 
-      const data = await SuperAdminService.getAdmins(paginationQueries)
+      const data = await SuperAdminService.listAdmins(paginationQueries)
 
       super.sendSuccess(res, {
         message: "Fetched Admin Users",
@@ -61,9 +61,9 @@ export default class SuperAdminController extends BaseController {
    * 
    * Fetch admin permission list.
    */
-  static async geAdminPermissions(_req: Request, res: Response) {
+  static async listAdminPermissions(_req: Request, res: Response) {
     try {
-      const data = await SuperAdminService.geAdminPermissions()
+      const data = await SuperAdminService.listAdminPermissions()
 
       super.sendSuccess(res, {
         data,

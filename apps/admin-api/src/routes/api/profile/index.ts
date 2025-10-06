@@ -15,25 +15,21 @@ import notificationRouter from "#routes/api/profile/notifications"
 const profileRouter = express.Router()
 
 profileRouter.route("/")
-  .get([
-    authenticationMiddleware,
-  ], ProfileController.getDetails)
-  .patch([
-    authenticationMiddleware,
-  ], ProfileController.updateDetails)
+  .get(authenticationMiddleware, ProfileController.getDetails)
+  .patch(authenticationMiddleware, ProfileController.updateDetails)
 
-profileRouter.put("/password", [
+profileRouter.put(
+  "/password",
   authenticationMiddleware,
-], ProfileController.updatePassword)
+  ProfileController.updatePassword
+)
 
 profileRouter.route("/picture")
   .put([
     authenticationMiddleware,
     upload.single("profilePicture"),
   ], ProfileController.updateProfilePicture)
-  .delete([
-    authenticationMiddleware,
-  ], ProfileController.removeProfilePicture)
+  .delete(authenticationMiddleware, ProfileController.removeProfilePicture)
 
 profileRouter.use("/notifications", notificationRouter)
 

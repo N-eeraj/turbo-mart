@@ -28,19 +28,11 @@ const categoryManagementMiddlewares = [
 ]
 
 categoryRouter.route("/")
-  .get([
-    ...categoryManagementMiddlewares,
-  ], CategoryController.list)
-  .post([
-    ...categoryManagementMiddlewares,
-  ], CategoryController.create)
+  .get(categoryManagementMiddlewares, CategoryController.list)
+  .post(categoryManagementMiddlewares, CategoryController.create)
 
 categoryRouter.route("/:categoryId")
-  .get([
-    ...categoryManagementMiddlewares,
-  ], CategoryController.getById)
-  .patch([
-    ...categoryManagementMiddlewares,
-  ], CategoryController.update)
+  .get(categoryManagementMiddlewares, CategoryController.getById)
+  .patch(categoryManagementMiddlewares, CategoryController.update)
 
 export default categoryRouter

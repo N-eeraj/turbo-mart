@@ -64,7 +64,7 @@ export default class SuperAdminService extends BaseService {
    * 
    * @throws If database lookup fails.
    */
-  static async getAdmins({
+  static async listAdmins({
     limit = DEFAULT_ADMIN_USERS_OPTIONS.limit,
     skip = DEFAULT_ADMIN_USERS_OPTIONS.skip,
     order = DEFAULT_ADMIN_USERS_OPTIONS.order,
@@ -149,7 +149,7 @@ export default class SuperAdminService extends BaseService {
    * 
    * @returns the list of admin permissions.
    */
-  static async geAdminPermissions(): Promise<Array<PermissionMap>> {
+  static async listAdminPermissions(): Promise<Array<PermissionMap>> {
     return this.PERMISSIONS_MAP_LIST
   }
 

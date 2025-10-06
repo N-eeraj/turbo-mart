@@ -12,7 +12,7 @@
           },
           "message": {
             "type": "string",
-            "example": "Invalid admin id",
+            "example": "Invalid id",
             "description": "Error message."
           }
         }

@@ -14,9 +14,7 @@ const authRouter = express.Router()
 
 authRouter.post("/login", AuthController.login)
 
-authRouter.post("/logout", [
-  authenticationMiddleware,
-], AuthController.logout)
+authRouter.post("/logout", authenticationMiddleware, AuthController.logout)
 
 authRouter.post("/forgot-password", AuthController.forgotPassword)
 authRouter.post("/reset-password", AuthController.resetPassword)

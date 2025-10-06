@@ -13,25 +13,13 @@ import NotificationController from "#controllers/profile/NotificationController"
 const notificationRouter = express.Router()
 
 notificationRouter.route("/")
-  .get([
-    authenticationMiddleware,
-  ], NotificationController.getNotifications)
-  .patch([
-    authenticationMiddleware,
-  ], NotificationController.setNotificationReadStatusBulk)
-  .delete([
-    authenticationMiddleware,
-  ], NotificationController.deleteNotificationBulk)
+  .get(authenticationMiddleware, NotificationController.list)
+  .patch(authenticationMiddleware, NotificationController.updateReadStatusMultiple)
+  .delete(authenticationMiddleware, NotificationController.deleteMultiple)
 
 notificationRouter.route("/:notificationId")
-  .get([
-    authenticationMiddleware,
-  ], NotificationController.getNotificationsById)
-  .patch([
-    authenticationMiddleware,
-  ], NotificationController.setNotificationReadStatus)
-  .delete([
-    authenticationMiddleware,
-  ], NotificationController.deleteNotification)
+  .get(authenticationMiddleware, NotificationController.getById)
+  .patch(authenticationMiddleware, NotificationController.updateReadStatus)
+  .delete(authenticationMiddleware, NotificationController.delete)
 
 export default notificationRouter

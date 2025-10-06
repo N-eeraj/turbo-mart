@@ -11,7 +11,7 @@ import Notification, {
 
 import BaseService from "#services/BaseService"
 
-interface GetNotificationsOptions {
+export interface GetNotificationsOptions {
   isRead?: boolean
   limit?: number
   skip?: number
@@ -35,7 +35,7 @@ export default class NotificationService extends BaseService {
    * 
    * @throws If fetching the notifications failed.
    */
-  static async getNotifications(
+  static async list(
     adminId: AdminObject["id"],
     {
       isRead,
@@ -70,7 +70,7 @@ export default class NotificationService extends BaseService {
     return notifications.map(transformNotification)
   }
 
-  static async getNotificationsById(
+  static async getById(
     adminId: AdminObject["id"],
     notificationId: NotificationObject["id"]
   ): Promise<NotificationObject> {
@@ -158,7 +158,7 @@ export default class NotificationService extends BaseService {
    * 
    * @throws If updating the notifications failed.
    */
-  static async setNotificationReadStatus(
+  static async updateReadStatuses(
     adminId: AdminObject["id"],
     read: boolean,
     notificationIds?: Array<NotificationObject["id"]>
@@ -186,7 +186,7 @@ export default class NotificationService extends BaseService {
    * 
    * @throws If deleting the notifications failed.
    */
-  static async deleteNotifications(
+  static async delete(
     adminId: AdminObject["id"],
     notificationIds?: Array<NotificationObject["id"]>
   ): Promise<void> {

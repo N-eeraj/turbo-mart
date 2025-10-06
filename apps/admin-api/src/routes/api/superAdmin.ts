@@ -32,27 +32,19 @@ const adminManagementMiddlewares = [
 ]
 
 adminManagementRouter.route("/")
-  .get([
-    ...adminManagementMiddlewares,
-  ], SuperAdminController.getAdmins)
-  .post([
-    ...adminManagementMiddlewares,
-  ], SuperAdminController.createAdmin)
+  .get(adminManagementMiddlewares, SuperAdminController.listAdmins)
+  .post(adminManagementMiddlewares, SuperAdminController.createAdmin)
 
-adminManagementRouter.get("/permissions", [
-  ...adminManagementMiddlewares,
-], SuperAdminController.geAdminPermissions)
+adminManagementRouter.get(
+  "/permissions",
+  adminManagementMiddlewares,
+  SuperAdminController.listAdminPermissions
+)
 
 adminManagementRouter.route("/:adminId")
-  .get([
-    ...adminManagementMiddlewares,
-  ], SuperAdminController.getAdminById)
-  .patch([
-    ...adminManagementMiddlewares,
-  ], SuperAdminController.updateAdmin)
-  .delete([
-    ...adminManagementMiddlewares,
-  ], SuperAdminController.deleteAdmin)
+  .get(adminManagementMiddlewares, SuperAdminController.getAdminById)
+  .patch(adminManagementMiddlewares, SuperAdminController.updateAdmin)
+  .delete(adminManagementMiddlewares, SuperAdminController.deleteAdmin)
 
 superAdminRouter.use("/admin", adminManagementRouter)
 
