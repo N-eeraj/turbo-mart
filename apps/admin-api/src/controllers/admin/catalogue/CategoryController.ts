@@ -8,7 +8,8 @@ import CategoryService, {
   type ListOptions,
 } from "#services/admin/catalogue/CategoryService"
 import {
-  categorySchema,
+  categoryCreationSchema,
+  categoryUpdateSchema,
 } from "#schemas/admin/catalogue/category"
 
 /**
@@ -42,12 +43,40 @@ export default class CategoryController extends BaseController {
    */
   static async create({ body }: Request, res: Response) {
     try {
-      const category = super.validateRequest(categorySchema, body)
+      const category = super.validateRequest(categoryCreationSchema, body)
 
       const data = await CategoryService.create(category)
 
       super.sendSuccess(res, {
         message: "Created Category",
+        data,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route PATCH /api/admin/catalogue/category/:categoryId
+   * 
+   * Update category.
+   */
+  static async update({ params, body }: Request, res: Response) {
+    try {
+      const categoryId = super.parseObjectId(params.categoryId)
+      if (!categoryId) {
+        throw {
+          status: 400,
+          message: "Invalid category id",
+        }
+      }
+
+      const category = super.validateRequest(categoryUpdateSchema, body)
+
+      const data = await CategoryService.update(categoryId, category)
+
+      super.sendSuccess(res, {
+        message: "Updated Category",
         data,
       })
     } catch (error) {

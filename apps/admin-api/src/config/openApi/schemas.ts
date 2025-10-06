@@ -24,7 +24,8 @@ import {
   adminUpdateJSONSchema,
 } from "#schemas/user"
 import {
-  categoryJSONSchema,
+  categoryCreationJSONSchema,
+  categoryUpdateJSONSchema,
 } from "#schemas/admin/catalogue/category"
 
 const LimitOptionSchema = {
@@ -101,7 +102,8 @@ const schemas = {
   AdminSchema: adminJSONSchema,
   AdminCreationSchema: adminCreationJSONSchema,
   AdminUpdateSchema: adminUpdateJSONSchema,
-  CategoryCreationSchema: categoryJSONSchema,
+  CategoryCreationSchema: categoryCreationJSONSchema,
+  CategoryUpdateSchema: categoryUpdateJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

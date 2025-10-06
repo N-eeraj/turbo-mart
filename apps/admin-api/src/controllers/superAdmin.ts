@@ -75,13 +75,13 @@ export default class SuperAdminController extends BaseController {
   }
 
   /**
-   * @route GET /api/super-admin/admin/:id
+   * @route GET /api/super-admin/admin/:adminId
    * 
    * Fetch admin user by id.
    */
   static async getAdminById({ params }: Request, res: Response) {
     try {
-      const adminId = super.parseObjectId(params.id)
+      const adminId = super.parseObjectId(params.adminId)
       if (!adminId) {
         throw {
           status: 400,
@@ -101,13 +101,13 @@ export default class SuperAdminController extends BaseController {
   }
 
   /**
-   * @route PATCH /api/super-admin/admin/:id
+   * @route PATCH /api/super-admin/admin/:adminId
    * 
    * Update admin user by id.
    */
   static async updateAdmin({ params, body }: Request, res: Response) {
     try {
-      const adminId = super.parseObjectId(params.id)
+      const adminId = super.parseObjectId(params.adminId)
       if (!adminId) {
         throw {
           status: 400,
@@ -129,13 +129,13 @@ export default class SuperAdminController extends BaseController {
   }
 
   /**
-   * @route DELETE /api/super-admin/admin/:id
+   * @route DELETE /api/super-admin/admin/:adminId
    * 
    * Delete admin user by id.
    */
   static async deleteAdmin({ params }: Request, res: Response) {
     try {
-      const adminId = super.parseObjectId(params.id)
+      const adminId = super.parseObjectId(params.adminId)
       if (!adminId) {
         throw {
           status: 400,

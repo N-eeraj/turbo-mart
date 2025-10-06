@@ -7,7 +7,8 @@ import Category, {
 
 import BaseService from "#services/BaseService"
 import {
-  type CategoryData,
+  CategoryUpdateData,
+  type CategoryCreationData,
 } from "#schemas/admin/catalogue/category"
 
 export interface ListOptions {
@@ -76,7 +77,7 @@ export default class CategoryService extends BaseService {
    * @throws 409 error if slug is already in use.
    * @throws If category creation fails.
    */
-  static async create({ name, slug }: CategoryData): Promise<CategoryObject> {
+  static async create({ name, slug }: CategoryCreationData): Promise<CategoryObject> {
     try {
       const category = await Category.create({
         name,
@@ -84,6 +85,57 @@ export default class CategoryService extends BaseService {
       })
 
       return transformCategory(category)
+    } catch (error) {
+      const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
+      // throw conflict error
+      if (isDuplicateKeyError) {
+        throw {
+          status: 409,
+          message: "A category with the same unique field(s) already exists",
+          ...conflicts,
+        }
+      }
+
+      throw error
+    }
+  }
+
+  /**
+   * Update the category.
+   * 
+   * @params categoryId - id of the category to update.
+   * @params categoryData - Data to update the category with.
+   * - `name` - Category Name.
+   * - `slug` - Category Slug.
+   * 
+   * @returns the newly created category.
+   * 
+   * @throws 404 error if category is not found.
+   * @throws 409 error if slug is already in use.
+   * @throws If category update fails.
+   */
+  static async update(categoryId: CategoryObject["id"], { name, slug }: CategoryUpdateData): Promise<CategoryObject> {
+    try {
+      const updatedCategory = await Category.findByIdAndUpdate(
+        categoryId,
+        {
+          name,
+          slug,
+        },
+        {
+          new: true,
+        }
+      )
+
+      // throw error if category is not found
+      if (!updatedCategory) {
+        throw {
+          status: 404,
+          message: "Category not found",
+        }
+      }
+
+      return transformCategory(updatedCategory)
     } catch (error) {
       const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
       // throw conflict error

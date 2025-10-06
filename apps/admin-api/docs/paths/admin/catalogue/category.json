@@ -53,7 +53,7 @@
                   "data": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/CategoryCreationSchema"
+                      "$ref": "#/components/schemas/CategorySchema"
                     }
                   },
                   "message": {
@@ -103,7 +103,7 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "$ref": "#/components/schemas/CategoryCreationSchema"
+                    "$ref": "#/components/schemas/CategorySchema"
                   },
                   "message": {
                     "type": "string",
@@ -119,6 +119,123 @@
         },
         "403": {
           "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "409": {
+          "description": "Conflict error.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "A category with the same unique field(s) already exists"
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "slug": {
+                        "type": "string",
+                        "example": "slug already in use"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  },
+  "/api/admin/catalogue/category/{categoryId}": {
+    "patch": {
+      "tags": ["Category Management"],
+      "summary": "Update Category",
+      "description": "Update category.",
+      "parameters": [
+        {
+          "name": "categoryId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the category.",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CategoryUpdateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Update category.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/CategorySchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Updated Category"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidCategoryId"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Category not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Category not found",
+                    "description": "Error message: Couldn't find the category."
+                  }
+                }
+              }
+            }
+          }
         },
         "409": {
           "description": "Conflict error.",

@@ -23,7 +23,7 @@ notificationRouter.route("/")
     authenticationMiddleware,
   ], NotificationController.deleteNotificationBulk)
 
-notificationRouter.route("/:id")
+notificationRouter.route("/:notificationId")
   .get([
     authenticationMiddleware,
   ], NotificationController.getNotificationsById)

@@ -255,14 +255,14 @@
       }
     }
   },
-  "/api/profile/notifications/{id}": {
+  "/api/profile/notifications/{notificationId}": {
     "get": {
       "tags": ["Profile"],
       "summary": "Profile Notification",
       "description": "Notifications of logged in user by id.",
       "parameters": [
         {
-          "name": "id",
+          "name": "notificationId",
           "in": "path",
           "required": true,
           "description": "ID of the notification",
@@ -315,7 +315,7 @@
       "description": "Update the read status of a notification.",
       "parameters": [
         {
-          "name": "id",
+          "name": "notificationId",
           "in": "path",
           "required": true,
           "description": "ID of the notification",
@@ -442,7 +442,7 @@
       "description": "Delete the notification.",
       "parameters": [
         {
-          "name": "id",
+          "name": "notificationId",
           "in": "path",
           "required": true,
           "description": "ID of the notification",

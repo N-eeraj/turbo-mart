@@ -6,7 +6,7 @@ import {
   CATEGORY,
 } from "#constants/validationMessages"
 
-export const categorySchema = z.object({
+export const categoryCreationSchema = z.object({
   name: z.string({ error: CATEGORY.name.required })
     .nonempty(CATEGORY.name.required)
     .trim()
@@ -23,6 +23,10 @@ export const categorySchema = z.object({
     }),
 })
 
-export const categoryJSONSchema = z.toJSONSchema(categorySchema)
+export const categoryUpdateSchema = categoryCreationSchema.partial()
 
-export type CategoryData = z.infer<typeof categorySchema>
+export const categoryCreationJSONSchema = z.toJSONSchema(categoryCreationSchema)
+export const categoryUpdateJSONSchema = z.toJSONSchema(categoryUpdateSchema)
+
+export type CategoryCreationData = z.infer<typeof categoryCreationSchema>
+export type CategoryUpdateData = z.infer<typeof categoryUpdateSchema>

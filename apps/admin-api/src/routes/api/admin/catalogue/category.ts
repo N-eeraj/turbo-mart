@@ -27,12 +27,17 @@ const categoryManagementMiddlewares = [
   permissionAuthorizationMiddleware(Permissions.CATALOGUE_MANAGER),
 ]
 
-categoryRouter.get("/", [
-  ...categoryManagementMiddlewares,
-], CategoryController.list)
+categoryRouter.route("/")
+  .all([
+    ...categoryManagementMiddlewares,
+  ])
+  .get(CategoryController.list)
+  .post(CategoryController.create)
 
-categoryRouter.post("/", [
-  ...categoryManagementMiddlewares,
-], CategoryController.create)
+categoryRouter.route("/:categoryId")
+  .all([
+    ...categoryManagementMiddlewares,
+  ])
+  .patch(CategoryController.update)
 
 export default categoryRouter

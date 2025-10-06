@@ -43,7 +43,7 @@ adminManagementRouter.get("/permissions", [
   ...adminManagementMiddlewares,
 ], SuperAdminController.geAdminPermissions)
 
-adminManagementRouter.route("/:id")
+adminManagementRouter.route("/:adminId")
   .get([
     ...adminManagementMiddlewares,
   ], SuperAdminController.getAdminById)

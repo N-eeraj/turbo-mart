@@ -4,6 +4,7 @@ import UnauthorizedSuperAdminUser from "#docs/responses/unauthorizedSuperAdminUs
 import UnauthorizedUser from "#docs/responses/unauthorizedUser" with { type: "json" }
 import InternalServerError from "#docs/responses/internalServerError" with { type: "json" }
 import InvalidNotificationIds from "#docs/responses/invalidNotificationIds" with { type: "json" }
+import InvalidCategoryId from "#docs/responses/invalidCategoryId" with { type: "json" }
 
 // partial responses
 import incorrectPassword from "#docs/responses/partials/incorrectPassword" with { type: "json" }
@@ -83,6 +84,7 @@ const responses = {
   IncorrectPassword,
   NotificationStatusNotFound,
   InvalidNotificationIds,
+  InvalidCategoryId,
 }
 
 export default responses

@@ -284,17 +284,17 @@
       }
     }
   },
-  "/api/super-admin/admin/{id}": {
+  "/api/super-admin/admin/{adminId}": {
     "get": {
       "tags": ["Super Admin"],
       "summary": "Fetch Single Admin",
       "description": "Fetch admin by id.",
       "parameters": [
         {
-          "name": "id",
+          "name": "adminId",
           "in": "path",
           "required": true,
-          "description": "ID of the admin user",
+          "description": "ID of the admin user.",
             "schema": {
             "type": "string"
           }
@@ -363,10 +363,10 @@
       "description": "Update admin details.",
       "parameters": [
         {
-          "name": "id",
+          "name": "adminId",
           "in": "path",
           "required": true,
-          "description": "ID of the admin user",
+          "description": "ID of the admin user.",
             "schema": {
             "type": "string"
           }
@@ -527,10 +527,10 @@
       "description": "Delete admin by id.",
       "parameters": [
         {
-          "name": "id",
+          "name": "adminId",
           "in": "path",
           "required": true,
-          "description": "ID of the admin user",
+          "description": "ID of the admin user.",
             "schema": {
             "type": "string"
           }

@@ -35,13 +35,13 @@ export default class NotificationController extends BaseController {
   }
 
   /**
-   * @route GET /api/profile/notifications/:id
+   * @route GET /api/profile/notifications/:notificationId
    * 
    * Get the user notification.
    */
   static async getNotificationsById({ user, params }: Request, res: Response) {
     try {
-      const notificationId = super.parseObjectId(params.id)
+      const notificationId = super.parseObjectId(params.notificationId)
       if (notificationId === null) {
         throw {
           status: 400,
@@ -60,13 +60,13 @@ export default class NotificationController extends BaseController {
     }}
 
   /**
-   * @route PATCH /api/profile/notifications/:id
+   * @route PATCH /api/profile/notifications/:notificationId
    * 
    * Set the read status for single notification.
    */
   static async setNotificationReadStatus({ user, params, body }: Request, res: Response) {
     try {
-      const notificationId = super.parseObjectId(params.id)
+      const notificationId = super.parseObjectId(params.notificationId)
       if (notificationId === null) {
         throw {
           status: 400,
@@ -132,13 +132,13 @@ export default class NotificationController extends BaseController {
   }
 
   /**
-   * @route DELETE /api/profile/notifications/:id
+   * @route DELETE /api/profile/notifications/:notificationId
    * 
    * Delete single notification.
    */
   static async deleteNotification({ user, params }: Request, res: Response) {
     try {
-      const notificationId = super.parseObjectId(params.id)
+      const notificationId = super.parseObjectId(params.notificationId)
       if (notificationId === null) {
         throw {
           status: 400,
