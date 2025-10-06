@@ -57,6 +57,32 @@ export default class CategoryController extends BaseController {
   }
 
   /**
+   * @route GET /api/admin/catalogue/category/:categoryId
+   * 
+   * Get one category by Id.
+   */
+  static async getById({ params }: Request, res: Response) {
+    try {
+      const categoryId = super.parseObjectId(params.categoryId)
+      if (!categoryId) {
+        throw {
+          status: 400,
+          message: "Invalid category id",
+        }
+      }
+
+      const data = await CategoryService.getById(categoryId)
+
+      super.sendSuccess(res, {
+        message: "Fetched Category",
+        data,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
    * @route PATCH /api/admin/catalogue/category/:categoryId
    * 
    * Update category.

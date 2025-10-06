@@ -3,6 +3,7 @@ import UserNotFound from "#docs/responses/userNotFound" with { type: "json" }
 import UnauthorizedSuperAdminUser from "#docs/responses/unauthorizedSuperAdminUser" with { type: "json" }
 import UnauthorizedUser from "#docs/responses/unauthorizedUser" with { type: "json" }
 import InternalServerError from "#docs/responses/internalServerError" with { type: "json" }
+import InvalidAdminId from "#docs/responses/invalidAdminId" with { type: "json" }
 import InvalidNotificationIds from "#docs/responses/invalidNotificationIds" with { type: "json" }
 import InvalidCategoryId from "#docs/responses/invalidCategoryId" with { type: "json" }
 
@@ -83,6 +84,7 @@ const responses = {
   InternalServerError,
   IncorrectPassword,
   NotificationStatusNotFound,
+  InvalidAdminId,
   InvalidNotificationIds,
   InvalidCategoryId,
 }

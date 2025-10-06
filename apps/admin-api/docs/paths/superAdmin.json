@@ -324,6 +324,9 @@
             }
           }
         },
+        "400": {
+          "$ref": "#/components/responses/InvalidAdminId"
+        },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"
         },
@@ -405,6 +408,9 @@
               }
             }
           }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidAdminId"
         },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"
@@ -556,6 +562,9 @@
               }
             }
           }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidAdminId"
         },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"

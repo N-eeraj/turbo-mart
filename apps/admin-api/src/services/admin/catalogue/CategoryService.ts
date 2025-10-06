@@ -100,6 +100,20 @@ export default class CategoryService extends BaseService {
     }
   }
 
+  static async getById(categoryId: CategoryObject["id"]): Promise<CategoryObject> {
+    const category = await Category.findById(categoryId)
+
+    // throw error if category is not found
+    if (!category) {
+      throw {
+        status: 404,
+        message: "Category not found",
+      }
+    }
+
+    return transformCategory(category)
+  }
+
   /**
    * Update the category.
    * 
