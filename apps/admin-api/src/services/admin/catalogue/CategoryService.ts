@@ -128,7 +128,10 @@ export default class CategoryService extends BaseService {
    * @throws 409 error if slug is already in use.
    * @throws If category update fails.
    */
-  static async update(categoryId: CategoryObject["id"], { name, slug }: CategoryUpdateData): Promise<CategoryObject> {
+  static async update(
+    categoryId: CategoryObject["id"],
+    { name, slug }: CategoryUpdateData
+  ): Promise<CategoryObject> {
     try {
       const updatedCategory = await Category.findByIdAndUpdate(
         categoryId,
@@ -162,6 +165,26 @@ export default class CategoryService extends BaseService {
       }
 
       throw error
+    }
+  }
+
+  /**
+   * Deletes the of category document.
+   * 
+   * @param adminId - Id of the category.
+   * 
+   * @throws 404 error if category not found.
+   * @throws If deleting the category failed.
+   */
+  static async delete(categoryId: CategoryObject["id"]): Promise<void> {
+    const category = await Category.findByIdAndDelete(categoryId)
+
+    // throw not found error if category is not found
+    if (!category) {
+      throw {
+        status: 404,
+        message: "Category not found",
+      }
     }
   }
 }

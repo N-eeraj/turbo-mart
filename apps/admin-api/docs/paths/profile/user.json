@@ -161,7 +161,7 @@
     }
   },
   "/api/profile/password": {
-    "put": {
+    "patch": {
       "tags": ["Profile"],
       "summary": "Password Update",
       "description": "Update password of logged in user.",

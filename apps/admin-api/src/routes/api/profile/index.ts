@@ -18,7 +18,7 @@ profileRouter.route("/")
   .get(authenticationMiddleware, ProfileController.getDetails)
   .patch(authenticationMiddleware, ProfileController.updateDetails)
 
-profileRouter.put(
+profileRouter.patch(
   "/password",
   authenticationMiddleware,
   ProfileController.updatePassword

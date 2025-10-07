@@ -109,4 +109,30 @@ export default class CategoryController extends BaseController {
       super.sendError(res, error)
     }
   }
+
+  /**
+   * @route DELETE /api/admin/catalogue/category/:categoryId
+   * 
+   * Delete category.
+   */
+  static async delete({ params }: Request, res: Response) {
+    try {
+      const categoryId = super.parseObjectId(params.categoryId)
+      if (!categoryId) {
+        throw {
+          status: 400,
+          message: "Invalid category id",
+        }
+      }
+
+      const data = await CategoryService.delete(categoryId)
+
+      super.sendSuccess(res, {
+        message: "Deleted Category",
+        data,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
 }

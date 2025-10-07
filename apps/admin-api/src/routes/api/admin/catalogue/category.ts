@@ -34,5 +34,6 @@ categoryRouter.route("/")
 categoryRouter.route("/:categoryId")
   .get(categoryManagementMiddlewares, CategoryController.getById)
   .patch(categoryManagementMiddlewares, CategoryController.update)
+  .delete(categoryManagementMiddlewares, CategoryController.delete)
 
 export default categoryRouter

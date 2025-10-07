@@ -112,7 +112,9 @@ export default class BaseController {
    * @example
    * const data = BaseController.validateRequest(schema, req.body)
    */
-  static validateRequest<T extends SchemaShape>(...params: Parameters<typeof validateData<T>>): ReturnType<typeof validateData<T>> {
+  static validateRequest<T extends SchemaShape>(
+    ...params: Parameters<typeof validateData<T>>
+  ): ReturnType<typeof validateData<T>> {
     try {
       return validateData(...params)
     } catch (error) {

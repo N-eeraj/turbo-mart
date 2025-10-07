@@ -44,7 +44,6 @@
         {
           "in": "path",
           "name": "anyPath",
-          "required": true,
           "schema": {
             "type": "string"
           },

@@ -233,13 +233,11 @@ export default class SuperAdminService extends BaseService {
    * 
    * @param adminId - Id of the admin user.
    * 
-   * @returns admin user.
-   * 
    * @throws 404 error if admin user not found.
    * @throws If deleting the admin user failed.
    */
   static async deleteAdmin(adminId: AdminObject["id"]): Promise<void> {
-    const admin = await AdminUser.findOne({
+    const admin = await AdminUser.findOneAndDelete({
       _id: adminId,
       role: Roles.ADMIN,
     })
@@ -251,7 +249,5 @@ export default class SuperAdminService extends BaseService {
         message: "Admin user not found",
       }
     }
-
-    await admin.deleteOne()
   }
 }
