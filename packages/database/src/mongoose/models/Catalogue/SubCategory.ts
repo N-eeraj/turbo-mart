@@ -5,6 +5,37 @@ export type SubCategory = mongoose.HydratedDocument<InferredSubCategorySchemaTyp
 export type ObjectKeys = keyof InferredSubCategorySchemaType
 export type SubCategoryObject = Pick<SubCategory, ObjectKeys> & { id: SubCategory["_id"] }
 
+enum AttributeType {
+  TEXT,
+  NUMBER,
+  BOOLEAN,
+  SELECT,
+  MULTI_SELECT,
+  IMAGE,
+  COLOR,
+  DATE,
+}
+
+const AttributeSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: Number,
+    enum: Object.values(AttributeType).map(Number),
+    required: true,
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  metaData: {
+    type: JSON,
+    default: undefined,
+  },
+})
+
 /**
  * Mongoose schema for catalogue sub category.
  */
@@ -24,11 +55,15 @@ const SubCategorySchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
+  attributes: [
+    AttributeSchema
+  ],
 }, {
   timestamps: true,
 })
 
 SubCategorySchema.index({
+  category: 1,
   name: 1,
   slug: 1,
 })
@@ -42,17 +77,19 @@ SubCategorySchema.index({
  */
 export function transformSubCategory({
   _id,
+  category,
   name,
   slug,
-  category,
+  attributes,
   createdAt,
   updatedAt,
 }: SubCategory): SubCategoryObject {
   const subCategory: SubCategoryObject = {
     id: _id,
+    category,
     name,
     slug,
-    category,
+    attributes,
     createdAt,
     updatedAt,
   }
