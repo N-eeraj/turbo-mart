@@ -14,7 +14,7 @@
     "slug": {
       "type": "string",
       "description": "Unique and short name (slug) of the category.",
-      "slug": "elctx"
+      "example": "elctx"
     },
     "createdAt": {
       "type": "string",

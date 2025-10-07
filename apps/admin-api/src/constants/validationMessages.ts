@@ -73,3 +73,15 @@ export const CATEGORY = {
     required: "Please enter a category slug",
   },
 }
+
+export const SUB_CATEGORY = {
+  categoryId: {
+    required: "Please select a category",
+  },
+  name: {
+    required: "Please enter a sub category name",
+  },
+  slug: {
+    required: "Please enter a sub category slug",
+  },
+}

@@ -26,11 +26,13 @@ function getInvalidResourceId(resourceName: string): typeof InvalidId {
 // extended responses for invalid resource id
 const InvalidAdminId = getInvalidResourceId("admin")
 const InvalidCategoryId = getInvalidResourceId("category")
+const InvalidSubCategoryId = getInvalidResourceId("sub category")
 
 const InvalidIds = {
   InvalidAdminId,
   InvalidNotificationIds,
   InvalidCategoryId,
+  InvalidSubCategoryId,
 }
 
 // extended response for password update from UnauthenticatedUser
