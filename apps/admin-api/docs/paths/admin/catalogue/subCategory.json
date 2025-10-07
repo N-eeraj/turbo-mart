@@ -1,9 +1,9 @@
 {
-  "/api/admin/catalogue/category": {
+  "/api/admin/catalogue/sub-category": {
     "get": {
-      "tags": ["Category Management"],
-      "summary": "Category List",
-      "description": "Fetches the list of categories.",
+      "tags": ["Sub Category Management"],
+      "summary": "Sub Category List",
+      "description": "Fetches the list of sub categories.",
       "parameters": [
         {
           "name": "limit",
@@ -40,7 +40,7 @@
       ],
       "responses": {
         "200": {
-          "description": "Fetched list of categories",
+          "description": "Fetched list of sub categories",
           "content": {
             "application/json": {
               "schema": {
@@ -53,12 +53,12 @@
                   "data": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/CategorySchema"
+                      "$ref": "#/components/schemas/SubCategorySchema"
                     }
                   },
                   "message": {
                     "type": "string",
-                    "example": "Fetched Categories"
+                    "example": "Fetched Sub Categories"
                   }
                 }
               }
@@ -77,22 +77,22 @@
       }
     },
     "post": {
-      "tags": ["Category Management"],
-      "summary": "Create Category",
-      "description": "Create new category.",
+      "tags": ["Sub Category Management"],
+      "summary": "Create Sub Category",
+      "description": "Create new sub category.",
       "requestBody": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CategoryCreationSchema"
+              "$ref": "#/components/schemas/SubCategoryCreationSchema"
             }
           }
         }
       },
       "responses": {
         "200": {
-          "description": "Create category.",
+          "description": "Create sub category.",
           "content": {
             "application/json": {
               "schema": {
@@ -103,11 +103,11 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "$ref": "#/components/schemas/CategorySchema"
+                    "$ref": "#/components/schemas/SubCategorySchema"
                   },
                   "message": {
                     "type": "string",
-                    "example": "Created Category"
+                    "example": "Created Sub Category"
                   }
                 }
               }
@@ -134,7 +134,7 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "A category with the same unique field(s) already exists"
+                    "example": "A sub category with the same unique field(s) already exists"
                   },
                   "errors": {
                     "type": "object",
@@ -156,17 +156,17 @@
       }
     }
   },
-  "/api/admin/catalogue/category/{categoryId}": {
+  "/api/admin/catalogue/sub-category/{subCategoryId}": {
     "get": {
-      "tags": ["Category Management"],
-      "summary": "Fetch Single Category",
-      "description": "Fetch single category.",
+      "tags": ["Sub Category Management"],
+      "summary": "Fetch Single Sub Category",
+      "description": "Fetch single sub category.",
       "parameters": [
         {
-          "name": "categoryId",
+          "name": "subCategoryId",
           "in": "path",
           "required": true,
-          "description": "ID of the category.",
+          "description": "ID of the sub category.",
             "schema": {
             "type": "string"
           }
@@ -174,7 +174,7 @@
       ],
       "responses": {
         "200": {
-          "description": "Fetched category.",
+          "description": "Fetched sub category.",
           "content": {
             "application/json": {
               "schema": {
@@ -185,11 +185,11 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "$ref": "#/components/schemas/CategorySchema"
+                    "$ref": "#/components/schemas/SubCategorySchema"
                   },
                   "message": {
                     "type": "string",
-                    "example": "Fetched Category"
+                    "example": "Fetched Sub Category"
                   }
                 }
               }
@@ -197,7 +197,7 @@
           }
         },
         "400": {
-          "$ref": "#/components/responses/InvalidCategoryId"
+          "$ref": "#/components/responses/InvalidSubCategoryId"
         },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"
@@ -206,7 +206,7 @@
           "$ref": "#/components/responses/UnauthorizedUser"
         },
         "404": {
-          "description": "Category not found.",
+          "description": "Sub category not found.",
           "content": {
             "application/json": {
               "schema": {
@@ -219,8 +219,8 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Category not found",
-                    "description": "Error message: Couldn't find the category."
+                    "example": "Sub category not found",
+                    "description": "Error message: Couldn't find the sub category."
                   }
                 }
               }
@@ -233,15 +233,15 @@
       }
     },
     "patch": {
-      "tags": ["Category Management"],
-      "summary": "Update Category",
-      "description": "Update category.",
+      "tags": ["Sub Category Management"],
+      "summary": "Update Sub Category",
+      "description": "Update sub category.",
       "parameters": [
         {
-          "name": "categoryId",
+          "name": "subCategoryId",
           "in": "path",
           "required": true,
-          "description": "ID of the category.",
+          "description": "ID of the sub category.",
             "schema": {
             "type": "string"
           }
@@ -252,14 +252,14 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CategoryUpdateSchema"
+              "$ref": "#/components/schemas/SubCategoryUpdateSchema"
             }
           }
         }
       },
       "responses": {
         "200": {
-          "description": "Update category.",
+          "description": "Update sub category.",
           "content": {
             "application/json": {
               "schema": {
@@ -270,11 +270,11 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "$ref": "#/components/schemas/CategorySchema"
+                    "$ref": "#/components/schemas/SubCategorySchema"
                   },
                   "message": {
                     "type": "string",
-                    "example": "Updated Category"
+                    "example": "Updated Sub Category"
                   }
                 }
               }
@@ -282,7 +282,7 @@
           }
         },
         "400": {
-          "$ref": "#/components/responses/InvalidCategoryId"
+          "$ref": "#/components/responses/InvalidSubCategoryId"
         },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"
@@ -291,7 +291,7 @@
           "$ref": "#/components/responses/UnauthorizedUser"
         },
         "404": {
-          "description": "Category not found.",
+          "description": "Sub category not found.",
           "content": {
             "application/json": {
               "schema": {
@@ -304,8 +304,8 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Category not found",
-                    "description": "Error message: Couldn't find the category."
+                    "example": "Sub category not found",
+                    "description": "Error message: Couldn't find the sub category."
                   }
                 }
               }
@@ -326,7 +326,7 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "A category with the same unique field(s) already exists"
+                    "example": "A sub category with the same unique field(s) already exists"
                   },
                   "errors": {
                     "type": "object",
@@ -348,15 +348,15 @@
       }
     },
     "delete": {
-      "tags": ["Category Management"],
-      "summary": "Delete Category",
-      "description": "Delete category.",
+      "tags": ["Sub Category Management"],
+      "summary": "Delete Sub Category",
+      "description": "Delete sub category.",
       "parameters": [
         {
-          "name": "categoryId",
+          "name": "subCategoryId",
           "in": "path",
           "required": true,
-          "description": "ID of the category.",
+          "description": "ID of the sub category.",
             "schema": {
             "type": "string"
           }
@@ -364,7 +364,7 @@
       ],
       "responses": {
         "200": {
-          "description": "Delete category.",
+          "description": "Delete sub category.",
           "content": {
             "application/json": {
               "schema": {
@@ -376,7 +376,7 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Deleted Category"
+                    "example": "Deleted Sub Category"
                   }
                 }
               }
@@ -384,7 +384,7 @@
           }
         },
         "400": {
-          "$ref": "#/components/responses/InvalidCategoryId"
+          "$ref": "#/components/responses/InvalidSubCategoryId"
         },
         "401": {
           "$ref": "#/components/responses/UnauthenticatedUser"
@@ -393,7 +393,7 @@
           "$ref": "#/components/responses/UnauthorizedUser"
         },
         "404": {
-          "description": "Category not found.",
+          "description": "Sub category not found.",
           "content": {
             "application/json": {
               "schema": {
@@ -406,8 +406,8 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Category not found",
-                    "description": "Error message: Couldn't find the category."
+                    "example": "Sub category not found",
+                    "description": "Error message: Couldn't find the sub category."
                   }
                 }
               }
