@@ -5,7 +5,7 @@ export type SubCategory = mongoose.HydratedDocument<InferredSubCategorySchemaTyp
 export type ObjectKeys = keyof InferredSubCategorySchemaType
 export type SubCategoryObject = Pick<SubCategory, ObjectKeys> & { id: SubCategory["_id"] }
 
-enum AttributeType {
+export enum AttributeType {
   TEXT,
   NUMBER,
   BOOLEAN,
@@ -70,58 +70,64 @@ const ListAttributeMetaDataSchema = new mongoose.Schema({
       ],
       required: true,
     },
-    required: true,
+    options: [],
   },
 }, {
   _id: false,
   discriminatorKey: "metaData.type",
 })
-ListAttributeMetaDataSchema.path<mongoose.Schema.Types.Subdocument>("metaData")
+
+ListAttributeMetaDataSchema
   .discriminator(
     AttributeType.TEXT,
-      new mongoose.Schema({
-    options: {
-      type: [
-        {
-          type: String,
-          required: true,
-        }
-      ],
-      default: [],
-    },
-  })
+    new mongoose.Schema({
+      options: {
+        type: [
+          {
+            type: String,
+            required: true,
+          }
+        ],
+        default: [],
+      },
+    }, {
+      _id: false,
+    })
 )
-ListAttributeMetaDataSchema.path<mongoose.Schema.Types.Subdocument>("metaData")
+
+ListAttributeMetaDataSchema
   .discriminator(
     AttributeType.NUMBER,
-      new mongoose.Schema({
-    options: {
-      type: [
-        {
-          type: {
-            value: {
-              type: Number,
-              required: true,
+    new mongoose.Schema({
+      options: {
+        type: [
+          {
+            type: {
+              value: {
+                type: Number,
+                required: true,
+              },
+              unit: {
+                type: String,
+                default: undefined,
+              },
+              template: {
+                type: String,
+                default: "{{value}}",
+              },
+              base: {
+                type: Number,
+                default: 1,
+              },
             },
-            unit: {
-              type: String,
-              default: undefined,
-            },
-            template: {
-              type: String,
-              default: "{{value}}",
-            },
-            base: {
-              type: Number,
-              default: 1,
-            },
-          },
-          required: true,
-        }
-      ],
-      default: [],
-    },
-  })
+            required: true,
+          }
+        ],
+        default: [],
+      },
+    }, {
+      _id: false,
+    })
 )
 
 
@@ -143,7 +149,7 @@ const DateAttributeMetaDataSchema = new mongoose.Schema({
   _id: false,
 })
 
-const CustomAttributeMetaDataSchema = new mongoose.Schema({
+const JsonAttributeMetaDataSchema = new mongoose.Schema({
   metaData: {
     type: mongoose.Schema.Types.Mixed,
     default: undefined,
@@ -174,9 +180,8 @@ AttributeSchema.discriminator(AttributeType.TEXT, TextAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.COLOR, CustomAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.JSON, CustomAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.JSON, JsonAttributeMetaDataSchema)
 
 /**
  * Mongoose schema for catalogue sub category.
@@ -242,6 +247,6 @@ export function transformSubCategory({
   return subCategory
 }
 
-const SubCategory = mongoose.model<SubCategory, mongoose.Model<SubCategory>>("SubCategory", SubCategorySchema)
+const SubCategory = mongoose.model<SubCategory, mongoose.Model<SubCategory>>("SubCategory", SubCategorySchema, "subCategories")
 
 export default SubCategory
