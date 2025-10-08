@@ -11,10 +11,146 @@ enum AttributeType {
   BOOLEAN,
   SELECT,
   MULTI_SELECT,
-  IMAGE,
   COLOR,
   DATE,
+  JSON,
 }
+
+const TextAttributeMetaDataSchema = new mongoose.Schema({
+  metaData: {
+    type: {
+      maxLength: {
+        type: Number,
+        default: undefined,
+      },
+    },
+    default: {},
+  },
+}, {
+  _id: false,
+})
+
+const NumberAttributeMetaDataSchema = new mongoose.Schema({
+  metaData: {
+    type: {
+      min: {
+        type: Number,
+        default: undefined,
+      },
+      max: {
+        type: Number,
+        default: undefined,
+      },
+      unit: {
+        type: String,
+        default: undefined,
+      },
+      template: {
+        type: String,
+        default: "{{value}}",
+      },
+      base: {
+        type: Number,
+        default: 1
+      },
+    },
+    default: {},
+  },
+}, {
+  _id: false,
+})
+
+const ListAttributeMetaDataSchema = new mongoose.Schema({
+  metaData: {
+    type: {
+      type: Number,
+      enum: [
+        AttributeType.TEXT,
+        AttributeType.NUMBER,
+      ],
+      required: true,
+    },
+    required: true,
+  },
+}, {
+  _id: false,
+  discriminatorKey: "metaData.type",
+})
+ListAttributeMetaDataSchema.path<mongoose.Schema.Types.Subdocument>("metaData")
+  .discriminator(
+    AttributeType.TEXT,
+      new mongoose.Schema({
+    options: {
+      type: [
+        {
+          type: String,
+          required: true,
+        }
+      ],
+      default: [],
+    },
+  })
+)
+ListAttributeMetaDataSchema.path<mongoose.Schema.Types.Subdocument>("metaData")
+  .discriminator(
+    AttributeType.NUMBER,
+      new mongoose.Schema({
+    options: {
+      type: [
+        {
+          type: {
+            value: {
+              type: Number,
+              required: true,
+            },
+            unit: {
+              type: String,
+              default: undefined,
+            },
+            template: {
+              type: String,
+              default: "{{value}}",
+            },
+            base: {
+              type: Number,
+              default: 1,
+            },
+          },
+          required: true,
+        }
+      ],
+      default: [],
+    },
+  })
+)
+
+
+const DateAttributeMetaDataSchema = new mongoose.Schema({
+  metaData: {
+    type: {
+      min: {
+        type: Date,
+        default: undefined,
+      },
+      max: {
+        type: Date,
+        default: undefined,
+      },
+    },
+    default: undefined,
+  },
+}, {
+  _id: false,
+})
+
+const CustomAttributeMetaDataSchema = new mongoose.Schema({
+  metaData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: undefined,
+  },
+}, {
+  _id: false,
+})
 
 const AttributeSchema = new mongoose.Schema({
   name: {
@@ -30,11 +166,17 @@ const AttributeSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  metaData: {
-    type: JSON,
-    default: undefined,
-  },
+}, {
+  discriminatorKey: "type",
 })
+
+AttributeSchema.discriminator(AttributeType.TEXT, TextAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.COLOR, CustomAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetaDataSchema)
+AttributeSchema.discriminator(AttributeType.JSON, CustomAttributeMetaDataSchema)
 
 /**
  * Mongoose schema for catalogue sub category.
@@ -55,9 +197,12 @@ const SubCategorySchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
-  attributes: [
-    AttributeSchema
-  ],
+  attributes: {
+    type: [
+      AttributeSchema,
+    ],
+    default: [],
+  },
 }, {
   timestamps: true,
 })
