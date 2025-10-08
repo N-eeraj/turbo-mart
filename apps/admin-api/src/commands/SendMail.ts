@@ -6,7 +6,10 @@ export default class SendMail {
       recipients: [{ email: "test@email.com" }],
       category: "Test",
       subject: "Test Email",
-      text: "This is a test email",
+      body: {
+        type: "text",
+        content: "Hello World"
+      }
     })
     process.exit(0)
   }
