@@ -1,7 +1,8 @@
 import connectMongoDB from "@app/database/mongoose/connect.ts"
-import SubCategory, {
+import SubCategory from "@app/database/mongoose/models/Catalogue/SubCategory.ts"
+import {
   AttributeType,
-} from "@app/database/mongoose/models/Catalogue/SubCategory.ts"
+} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
 
 export default class Temporary {
   static async execute(..._args: Array<unknown>) {
@@ -15,7 +16,7 @@ export default class Temporary {
             name: "Processor",
             type: AttributeType.TEXT,
             mandatory: true,
-            metaData: {
+            metadata: {
               maxLength: 100,
               test: true,
             },
@@ -25,7 +26,7 @@ export default class Temporary {
             name: "Screen Size",
             type: AttributeType.NUMBER,
             mandatory: true,
-            metaData: {
+            metadata: {
               min: 5,
               max: 7,
               unit: "inches",
@@ -44,12 +45,11 @@ export default class Temporary {
             name: "Operating System",
             type: AttributeType.SELECT,
             mandatory: true,
-            metaData: {
+            metadata: {
               type: AttributeType.TEXT,
               options: [
                 "Android",
                 "iOS",
-                {}
               ],
               test: true,
             },
@@ -59,7 +59,7 @@ export default class Temporary {
             name: "Refresh Rates",
             type: AttributeType.MULTI_SELECT,
             mandatory: false,
-            metaData: {
+            metadata: {
               type: AttributeType.NUMBER,
               options: [
                 {
@@ -101,7 +101,7 @@ export default class Temporary {
             name: "Released On",
             type: AttributeType.DATE,
             mandatory: true,
-            metaData: {
+            metadata: {
               min: new Date(),
               test: true,
             },
@@ -111,7 +111,7 @@ export default class Temporary {
             name: "Stuff",
             type: AttributeType.JSON,
             mandatory: false,
-            metaData: {
+            metadata: {
               metaStuff1: "abc",
               metaStuff2: 123,
               metaStuff3: [
