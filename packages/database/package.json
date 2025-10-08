@@ -6,6 +6,10 @@
   "scripts": {
     "drizzle:push": "npx drizzle-kit push --config ./src/drizzle/config.ts"
   },
+  "imports": {
+    "#drizzle/*": "./src/drizzle/*",
+    "#mongoose/*": "./src/mongoose/*"
+  },
   "exports": {
     "./*": "./src/*"
   },
