@@ -71,7 +71,7 @@ export default class SubcategoryService extends BaseService {
   /**
    * Creates a new subcategory.
    * 
-   * @params subcategoryData - The data for new the subcategory.
+   * @param subcategoryData - The data for new the subcategory.
    * - `name` - Subcategory Name.
    * - `slug` - Subcategory Slug.
    * 
@@ -121,8 +121,8 @@ export default class SubcategoryService extends BaseService {
   /**
    * Update the subcategory.
    * 
-   * @params subcategoryId - id of the subcategory to update.
-   * @params subcategoryData - Data to update the subcategory with.
+   * @param subcategoryId - id of the subcategory to update.
+   * @param subcategoryData - Data to update the subcategory with.
    * - `name` - Subcategory Name.
    * - `slug` - Subcategory Slug.
    * 

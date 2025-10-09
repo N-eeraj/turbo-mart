@@ -4,7 +4,10 @@ import Category, {
   transformCategory,
   type CategoryObject,
 } from "@app/database/mongoose/models/Catalogue/Category.ts"
-import Subcategory from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
+import Subcategory, {
+  transformSubcategory,
+  type SubcategoryObject,
+} from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
 
 import BaseService from "#services/BaseService"
 import {
@@ -69,7 +72,7 @@ export default class CategoryService extends BaseService {
   /**
    * Creates a new category.
    * 
-   * @params categoryData - The data for new the category.
+   * @param categoryData - The data for new the category.
    * - `name` - Category Name.
    * - `slug` - Category Slug.
    * 
@@ -118,8 +121,8 @@ export default class CategoryService extends BaseService {
   /**
    * Update the category.
    * 
-   * @params categoryId - id of the category to update.
-   * @params categoryData - Data to update the category with.
+   * @param categoryId - id of the category to update.
+   * @param categoryData - Data to update the category with.
    * - `name` - Category Name.
    * - `slug` - Category Slug.
    * 
@@ -202,5 +205,63 @@ export default class CategoryService extends BaseService {
         message: "Category not found",
       }
     }
+  }
+
+  /**
+   * Fetch the categories.
+   * 
+   * @param
+   * @param paginationQueries - Pagination query options.
+   * 
+   * @returns array of categories.
+   * 
+   * @throws If database lookup fails.
+   */
+  static async listSubcategories(
+    categoryId: CategoryObject["id"], {
+    limit = DEFAULT_LIST_OPTIONS.limit,
+    skip = DEFAULT_LIST_OPTIONS.skip,
+    order = DEFAULT_LIST_OPTIONS.order,
+    search = DEFAULT_LIST_OPTIONS.search,
+  }: ListOptions = DEFAULT_LIST_OPTIONS): Promise<Array<SubcategoryObject>> {
+    const category = await Category.findById(categoryId)
+      .lean()
+      .select("_id")
+
+    // throw error if category is not found
+    if (!category) {
+      throw {
+        status: 404,
+        message: "Category not found",
+      }
+    }
+
+    const searchRegex = {
+      $regex: new RegExp(search, "i"),
+    }
+
+    const subcategories = await Subcategory.find({
+      category,
+      $or: [
+        {
+          name: searchRegex,
+        },
+        {
+          slug: searchRegex,
+        },
+      ],
+    })
+      .sort({
+        createdAt: order,
+      })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+      .select({
+        category: 0,
+        attributes: 0,
+      })
+
+    return subcategories.map(transformSubcategory)
   }
 }
