@@ -1,7 +1,7 @@
 import express from "express"
 
-import categoryRouter from "#routes/api/admin/catalogue/category"
-import subcategoryRouter from "#routes/api/admin/catalogue/subcategory"
+import categoryRouter from "#routes/api/admin/catalogue/categories"
+import subcategoryRouter from "#routes/api/admin/catalogue/subcategories"
 
 /**
  * Catalogue APIs router.
@@ -10,7 +10,7 @@ import subcategoryRouter from "#routes/api/admin/catalogue/subcategory"
  */
 const catalogueRouter = express.Router()
 
-catalogueRouter.use("/category", categoryRouter)
-catalogueRouter.use("/subcategory", subcategoryRouter)
+catalogueRouter.use("/categories", categoryRouter)
+catalogueRouter.use("/subcategories", subcategoryRouter)
 
 export default catalogueRouter

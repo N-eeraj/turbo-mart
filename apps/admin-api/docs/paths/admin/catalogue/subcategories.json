@@ -1,5 +1,5 @@
 {
-  "/api/admin/catalogue/subcategory": {
+  "/api/admin/catalogue/subcategories": {
     "get": {
       "tags": ["Subcategory Management"],
       "summary": "Subcategory List",
@@ -156,7 +156,7 @@
       }
     }
   },
-  "/api/admin/catalogue/subcategory/{subcategoryId}": {
+  "/api/admin/catalogue/subcategories/{subcategoryId}": {
     "get": {
       "tags": ["Subcategory Management"],
       "summary": "Fetch Single Subcategory",

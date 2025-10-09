@@ -1,5 +1,5 @@
 {
-  "/api/admin/catalogue/category": {
+  "/api/admin/catalogue/categories": {
     "get": {
       "tags": ["Category Management"],
       "summary": "Category List",
@@ -156,7 +156,7 @@
       }
     }
   },
-  "/api/admin/catalogue/category/{categoryId}": {
+  "/api/admin/catalogue/categories/{categoryId}": {
     "get": {
       "tags": ["Category Management"],
       "summary": "Fetch Single Category",
