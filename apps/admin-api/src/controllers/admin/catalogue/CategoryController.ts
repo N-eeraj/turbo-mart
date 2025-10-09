@@ -135,4 +135,31 @@ export default class CategoryController extends BaseController {
       super.sendError(res, error)
     }
   }
+
+  /**
+   * @route GET /api/admin/catalogue/categories/:categoryId/subcategories
+   * 
+   * Fetches the list of subcategories of the given category.
+   */
+  static async listSubcategories({ params, query }: Request, res: Response) {
+    try {
+      const categoryId = super.parseObjectId(params.categoryId)
+      if (!categoryId) {
+        throw {
+          status: 400,
+          message: "Invalid category id",
+        }
+      }
+      const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+
+      const data = await CategoryService.listSubcategories(categoryId, paginationQueries)
+
+      super.sendSuccess(res, {
+        message: "Fetched Subcategories",
+        data,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
 }
