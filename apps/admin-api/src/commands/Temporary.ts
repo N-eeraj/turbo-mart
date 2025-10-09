@@ -1,5 +1,5 @@
 import connectMongoDB from "@app/database/mongoose/connect.ts"
-import SubCategory from "@app/database/mongoose/models/Catalogue/SubCategory.ts"
+import Subcategory from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
 import {
   AttributeType,
 } from "@app/database/mongoose/models/Catalogue/Attributes.ts"
@@ -7,7 +7,7 @@ import {
 export default class Temporary {
   static async execute(..._args: Array<unknown>) {
     connectMongoDB(async () => {
-      const subCategory = new SubCategory({
+      const subcategory = new Subcategory({
         category: "68e006fc56f54a9415173411",
         name: "Smart Phone",
         slug: "smrt-phn",
@@ -128,7 +128,7 @@ export default class Temporary {
         test: true,
       })
   
-      await subCategory.save()
+      await subcategory.save()
       process.exit(0)
     })
   }

@@ -8,7 +8,7 @@ import {
 import ProfileSchema from "#docs/schemas/profile" with { type: "json" }
 import NotificationSchema from "#docs/schemas/notification" with { type: "json" }
 import CategorySchema from "#docs/schemas/catalogue/category" with { type: "json" }
-import SubCategorySchema from "#docs/schemas/catalogue/subCategory" with { type: "json" }
+import SubcategorySchema from "#docs/schemas/catalogue/subcategory" with { type: "json" }
 import {
   loginJSONSchema,
   forgotPasswordJSONSchema,
@@ -29,9 +29,9 @@ import {
   categoryUpdateJSONSchema,
 } from "#schemas/admin/catalogue/category"
 import {
-  subCategoryCreationJSONSchema,
-  subCategoryUpdateJSONSchema,
-} from "#schemas/admin/catalogue/subCategory"
+  subcategoryCreationJSONSchema,
+  subcategoryUpdateJSONSchema,
+} from "#schemas/admin/catalogue/subcategory"
 
 const LimitOptionSchema = {
   "type": "number",
@@ -85,7 +85,7 @@ const ResponseSchemas = {
   ProfileSchema,
   NotificationSchema,
   CategorySchema,
-  SubCategorySchema,
+  SubcategorySchema,
 }
 
 const UtilitySchemas = {
@@ -110,8 +110,8 @@ const schemas = {
   AdminUpdateSchema: adminUpdateJSONSchema,
   CategoryCreationSchema: categoryCreationJSONSchema,
   CategoryUpdateSchema: categoryUpdateJSONSchema,
-  SubCategoryCreationSchema: subCategoryCreationJSONSchema,
-  SubCategoryUpdateSchema: subCategoryUpdateJSONSchema,
+  SubcategoryCreationSchema: subcategoryCreationJSONSchema,
+  SubcategoryUpdateSchema: subcategoryUpdateJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

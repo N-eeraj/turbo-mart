@@ -179,7 +179,7 @@ const JsonAttributeMetaDataSchema = new mongoose.Schema({
 })
 
 /**
- * Mongoose schema for sub category attribute.
+ * Mongoose schema for subcategory attribute.
  */
 const AttributeSchema = new mongoose.Schema({
   name: {

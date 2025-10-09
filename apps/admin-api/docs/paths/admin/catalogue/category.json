@@ -414,6 +414,27 @@
             }
           }
         },
+        "409": {
+          "description": "Conflict error.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Cannot delete: this category has a linked subcategory"
+                  }
+                }
+              }
+            }
+          }
+        },
         "500": {
           "$ref": "#/components/responses/InternalServerError"
         }
