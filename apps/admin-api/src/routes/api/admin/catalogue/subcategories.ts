@@ -15,7 +15,7 @@ import SubcategoryController from "#controllers/admin/catalogue/SubcategoryContr
 /**
  * Catalogue APIs router.
  * 
- * Used in the api router (`src/routes/api/admin/catalogue/index.ts`) via `catalogueRouter.use("/subcategory", subcategoryRouter)`.
+ * Used in the api router (`src/routes/api/admin/catalogue/index.ts`) via `catalogueRouter.use("/subcategories", subcategoryRouter)`.
  */
 const subcategoryRouter = express.Router()
 

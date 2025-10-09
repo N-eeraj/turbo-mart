@@ -17,7 +17,7 @@ import {
  */
 export default class CategoryController extends BaseController {
   /**
-   * @route GET /api/admin/catalogue/category
+   * @route GET /api/admin/catalogue/categories
    * 
    * Fetches the list of categories.
    */
@@ -37,7 +37,7 @@ export default class CategoryController extends BaseController {
   }
 
   /**
-   * @route POST /api/admin/catalogue/category
+   * @route POST /api/admin/catalogue/categories
    * 
    * Create new category.
    */
@@ -57,7 +57,7 @@ export default class CategoryController extends BaseController {
   }
 
   /**
-   * @route GET /api/admin/catalogue/category/:categoryId
+   * @route GET /api/admin/catalogue/categories/:categoryId
    * 
    * Get one category by Id.
    */
@@ -83,7 +83,7 @@ export default class CategoryController extends BaseController {
   }
 
   /**
-   * @route PATCH /api/admin/catalogue/category/:categoryId
+   * @route PATCH /api/admin/catalogue/categories/:categoryId
    * 
    * Update category.
    */
@@ -111,7 +111,7 @@ export default class CategoryController extends BaseController {
   }
 
   /**
-   * @route DELETE /api/admin/catalogue/category/:categoryId
+   * @route DELETE /api/admin/catalogue/categories/:categoryId
    * 
    * Delete category.
    */

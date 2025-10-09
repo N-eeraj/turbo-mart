@@ -17,7 +17,7 @@ import {
  */
 export default class SubcategoryController extends BaseController {
   /**
-   * @route GET /api/admin/catalogue/subcategory
+   * @route GET /api/admin/catalogue/subcategories
    * 
    * Fetches the list of subcategories.
    */
@@ -37,7 +37,7 @@ export default class SubcategoryController extends BaseController {
   }
 
   /**
-   * @route POST /api/admin/catalogue/subcategory
+   * @route POST /api/admin/catalogue/subcategories
    * 
    * Create new subcategory.
    */
@@ -57,7 +57,7 @@ export default class SubcategoryController extends BaseController {
   }
 
   /**
-   * @route GET /api/admin/catalogue/subcategory/:subcategoryId
+   * @route GET /api/admin/catalogue/subcategories/:subcategoryId
    * 
    * Get one subcategory by Id.
    */
@@ -83,7 +83,7 @@ export default class SubcategoryController extends BaseController {
   }
 
   /**
-   * @route PATCH /api/admin/catalogue/subcategory/:subcategoryId
+   * @route PATCH /api/admin/catalogue/subcategories/:subcategoryId
    * 
    * Update subcategory.
    */
@@ -111,7 +111,7 @@ export default class SubcategoryController extends BaseController {
   }
 
   /**
-   * @route DELETE /api/admin/catalogue/subcategory/:subcategoryId
+   * @route DELETE /api/admin/catalogue/subcategories/:subcategoryId
    * 
    * Delete subcategory.
    */

@@ -3,8 +3,8 @@ import authPaths from "#docs/paths/auth" with { type: "json" }
 import profileUserPaths from "#docs/paths/profile/user" with { type: "json" }
 import profileNotificationsPaths from "#docs/paths/profile/notifications" with { type: "json" }
 import superAdminPaths from "#docs/paths/superAdmin" with { type: "json" }
-import categoryPaths from "#docs/paths/admin/catalogue/category" with { type: "json" }
-import subcategoryPaths from "#docs/paths/admin/catalogue/subcategory" with { type: "json" }
+import categoriesPaths from "#docs/paths/admin/catalogue/categories" with { type: "json" }
+import subcategoriesPaths from "#docs/paths/admin/catalogue/subcategories" with { type: "json" }
 
 const profilePaths = {
   ...profileUserPaths,
@@ -12,8 +12,8 @@ const profilePaths = {
 }
 
 const cataloguePaths = {
-  ...categoryPaths,
-  ...subcategoryPaths,
+  ...categoriesPaths,
+  ...subcategoriesPaths,
 }
 
 const adminPaths = {
