@@ -2,15 +2,15 @@ import mongoose from "mongoose"
 
 import AttributeSchema from "#mongoose/models/Catalogue/Attributes.ts"
 
-export type InferredSubCategorySchemaType = mongoose.InferSchemaType<typeof SubCategorySchema>
-export type SubCategory = mongoose.HydratedDocument<InferredSubCategorySchemaType>
-export type ObjectKeys = keyof InferredSubCategorySchemaType
-export type SubCategoryObject = Pick<SubCategory, ObjectKeys> & { id: SubCategory["_id"] }
+export type InferredSubcategorySchemaType = mongoose.InferSchemaType<typeof SubcategorySchema>
+export type Subcategory = mongoose.HydratedDocument<InferredSubcategorySchemaType>
+export type ObjectKeys = keyof InferredSubcategorySchemaType
+export type SubcategoryObject = Pick<Subcategory, ObjectKeys> & { id: Subcategory["_id"] }
 
 /**
- * Mongoose schema for catalogue sub category.
+ * Mongoose schema for catalogue subcategory.
  */
-const SubCategorySchema = new mongoose.Schema({
+const SubcategorySchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
@@ -30,26 +30,26 @@ const SubCategorySchema = new mongoose.Schema({
     type: [
       AttributeSchema,
     ],
-    default: [],
+    default: undefined,
   },
 }, {
   timestamps: true,
 })
 
-SubCategorySchema.index({
+SubcategorySchema.index({
   category: 1,
   name: 1,
   slug: 1,
 })
 
 /**
- * Transforms an Sub Category object by mapping internal `_id` to external `id`.
+ * Transforms an Subcategory object by mapping internal `_id` to external `id`.
  * 
- * @param subCategory - The sub category object to transform.
+ * @param subcategory - The subcategory object to transform.
  * 
- * @returns The transformed sub category object.
+ * @returns The transformed subcategory object.
  */
-export function transformSubCategory({
+export function transformSubcategory({
   _id,
   category,
   name,
@@ -57,8 +57,8 @@ export function transformSubCategory({
   attributes,
   createdAt,
   updatedAt,
-}: SubCategory): SubCategoryObject {
-  const subCategory: SubCategoryObject = {
+}: Subcategory): SubcategoryObject {
+  const subcategory: SubcategoryObject = {
     id: _id,
     category,
     name,
@@ -68,9 +68,9 @@ export function transformSubCategory({
     updatedAt,
   }
 
-  return subCategory
+  return subcategory
 }
 
-const SubCategory = mongoose.model<SubCategory, mongoose.Model<SubCategory>>("SubCategory", SubCategorySchema, "subCategories")
+const Subcategory = mongoose.model<Subcategory, mongoose.Model<Subcategory>>("Subcategory", SubcategorySchema, "subCategories")
 
-export default SubCategory
+export default Subcategory

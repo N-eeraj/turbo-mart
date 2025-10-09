@@ -4,7 +4,7 @@ import profileUserPaths from "#docs/paths/profile/user" with { type: "json" }
 import profileNotificationsPaths from "#docs/paths/profile/notifications" with { type: "json" }
 import superAdminPaths from "#docs/paths/superAdmin" with { type: "json" }
 import categoryPaths from "#docs/paths/admin/catalogue/category" with { type: "json" }
-import subCategoryPaths from "#docs/paths/admin/catalogue/subCategory" with { type: "json" }
+import subcategoryPaths from "#docs/paths/admin/catalogue/subcategory" with { type: "json" }
 
 const profilePaths = {
   ...profileUserPaths,
@@ -13,7 +13,7 @@ const profilePaths = {
 
 const cataloguePaths = {
   ...categoryPaths,
-  ...subCategoryPaths,
+  ...subcategoryPaths,
 }
 
 const adminPaths = {

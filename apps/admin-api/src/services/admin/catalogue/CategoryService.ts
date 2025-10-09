@@ -4,6 +4,7 @@ import Category, {
   transformCategory,
   type CategoryObject,
 } from "@app/database/mongoose/models/Catalogue/Category.ts"
+import Subcategory from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
 
 import BaseService from "#services/BaseService"
 import {
@@ -174,9 +175,24 @@ export default class CategoryService extends BaseService {
    * @param adminId - Id of the category.
    * 
    * @throws 404 error if category not found.
+   * @throws 409 error if category is used in any subcategory.
    * @throws If deleting the category failed.
    */
   static async delete(categoryId: CategoryObject["id"]): Promise<void> {
+    const hasLinkedSubcategory = await Subcategory.findOne({
+      category: categoryId,
+    })
+      .lean()
+      .select("_id")
+
+    // throw not conflict error if a linked subcategory exists
+    if (hasLinkedSubcategory) {
+      throw {
+        status: 409,
+        message: "Cannot delete: this category has a linked subcategory",
+      }
+    }
+
     const category = await Category.findByIdAndDelete(categoryId)
 
     // throw not found error if category is not found

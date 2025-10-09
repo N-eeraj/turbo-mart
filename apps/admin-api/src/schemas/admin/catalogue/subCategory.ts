@@ -6,34 +6,34 @@ import {
   SUB_CATEGORY,
 } from "#constants/validationMessages"
 
-export const subCategoryCreationSchema = z.object({
-  categoryId: z.string({ error: SUB_CATEGORY.categoryId.required })
-    .nonempty(SUB_CATEGORY.categoryId.required)
+export const subcategoryCreationSchema = z.object({
+  category: z.string({ error: SUB_CATEGORY.category.required })
+    .nonempty(SUB_CATEGORY.category.required)
     .trim()
     .meta({
-      description: "Name of the sub category.",
-      example: "Smart Phone",
+      description: "Category Id.",
+      example: "01abcd091ab01a0123ab012a",
     }),
   name: z.string({ error: SUB_CATEGORY.name.required })
     .nonempty(SUB_CATEGORY.name.required)
     .trim()
     .meta({
-      description: "Name of the sub category.",
+      description: "Name of the subcategory.",
       example: "Smart Phone",
     }),
   slug: z.string({ error: SUB_CATEGORY.slug.required })
     .nonempty(SUB_CATEGORY.slug.required)
     .trim()
     .meta({
-      description: "Unique and short name (slug) of the sub category.",
+      description: "Unique and short name (slug) of the subcategory.",
       example: "smtphn",
     }),
 })
 
-export const subCategoryUpdateSchema = subCategoryCreationSchema.partial()
+export const subcategoryUpdateSchema = subcategoryCreationSchema.partial()
 
-export const subCategoryCreationJSONSchema = z.toJSONSchema(subCategoryCreationSchema)
-export const subCategoryUpdateJSONSchema = z.toJSONSchema(subCategoryUpdateSchema)
+export const subcategoryCreationJSONSchema = z.toJSONSchema(subcategoryCreationSchema)
+export const subcategoryUpdateJSONSchema = z.toJSONSchema(subcategoryUpdateSchema)
 
-export type SubCategoryCreationData = z.infer<typeof subCategoryCreationSchema>
-export type SubCategoryUpdateData = z.infer<typeof subCategoryUpdateSchema>
+export type SubcategoryCreationData = z.infer<typeof subcategoryCreationSchema>
+export type SubcategoryUpdateData = z.infer<typeof subcategoryUpdateSchema>
