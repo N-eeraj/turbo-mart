@@ -85,7 +85,7 @@ export default class NotificationController extends BaseController {
    */
   static async deleteMultiple({ user, query }: Request, res: Response) {
     try {
-      const notifications = query.ids
+      const notifications = query.notificationIds
 
       let notificationIds
       if (Array.isArray(notifications)) {
