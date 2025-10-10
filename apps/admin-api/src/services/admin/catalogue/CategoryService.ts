@@ -173,7 +173,7 @@ export default class CategoryService extends BaseService {
   }
 
   /**
-   * Deletes the of category document.
+   * Deletes the category document.
    * 
    * @param adminId - Id of the category.
    * 

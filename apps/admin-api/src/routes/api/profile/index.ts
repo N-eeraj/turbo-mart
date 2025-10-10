@@ -28,7 +28,7 @@ profileRouter.route("/picture")
   .put([
     authenticationMiddleware,
     upload.single("profilePicture"),
-  ], ProfileController.updateProfilePicture)
+  ], ProfileController.setProfilePicture)
   .delete(authenticationMiddleware, ProfileController.removeProfilePicture)
 
 profileRouter.use("/notifications", notificationRouter)

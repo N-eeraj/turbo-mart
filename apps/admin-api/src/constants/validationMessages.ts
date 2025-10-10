@@ -84,4 +84,16 @@ export const SUB_CATEGORY = {
   slug: {
     required: "Please enter a subcategory slug",
   },
+  attribute: {
+    id: {
+      required: "Attribute id is required",
+    },
+    name: {
+      required: "Please enter an attribute name",
+    },
+    type: {
+      required: "Please select an attribute type",
+      valid: "Please select a valid attribute type",
+    },
+  },
 }

@@ -229,7 +229,7 @@ export default class SuperAdminService extends BaseService {
   }
 
   /**
-   * Deletes the of admin user document.
+   * Deletes the admin user document.
    * 
    * @param adminId - Id of the admin user.
    * 

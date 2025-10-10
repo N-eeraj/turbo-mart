@@ -137,7 +137,7 @@ export default class ProfileService extends BaseService {
    * @throws 404 error if admin is not found.
    * @throws If the profile picture update fails.
    */
-  static async updateProfilePicture(adminId: AdminObject["id"], picture: File): Promise<string> {
+  static async setProfilePicture(adminId: AdminObject["id"], picture: File): Promise<string> {
     const fileName = `${adminId}.${super.getFileExtension(picture)}`
     const {
       publicPath,

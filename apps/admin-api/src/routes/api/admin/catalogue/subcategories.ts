@@ -36,4 +36,7 @@ subcategoryRouter.route("/:subcategoryId")
   .patch(subcategoryManagementMiddlewares, SubcategoryController.update)
   .delete(subcategoryManagementMiddlewares, SubcategoryController.delete)
 
+subcategoryRouter.route("/:subcategoryId/attributes")
+  .patch(subcategoryManagementMiddlewares, SubcategoryController.setAttributes)
+
 export default subcategoryRouter

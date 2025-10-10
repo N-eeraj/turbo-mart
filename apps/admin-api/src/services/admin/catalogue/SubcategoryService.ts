@@ -13,6 +13,7 @@ import BaseService from "#services/BaseService"
 import {
   SubcategoryUpdateData,
   type SubcategoryCreationData,
+  type SubcategoryAttributeUpdateData,
 } from "#schemas/admin/catalogue/subcategory"
 
 export interface ListOptions {
@@ -195,9 +196,9 @@ export default class SubcategoryService extends BaseService {
   }
 
   /**
-   * Deletes the of subcategory document.
+   * Deletes the subcategory document.
    * 
-   * @param adminId - Id of the subcategory.
+   * @param subcategoryId - Id of the subcategory.
    * 
    * @throws 404 error if subcategory not found.
    * @throws If deleting the subcategory failed.
@@ -212,5 +213,34 @@ export default class SubcategoryService extends BaseService {
         message: "Subcategory not found",
       }
     }
+  }
+
+  /**
+   * Updates the subcategory attributes.
+   * 
+   * @param subcategoryId - Id of the subcategory.
+   * @param attributeData - Data of attributes.
+   *  - `create`- List of new attributes to create.
+   *  - `update`- List of existing attributes data to update.
+   *  - `delete`- List of existing attribute ids to delete.
+   * 
+   * @throws 404 error if subcategory not found.
+   * @throws If updating the subcategory attributes failed.
+   */
+  static async setAttributes(
+    subcategoryId: SubcategoryObject["id"],
+    attributeData: SubcategoryAttributeUpdateData,
+  ): Promise<void> {
+    const subcategory = await Subcategory.findById(subcategoryId)
+
+    // throw not found error if subcategory is not found
+    if (!subcategory) {
+      throw {
+        status: 404,
+        message: "Subcategory not found",
+      }
+    }
+
+    console.log(attributeData)
   }
 }
