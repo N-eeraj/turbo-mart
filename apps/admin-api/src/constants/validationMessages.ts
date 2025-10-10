@@ -95,5 +95,45 @@ export const SUB_CATEGORY = {
       required: "Please select an attribute type",
       valid: "Please select a valid attribute type",
     },
+    metadata: {
+      text: {
+        maxLength: {
+          valid: "Please enter a valid max length",
+        },
+      },
+      number: {
+        min: {
+          valid: "Please enter a valid number",
+          maxValue: "Please enter a value smaller than the maximum value",
+        },
+        max: {
+          valid: "Please enter a valid number",
+          minValue: "Please enter a value larger than the minimum value",
+        },
+        unit: {
+          valid: "Please enter a valid unit",
+        },
+        template: {
+          valid: "Please enter a valid template",
+        },
+        base: {
+          valid: "Please enter a valid number",
+          minValue: "Please enter a value of at least 1",
+        },
+      },
+      list: {
+        required: "Metadata is required",
+      },
+      date: {
+        min: {
+          valid: "Please select a valid date",
+          maxDate: "Please select a date before the maximum date",
+        },
+        max: {
+          valid: "Please select a valid date",
+          minDate: "Please select a date after the minimum date",
+        },
+      },
+    },
   },
 }

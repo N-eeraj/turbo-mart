@@ -22,7 +22,7 @@ const TextAttributeMetaDataSchema = new mongoose.Schema({
         default: undefined,
       },
     },
-    default: {},
+    default: undefined,
   },
 }, {
   _id: false,
@@ -55,7 +55,7 @@ const NumberAttributeMetaDataSchema = new mongoose.Schema({
         default: 1
       },
     },
-    default: {},
+    default: undefined,
   },
 }, {
   _id: false,
