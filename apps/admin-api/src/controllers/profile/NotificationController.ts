@@ -85,37 +85,11 @@ export default class NotificationController extends BaseController {
    */
   static async deleteMultiple({ user, query }: Request, res: Response) {
     try {
-      const notifications = query.notificationIds
-
-      let notificationIds
-      if (Array.isArray(notifications)) {
-        const {
-          validIds,
-          invalidIds,
-        } = super.parseObjectIdBulk(notifications as Array<string>)
-
-        if (invalidIds.length) {
-          throw {
-            status: 400,
-            message: "Invalid notification id",
-            invalidIds,
-          }
-        }
-
-        notificationIds = validIds
-      } else if (typeof notifications === "string") {
-        const parsedId = super.parseObjectId(notifications)
-        if (parsedId === null) {
-          throw {
-            status: 400,
-            message: "Invalid notification id",
-            invalidIds: [
-              notifications,
-            ],
-          }
-        }
-        notificationIds = [parsedId]
-      }
+      const notificationIds = super.parseResourceIdQueries(
+        query,
+        "notificationIds",
+        "Invalid notification id"
+      )
 
       await NotificationService.delete(user.id, notificationIds)
 
