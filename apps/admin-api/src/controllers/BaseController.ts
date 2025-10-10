@@ -128,6 +128,8 @@ export default class BaseController {
 
   /**
    * Parses and validates a given value as a Mongoose ObjectId.
+   * 
+   * @static
    *
    * @param id - The value to validate and convert.
    *
@@ -139,6 +141,9 @@ export default class BaseController {
   }
 
   /**
+   * Parses and validates an array of given value as a Mongoose ObjectIds.
+   * 
+   * @static
    * 
    * @param idList - The list of values to validate and convert.
    *  
@@ -161,6 +166,8 @@ export default class BaseController {
 
   /**
    * Parses and validates a given value as a Mongoose SortOrder.
+   * 
+   * @static
    * 
    * @param value - The value to validate and convert.
    * 
@@ -187,6 +194,15 @@ export default class BaseController {
     return isValidSortOrder ? normalizedValue as mongoose.SortOrder : null
   }
 
+  /**
+   * Parses the request query to get the common pagination queries.
+   * 
+   * @static
+   * 
+   * @param query - The Express `Request` query object.
+   * 
+   * @returns pagination queries.
+   */
   static parsePaginationQueries(query: Request["query"]): PaginationQueries {
     const paginationQueries: PaginationQueries = {}
 
@@ -210,6 +226,60 @@ export default class BaseController {
     }
 
     return paginationQueries
+  }
+
+  /**
+   * Parses the request query and validate an array of given value as a Mongoose ObjectIds.
+   * 
+   * @static
+   * 
+   * @param query - The Express `Request` query object
+   * @param queryKey - The query key name of the list of ids.
+   * @param errorMessage - The error message to be shown in case of  invalid ids.
+   * 
+   * @returns an array of parsed Mongoose ObjectIds.
+   * 
+   * @throws 400 error if the id list contains invalid ids.
+   */
+  static parseResourceIdQueries(
+    query: Request["query"],
+    queryKey: string,
+    errorMessage = `Invalid ${queryKey} Ids`
+  ): Array<mongoose.Types.ObjectId> {
+    let resourceIds: Array<mongoose.Types.ObjectId> = []
+
+    const resources = query[queryKey]
+
+    if (Array.isArray(resources)) {
+      const {
+        validIds,
+        invalidIds,
+      } = BaseController.parseObjectIdBulk(resources as Array<string>)
+
+      if (invalidIds.length) {
+        throw {
+          status: 400,
+          message: errorMessage,
+          invalidIds,
+        }
+      }
+
+      resourceIds = validIds
+    } else if (typeof resources === "string") {
+      const parsedId = BaseController.parseObjectId(resources)
+      if (parsedId === null) {
+        throw {
+          status: 400,
+          message: errorMessage,
+          invalidIds: [
+            resources,
+          ],
+        }
+      }
+      resourceIds = [parsedId]
+    }
+
+    return resourceIds
   }
 
   /**
