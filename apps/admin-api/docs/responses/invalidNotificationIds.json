@@ -24,8 +24,7 @@
                 "items": {
                   "type": "string"
                 },
-                "example": ["01abcd091ab01a0123ab012a"],
-                "description": "List of invalid ids."
+                "description": "List of invalid notification ids."
               }
             }
           }

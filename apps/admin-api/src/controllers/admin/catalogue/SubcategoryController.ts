@@ -24,8 +24,43 @@ export default class SubcategoryController extends BaseController {
   static async list({ query }: Request, res: Response) {
     try {
       const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+      const categories = query.categories
 
-      const data = await SubcategoryService.list(paginationQueries)
+      let categoryIds
+
+      if (Array.isArray(categories)) {
+        const {
+          validIds,
+          invalidIds,
+        } = super.parseObjectIdBulk(categories as Array<string>)
+
+        if (invalidIds.length) {
+          throw {
+            status: 400,
+            message: "Invalid category id",
+            invalidIds,
+          }
+        }
+
+        categoryIds = validIds
+      } else if (typeof categories === "string") {
+        const parsedId = super.parseObjectId(categories)
+        if (parsedId === null) {
+          throw {
+            status: 400,
+            message: "Invalid category id",
+            invalidIds: [
+              categories,
+            ],
+          }
+        }
+        categoryIds = [parsedId]
+      }
+
+      const data = await SubcategoryService.list({
+        ...paginationQueries,
+        categories: categoryIds,
+      })
 
       super.sendSuccess(res, {
         message: "Fetched Subcategories",

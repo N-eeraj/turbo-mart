@@ -2,8 +2,12 @@ import type mongoose from "mongoose"
 
 import Subcategory, {
   transformSubcategory,
+  type InferredSubcategorySchemaType,
   type SubcategoryObject,
 } from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
+import {
+  type CategoryObject,
+} from "@app/database/mongoose/models/Catalogue/Category.js"
 
 import BaseService from "#services/BaseService"
 import {
@@ -16,6 +20,7 @@ export interface ListOptions {
   skip?: number
   search?: string
   order?: mongoose.SortOrder
+  categories?: Array<CategoryObject["id"]>
 }
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
@@ -23,6 +28,7 @@ const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
   skip: 0,
   order: "descending",
   search: "",
+  categories: [],
 }
 
 export default class SubcategoryService extends BaseService {
@@ -40,12 +46,19 @@ export default class SubcategoryService extends BaseService {
     skip = DEFAULT_LIST_OPTIONS.skip,
     order = DEFAULT_LIST_OPTIONS.order,
     search = DEFAULT_LIST_OPTIONS.search,
+    categories = DEFAULT_LIST_OPTIONS.categories,
   }: ListOptions = DEFAULT_LIST_OPTIONS): Promise<Array<SubcategoryObject>> {
     const searchRegex = {
       $regex: new RegExp(search, "i"),
     }
 
-    const subcategories = await Subcategory.find({
+    /**
+     * Defines the query conditions for finding subcategories.
+     *
+     * - `searchQuery` - The search query checking the name and slug fields.
+     * - `categories` - The categories to filter.
+     */
+    const filterQuery: mongoose.FilterQuery<InferredSubcategorySchemaType> = {
       $or: [
         {
           name: searchRegex,
@@ -54,7 +67,16 @@ export default class SubcategoryService extends BaseService {
           slug: searchRegex,
         },
       ],
-    })
+    }
+
+    // add categories filter if it exists
+    if (categories.length) {
+      filterQuery.category = {
+        $in: categories,
+      }
+    }
+
+    const subcategories = await Subcategory.find(filterQuery)
       .sort({
         createdAt: order,
       })

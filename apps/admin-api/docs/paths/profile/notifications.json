@@ -204,7 +204,7 @@
       "description": "Delete the list of notifications.",
       "parameters": [
         {
-          "name": "ids",
+          "name": "notificationIds",
           "in": "query",
           "description": "IDs of the notification",
           "schema": {

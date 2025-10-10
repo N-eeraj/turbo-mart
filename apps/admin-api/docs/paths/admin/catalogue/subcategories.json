@@ -36,6 +36,17 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "categories",
+          "in": "query",
+          "description": "IDs of the categories to filter",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       ],
       "responses": {
@@ -59,6 +70,41 @@
                   "message": {
                     "type": "string",
                     "example": "Fetched Subcategories"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid data error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Invalid category id",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Error details for the fields.",
+                    "properties": {
+                      "invalidIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "List of invalid category ids."
+                      }
+                    }
                   }
                 }
               }
