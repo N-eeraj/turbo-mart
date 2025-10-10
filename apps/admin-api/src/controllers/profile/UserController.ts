@@ -73,9 +73,9 @@ export default class ProfileController extends BaseController {
   /**
    * @route PUT /api/profile/picture
    * 
-   * Update profile picture of the current logged in users.
+   * Set profile picture of the current logged in users.
    */
-  static async updateProfilePicture({ user, file }: Request, res: Response) {
+  static async setProfilePicture({ user, file }: Request, res: Response) {
     try {
       const payload = {
         profilePicture: super.multerToFile(file)
@@ -85,7 +85,7 @@ export default class ProfileController extends BaseController {
         profilePicture,
       } = super.validateRequest(profilePictureSchema, payload)
 
-      const data = await ProfileService.updateProfilePicture(user.id, profilePicture)
+      const data = await ProfileService.setProfilePicture(user.id, profilePicture)
     
       super.sendSuccess(res, {
         data,

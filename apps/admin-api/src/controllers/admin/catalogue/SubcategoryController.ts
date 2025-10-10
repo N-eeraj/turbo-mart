@@ -10,6 +10,7 @@ import SubcategoryService, {
 import {
   subcategoryCreationSchema,
   subcategoryUpdateSchema,
+  subcategoryAttributeUpdateSchema,
 } from "#schemas/admin/catalogue/subcategory"
 
 /**
@@ -137,6 +138,34 @@ export default class SubcategoryController extends BaseController {
 
       super.sendSuccess(res, {
         message: "Deleted Subcategory",
+        data,
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
+   * @route PATCH /api/admin/catalogue/subcategories/:subcategoryId/attributes
+   * 
+   * Set subcategory attributes.
+   */
+  static async setAttributes({ params, body }: Request, res: Response) {
+    try {
+      const subcategoryId = super.parseObjectId(params.subcategoryId)
+      if (!subcategoryId) {
+        throw {
+          status: 400,
+          message: "Invalid subcategory id",
+        }
+      }
+
+      const attributeData = super.validateRequest(subcategoryAttributeUpdateSchema, body)
+
+      const data = await SubcategoryService.setAttributes(subcategoryId, attributeData)
+
+      super.sendSuccess(res, {
+        message: "Updated Subcategory Attributes",
         data,
       })
     } catch (error) {

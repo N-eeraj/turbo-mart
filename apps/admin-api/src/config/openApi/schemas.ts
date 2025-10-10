@@ -31,6 +31,7 @@ import {
 import {
   subcategoryCreationJSONSchema,
   subcategoryUpdateJSONSchema,
+  subcategoryAttributeUpdateJSONSchema,
 } from "#schemas/admin/catalogue/subcategory"
 
 const LimitOptionSchema = {
@@ -112,6 +113,7 @@ const schemas = {
   CategoryUpdateSchema: categoryUpdateJSONSchema,
   SubcategoryCreationSchema: subcategoryCreationJSONSchema,
   SubcategoryUpdateSchema: subcategoryUpdateJSONSchema,
+  SubcategoryAttributeUpdateSchema: subcategoryAttributeUpdateJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

@@ -258,8 +258,8 @@
   "/api/profile/picture": {
     "put": {
       "tags": ["Profile"],
-      "summary": "Profile Picture Update",
-      "description": "Update profile picture of logged in user.",
+      "summary": "Set Profile Picture",
+      "description": "Set profile picture of logged in user.",
       "requestBody": {
         "required": true,
         "content": {
