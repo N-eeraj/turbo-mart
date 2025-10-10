@@ -241,6 +241,20 @@ export default class SubcategoryService extends BaseService {
       }
     }
 
-    console.log(attributeData)
+    if (attributeData.create?.length) {
+      const firstCreate = attributeData.create[0]
+      if (firstCreate.type === 6) {
+        firstCreate.metadata
+      }
+    }
+    if (attributeData.update?.length) {
+      const firstUpdate = attributeData.update[0]
+      if (firstUpdate.type === 6) {
+        firstUpdate.metadata
+      }
+    }
+    if (attributeData.delete?.length) {
+      const firstDelete = attributeData.delete[0]
+    }
   }
 }

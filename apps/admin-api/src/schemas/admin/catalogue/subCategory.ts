@@ -36,7 +36,7 @@ export const subcategoryCreationSchema = z.object({
 
 export const subcategoryUpdateSchema = subcategoryCreationSchema.partial()
 
-export const subcategoryAttributeSchema = z.object({
+export const subcategoryAttributeBaseSchema = z.object({
   id: z.string({ error: SUB_CATEGORY.attribute.id.required })
     .nonempty(SUB_CATEGORY.attribute.id.required)
     .trim()
@@ -51,14 +51,6 @@ export const subcategoryAttributeSchema = z.object({
       description: "Attribute name.",
       example: "Color",
     }),
-  type: z.enum(AttributeType, { error: (issue) => {
-      if (!issue.input) return SUB_CATEGORY.attribute.type.required
-      return SUB_CATEGORY.attribute.type.valid
-    }})
-    .meta({
-      description: "Attribute type",
-      example: AttributeType.COLOR,
-    }),
   required: z.boolean()
     .optional()
     .meta({
@@ -66,11 +58,189 @@ export const subcategoryAttributeSchema = z.object({
     }),
 })
 
+export const subcategoryAttributeBaseSchemaWithoutId = subcategoryAttributeBaseSchema.omit({
+  id: true,
+})
+
+const TEXT_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.TEXT),
+  metadata: z.object({
+    maxLength: z.number({ error: SUB_CATEGORY.attribute.metadata.text.maxLength.valid })
+      .meta({
+        description: "Maximum length of the attribute value.",
+        example: 50,
+      }),
+  })
+    .optional(),
+}
+const NUMBER_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.NUMBER),
+  metadata: z.object({
+    min: z.number({ error: SUB_CATEGORY.attribute.metadata.number.min.valid })
+      .optional()
+      .meta({
+        description: "Minimum value of the attribute.",
+        example: 2,
+      }),
+    max: z.number({ error: SUB_CATEGORY.attribute.metadata.number.max.valid })
+      .optional()
+      .meta({
+        description: "Maximum value of the attribute.",
+        example: 16,
+      }),
+    unit: z.string({ error: SUB_CATEGORY.attribute.metadata.number.unit.valid })
+      .optional()
+      .meta({
+        description: "Unit the attribute is measure in.",
+        example: "Inches",
+      }),
+    template: z.string({ error: SUB_CATEGORY.attribute.metadata.number.template.valid })
+      .optional()
+      .meta({
+        description: "The display template for the value.",
+        example: "{{value}} {{unit}}",
+      }),
+    base: z.number({ error: SUB_CATEGORY.attribute.metadata.number.base.valid })
+      .min(1, { error: SUB_CATEGORY.attribute.metadata.number.base.minValue })
+      .optional()
+      .meta({
+        description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",
+        example: 10,
+      }),
+  })
+    .optional(),
+}
+const BOOLEAN_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.BOOLEAN),
+}
+const LIST_METADATA = {}
+const SELECT_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.SELECT),
+  metadata: LIST_METADATA,
+}
+const MULTI_SELECT_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.MULTI_SELECT),
+  metadata: LIST_METADATA,
+}
+const COLOR_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.COLOR),
+}
+const DATE_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.DATE),
+  metadata: z.object({
+    min: z.date({ error: SUB_CATEGORY.attribute.metadata.date.min.valid })
+      .optional()
+      .meta({
+        description: "Minimum date value of the attribute.",
+        example: 2,
+      }),
+    max: z.date({ error: SUB_CATEGORY.attribute.metadata.date.max.valid })
+      .optional()
+      .meta({
+        description: "Maximum date value of the attribute.",
+        example: 16,
+      }),
+  })
+    .optional(),
+}
+const JSON_ATTRIBUTE_TYPE_METADATA = {
+  type: z.literal(AttributeType.JSON),
+  metadata: z.looseObject({})
+    .optional()
+    .meta({
+      description: "A JSON data to stored along the attribute value.",
+    }),
+}
+
+const subcategoryNumberAttributeSchema = subcategoryAttributeBaseSchema
+  .extend(NUMBER_ATTRIBUTE_TYPE_METADATA)
+const subcategoryNumberAttributeSchemaWithoutId = subcategoryAttributeBaseSchemaWithoutId
+  .extend(NUMBER_ATTRIBUTE_TYPE_METADATA)
+type SubcategoryNumberAttributeSchema<TId extends boolean> = TId extends true
+  ? typeof subcategoryNumberAttributeSchema
+  : typeof subcategoryNumberAttributeSchemaWithoutId
+
+const subcategoryDateAttributeSchema = subcategoryAttributeBaseSchema
+  .extend(DATE_ATTRIBUTE_TYPE_METADATA)
+const subcategoryDateAttributeSchemaWithoutId = subcategoryAttributeBaseSchemaWithoutId
+  .extend(DATE_ATTRIBUTE_TYPE_METADATA)
+type SubcategoryDateAttributeSchema<TId extends boolean> = TId extends true
+  ? typeof subcategoryDateAttributeSchema
+  : typeof subcategoryDateAttributeSchemaWithoutId
+
+
+function numberMetadataSuperRefine<TId extends boolean>(
+  { metadata }: z.infer<SubcategoryNumberAttributeSchema<TId>>,
+  ctx: z.RefinementCtx
+) {
+  if (metadata && metadata.min !== undefined && metadata.max !== undefined) {
+    if (metadata.min > metadata.max) {
+      ctx.addIssue({
+        path: ["min"],
+        message: SUB_CATEGORY.attribute.metadata.number.min.maxValue,
+        code: "custom",
+      })
+      ctx.addIssue({
+        path: ["max"],
+        message: SUB_CATEGORY.attribute.metadata.number.max.minValue,
+        code: "custom",
+      })
+    }
+  }
+}
+
+function dateMetadataSuperRefine<TId extends boolean>(
+  { metadata }: z.infer<SubcategoryDateAttributeSchema<TId>>,
+  ctx: z.RefinementCtx
+) {
+  if (metadata && metadata.min !== undefined && metadata.max !== undefined) {
+    if (metadata.min > metadata.max) {
+      ctx.addIssue({
+        path: ["min"],
+        message: SUB_CATEGORY.attribute.metadata.date.min.maxDate,
+        code: "custom",
+      })
+      ctx.addIssue({
+        path: ["max"],
+        message: SUB_CATEGORY.attribute.metadata.date.max.minDate,
+        code: "custom",
+      })
+    }
+  }
+}
+
+const ATTRIBUTE_METADATA_SCHEMAS = [
+  subcategoryAttributeBaseSchema.extend(TEXT_ATTRIBUTE_TYPE_METADATA),
+  subcategoryNumberAttributeSchema
+    .superRefine(numberMetadataSuperRefine<true>),
+  subcategoryAttributeBaseSchema.extend(BOOLEAN_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchema.extend(SELECT_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchema.extend(MULTI_SELECT_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchema.extend(COLOR_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchema.extend(DATE_ATTRIBUTE_TYPE_METADATA)
+    .superRefine(dateMetadataSuperRefine<true>),
+  subcategoryAttributeBaseSchema.extend(JSON_ATTRIBUTE_TYPE_METADATA),
+] as const
+const ATTRIBUTE_METADATA_SCHEMAS_WITHOUT_ID = [
+  subcategoryAttributeBaseSchemaWithoutId.extend(TEXT_ATTRIBUTE_TYPE_METADATA),
+  subcategoryNumberAttributeSchemaWithoutId
+    .superRefine(numberMetadataSuperRefine<false>),
+  subcategoryAttributeBaseSchemaWithoutId.extend(BOOLEAN_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchemaWithoutId.extend(SELECT_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchemaWithoutId.extend(MULTI_SELECT_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchemaWithoutId.extend(COLOR_ATTRIBUTE_TYPE_METADATA),
+  subcategoryAttributeBaseSchemaWithoutId.extend(DATE_ATTRIBUTE_TYPE_METADATA)
+    .superRefine(dateMetadataSuperRefine<false>),
+  subcategoryAttributeBaseSchemaWithoutId.extend(JSON_ATTRIBUTE_TYPE_METADATA),
+] as const
+
+
+const subcategoryAttributeSchema = z.discriminatedUnion("type", ATTRIBUTE_METADATA_SCHEMAS)
+const subcategoryAttributeSchemaWithoutId = z.discriminatedUnion("type", ATTRIBUTE_METADATA_SCHEMAS_WITHOUT_ID)
+
 export const subcategoryAttributeUpdateSchema = z.object({
   create: z.array(
-    subcategoryAttributeSchema.omit({
-      id: true,
-    }),
+    subcategoryAttributeSchemaWithoutId,
   )
     .optional(),
   update: z.array(
