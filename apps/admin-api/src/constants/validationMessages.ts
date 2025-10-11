@@ -84,31 +84,52 @@ export const SUB_CATEGORY = {
   slug: {
     required: "Please enter a subcategory slug",
   },
-  attribute: {
-    id: {
-      required: "Attribute id is required",
+}
+
+export const ATTRIBUTE = {
+  id: {
+    required: "Attribute id is required",
+  },
+  name: {
+    required: "Please enter an attribute name",
+  },
+  type: {
+    required: "Please select an attribute type",
+    valid: "Please select a valid attribute type",
+  },
+  metadata: {
+    text: {
+      maxLength: {
+        valid: "Please enter a valid max length",
+      },
     },
-    name: {
-      required: "Please enter an attribute name",
+    number: {
+      min: {
+        valid: "Please enter a valid number",
+        maxValue: "Please enter a value smaller than the maximum value",
+      },
+      max: {
+        valid: "Please enter a valid number",
+        minValue: "Please enter a value larger than the minimum value",
+      },
+      unit: {
+        valid: "Please enter a valid unit",
+      },
+      template: {
+        valid: "Please enter a valid template",
+      },
+      base: {
+        valid: "Please enter a valid number",
+        minValue: "Please enter a value of at least 1",
+      },
     },
-    type: {
-      required: "Please select an attribute type",
-      valid: "Please select a valid attribute type",
-    },
-    metadata: {
+    list: {
       text: {
-        maxLength: {
-          valid: "Please enter a valid max length",
-        },
+        valid: "Please enter a valid option",
       },
       number: {
-        min: {
+        value: {
           valid: "Please enter a valid number",
-          maxValue: "Please enter a value smaller than the maximum value",
-        },
-        max: {
-          valid: "Please enter a valid number",
-          minValue: "Please enter a value larger than the minimum value",
         },
         unit: {
           valid: "Please enter a valid unit",
@@ -120,19 +141,16 @@ export const SUB_CATEGORY = {
           valid: "Please enter a valid number",
           minValue: "Please enter a value of at least 1",
         },
+      }
+    },
+    date: {
+      min: {
+        valid: "Please select a valid date",
+        maxDate: "Please select a date before the maximum date",
       },
-      list: {
-        required: "Metadata is required",
-      },
-      date: {
-        min: {
-          valid: "Please select a valid date",
-          maxDate: "Please select a date before the maximum date",
-        },
-        max: {
-          valid: "Please select a valid date",
-          minDate: "Please select a date after the minimum date",
-        },
+      max: {
+        valid: "Please select a valid date",
+        minDate: "Please select a date after the minimum date",
       },
     },
   },
