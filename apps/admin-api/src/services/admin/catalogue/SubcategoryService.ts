@@ -7,7 +7,7 @@ import Subcategory, {
 } from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
 import {
   type CategoryObject,
-} from "@app/database/mongoose/models/Catalogue/Category.js"
+} from "@app/database/mongoose/models/Catalogue/Category.ts"
 
 import BaseService from "#services/BaseService"
 import {
