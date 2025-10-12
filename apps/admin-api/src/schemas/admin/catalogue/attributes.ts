@@ -229,8 +229,7 @@ function dateMetadataSuperRefine<TId extends boolean>(
 
 const ATTRIBUTE_METADATA_SCHEMAS = [
   attributeBaseSchema.extend(TEXT_ATTRIBUTE_TYPE_METADATA),
-  numberAttributeSchema
-    .superRefine(numberMetadataSuperRefine<true>),
+  numberAttributeSchema.superRefine(numberMetadataSuperRefine<true>),
   attributeBaseSchema.extend(BOOLEAN_ATTRIBUTE_TYPE_METADATA),
   attributeBaseSchema.extend(SELECT_ATTRIBUTE_TYPE_METADATA),
   attributeBaseSchema.extend(MULTI_SELECT_ATTRIBUTE_TYPE_METADATA),
@@ -241,8 +240,7 @@ const ATTRIBUTE_METADATA_SCHEMAS = [
 ] as const
 const ATTRIBUTE_METADATA_SCHEMAS_WITHOUT_ID = [
   attributeBaseSchemaWithoutId.extend(TEXT_ATTRIBUTE_TYPE_METADATA),
-  numberAttributeSchemaWithoutId
-    .superRefine(numberMetadataSuperRefine<false>),
+  numberAttributeSchemaWithoutId.superRefine(numberMetadataSuperRefine<false>),
   attributeBaseSchemaWithoutId.extend(BOOLEAN_ATTRIBUTE_TYPE_METADATA),
   attributeBaseSchemaWithoutId.extend(SELECT_ATTRIBUTE_TYPE_METADATA),
   attributeBaseSchemaWithoutId.extend(MULTI_SELECT_ATTRIBUTE_TYPE_METADATA),
