@@ -84,6 +84,11 @@ export const SUB_CATEGORY = {
   slug: {
     required: "Please enter a subcategory slug",
   },
+  attributes: {
+    create: {
+      duplicateName: "Please enter unique attribute names",
+    },
+  },
 }
 
 export const ATTRIBUTE = {

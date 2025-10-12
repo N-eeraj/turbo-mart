@@ -37,15 +37,47 @@ export const subcategoryCreationSchema = z.object({
 
 export const subcategoryUpdateSchema = subcategoryCreationSchema.partial()
 
+const attributesCreate = z.array(
+  attributeSchemaWithoutId,
+)
+  .optional()
+const attributesUpdate = z.array(
+  attributeSchema,
+)
+  .optional()
+
+function duplicateNameSuperRefine(
+  attributes: z.infer<typeof attributesCreate | typeof attributesUpdate>,
+  ctx: z.RefinementCtx
+) {
+  const attributeMap: Map<string, number> = new Map()
+  const duplicateSet: Set<number> = new Set()
+
+  attributes?.some(({ name }, index: number) => {
+    const _name = name.toLowerCase()
+    if (attributeMap.has(_name)) {
+      duplicateSet.add(index)
+      duplicateSet.add(attributeMap.get(_name) as number)
+    } else {
+      attributeMap.set(_name, index)
+    }
+  })
+
+  duplicateSet.forEach((item) => {
+    ctx.addIssue({
+      path: [
+        item,
+        "name",
+      ],
+      code: "custom",
+      message: "Duplicate error",
+    })
+  })
+}
+
 export const subcategoryAttributeUpdateSchema = z.object({
-  create: z.array(
-    attributeSchemaWithoutId,
-  )
-    .optional(),
-  update: z.array(
-    attributeSchema,
-  )
-    .optional(),
+  create: attributesCreate.superRefine(duplicateNameSuperRefine),
+  update: attributesUpdate.superRefine(duplicateNameSuperRefine),
   delete: z.array(
     z.string({ error: ATTRIBUTE.id.required })
       .nonempty(ATTRIBUTE.id.required)
