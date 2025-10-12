@@ -46,38 +46,93 @@ const attributesUpdate = z.array(
 )
   .optional()
 
-function duplicateNameSuperRefine(
-  attributes: z.infer<typeof attributesCreate | typeof attributesUpdate>,
-  ctx: z.RefinementCtx
+type CreateAttributeList = z.infer<typeof attributesCreate>
+type UpdateAttributeList = z.infer<typeof attributesUpdate>
+type CreateUpdateAttributeList<TId extends boolean> = TId extends true
+  ? UpdateAttributeList
+  : CreateAttributeList
+type CreateUpdateAttributeKey<TId extends boolean> = TId extends true
+  ? keyof Exclude<UpdateAttributeList, undefined>[number]
+  : keyof Exclude<CreateAttributeList, undefined>[number]
+
+function duplicateNameSuperRefine<TId extends boolean>(
+  attributes: CreateUpdateAttributeList<TId>,
+  ctx: z.RefinementCtx,
+  keys: Array<CreateUpdateAttributeKey<TId>>,
+  transforms: Partial<Record<CreateUpdateAttributeKey<TId>, (_: any) => any>>
 ) {
-  const attributeMap: Map<string, number> = new Map()
-  const duplicateSet: Set<number> = new Set()
+  const duplicates: Record<string, {
+    map: Map<unknown, number>
+    set: Set<number>
+  }> = Object.fromEntries(
+    keys.map((key) => {
+      return [
+        key, {
+          set: new Set(),
+          map: new Map(),
+        }
+      ]
+    })
+  )
 
-  attributes?.some(({ name }, index: number) => {
-    const _name = name.toLowerCase()
-    if (attributeMap.has(_name)) {
-      duplicateSet.add(index)
-      duplicateSet.add(attributeMap.get(_name) as number)
-    } else {
-      attributeMap.set(_name, index)
-    }
-  })
-
-  duplicateSet.forEach((item) => {
-    ctx.addIssue({
-      path: [
-        item,
-        "name",
-      ],
-      code: "custom",
-      message: "Duplicate error",
+  attributes?.forEach((data, index: number) => {
+    keys.forEach(key => {
+      let value = data[key]
+      if (transforms[key]) {
+        value = transforms[key](value)
+      }
+      if (duplicates[key].map.has(value)) {
+        duplicates[key].set.add(index)
+        duplicates[key].set.add(duplicates[key].map.get(value) as number)
+      } else {
+        duplicates[key].map.set(value, index)
+      }
     })
   })
+
+  Object.entries(duplicates)
+    .forEach(([key, { set }]) => {
+      set.forEach(item => {
+        ctx.addIssue({
+          path: [
+            item,
+            key,
+          ],
+          code: "custom",
+          message: "Duplicate error",
+        })
+      })
+    })
 }
 
 export const subcategoryAttributeUpdateSchema = z.object({
-  create: attributesCreate.superRefine(duplicateNameSuperRefine),
-  update: attributesUpdate.superRefine(duplicateNameSuperRefine),
+  create: attributesCreate
+    .superRefine(
+      (attributes, ctx) => duplicateNameSuperRefine(
+        attributes,
+        ctx,
+        [
+          "name",
+        ],
+        {
+          name: (_name: string) => _name.toLowerCase()
+        }
+      )
+    ),
+  update: attributesUpdate
+    .superRefine(
+      (attributes, ctx) => duplicateNameSuperRefine(
+        attributes,
+        ctx,
+        [
+          "id",
+          "name",
+        ],
+        {
+          name: (_name: string) => _name.toLowerCase()
+        }
+      )
+    ),
   delete: z.array(
     z.string({ error: ATTRIBUTE.id.required })
       .nonempty(ATTRIBUTE.id.required)
