@@ -8,6 +8,42 @@ import {
 export type SchemaShape = ZodRawShape
 
 /**
+ * Converts Zod validation errors into a nested object format.
+ *
+ * @param errors - An array of Zod error issues.
+ * 
+ * @returns A nested object with arrays of error messages by path.
+ */
+function convertErrorsToNestedObject<T extends SchemaShape>(
+  errors: z.ZodError<z.core.$InferObjectOutput<T, {}>>["issues"]
+) {
+  const result: Record<PropertyKey, any> = {}
+
+  for (const error of errors) {
+    const { path, message } = error
+    let current = result
+
+    for (let i = 0; i < path.length; i++) {
+      const key = path[i]
+
+      if (i === path.length - 1) {
+        if (!Array.isArray(current[key])) {
+          current[key] = []
+        }
+        current[key].push(message)
+      } else {
+        if (!(key in current)) {
+          current[key] = {}
+        }
+        current = current[key]
+      }
+    }
+  }
+
+  return result
+}
+
+/**
  * Validates given data against a Zod schema.
  * 
  * @param schema - A Zod object schema to validate against.
@@ -23,10 +59,7 @@ function validateData<T extends SchemaShape>(schema: ZodObject<T>, data: unknown
     error,
   } = schema.safeParse(data ?? {})
   if (error) {
-    const {
-      fieldErrors,
-    } = flattenError(error)
-    throw fieldErrors
+    throw convertErrorsToNestedObject(error.issues)
   }
 
   return parsedData
