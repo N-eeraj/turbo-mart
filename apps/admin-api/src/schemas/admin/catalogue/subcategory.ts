@@ -45,6 +45,16 @@ const attributesUpdate = z.array(
   attributeSchema,
 )
   .optional()
+const attributesDelete = z.array(
+  z.string({ error: ATTRIBUTE.id.required })
+    .nonempty(ATTRIBUTE.id.required)
+    .trim()
+    .meta({
+      description: "Attribute id.",
+      example: "01abcd091ab01a0123ab012a",
+    }),
+)
+  .optional()
 
 type CreateAttributeList = z.infer<typeof attributesCreate>
 type UpdateAttributeList = z.infer<typeof attributesUpdate>
@@ -55,11 +65,12 @@ type CreateUpdateAttributeKey<TId extends boolean> = TId extends true
   ? keyof Exclude<UpdateAttributeList, undefined>[number]
   : keyof Exclude<CreateAttributeList, undefined>[number]
 
-function duplicateNameSuperRefine<TId extends boolean>(
+function duplicateSuperRefine<TId extends boolean>(
   attributes: CreateUpdateAttributeList<TId>,
   ctx: z.RefinementCtx,
   keys: Array<CreateUpdateAttributeKey<TId>>,
-  transforms: Partial<Record<CreateUpdateAttributeKey<TId>, (_: any) => any>>
+  errorMessages: Partial<Record<CreateUpdateAttributeKey<TId>, string>>,
+  transforms: Partial<Record<CreateUpdateAttributeKey<TId>, (_: any) => any>> = {},
 ) {
   const duplicates: Record<string, {
     map: Map<unknown, number>
@@ -77,7 +88,7 @@ function duplicateNameSuperRefine<TId extends boolean>(
 
   attributes?.forEach((data, index: number) => {
     keys.forEach(key => {
-      let value = data[key]
+      let value = data[key as keyof typeof data]
       if (transforms[key]) {
         value = transforms[key](value)
       }
@@ -97,9 +108,10 @@ function duplicateNameSuperRefine<TId extends boolean>(
           path: [
             item,
             key,
+            "create",
           ],
           code: "custom",
-          message: "Duplicate error",
+          message: errorMessages[key as keyof typeof errorMessages] ?? "Duplicate error",
         })
       })
     })
@@ -108,12 +120,15 @@ function duplicateNameSuperRefine<TId extends boolean>(
 export const subcategoryAttributeUpdateSchema = z.object({
   create: attributesCreate
     .superRefine(
-      (attributes, ctx) => duplicateNameSuperRefine(
+      (attributes, ctx) => duplicateSuperRefine(
         attributes,
         ctx,
         [
           "name",
         ],
+        {
+          name: SUB_CATEGORY.attributes.duplicateName,
+        },
         {
           name: (_name: string) => _name.toLowerCase()
         }
@@ -121,7 +136,7 @@ export const subcategoryAttributeUpdateSchema = z.object({
     ),
   update: attributesUpdate
     .superRefine(
-      (attributes, ctx) => duplicateNameSuperRefine(
+      (attributes, ctx) => duplicateSuperRefine(
         attributes,
         ctx,
         [
@@ -129,20 +144,15 @@ export const subcategoryAttributeUpdateSchema = z.object({
           "name",
         ],
         {
+          id: SUB_CATEGORY.attributes.duplicateId,
+          name: SUB_CATEGORY.attributes.duplicateName,
+        },
+        {
           name: (_name: string) => _name.toLowerCase()
         }
       )
     ),
-  delete: z.array(
-    z.string({ error: ATTRIBUTE.id.required })
-      .nonempty(ATTRIBUTE.id.required)
-      .trim()
-      .meta({
-        description: "Attribute id.",
-        example: "01abcd091ab01a0123ab012a",
-      }),
-  )
-    .optional(),
+  delete: attributesDelete,
 })
 
 export const subcategoryCreationJSONSchema = z.toJSONSchema(subcategoryCreationSchema)
