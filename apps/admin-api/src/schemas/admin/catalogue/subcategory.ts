@@ -153,6 +153,78 @@ export const subcategoryAttributeUpdateSchema = z.object({
     ),
   delete: attributesDelete,
 })
+  .superRefine(({ create, update, delete: _delete }, ctx) => {
+    const nameMap = new Map()
+    const idMap = new Map()
+    const duplicatesList: Array<{
+      path: string
+      pathIndex: number
+      key: string
+      message: string
+    }> = []
+
+    interface Attribute {
+      path: "create" | "update" | "delete"
+      pathIndex: number
+      name: string
+      id?: string
+    }
+
+    (
+      [
+        ...create?.map(({ name }, index) => ({
+          name,
+          path: "create" as const,
+          pathIndex: index
+        })) ?? [],
+        ...update?.map(({ id, name }, index) => ({
+          id,
+          name,
+          path: "update" as const,
+          pathIndex: index
+        })) ?? [],
+        ..._delete?.map((name, index) => ({
+          name,
+          path: "delete" as const,
+          pathIndex: index
+        })) ?? [],
+      ] as Array<Attribute>
+    )
+      .forEach(({ path, pathIndex, name, id }) => {
+        if (nameMap.has(name)) {
+          duplicatesList.push({
+            path,
+            pathIndex,
+            key: "name",
+            message: SUB_CATEGORY.attributes.duplicateName,
+          })
+        } else if (name) {
+          nameMap.set(name, { path, pathIndex })
+        }
+        if (idMap.has(id)) {
+          duplicatesList.push({
+            path,
+            pathIndex,
+            key: "id",
+            message: SUB_CATEGORY.attributes.duplicateId,
+          })
+        } else if (id) {
+          idMap.set(id, { path, pathIndex })
+        }
+      })
+
+    duplicatesList.forEach(({ path, pathIndex, key, message }) => {
+      ctx.addIssue({
+        path: [
+          path,
+          pathIndex,
+          key,
+        ],
+        code: "custom",
+        message,
+      })
+    })
+  })
 
 export const subcategoryCreationJSONSchema = z.toJSONSchema(subcategoryCreationSchema)
 export const subcategoryUpdateJSONSchema = z.toJSONSchema(subcategoryUpdateSchema)
