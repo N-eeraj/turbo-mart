@@ -97,7 +97,8 @@ const LIST_METADATA = z.discriminatedUnion("type", [
           description: "Text value option for the list attribute types.",
           example: "Android",
         }),
-    ),
+    )
+      .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
   }),
   z.object({
     type: z.literal(AttributeType.NUMBER),
@@ -128,7 +129,8 @@ const LIST_METADATA = z.discriminatedUnion("type", [
             example: 10,
           }),
       }),
-    ),
+    )
+      .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
   }),
 ])
 const SELECT_ATTRIBUTE_TYPE_METADATA = {
@@ -145,17 +147,17 @@ const COLOR_ATTRIBUTE_TYPE_METADATA = {
 const DATE_ATTRIBUTE_TYPE_METADATA = {
   type: z.literal(AttributeType.DATE),
   metadata: z.object({
-    min: z.string({ error: ATTRIBUTE.metadata.date.min.valid })
+    min: z.iso.datetime({ error: ATTRIBUTE.metadata.date.min.valid })
       .optional()
       .meta({
         description: "Minimum date value of the attribute.",
-        example: 2,
+        example: new Date(),
       }),
-    max: z.string({ error: ATTRIBUTE.metadata.date.max.valid })
+    max: z.iso.datetime({ error: ATTRIBUTE.metadata.date.max.valid })
       .optional()
       .meta({
         description: "Maximum date value of the attribute.",
-        example: 16,
+        example: new Date(),
       }),
   })
     .optional(),

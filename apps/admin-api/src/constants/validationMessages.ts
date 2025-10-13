@@ -85,9 +85,8 @@ export const SUB_CATEGORY = {
     required: "Please enter a subcategory slug",
   },
   attributes: {
-    create: {
-      duplicateName: "Please enter unique attribute names",
-    },
+    duplicateName: "Please enter unique attribute names",
+    duplicateId: "Unique attributes required",
   },
 }
 
@@ -146,7 +145,10 @@ export const ATTRIBUTE = {
           valid: "Please enter a valid number",
           minValue: "Please enter a value of at least 1",
         },
-      }
+      },
+      options: {
+        minLength: "Please add at least 1 option",
+      },
     },
     date: {
       min: {
