@@ -108,7 +108,6 @@ function duplicateSuperRefine<TId extends boolean>(
           path: [
             item,
             key,
-            "create",
           ],
           code: "custom",
           message: errorMessages[key as keyof typeof errorMessages] ?? "Duplicate error",
