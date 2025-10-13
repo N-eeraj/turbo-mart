@@ -30,7 +30,9 @@ function convertErrorsToNestedObject<T extends SchemaShape>(
         if (!Array.isArray(current[key])) {
           current[key] = []
         }
-        current[key].push(message)
+        if (!current[key].includes(message)) {
+          current[key].push(message)
+        }
       } else {
         if (!(key in current)) {
           current[key] = {}
