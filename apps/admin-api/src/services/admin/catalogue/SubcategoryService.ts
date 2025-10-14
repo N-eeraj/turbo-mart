@@ -240,21 +240,14 @@ export default class SubcategoryService extends BaseService {
         message: "Subcategory not found",
       }
     }
-
     if (attributeData.create?.length) {
-      const firstCreate = attributeData.create[0]
-      if (firstCreate.type === 6) {
-        firstCreate.metadata
-      }
+      console.log(attributeData.create)
     }
     if (attributeData.update?.length) {
-      const firstUpdate = attributeData.update[0]
-      if (firstUpdate.type === 6) {
-        firstUpdate.metadata
-      }
+      console.log(attributeData.update)
     }
     if (attributeData.delete?.length) {
-      const firstDelete = attributeData.delete[0]
+      console.log(attributeData.delete)
     }
   }
 }

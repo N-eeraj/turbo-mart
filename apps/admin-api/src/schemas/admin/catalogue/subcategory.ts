@@ -37,229 +37,143 @@ export const subcategoryCreationSchema = z.object({
 
 export const subcategoryUpdateSchema = subcategoryCreationSchema.partial()
 
-const attributesCreate = z.array(
-  attributeSchemaWithoutId,
-)
-  .optional()
-const attributesUpdate = z.array(
-  attributeSchema,
-)
-  .optional()
-const attributesDelete = z.array(
-  z.string({ error: ATTRIBUTE.id.required })
-    .nonempty(ATTRIBUTE.id.required)
-    .trim()
-    .meta({
-      description: "Attribute id.",
-      example: "01abcd091ab01a0123ab012a",
-    }),
-)
-  .optional()
 
-type CreateAttributeList = z.infer<typeof attributesCreate>
-type UpdateAttributeList = z.infer<typeof attributesUpdate>
-type CreateUpdateAttributeList<TId extends boolean> = TId extends true
-  ? UpdateAttributeList
-  : CreateAttributeList
-type CreateUpdateAttributeKey<TId extends boolean> = TId extends true
-  ? keyof Exclude<UpdateAttributeList, undefined>[number]
-  : keyof Exclude<CreateAttributeList, undefined>[number]
-
-function duplicateSuperRefine<TId extends boolean>(
-  attributes: CreateUpdateAttributeList<TId>,
-  ctx: z.RefinementCtx,
-  keys: Array<CreateUpdateAttributeKey<TId>>,
-  errorMessages: Partial<Record<CreateUpdateAttributeKey<TId>, string>>,
-  transforms: Partial<Record<CreateUpdateAttributeKey<TId>, (_: any) => any>> = {},
+function SubcategoryAttributeUpdateSuperRefine(
+  {
+    create,
+    update,
+    delete: _delete,
+  }: z.infer<typeof subcategoryAttributeUpdateSchema>,
+  ctx: z.RefinementCtx
 ) {
-  const duplicates: Record<string, {
-    map: Map<unknown, number>
-    set: Set<number>
-  }> = Object.fromEntries(
-    keys.map((key) => {
-      return [
-        key, {
-          set: new Set(),
-          map: new Map(),
-        }
-      ]
-    })
-  )
+  const nameMap = new Map()
+  const idMap = new Map()
+  const duplicatesList: Array<{
+    path: string
+    pathIndex: number
+    key: string
+    message: string
+  }> = []
 
-  attributes?.forEach((data, index: number) => {
-    keys.forEach(key => {
-      let value = data[key as keyof typeof data]
-      if (transforms[key]) {
-        value = transforms[key](value)
-      }
-      if (duplicates[key].map.has(value)) {
-        duplicates[key].set.add(index)
-        duplicates[key].set.add(duplicates[key].map.get(value) as number)
-      } else {
-        duplicates[key].map.set(value, index)
-      }
-    })
-  })
+  interface Attribute {
+    path: "create" | "update" | "delete"
+    pathIndex: number
+    name: string
+    id?: string
+  }
 
-  Object.entries(duplicates)
-    .forEach(([key, { set }]) => {
-      set.forEach(item => {
-        ctx.addIssue({
-          path: [
-            item,
-            key,
-          ],
-          code: "custom",
-          message: errorMessages[key as keyof typeof errorMessages] ?? "Duplicate error",
-        })
+  const mappedAttributes = [
+    ...create?.map(({ name }, index) => ({
+      name,
+      path: "create" as const,
+      pathIndex: index
+    })) ?? [],
+    ...update?.map(({ id, name }, index) => ({
+      id,
+      name,
+      path: "update" as const,
+      pathIndex: index
+    })) ?? [],
+    ..._delete?.map((id, index) => ({
+      id,
+      path: "delete" as const,
+      pathIndex: index
+    })) ?? [],
+  ] as Array<Attribute>
+
+  mappedAttributes.forEach(({ path, pathIndex, name, id }) => {
+    if (nameMap.has(name)) {
+      duplicatesList.push({
+        path,
+        pathIndex,
+        key: "name",
+        message: SUB_CATEGORY.attributes.duplicateName,
       })
-    })
-}
 
-export const subcategoryAttributeUpdateSchema = z.object({
-  create: attributesCreate,
-    // .superRefine(
-    //   (attributes, ctx) => duplicateSuperRefine(
-    //     attributes,
-    //     ctx,
-    //     [
-    //       "name",
-    //     ],
-    //     {
-    //       name: SUB_CATEGORY.attributes.duplicateName,
-    //     },
-    //     {
-    //       name: (_name: string) => _name.toLowerCase()
-    //     }
-    //   )
-    // ),
-  update: attributesUpdate,
-    // .superRefine(
-    //   (attributes, ctx) => duplicateSuperRefine(
-    //     attributes,
-    //     ctx,
-    //     [
-    //       "id",
-    //       "name",
-    //     ],
-    //     {
-    //       id: SUB_CATEGORY.attributes.duplicateId,
-    //       name: SUB_CATEGORY.attributes.duplicateName,
-    //     },
-    //     {
-    //       name: (_name: string) => _name.toLowerCase()
-    //     }
-    //   )
-    // ),
-  delete: attributesDelete,
-})
-  .superRefine(({ create, update, delete: _delete }, ctx) => {
-    const nameMap = new Map()
-    const idMap = new Map()
-    const duplicatesList: Array<{
-      path: string
-      pathIndex: number
-      key: string
-      message: string
-    }> = []
+      const trackedAttribute = nameMap.get(name)
 
-    interface Attribute {
-      path: "create" | "update" | "delete"
-      pathIndex: number
-      name: string
-      id?: string
-    }
+      const hasOriginalItem = duplicatesList.some((attribute) => (
+        attribute.path === trackedAttribute.path &&
+        attribute.pathIndex === trackedAttribute.pathIndex &&
+        attribute.key === "name" &&
+        attribute.message === SUB_CATEGORY.attributes.duplicateName
+      ))
 
-    const mappedAttributes = [
-      ...create?.map(({ name }, index) => ({
-        name,
-        path: "create" as const,
-        pathIndex: index
-      })) ?? [],
-      ...update?.map(({ id, name }, index) => ({
-        id,
-        name,
-        path: "update" as const,
-        pathIndex: index
-      })) ?? [],
-      ..._delete?.map((id, index) => ({
-        id,
-        path: "delete" as const,
-        pathIndex: index
-      })) ?? [],
-    ] as Array<Attribute>
-
-    mappedAttributes.forEach(({ path, pathIndex, name, id }) => {
-      if (nameMap.has(name)) {
+      if (!hasOriginalItem) {
         duplicatesList.push({
-          path,
-          pathIndex,
+          path: trackedAttribute.path,
+          pathIndex: trackedAttribute.pathIndex,
           key: "name",
           message: SUB_CATEGORY.attributes.duplicateName,
         })
-
-        const trackedAttribute = nameMap.get(name)
-
-        const hasOriginalItem = duplicatesList.some((attribute) => (
-          attribute.path === trackedAttribute.path &&
-          attribute.pathIndex === trackedAttribute.pathIndex &&
-          attribute.key === "name" &&
-          attribute.message === SUB_CATEGORY.attributes.duplicateName
-        ))
-
-        if (!hasOriginalItem) {
-          duplicatesList.push({
-            path: trackedAttribute.path,
-            pathIndex: trackedAttribute.pathIndex,
-            key: "name",
-            message: SUB_CATEGORY.attributes.duplicateName,
-          })
-        }
-      } else if (name) {
-        nameMap.set(name, { path, pathIndex })
       }
-      if (idMap.has(id)) {
+    } else if (name) {
+      nameMap.set(name, { path, pathIndex })
+    }
+    if (idMap.has(id)) {
+      duplicatesList.push({
+        path,
+        pathIndex,
+        key: "id",
+        message: SUB_CATEGORY.attributes.duplicateId,
+      })
+
+      const trackedAttribute = idMap.get(id)
+
+      const hasOriginalItem = duplicatesList.some((attribute) => (
+        attribute.path === trackedAttribute.path &&
+        attribute.pathIndex === trackedAttribute.pathIndex &&
+        attribute.key === "id" &&
+        attribute.message === SUB_CATEGORY.attributes.duplicateId
+      ))
+
+      if (!hasOriginalItem) {
         duplicatesList.push({
-          path,
-          pathIndex,
+          path: trackedAttribute.path,
+          pathIndex: trackedAttribute.pathIndex,
           key: "id",
           message: SUB_CATEGORY.attributes.duplicateId,
         })
-
-        const trackedAttribute = idMap.get(id)
-
-        const hasOriginalItem = duplicatesList.some((attribute) => (
-          attribute.path === trackedAttribute.path &&
-          attribute.pathIndex === trackedAttribute.pathIndex &&
-          attribute.key === "id" &&
-          attribute.message === SUB_CATEGORY.attributes.duplicateId
-        ))
-
-        if (!hasOriginalItem) {
-          duplicatesList.push({
-            path: trackedAttribute.path,
-            pathIndex: trackedAttribute.pathIndex,
-            key: "id",
-            message: SUB_CATEGORY.attributes.duplicateId,
-          })
-        }
-      } else if (id) {
-        idMap.set(id, { path, pathIndex })
       }
-    })
+    } else if (id) {
+      idMap.set(id, { path, pathIndex })
+    }
+  })
 
-    duplicatesList.forEach(({ path, pathIndex, key, message }) => {
-      ctx.addIssue({
-        path: [
-          path,
-          pathIndex,
-          key,
-        ],
-        code: "custom",
-        message,
-      })
+  duplicatesList.forEach(({ path, pathIndex, key, message }) => {
+    ctx.addIssue({
+      path: [
+        path,
+        pathIndex,
+        key,
+      ],
+      code: "custom",
+      message,
     })
   })
+}
+
+export const subcategoryAttributeUpdateSchema = z.object({
+  create: z.array(
+    attributeSchemaWithoutId,
+  )
+    .optional(),
+  update: z.array(
+    attributeSchema,
+  )
+    .optional(),
+  delete: z.array(
+    z.string({ error: ATTRIBUTE.id.required })
+      .nonempty(ATTRIBUTE.id.required)
+      .trim()
+      .meta({
+        description: "Attribute id.",
+        example: "01abcd091ab01a0123ab012a",
+      }),
+  )
+    .optional(),
+})
+  .superRefine(SubcategoryAttributeUpdateSuperRefine)
 
 export const subcategoryCreationJSONSchema = z.toJSONSchema(subcategoryCreationSchema)
 export const subcategoryUpdateJSONSchema = z.toJSONSchema(subcategoryUpdateSchema)
