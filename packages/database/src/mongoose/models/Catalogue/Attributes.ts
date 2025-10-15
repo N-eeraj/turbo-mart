@@ -11,6 +11,23 @@ export enum AttributeType {
   JSON,
 }
 
+export type AttributeMetaDataSchemaType<T extends AttributeType> = 
+  T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof TextAttributeMetaDataSchema> :
+  T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetaDataSchema> :
+  T extends AttributeType.SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetaDataSchema> :
+  T extends AttributeType.MULTI_SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetaDataSchema> :
+  T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetaDataSchema> :
+  T extends AttributeType.JSON ? mongoose.InferSchemaType<typeof JsonAttributeMetaDataSchema> :
+  never
+
+export type InferredAttributeSchemaType<T extends AttributeType> = Omit<mongoose.InferSchemaType<typeof AttributeSchema>, "type"> & {
+  type: T
+  metadata: AttributeMetaDataSchemaType<T>["metadata"]
+}
+export type Attribute<T extends AttributeType> = InferredAttributeSchemaType<T> & { _id: mongoose.Types.ObjectId }
+export type ObjectKeys<T extends AttributeType> = keyof InferredAttributeSchemaType<T>
+export type AttributeObject<T extends AttributeType> = Pick<Attribute<T>, ObjectKeys<T>> & { id: Attribute<T>["_id"] }
+
 /**
  * Mongoose schema for metadata of text attribute.
  */
@@ -205,5 +222,24 @@ AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetaDataSchema)
 AttributeSchema.discriminator(AttributeType.JSON, JsonAttributeMetaDataSchema)
+
+export function transformAttribute<T extends AttributeType>({
+  _id,
+  name,
+  type,
+  required,
+  metadata,
+}: Attribute<T>): AttributeObject<T> {
+
+  const attribute: AttributeObject<T> = {
+    id: _id,
+    name,
+    type,
+    required,
+    metadata,
+  }
+
+  return attribute
+}
 
 export default AttributeSchema
