@@ -20,10 +20,16 @@ export type AttributeMetaDataSchemaType<T extends AttributeType> =
   T extends AttributeType.JSON ? mongoose.InferSchemaType<typeof JsonAttributeMetaDataSchema> :
   never
 
-export type InferredAttributeSchemaType<T extends AttributeType> = Omit<mongoose.InferSchemaType<typeof AttributeSchema>, "type"> & {
-  type: T
-  metadata: AttributeMetaDataSchemaType<T>["metadata"]
-}
+export type MetadataSchemaType<T extends AttributeType> =
+  AttributeMetaDataSchemaType<T> extends never
+    ? { metadata?: never }
+    : { metadata: AttributeMetaDataSchemaType<T>["metadata"] }
+
+export type InferredAttributeSchemaType<T extends AttributeType> =
+  Omit<mongoose.InferSchemaType<typeof AttributeSchema>, "type">
+  & { type: T }
+  & MetadataSchemaType<T>
+
 export type Attribute<T extends AttributeType> = InferredAttributeSchemaType<T> & { _id: mongoose.Types.ObjectId }
 export type ObjectKeys<T extends AttributeType> = keyof InferredAttributeSchemaType<T>
 export type AttributeObject<T extends AttributeType> = Pick<Attribute<T>, ObjectKeys<T>> & { id: Attribute<T>["_id"] }
@@ -231,7 +237,7 @@ export function transformAttribute<T extends AttributeType>({
   metadata,
 }: Attribute<T>): AttributeObject<T> {
 
-  const attribute: AttributeObject<T> = {
+  const attribute = {
     id: _id,
     name,
     type,
@@ -239,7 +245,7 @@ export function transformAttribute<T extends AttributeType>({
     metadata,
   }
 
-  return attribute
+  return attribute as AttributeObject<T>
 }
 
 export default AttributeSchema
