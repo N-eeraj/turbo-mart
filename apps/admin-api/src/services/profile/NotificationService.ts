@@ -110,7 +110,7 @@ export default class NotificationService extends BaseService {
     if (notificationIds && !notificationIds.length) {
       throw {
         status: 400,
-        message: "Not notifications selected",
+        message: "No notifications selected",
       }
     }
 
