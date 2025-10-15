@@ -8,12 +8,15 @@ import Subcategory, {
 import {
   type CategoryObject,
 } from "@app/database/mongoose/models/Catalogue/Category.ts"
+import {
+  AttributeType,
+  type AttributeObject,
+} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
 
 import BaseService from "#services/BaseService"
 import {
   SubcategoryUpdateData,
   type SubcategoryCreationData,
-  type SubcategoryAttributeUpdateData,
 } from "#schemas/admin/catalogue/subcategory"
 
 export interface ListOptions {
@@ -22,6 +25,12 @@ export interface ListOptions {
   search?: string
   order?: mongoose.SortOrder
   categories?: Array<CategoryObject["id"]>
+}
+
+interface SubcategoryAttributeUpdateData {
+  create: Array<Exclude<AttributeObject<AttributeType>, "id">>
+  update: Array<AttributeObject<AttributeType>>
+  delete: Array<AttributeObject<AttributeType>["id"]>
 }
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
@@ -215,6 +224,36 @@ export default class SubcategoryService extends BaseService {
     }
   }
 
+  private static async ensureAttributeIds(
+    subcategoryId: SubcategoryObject["id"],
+    attributeIds: Array<AttributeObject<AttributeType>["id"]>,
+  ) {
+    const attributes = await Subcategory.aggregate([
+      {
+        $match: {
+          _id: subcategoryId,
+        },
+      },
+      {
+        $project: {
+          attributes: {
+            $filter: {
+              input: "$attributes",
+              as: "attribute",
+              cond: {
+                $in: [
+                  "$$attribute._id", attributeIds,
+                ]
+              },
+            },
+          },
+        },
+      },
+    ])
+
+    console.log(attributes)
+  }
+
   /**
    * Updates the subcategory attributes.
    * 
@@ -240,14 +279,8 @@ export default class SubcategoryService extends BaseService {
         message: "Subcategory not found",
       }
     }
-    if (attributeData.create?.length) {
-      console.log(attributeData.create)
-    }
-    if (attributeData.update?.length) {
-      console.log(attributeData.update)
-    }
-    if (attributeData.delete?.length) {
-      console.log(attributeData.delete)
-    }
+
+    this.ensureAttributeIds(subcategoryId, attributeData.update.map(({ id }) => id))
+    this.ensureAttributeIds(subcategoryId, attributeData.delete)
   }
 }
