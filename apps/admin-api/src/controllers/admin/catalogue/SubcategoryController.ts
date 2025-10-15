@@ -162,6 +162,25 @@ export default class SubcategoryController extends BaseController {
 
       const attributeData = super.validateRequest(subcategoryAttributeUpdateSchema, body)
 
+      const {
+        validIds: validUpdateIds,
+        invalidIds: invalidUpdateIds,
+      } = super.parseObjectIdBulk((attributeData.update ?? []).map(({ id }) => id))
+
+      const {
+        validIds: validDeleteIds,
+        invalidIds: invalidDeleteIds,
+      } = super.parseObjectIdBulk(attributeData.delete ?? [])
+
+      if (invalidUpdateIds.length || invalidDeleteIds.length) {
+        throw {
+          status: 400,
+          message: "Invalid Ids",
+          ...(invalidUpdateIds.length && { update: invalidUpdateIds }),
+          ...(invalidDeleteIds.length && { delete: invalidDeleteIds }),
+        }
+      }
+
       const data = await SubcategoryService.setAttributes(subcategoryId, attributeData)
 
       super.sendSuccess(res, {
