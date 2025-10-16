@@ -2,6 +2,7 @@ import type mongoose from "mongoose"
 
 import Subcategory, {
   transformSubcategory,
+  type Subcategory as SubcategoryType,
   type InferredSubcategorySchemaType,
   type SubcategoryObject,
 } from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
@@ -40,7 +41,9 @@ type ParseStringId<TItem> =
       : TItem // otherwise, leave it unchanged
 
 export type ParsedSubcategoryAttributeUpdateData = {
-  [Key in keyof SubcategoryAttributeUpdateData]-?: Array<ParseStringId<NonNullable<SubcategoryAttributeUpdateData[Key]>[number]>>
+  [Key in keyof SubcategoryAttributeUpdateData]-?: Array<
+    ParseStringId<NonNullable<SubcategoryAttributeUpdateData[Key]>[number]>
+  >
 }
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
@@ -234,11 +237,19 @@ export default class SubcategoryService extends BaseService {
     }
   }
 
+  /**
+   * Verifies that all attribute ids exist under the given subcategory.
+   * 
+   * @param subcategoryId - Id of the subcategory.
+   * @param attributeIds - List of attribute ids.
+   * 
+   * @returns list of attribute ids that are not found under the subcategory.
+   */
   private static async getInvalidAttributeIds(
     subcategoryId: SubcategoryObject["id"],
     attributeIds: Array<AttributeId>,
   ): Promise<Array<AttributeId>> {
-    const subcategoryAttributes = await Subcategory.aggregate([
+    const [{ attributes }] = await Subcategory.aggregate<Pick<SubcategoryType, "_id" | "attributes">>([
       {
         $match: {
           _id: subcategoryId,
@@ -261,11 +272,9 @@ export default class SubcategoryService extends BaseService {
       },
     ])
 
-    const attributeSet = new Set(subcategoryAttributes[0].attributes.map(({ _id }) => _id.toString()))
+    const attributeSet = new Set(attributes?.map(({ _id }) => _id.toString()))
 
-    const notFoundAttributes = attributeIds.filter((id) => !attributeSet.has(id.toString()))
-
-    return notFoundAttributes
+    return attributeIds.filter((id) => !attributeSet.has(id.toString()))
   }
 
   /**
@@ -278,6 +287,7 @@ export default class SubcategoryService extends BaseService {
    *  - `delete`- List of existing attribute ids to delete.
    * 
    * @throws 404 error if subcategory not found.
+   * @throws 404 error if attributes are not found under the subcategory.
    * @throws If updating the subcategory attributes failed.
    */
   static async setAttributes(
@@ -301,8 +311,8 @@ export default class SubcategoryService extends BaseService {
       throw {
         status: 404,
         message: "Attributes not found",
-        update: invalidUpdateAttributes,
-        delete: invalidDeleteAttributes,
+        ...(invalidUpdateAttributes.length && { update: invalidUpdateAttributes }),
+        ...(invalidDeleteAttributes.length && { delete: invalidDeleteAttributes }),
       }
     }
   }
