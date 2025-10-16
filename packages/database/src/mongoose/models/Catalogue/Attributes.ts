@@ -1,5 +1,20 @@
 import mongoose from "mongoose"
 
+/**
+ * Types for subcategory attributes.
+ *
+ * @readonly
+ * @enum
+ * 
+ * @property TEXT = 0 - Free-form text input.
+ * @property NUMBER = 1 - Numeric value.
+ * @property BOOLEAN = 2 - Boolean value.
+ * @property SELECT = 3 - Single option from a predefined list.
+ * @property MULTI_SELECT = 4 - Multiple options from a predefined list.
+ * @property COLOR = 5 - Color value, that attributes that require color picker/swatches.
+ * @property DATE = 6 - Date or timestamp value.
+ * @property JSON = 7 - Structured data stored as a key value JSON object.
+ */
 export enum AttributeType {
   TEXT,
   NUMBER,
@@ -11,19 +26,36 @@ export enum AttributeType {
   JSON,
 }
 
-export type AttributeMetaDataSchemaType<T extends AttributeType> = 
-  T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof TextAttributeMetaDataSchema> :
-  T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetaDataSchema> :
-  T extends AttributeType.SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetaDataSchema> :
-  T extends AttributeType.MULTI_SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetaDataSchema> :
-  T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetaDataSchema> :
-  T extends AttributeType.JSON ? mongoose.InferSchemaType<typeof JsonAttributeMetaDataSchema> :
+/**
+ * Maps an AttributeType to its corresponding Mongoose metadata schema type.
+ * 
+ * @template T - The specific attribute type.
+ * @typeParam T - Must extend AttributeType.
+ * 
+ * @returns The inferred metadata schema type for the given attribute type.
+ *
+ * | AttributeType         | Schema Type                          |
+ * |-----------------------|--------------------------------------|
+ * | TEXT                  | TextAttributeMetadataSchema          |
+ * | NUMBER                | NumberAttributeMetadataSchema        |
+ * | SELECT                | ListAttributeMetadataSchema          |
+ * | MULTI_SELECT          | ListAttributeMetadataSchema          |
+ * | DATE                  | DateAttributeMetadataSchema          |
+ * | JSON                  | JsonAttributeMetadataSchema          |
+ */
+export type AttributeMetadataSchemaType<T extends AttributeType> = 
+  T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof TextAttributeMetadataSchema> :
+  T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetadataSchema> :
+  T extends AttributeType.SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetadataSchema> :
+  T extends AttributeType.MULTI_SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetadataSchema> :
+  T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetadataSchema> :
+  T extends AttributeType.JSON ? mongoose.InferSchemaType<typeof JsonAttributeMetadataSchema> :
   never
 
 export type MetadataSchemaType<T extends AttributeType> =
-  AttributeMetaDataSchemaType<T> extends never
+  AttributeMetadataSchemaType<T> extends never
     ? { metadata?: never }
-    : { metadata: AttributeMetaDataSchemaType<T>["metadata"] }
+    : { metadata: AttributeMetadataSchemaType<T>["metadata"] }
 
 export type InferredAttributeSchemaType<T extends AttributeType> =
   Omit<mongoose.InferSchemaType<typeof AttributeSchema>, "type">
@@ -37,7 +69,7 @@ export type AttributeObject<T extends AttributeType> = Pick<Attribute<T>, Object
 /**
  * Mongoose schema for metadata of text attribute.
  */
-const TextAttributeMetaDataSchema = new mongoose.Schema({
+const TextAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
     type: {
       maxLength: {
@@ -54,7 +86,7 @@ const TextAttributeMetaDataSchema = new mongoose.Schema({
 /**
  * Mongoose schema for metadata of number attribute.
  */
-const NumberAttributeMetaDataSchema = new mongoose.Schema({
+const NumberAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
     type: {
       min: {
@@ -87,7 +119,7 @@ const NumberAttributeMetaDataSchema = new mongoose.Schema({
 /**
  * Base mongoose schema for list attribute metadata.
  */
-const ListAttributeMetaDataBaseSchema = new mongoose.Schema({
+const ListAttributeMetadataBaseSchema = new mongoose.Schema({
   type: {
     type: Number,
     enum: [
@@ -152,15 +184,16 @@ const ListNumberOptionSchema = new mongoose.Schema({
   _id: false,
 })
 
-ListAttributeMetaDataBaseSchema.discriminator(AttributeType.TEXT, ListTextOptionSchema)
-ListAttributeMetaDataBaseSchema.discriminator(AttributeType.NUMBER, ListNumberOptionSchema)
+// handle the options schema based on the `type` discriminatorKey
+ListAttributeMetadataBaseSchema.discriminator(AttributeType.TEXT, ListTextOptionSchema)
+ListAttributeMetadataBaseSchema.discriminator(AttributeType.NUMBER, ListNumberOptionSchema)
 
 /**
  * Mongoose schema for metadata of list attribute.
  */
-const ListAttributeMetaDataSchema = new mongoose.Schema({
+const ListAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
-    type: ListAttributeMetaDataBaseSchema,
+    type: ListAttributeMetadataBaseSchema,
     required: true,
   },
 }, {
@@ -171,7 +204,7 @@ const ListAttributeMetaDataSchema = new mongoose.Schema({
 /**
  * Mongoose schema for metadata of date attribute.
  */
-const DateAttributeMetaDataSchema = new mongoose.Schema({
+const DateAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
     type: {
       min: {
@@ -192,7 +225,7 @@ const DateAttributeMetaDataSchema = new mongoose.Schema({
 /**
  * Mongoose schema for metadata of JSON attribute.
  */
-const JsonAttributeMetaDataSchema = new mongoose.Schema({
+const JsonAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
     type: mongoose.Schema.Types.Mixed,
     default: undefined,
@@ -222,13 +255,21 @@ const AttributeSchema = new mongoose.Schema({
   discriminatorKey: "type",
 })
 
-AttributeSchema.discriminator(AttributeType.TEXT, TextAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetaDataSchema)
-AttributeSchema.discriminator(AttributeType.JSON, JsonAttributeMetaDataSchema)
+// handle the metadata schema based on the `type` discriminatorKey
+AttributeSchema.discriminator(AttributeType.TEXT, TextAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.JSON, JsonAttributeMetadataSchema)
 
+/**
+ * Transforms an Attribute object by mapping internal `_id` to external `id`.
+ * 
+ * @param attribute - The attribute object to transform.
+ * 
+ * @returns The transformed attribute object.
+ */
 export function transformAttribute<T extends AttributeType>({
   _id,
   name,

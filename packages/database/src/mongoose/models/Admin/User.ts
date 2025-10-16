@@ -40,6 +40,7 @@ const SALT_ROUNDS = 10
  *
  * @readonly
  * @enum
+ * 
  * @property SUPER_ADMIN = 0 - Highest level admin with full privileges.
  * @property ADMIN = 1 - Standard admin with permission based access.
  */
@@ -53,6 +54,7 @@ export enum Roles {
  *
  * @readonly
  * @enum
+ * 
  * @property RETAILER_MANAGER = 0 - Permission to manage retailers.
  * @property CATALOGUE_MANAGER = 1 - Permission to manage product catalogues.
  * @property DELIVERY_PERSON_MANAGER = 2 - Permission to manage delivery personnel.

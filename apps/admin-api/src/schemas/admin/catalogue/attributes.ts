@@ -36,7 +36,7 @@ const attributeBaseSchemaWithoutId = attributeBaseSchema.omit({
   id: true,
 })
 
-const TEXT_ATTRIBUTE_TYPE_METADATA = {
+const textAttributeTypeMetadata = {
   type: z.literal(AttributeType.TEXT),
   metadata: z.object({
     maxLength: z.number({ error: ATTRIBUTE.metadata.text.maxLength.valid })
@@ -47,7 +47,7 @@ const TEXT_ATTRIBUTE_TYPE_METADATA = {
   })
     .optional(),
 }
-const NUMBER_ATTRIBUTE_TYPE_METADATA = {
+const numberAttributeTypeMetadata = {
   type: z.literal(AttributeType.NUMBER),
   metadata: z.object({
     min: z.number({ error: ATTRIBUTE.metadata.number.min.valid })
@@ -84,67 +84,73 @@ const NUMBER_ATTRIBUTE_TYPE_METADATA = {
   })
     .optional(),
 }
-const BOOLEAN_ATTRIBUTE_TYPE_METADATA = {
+const booleanAttributeTypeMetadata = {
   type: z.literal(AttributeType.BOOLEAN),
 }
-const LIST_METADATA = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal(AttributeType.TEXT),
-    options: z.array(
-      z.string({ error: ATTRIBUTE.metadata.list.text.valid })
-        .nonempty({ error: ATTRIBUTE.metadata.list.text.valid })
-        .meta({
-          description: "Text value option for the list attribute types.",
-          example: "Android",
-        }),
-    )
-      .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
-  }),
-  z.object({
-    type: z.literal(AttributeType.NUMBER),
-    options: z.array(
-      z.object({
-        value: z.number({ error: ATTRIBUTE.metadata.list.number.value.valid })
-          .meta({
-            description: "Number value option for the list attribute types.",
-            example: 4,
-          }),
-        unit: z.string({ error: ATTRIBUTE.metadata.list.number.unit.valid })
-          .optional()
-          .meta({
-            description: "Unit the attribute is measured in.",
-            example: "Inches",
-          }),
-        template: z.string({ error: ATTRIBUTE.metadata.list.number.template.valid })
-          .optional()
-          .meta({
-            description: "The display template for the value.",
-            example: "{{value}} {{unit}}",
-          }),
-        base: z.number({ error: ATTRIBUTE.metadata.list.number.base.valid })
-          .min(1, { error: ATTRIBUTE.metadata.list.number.base.minValue })
-          .optional()
-          .meta({
-            description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",
-            example: 10,
-          }),
+
+const textTypeOptionsList = z.object({
+  type: z.literal(AttributeType.TEXT),
+  options: z.array(
+    z.string({ error: ATTRIBUTE.metadata.list.text.valid })
+      .nonempty({ error: ATTRIBUTE.metadata.list.text.valid })
+      .meta({
+        description: "Text value option for the list attribute types.",
+        example: "Android",
       }),
-    )
-      .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
-  }),
+  )
+    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
+})
+const numberTypeOptionsList = z.object({
+  type: z.literal(AttributeType.NUMBER),
+  options: z.array(
+    z.object({
+      value: z.number({ error: ATTRIBUTE.metadata.list.number.value.valid })
+        .meta({
+          description: "Number value option for the list attribute types.",
+          example: 4,
+        }),
+      unit: z.string({ error: ATTRIBUTE.metadata.list.number.unit.valid })
+        .optional()
+        .meta({
+          description: "Unit the attribute is measured in.",
+          example: "Inches",
+        }),
+      template: z.string({ error: ATTRIBUTE.metadata.list.number.template.valid })
+        .optional()
+        .meta({
+          description: "The display template for the value.",
+          example: "{{value}} {{unit}}",
+        }),
+      base: z.number({ error: ATTRIBUTE.metadata.list.number.base.valid })
+        .min(1, { error: ATTRIBUTE.metadata.list.number.base.minValue })
+        .optional()
+        .meta({
+          description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",
+          example: 10,
+        }),
+    }),
+  )
+    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
+})
+
+// combination of textTypeOptionsList and numberTypeOptionsList based on the type literal
+const listMetadata = z.discriminatedUnion("type", [
+  textTypeOptionsList,
+  numberTypeOptionsList,
 ])
-const SELECT_ATTRIBUTE_TYPE_METADATA = {
+const selectAttributeTypeMetadata = {
   type: z.literal(AttributeType.SELECT),
-  metadata: LIST_METADATA,
+  metadata: listMetadata,
 }
-const MULTI_SELECT_ATTRIBUTE_TYPE_METADATA = {
+const multiSelectAttributeTypeMetadata = {
   type: z.literal(AttributeType.MULTI_SELECT),
-  metadata: LIST_METADATA,
+  metadata: listMetadata,
 }
-const COLOR_ATTRIBUTE_TYPE_METADATA = {
+
+const colorAttributeTypeMetadata = {
   type: z.literal(AttributeType.COLOR),
 }
-const DATE_ATTRIBUTE_TYPE_METADATA = {
+const dateAttributeTypeMetadata = {
   type: z.literal(AttributeType.DATE),
   metadata: z.object({
     min: z.iso.datetime({ error: ATTRIBUTE.metadata.date.min.valid })
@@ -162,7 +168,7 @@ const DATE_ATTRIBUTE_TYPE_METADATA = {
   })
     .optional(),
 }
-const JSON_ATTRIBUTE_TYPE_METADATA = {
+const jsonAttributeTypeMetadata = {
   type: z.literal(AttributeType.JSON),
   metadata: z.looseObject({})
     .optional()
@@ -173,9 +179,9 @@ const JSON_ATTRIBUTE_TYPE_METADATA = {
 
 // number attribute schemas and super refine function
 const numberAttributeSchema = attributeBaseSchema
-  .extend(NUMBER_ATTRIBUTE_TYPE_METADATA)
+  .extend(numberAttributeTypeMetadata)
 const numberAttributeSchemaWithoutId = attributeBaseSchemaWithoutId
-  .extend(NUMBER_ATTRIBUTE_TYPE_METADATA)
+  .extend(numberAttributeTypeMetadata)
 type NumberAttributeSchema<TId extends boolean> = TId extends true
   ? typeof numberAttributeSchema
   : typeof numberAttributeSchemaWithoutId
@@ -202,9 +208,9 @@ function numberMetadataSuperRefine<TId extends boolean>(
 
 // date attribute schemas and super refine function
 const dateAttributeSchema = attributeBaseSchema
-  .extend(DATE_ATTRIBUTE_TYPE_METADATA)
+  .extend(dateAttributeTypeMetadata)
 const dateAttributeSchemaWithoutId = attributeBaseSchemaWithoutId
-  .extend(DATE_ATTRIBUTE_TYPE_METADATA)
+  .extend(dateAttributeTypeMetadata)
 type DateAttributeSchema<TId extends boolean> = TId extends true
   ? typeof dateAttributeSchema
   : typeof dateAttributeSchemaWithoutId
@@ -230,28 +236,28 @@ function dateMetadataSuperRefine<TId extends boolean>(
 }
 
 const ATTRIBUTE_METADATA_SCHEMAS = [
-  attributeBaseSchema.extend(TEXT_ATTRIBUTE_TYPE_METADATA),
+  attributeBaseSchema.extend(textAttributeTypeMetadata),
   numberAttributeSchema.superRefine(numberMetadataSuperRefine<true>),
-  attributeBaseSchema.extend(BOOLEAN_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchema.extend(SELECT_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchema.extend(MULTI_SELECT_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchema.extend(COLOR_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchema.extend(DATE_ATTRIBUTE_TYPE_METADATA)
+  attributeBaseSchema.extend(booleanAttributeTypeMetadata),
+  attributeBaseSchema.extend(selectAttributeTypeMetadata),
+  attributeBaseSchema.extend(multiSelectAttributeTypeMetadata),
+  attributeBaseSchema.extend(colorAttributeTypeMetadata),
+  attributeBaseSchema.extend(dateAttributeTypeMetadata)
     .superRefine(dateMetadataSuperRefine<true>),
-  attributeBaseSchema.extend(JSON_ATTRIBUTE_TYPE_METADATA),
+  attributeBaseSchema.extend(jsonAttributeTypeMetadata),
 ] as const
 const ATTRIBUTE_METADATA_SCHEMAS_WITHOUT_ID = [
-  attributeBaseSchemaWithoutId.extend(TEXT_ATTRIBUTE_TYPE_METADATA),
+  attributeBaseSchemaWithoutId.extend(textAttributeTypeMetadata),
   numberAttributeSchemaWithoutId.superRefine(numberMetadataSuperRefine<false>),
-  attributeBaseSchemaWithoutId.extend(BOOLEAN_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchemaWithoutId.extend(SELECT_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchemaWithoutId.extend(MULTI_SELECT_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchemaWithoutId.extend(COLOR_ATTRIBUTE_TYPE_METADATA),
-  attributeBaseSchemaWithoutId.extend(DATE_ATTRIBUTE_TYPE_METADATA)
+  attributeBaseSchemaWithoutId.extend(booleanAttributeTypeMetadata),
+  attributeBaseSchemaWithoutId.extend(selectAttributeTypeMetadata),
+  attributeBaseSchemaWithoutId.extend(multiSelectAttributeTypeMetadata),
+  attributeBaseSchemaWithoutId.extend(colorAttributeTypeMetadata),
+  attributeBaseSchemaWithoutId.extend(dateAttributeTypeMetadata)
     .superRefine(dateMetadataSuperRefine<false>),
-  attributeBaseSchemaWithoutId.extend(JSON_ATTRIBUTE_TYPE_METADATA),
+  attributeBaseSchemaWithoutId.extend(jsonAttributeTypeMetadata),
 ] as const
 
-
+// combination of all attribute metadata based on the attribute type literal
 export const attributeSchema = z.discriminatedUnion("type", ATTRIBUTE_METADATA_SCHEMAS)
 export const attributeSchemaWithoutId = z.discriminatedUnion("type", ATTRIBUTE_METADATA_SCHEMAS_WITHOUT_ID)

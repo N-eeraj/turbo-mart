@@ -37,7 +37,12 @@ export const subcategoryCreationSchema = z.object({
 
 export const subcategoryUpdateSchema = subcategoryCreationSchema.partial()
 
-
+/**
+ * Validates that names are unique across both create and update lists, and that IDs are unique across both update and delete lists.
+ * 
+ * @param values - Schema values to be validated.
+ * @param ctx - Zod refinement context.
+ */
 function SubcategoryAttributeUpdateSuperRefine(
   {
     create,
@@ -56,7 +61,7 @@ function SubcategoryAttributeUpdateSuperRefine(
   }> = []
 
   interface Attribute {
-    path: "create" | "update" | "delete"
+    path: keyof z.infer<typeof subcategoryAttributeUpdateSchema>
     pathIndex: number
     name: string
     id?: string
@@ -82,6 +87,7 @@ function SubcategoryAttributeUpdateSuperRefine(
   ] as Array<Attribute>
 
   mappedAttributes.forEach(({ path, pathIndex, name, id }) => {
+    // unique name check
     if (nameMap.has(name)) {
       duplicatesList.push({
         path,
@@ -110,6 +116,8 @@ function SubcategoryAttributeUpdateSuperRefine(
     } else if (name) {
       nameMap.set(name, { path, pathIndex })
     }
+
+    // unique id check
     if (idMap.has(id)) {
       duplicatesList.push({
         path,
@@ -140,6 +148,7 @@ function SubcategoryAttributeUpdateSuperRefine(
     }
   })
 
+  // add validation issues to the context based on the specific path location
   duplicatesList.forEach(({ path, pathIndex, key, message }) => {
     ctx.addIssue({
       path: [

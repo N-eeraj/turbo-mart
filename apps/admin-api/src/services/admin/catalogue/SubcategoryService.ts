@@ -17,6 +17,7 @@ import BaseService from "#services/BaseService"
 import {
   SubcategoryUpdateData,
   type SubcategoryCreationData,
+  type SubcategoryAttributeUpdateData,
 } from "#schemas/admin/catalogue/subcategory"
 
 export interface ListOptions {
@@ -27,10 +28,19 @@ export interface ListOptions {
   categories?: Array<CategoryObject["id"]>
 }
 
-interface SubcategoryAttributeUpdateData {
-  create: Array<Exclude<AttributeObject<AttributeType>, "id">>
-  update: Array<AttributeObject<AttributeType>>
-  delete: Array<AttributeObject<AttributeType>["id"]>
+type AttributeId = AttributeObject<AttributeType>["id"]
+
+type ParseStringId<TItem> =
+  // if the item is a string,
+  TItem extends string
+    ? AttributeId // convert to ObjectId
+    // if the item is an object with an `id: string`,
+    : TItem extends { id: string }
+      ? Omit<TItem, "id"> & { id: AttributeId } // convert `id` to ObjectId
+      : TItem // otherwise, leave it unchanged
+
+export type ParsedSubcategoryAttributeUpdateData = {
+  [Key in keyof SubcategoryAttributeUpdateData]-?: Array<ParseStringId<NonNullable<SubcategoryAttributeUpdateData[Key]>[number]>>
 }
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
@@ -226,7 +236,7 @@ export default class SubcategoryService extends BaseService {
 
   private static async ensureAttributeIds(
     subcategoryId: SubcategoryObject["id"],
-    attributeIds: Array<AttributeObject<AttributeType>["id"]>,
+    attributeIds: Array<AttributeId>,
   ) {
     const attributes = await Subcategory.aggregate([
       {
@@ -268,7 +278,7 @@ export default class SubcategoryService extends BaseService {
    */
   static async setAttributes(
     subcategoryId: SubcategoryObject["id"],
-    attributeData: SubcategoryAttributeUpdateData,
+    attributeData: ParsedSubcategoryAttributeUpdateData,
   ): Promise<void> {
     const subcategory = await Subcategory.findById(subcategoryId)
 
