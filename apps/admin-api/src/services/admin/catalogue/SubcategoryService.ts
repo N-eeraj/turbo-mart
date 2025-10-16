@@ -234,11 +234,11 @@ export default class SubcategoryService extends BaseService {
     }
   }
 
-  private static async ensureAttributeIds(
+  private static async getInvalidAttributeIds(
     subcategoryId: SubcategoryObject["id"],
     attributeIds: Array<AttributeId>,
-  ) {
-    const attributes = await Subcategory.aggregate([
+  ): Promise<Array<AttributeId>> {
+    const subcategoryAttributes = await Subcategory.aggregate([
       {
         $match: {
           _id: subcategoryId,
@@ -261,7 +261,11 @@ export default class SubcategoryService extends BaseService {
       },
     ])
 
-    console.log(attributes)
+    const attributeSet = new Set(subcategoryAttributes[0].attributes.map(({ _id }) => _id.toString()))
+
+    const notFoundAttributes = attributeIds.filter((id) => !attributeSet.has(id.toString()))
+
+    return notFoundAttributes
   }
 
   /**
@@ -290,7 +294,16 @@ export default class SubcategoryService extends BaseService {
       }
     }
 
-    this.ensureAttributeIds(subcategoryId, attributeData.update.map(({ id }) => id))
-    this.ensureAttributeIds(subcategoryId, attributeData.delete)
+    const invalidUpdateAttributes = await this.getInvalidAttributeIds(subcategoryId, attributeData.update.map(({ id }) => id))
+    const invalidDeleteAttributes = await this.getInvalidAttributeIds(subcategoryId, attributeData.delete)
+
+    if (invalidUpdateAttributes.length || invalidDeleteAttributes.length) {
+      throw {
+        status: 404,
+        message: "Attributes not found",
+        update: invalidUpdateAttributes,
+        delete: invalidDeleteAttributes,
+      }
+    }
   }
 }

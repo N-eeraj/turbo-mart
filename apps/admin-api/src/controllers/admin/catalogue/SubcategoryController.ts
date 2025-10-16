@@ -6,6 +6,7 @@ import {
 import BaseController from "#controllers/BaseController"
 import SubcategoryService, {
   type ListOptions,
+  type ParsedSubcategoryAttributeUpdateData,
 } from "#services/admin/catalogue/SubcategoryService"
 import {
   subcategoryCreationSchema,
@@ -181,7 +182,13 @@ export default class SubcategoryController extends BaseController {
         }
       }
 
-      const data = await SubcategoryService.setAttributes(subcategoryId, attributeData)
+      const parsedAttributeData: ParsedSubcategoryAttributeUpdateData = {
+        create: attributeData.create ?? [],
+        update: (attributeData.update ?? []).map((attribute, index) => ({ ...attribute, id: validUpdateIds[index] })),
+        delete: validDeleteIds,
+      }
+
+      const data = await SubcategoryService.setAttributes(subcategoryId, parsedAttributeData)
 
       super.sendSuccess(res, {
         message: "Updated Subcategory Attributes",
