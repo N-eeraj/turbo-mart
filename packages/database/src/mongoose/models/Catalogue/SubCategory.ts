@@ -53,7 +53,8 @@ SubcategorySchema.index({
 })
 
 /**
- * Transforms an Subcategory object by mapping internal `_id` to external `id`.
+ * Transforms an Subcategory object by mapping internal `_id` to external `id` 
+ * and maps the attributes to the corresponding attribute object.
  * 
  * @param subcategory - The subcategory object to transform.
  * 

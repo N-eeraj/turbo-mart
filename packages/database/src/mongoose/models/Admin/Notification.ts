@@ -10,6 +10,7 @@ export type NotificationObject = Pick<Notification, ObjectKeys> & { id: Notifica
  *
  * @readonly
  * @enum
+ * 
  * @property SYSTEM = 0 - System generated notification.
  * @property SELLER_REGISTRATION_REQUEST = 1 - A seller has requested for registration.
  * @property DELIVERY_PERSON_REGISTRATION_REQUEST = 2 - A delivery person has requested for registration.
