@@ -304,9 +304,15 @@ export default class SubcategoryService extends BaseService {
       }
     }
 
-    const invalidUpdateAttributes = await this.getInvalidAttributeIds(subcategoryId, attributeData.update.map(({ id }) => id))
-    const invalidDeleteAttributes = await this.getInvalidAttributeIds(subcategoryId, attributeData.delete)
+    const [
+      invalidUpdateAttributes,
+      invalidDeleteAttributes,
+    ] = await Promise.all([
+      this.getInvalidAttributeIds(subcategoryId, attributeData.update.map(({ id }) => id)),
+      this.getInvalidAttributeIds(subcategoryId, attributeData.delete),
+    ])
 
+    // throw not found error if any attribute id is not found under the subcategory
     if (invalidUpdateAttributes.length || invalidDeleteAttributes.length) {
       throw {
         status: 404,

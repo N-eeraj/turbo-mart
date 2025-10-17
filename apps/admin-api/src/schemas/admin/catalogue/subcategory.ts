@@ -51,6 +51,16 @@ function SubcategoryAttributeUpdateSuperRefine(
   }: z.infer<typeof subcategoryAttributeUpdateSchema>,
   ctx: z.RefinementCtx
 ) {
+  if (!(create?.length || update?.length || _delete?.length)) {
+    return ctx.addIssue({
+      path: [
+        "root",
+      ],
+      code: "custom",
+      message: SUB_CATEGORY.attributes.missingFields,
+    })
+  }
+
   const nameMap = new Map()
   const idMap = new Map()
   const duplicatesList: Array<{
