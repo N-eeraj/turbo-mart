@@ -85,6 +85,7 @@ export const SUB_CATEGORY = {
     required: "Please enter a subcategory slug",
   },
   attributes: {
+    missingFields: "At least one of \"create\", \"update\", or \"delete\" field must be provided.",
     duplicateName: "Please enter unique attribute names",
     duplicateId: "Unique attributes required",
   },
