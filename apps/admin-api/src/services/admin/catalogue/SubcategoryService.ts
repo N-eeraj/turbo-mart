@@ -321,5 +321,57 @@ export default class SubcategoryService extends BaseService {
         ...(invalidDeleteAttributes.length && { delete: invalidDeleteAttributes }),
       }
     }
+
+    // create attributes
+    if (attributeData.create.length) {
+      await Subcategory.findByIdAndUpdate(subcategoryId, {
+        $push: {
+          attributes: {
+            $each: attributeData.create,
+          },
+        },
+      })
+    }
+    
+    // delete attributes
+    if (attributeData.delete.length) {
+      await Subcategory.findByIdAndUpdate(subcategoryId, {
+        $pull: {
+          attributes: {
+            _id: {
+              $in: attributeData.delete,
+            }
+          },
+        },
+      })
+    }
+
+    // update attributes
+    if (attributeData.update.length) {
+      const {
+        setObj,
+        arrayFilters,
+      } = attributeData.update.reduce((reduced: {
+        setObj: Record<string, any>
+        arrayFilters: Array<Record<string, any>>
+      }, { id, ...attribute }, index) => {
+        const indexedKey = `updateAttributes${index}`
+      
+        reduced.arrayFilters.push({
+          [`${indexedKey}._id`]: id,
+        })
+      
+        for (let key in attribute) {
+          reduced.setObj[`attributes.$[${indexedKey}].${key}`] = attribute[key as keyof typeof attribute]
+        }
+      
+        return reduced
+      }, {setObj: {}, arrayFilters: []})
+      await Subcategory.findByIdAndUpdate(subcategoryId, {
+        $set: setObj,
+      }, {
+        arrayFilters,
+      })
+    }
   }
 }
