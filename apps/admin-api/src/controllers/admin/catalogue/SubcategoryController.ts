@@ -176,7 +176,7 @@ export default class SubcategoryController extends BaseController {
       if (invalidUpdateIds.length || invalidDeleteIds.length) {
         throw {
           status: 400,
-          message: "Invalid Ids",
+          message: "Invalid attribute ids",
           ...(invalidUpdateIds.length && { update: invalidUpdateIds }),
           ...(invalidDeleteIds.length && { delete: invalidDeleteIds }),
         }
