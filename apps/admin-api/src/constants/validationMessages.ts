@@ -102,6 +102,9 @@ export const ATTRIBUTE = {
     required: "Please select an attribute type",
     valid: "Please select a valid attribute type",
   },
+  required: {
+    valid: "Please select a boolean value",
+  },
   metadata: {
     text: {
       maxLength: {
@@ -129,10 +132,16 @@ export const ATTRIBUTE = {
       },
     },
     list: {
+      required: "Please enter the required metadata",
+      type: {
+        required: "Please select a type",
+        valid: "Please select a valid type",
+      },
       text: {
         valid: "Please enter a valid option",
       },
       number: {
+        required: "Please enter the required metadata",
         value: {
           valid: "Please enter a valid number",
         },

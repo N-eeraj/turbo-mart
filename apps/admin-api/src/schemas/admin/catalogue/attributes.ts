@@ -25,7 +25,7 @@ const attributeBaseSchema = z.object({
       description: "Attribute name.",
       example: "Color",
     }),
-  required: z.boolean()
+  required: z.boolean({ error: ATTRIBUTE.required.valid })
     .optional()
     .meta({
       description: "Indicates if the attribute is mandatory for products in the subcategory.",
@@ -97,6 +97,7 @@ const textTypeOptionsList = z.object({
         description: "Text value option for the list attribute types.",
         example: "Android",
       }),
+    { error: ATTRIBUTE.metadata.list.options.minLength }
   )
     .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
 })
@@ -128,7 +129,8 @@ const numberTypeOptionsList = z.object({
           description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",
           example: 10,
         }),
-    }),
+    }, { error: ATTRIBUTE.metadata.list.number.required }),
+    { error: ATTRIBUTE.metadata.list.options.minLength }
   )
     .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
 })
@@ -137,7 +139,16 @@ const numberTypeOptionsList = z.object({
 const listMetadata = z.discriminatedUnion("type", [
   textTypeOptionsList,
   numberTypeOptionsList,
-])
+], { error: (issue) => {
+  if (!issue.input) return ATTRIBUTE.metadata.list.required
+  const validTypes = [
+    AttributeType.TEXT,
+    AttributeType.NUMBER,
+  ]
+  const type = (issue.input as Record<"type", typeof validTypes[number]>).type
+  if (!type) return ATTRIBUTE.metadata.list.type.required
+  if (!validTypes.includes(type)) return ATTRIBUTE.metadata.list.type.valid
+}})
 const selectAttributeTypeMetadata = {
   type: z.literal(AttributeType.SELECT),
   metadata: listMetadata,
