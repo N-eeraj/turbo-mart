@@ -505,8 +505,7 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "object",
-                    "properties": {}
+                    "type": "null"
                   },
                   "message": {
                     "type": "string",
@@ -518,16 +517,7 @@
           }
         },
         "400": {
-          "$ref": "#/components/responses/InvalidSubcategoryId"
-        },
-        "401": {
-          "$ref": "#/components/responses/UnauthenticatedUser"
-        },
-        "403": {
-          "$ref": "#/components/responses/UnauthorizedUser"
-        },
-        "404": {
-          "description": "Subcategory not found.",
+          "description": "Invalid data error",
           "content": {
             "application/json": {
               "schema": {
@@ -539,9 +529,103 @@
                     "description": "Indicates the request failed."
                   },
                   "message": {
-                    "type": "string",
-                    "example": "Subcategory not found",
-                    "description": "Error message: Couldn't find the subcategory."
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "example": "Invalid subcategory id",
+                        "description": "Error message"
+                      },
+                      {
+                        "type": "string",
+                        "example": "Invalid attribute ids",
+                        "description": "Error message"
+                      }
+                    ]
+                  }
+                }
+              },
+              "examples": {
+                "InvalidSubcategoryId": {
+                  "summary": "Invalid Subcategory Id",
+                  "value": {
+                    "success": false,
+                    "message": "Invalid subcategory id"
+                  }
+                },
+                "InvalidAttributedIds": {
+                  "summary": "Invalid Attributes Ids",
+                  "value": {
+                    "success": false,
+                    "message": "Invalid attribute ids",
+                    "errors": {
+                      "update": [
+                        "string"
+                      ],
+                      "delete": [
+                        "string"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Subcategory/Attribute not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "example": "Subcategory not found",
+                        "description": "Error message: Couldn't find the subcategory."
+                      },
+                      {
+                        "type": "string",
+                        "example": "Attributes not found",
+                        "description": "Error message: Couldn't find one or more attributes."
+                      }
+                    ]
+                  }
+                }
+              },
+              "examples": {
+                "SubcategoryNotFound": {
+                  "summary": "Subcategory Not Found",
+                  "value": {
+                    "success": false,
+                    "message": "Subcategory not found"
+                  }
+                },
+                "AttributedNotFound": {
+                  "summary": "Attributes Not Found",
+                  "value": {
+                    "success": false,
+                    "message": "Attributes not found",
+                    "errors": {
+                      "update": [
+                        "01abcd091ab01a0123ab012a"
+                      ],
+                      "delete": [
+                        "01abcd091ab01a0123ab012a"
+                      ]
+                    }
                   }
                 }
               }
