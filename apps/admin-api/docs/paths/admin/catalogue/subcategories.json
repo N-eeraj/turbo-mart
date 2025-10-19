@@ -196,6 +196,58 @@
             }
           }
         },
+        "422": {
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "category": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please select a category"],
+                        "description": "Validation errors for the category field."
+                      },
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a subcategory name"],
+                        "description": "Validation errors for the name field."
+                      },
+                      "slug": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a subcategory slug"],
+                        "description": "Validation errors for the slug field."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "500": {
           "$ref": "#/components/responses/InternalServerError"
         }
@@ -380,6 +432,58 @@
                       "slug": {
                         "type": "string",
                         "example": "slug already in use"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "category": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please select a category"],
+                        "description": "Validation errors for the category field."
+                      },
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a subcategory name"],
+                        "description": "Validation errors for the name field."
+                      },
+                      "slug": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a subcategory slug"],
+                        "description": "Validation errors for the slug field."
                       }
                     }
                   }
@@ -619,12 +723,297 @@
                     "success": false,
                     "message": "Attributes not found",
                     "errors": {
-                      "update": [
-                        "01abcd091ab01a0123ab012a"
-                      ],
-                      "delete": [
-                        "01abcd091ab01a0123ab012a"
+                      "update": ["01abcd091ab01a0123ab012a"],
+                      "delete": ["01abcd091ab01a0123ab012a"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
+          "content": {
+            "application/json": {
+              "examples": {
+                "RootError": {
+                  "summary": "Root Error",
+                  "value": {
+                    "success": false,
+                    "message": "Validation Error",
+                    "errors": {
+                      "root": [
+                        "At least one of \"create\", \"update\", or \"delete\" field must be provided."
                       ]
+                    }
+                  }
+                },
+                "DuplicateId": {
+                  "summary": "Duplicate Id",
+                  "value": {
+                    "success": false,
+                    "message": "Validation Error",
+                    "errors": {
+                      "delete": {
+                        "0": {
+                          "id": [
+                            "Unique attributes required"
+                          ]
+                        }
+                      },
+                      "update": {
+                        "0": {
+                          "id": [
+                            "Unique attributes required"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "DuplicateName": {
+                  "summary": "Duplicate Name",
+                  "value": {
+                    "success": false,
+                    "message": "Validation Error",
+                    "errors": {
+                      "create": {
+                        "0": {
+                          "name": [
+                            "Please enter unique attribute names"
+                          ]
+                        }
+                      },
+                      "update": {
+                        "0": {
+                          "name": [
+                            "Please enter unique attribute names"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "InvalidInput": {
+                  "summary": "Invalid Input",
+                  "value": {
+                    "success": false,
+                    "message": "Validation Error",
+                    "errors": {
+                      "create": {
+                        "0": {
+                          "name": [
+                            "Please enter an attribute name"
+                          ],
+                          "type": [
+                            "Invalid input"
+                          ],
+                          "required": [
+                            "Please select a boolean value"
+                          ],
+                          "metadata": [
+                            "Please enter the required metadata"
+                          ]
+                        },
+                        "1": {
+                          "metadata": {
+                            "maxLength": [
+                              "Please enter a valid max length"
+                            ]
+                          }
+                        },
+                        "2": {
+                          "metadata": {
+                            "options": {
+                              "0": {
+                                "value": [
+                                  "Please enter a valid number"
+                                ],
+                                "unit": [
+                                  "Please enter a valid unit"
+                                ],
+                                "template": [
+                                  "Please enter a valid template"
+                                ],
+                                "base": [
+                                  "Please enter a valid number"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "3": {
+                          "metadata": {
+                            "type": [
+                              "Please select a type"
+                            ]
+                          }
+                        },
+                        "4": {
+                          "metadata": {
+                            "options": [
+                              "Please add at least 1 option"
+                            ]
+                          }
+                        },
+                        "5": {
+                          "metadata": {
+                            "options": {
+                              "0": [
+                                "Please enter a valid option"
+                              ]
+                            }
+                          }
+                        },
+                        "6": {
+                          "metadata": {
+                            "options": {
+                              "0": [
+                                "Please enter the required metadata"
+                              ]
+                            }
+                          }
+                        },
+                        "7": {
+                          "metadata": {
+                            "options": {
+                              "0": {
+                                "value": [
+                                  "Please enter a valid number"
+                                ],
+                                "unit": [
+                                  "Please enter a valid unit"
+                                ],
+                                "template": [
+                                  "Please enter a valid template"
+                                ],
+                                "base": [
+                                  "Please enter a valid number"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "8": {
+                          "metadata": {
+                            "min": [
+                              "Please select a valid date"
+                            ],
+                            "max": [
+                              "Please select a valid date"
+                            ]
+                          }
+                        }
+                      },
+                      "update": {
+                        "0": {
+                          "id": [
+                            "Attribute id is required"
+                          ],
+                          "name": [
+                            "Please enter an attribute name"
+                          ],
+                          "type": [
+                            "Invalid input"
+                          ],
+                          "required": [
+                            "Please select a boolean value"
+                          ],
+                          "metadata": [
+                            "Please enter the required metadata"
+                          ]
+                        },
+                        "1": {
+                          "metadata": {
+                            "maxLength": [
+                              "Please enter a valid max length"
+                            ]
+                          }
+                        },
+                        "2": {
+                          "metadata": {
+                            "options": {
+                              "0": {
+                                "value": [
+                                  "Please enter a valid number"
+                                ],
+                                "unit": [
+                                  "Please enter a valid unit"
+                                ],
+                                "template": [
+                                  "Please enter a valid template"
+                                ],
+                                "base": [
+                                  "Please enter a valid number"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "3": {
+                          "metadata": {
+                            "type": [
+                              "Please select a type"
+                            ]
+                          }
+                        },
+                        "4": {
+                          "metadata": {
+                            "options": [
+                              "Please add at least 1 option"
+                            ]
+                          }
+                        },
+                        "5": {
+                          "metadata": {
+                            "options": {
+                              "0": [
+                                "Please enter a valid option"
+                              ]
+                            }
+                          }
+                        },
+                        "6": {
+                          "metadata": {
+                            "options": {
+                              "0": [
+                                "Please enter the required metadata"
+                              ]
+                            }
+                          }
+                        },
+                        "7": {
+                          "metadata": {
+                            "options": {
+                              "0": {
+                                "value": [
+                                  "Please enter a valid number"
+                                ],
+                                "unit": [
+                                  "Please enter a valid unit"
+                                ],
+                                "template": [
+                                  "Please enter a valid template"
+                                ],
+                                "base": [
+                                  "Please enter a valid number"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "8": {
+                          "metadata": {
+                            "min": [
+                              "Please select a valid date"
+                            ],
+                            "max": [
+                              "Please select a valid date"
+                            ]
+                          }
+                        }
+                      }
                     }
                   }
                 }
