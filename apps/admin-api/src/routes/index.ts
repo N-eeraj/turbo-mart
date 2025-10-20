@@ -1,8 +1,15 @@
 import express from "express"
 
+import {
+  ENVIRONMENT,
+} from "@app/load-env"
+
 import apiRoutes from "#routes/api/index"
 import docRoutes from "#routes/docs"
 import StaticController from "#controllers/StaticController"
+import {
+  ENVIRONMENT as ENVIRONMENT_VARIABLE,
+} from "#src/config/server"
 
 /**
  * Root application router.
@@ -13,7 +20,9 @@ import StaticController from "#controllers/StaticController"
 const router = express.Router()
 
 router.use("/api", apiRoutes)
-router.use(docRoutes)
+
+ENVIRONMENT_VARIABLE === ENVIRONMENT.DEV && router.use(docRoutes)
+
 router.get("/", StaticController.getHome)
 router.use(StaticController.handlePageNotFound)
 

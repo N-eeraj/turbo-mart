@@ -3,6 +3,10 @@ import {
   fileURLToPath,
 } from "url"
 
+import env from "@app/load-env"
+
+export const ENVIRONMENT = env.ENVIRONMENT
+
 // url configurations
 export const APP_URL = process.env.APP_URL
 export const ADMIN_UI_URL = process.env.ADMIN_UI_URL
