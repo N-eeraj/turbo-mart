@@ -7,7 +7,7 @@ import BaseController from "#controllers/BaseController"
 import SubcategoryService, {
   type ListOptions,
   type ParsedSubcategoryAttributeUpdateData,
-} from "#services/admin/catalogue/SubcategoryService"
+} from "#catalogue/subcategories/service.ts"
 import {
   subcategoryCreationSchema,
   subcategoryUpdateSchema,

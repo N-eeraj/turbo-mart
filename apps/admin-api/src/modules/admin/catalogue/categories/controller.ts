@@ -6,7 +6,7 @@ import {
 import BaseController from "#controllers/BaseController"
 import CategoryService, {
   type ListOptions,
-} from "#services/admin/catalogue/CategoryService"
+} from "#catalogue/categories/service.ts"
 import {
   categoryCreationSchema,
   categoryUpdateSchema,

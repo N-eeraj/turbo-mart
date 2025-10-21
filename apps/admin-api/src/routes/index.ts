@@ -4,7 +4,7 @@ import {
   ENVIRONMENT,
 } from "@app/load-env"
 
-import apiRoutes from "#src/routes/api.ts"
+import apiRoutes from "#routes/api"
 import docRoutes from "#docs/route.ts"
 import StaticController from "#controllers/StaticController"
 import {

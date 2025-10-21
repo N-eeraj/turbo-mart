@@ -3,7 +3,7 @@ import express from "express"
 import {
   authenticationMiddleware,
 } from "#middlewares/authentication"
-import AuthController from "#controllers/AuthController"
+import AuthController from "#src/modules/auth/controller.ts"
 
 /**
  * Auth APIs router.

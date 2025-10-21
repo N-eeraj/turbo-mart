@@ -4,7 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import AuthService from "#services/AuthService"
+import AuthService from "#src/modules/auth/service.ts"
 import {
   loginSchema,
   forgotPasswordSchema,

@@ -12,6 +12,7 @@
   },
   "imports": {
     "#middlewares/*": "./src/middlewares/*.ts",
+    "#routes/*": "./src/routes/*.ts",
     "#controllers/*": "./src/controllers/*.ts",
     "#services/*": "./src/services/*.ts",
     "#commands/*": "./src/commands/*.ts",
@@ -19,6 +20,7 @@
     "#utils/*": "./src/utils/*.ts",
     "#constants/*": "./src/constants/*.ts",
     "#docs/*": "./src/modules/docs/*",
+    "#catalogue/*": "./src/modules/admin/catalogue/*",
     "#src/*": "./src/*",
     "#jsonDocs/*": "./docs/*.json",
     "#app/*": "./*"

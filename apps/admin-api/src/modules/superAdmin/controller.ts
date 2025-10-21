@@ -6,7 +6,7 @@ import {
 import BaseController from "#controllers/BaseController"
 import SuperAdminService, {
   type GetAdminUsersOptions,
-} from "#services/superAdmin"
+} from "#src/modules/superAdmin/service.ts"
 import {
   adminCreationSchema,
   adminUpdateSchema,
