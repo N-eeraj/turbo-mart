@@ -4,7 +4,7 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import ProfileService from "#services/profile/UserService"
+import ProfileService from "#src/modules/profile/service.ts"
 import {
   profileUpdateSchema,
   passwordUpdateSchema,

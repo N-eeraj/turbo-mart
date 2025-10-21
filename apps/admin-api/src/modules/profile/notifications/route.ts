@@ -3,7 +3,7 @@ import express from "express"
 import {
   authenticationMiddleware,
 } from "#middlewares/authentication"
-import NotificationController from "#controllers/profile/NotificationController"
+import NotificationController from "#src/modules/profile/notifications/controller.ts"
 
 /**
  * Notifications APIs router.

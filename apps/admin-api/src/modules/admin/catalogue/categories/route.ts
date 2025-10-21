@@ -1,7 +1,7 @@
 import express from "express"
 
-import catalogueManagementMiddlewares from "#src/modules/admin/catalogue/middleware.ts"
-import CategoryController from "#controllers/admin/catalogue/CategoryController"
+import catalogueManagementMiddlewares from "#catalogue/middleware.ts"
+import CategoryController from "#catalogue/categories/controller.ts"
 
 /**
  * Catalogue APIs router.

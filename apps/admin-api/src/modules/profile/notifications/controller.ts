@@ -6,7 +6,7 @@ import {
 import BaseController from "#controllers/BaseController"
 import NotificationService, {
   type GetNotificationsOptions,
-} from "#services/profile/NotificationService"
+} from "#src/modules/profile/notifications/service.ts"
 import {
   notificationReadStatusSchema,
   notificationReadStatusBulkSchema,

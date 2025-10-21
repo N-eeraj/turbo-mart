@@ -1,13 +1,12 @@
 import express from "express"
 
-
 import {
   authenticationMiddleware,
 } from "#middlewares/authentication"
 import {
   superAdminAuthorizationMiddleware,
 } from "#middlewares/authorization"
-import SuperAdminController from "#controllers/superAdmin"
+import SuperAdminController from "#src/modules/superAdmin/controller.ts"
 
 /**
  * Super Admin APIs router.
