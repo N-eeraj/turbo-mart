@@ -1,6 +1,6 @@
-import paths from "#src/config/openApi/paths"
-import schemas from "#src/config/openApi/schemas"
-import responses from "#src/config/openApi/responses"
+import paths from "#docs/config/paths.ts"
+import schemas from "#docs/config/schemas.ts"
+import responses from "#docs/config/responses.ts"
 
 const OPEN_API_CONFIG = {
   openapi: "3.1.1",

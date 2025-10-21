@@ -1,7 +1,7 @@
 import express from "express"
 
-import categoryRouter from "#routes/api/admin/catalogue/categories"
-import subcategoryRouter from "#routes/api/admin/catalogue/subcategories"
+import categoryRouter from "#src/modules/admin/catalogue/categories/route.ts"
+import subcategoryRouter from "#src/modules/admin/catalogue/subcategories/route.ts"
 
 /**
  * Catalogue APIs router.

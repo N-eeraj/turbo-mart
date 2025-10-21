@@ -7,7 +7,7 @@ import mongoose from "mongoose"
 import {
   sendResponse,
   type SuccessResponse,
-} from "#src/utils/response"
+} from "#src/utils/response.ts"
 import {
   withPublicPath,
 } from "#utils/pathUtils"

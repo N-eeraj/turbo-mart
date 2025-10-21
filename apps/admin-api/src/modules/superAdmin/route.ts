@@ -12,7 +12,7 @@ import SuperAdminController from "#controllers/superAdmin"
 /**
  * Super Admin APIs router.
  * 
- * Used in the api router (`src/routes/api/index.ts`) via `apiRouter.use("/super-admin", superAdminRouter)`.
+ * Used in the api router (`src/routes/api.ts`) via `apiRouter.use("/super-admin", superAdminRouter)`.
  */
 const superAdminRouter = express.Router()
 

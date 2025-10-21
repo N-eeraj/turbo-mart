@@ -1,14 +1,14 @@
-import UnauthenticatedUser from "#docs/responses/unauthenticatedUser" with { type: "json" }
-import UserNotFound from "#docs/responses/userNotFound" with { type: "json" }
-import UnauthorizedSuperAdminUser from "#docs/responses/unauthorizedSuperAdminUser" with { type: "json" }
-import UnauthorizedUser from "#docs/responses/unauthorizedUser" with { type: "json" }
-import InternalServerError from "#docs/responses/internalServerError" with { type: "json" }
-import InvalidNotificationIds from "#docs/responses/invalidNotificationIds" with { type: "json" }
+import UnauthenticatedUser from "#jsonDocs/responses/unauthenticatedUser" with { type: "json" }
+import UserNotFound from "#jsonDocs/responses/userNotFound" with { type: "json" }
+import UnauthorizedSuperAdminUser from "#jsonDocs/responses/unauthorizedSuperAdminUser" with { type: "json" }
+import UnauthorizedUser from "#jsonDocs/responses/unauthorizedUser" with { type: "json" }
+import InternalServerError from "#jsonDocs/responses/internalServerError" with { type: "json" }
+import InvalidNotificationIds from "#jsonDocs/responses/invalidNotificationIds" with { type: "json" }
 
 // partial responses
-import InvalidId from "#docs/responses/partials/invalidId" with { type: "json" }
-import incorrectPassword from "#docs/responses/partials/incorrectPassword" with { type: "json" }
-import notificationNotFound from "#docs/responses/partials/notificationNotFound" with { type: "json" }
+import InvalidId from "#jsonDocs/responses/partials/invalidId" with { type: "json" }
+import incorrectPassword from "#jsonDocs/responses/partials/incorrectPassword" with { type: "json" }
+import notificationNotFound from "#jsonDocs/responses/partials/notificationNotFound" with { type: "json" }
 
 /**
  * Generate an "invalid resource" response.

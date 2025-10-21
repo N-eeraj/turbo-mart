@@ -4,13 +4,15 @@ import {
   documentationJSON,
   swaggerSetup,
   swaggerUIServer,
-} from "#middlewares/openApi"
+} from "#docs/middleware.ts"
 
 /**
  * Documentation router.
  * 
  * Serves the API documentation routes, including the raw JSON spec
  * and the interactive Swagger UI.
+ * 
+ * Used in the base router (`src/routes/index.ts`) via `router.use(docRoutes)`.
  */
 const docRouter = express.Router()
 
