@@ -11,7 +11,6 @@
     "command": "node --env-file=.env --import tsx src/commands/index.ts"
   },
   "imports": {
-    "#routes/*": "./src/routes/*.ts",
     "#middlewares/*": "./src/middlewares/*.ts",
     "#controllers/*": "./src/controllers/*.ts",
     "#services/*": "./src/services/*.ts",
@@ -19,8 +18,9 @@
     "#schemas/*": "./src/schemas/*.ts",
     "#utils/*": "./src/utils/*.ts",
     "#constants/*": "./src/constants/*.ts",
-    "#src/*": "./src/*.ts",
-    "#docs/*": "./docs/*.json",
+    "#docs/*": "./src/modules/docs/*",
+    "#src/*": "./src/*",
+    "#jsonDocs/*": "./docs/*.json",
     "#app/*": "./*"
   },
   "dependencies": {

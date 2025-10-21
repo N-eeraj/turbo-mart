@@ -8,7 +8,7 @@ import NotificationController from "#controllers/profile/NotificationController"
 /**
  * Notifications APIs router.
  * 
- * Used in the profile router (`src/routes/api/profile/index.ts`) via `profileRouter.use("/notifications", notificationRouter)`.
+ * Used in the profile router (`src/modules/profile/route.ts`) via `profileRouter.use("/notifications", notificationRouter)`.
  */
 const notificationRouter = express.Router()
 

@@ -2,7 +2,7 @@ import cors from "cors"
 
 import {
   ALLOWED_ORIGINS,
-} from "#src/config/server"
+} from "#src/config/server.ts"
 
 /**
  * Express CORS middleware allowing requests from origins listed in `ALLOWED_ORIGINS`.

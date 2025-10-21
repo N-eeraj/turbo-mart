@@ -1,10 +1,10 @@
 import express from "express"
 
 import corsMiddleware from "#middlewares/cors"
-import authRouter from "#routes/api/auth"
-import profileRouter from "#routes/api/profile/index"
-import superAdminRouter from "#routes/api/superAdmin"
-import adminRouter from "#routes/api/admin/index"
+import authRouter from "#src/modules/auth/route.ts"
+import profileRouter from "#src/modules/profile/route.ts"
+import superAdminRouter from "#src/modules/superAdmin/route.ts"
+import adminRouter from "#src/modules/admin/route.ts"
 import GeneralController from "#controllers/GeneralController"
 
 /**

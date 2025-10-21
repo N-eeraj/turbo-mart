@@ -4,12 +4,12 @@ import {
   ENVIRONMENT,
 } from "@app/load-env"
 
-import apiRoutes from "#routes/api/index"
-import docRoutes from "#routes/docs"
+import apiRoutes from "#src/routes/api.ts"
+import docRoutes from "#docs/route.ts"
 import StaticController from "#controllers/StaticController"
 import {
   ENVIRONMENT as ENVIRONMENT_VARIABLE,
-} from "#src/config/server"
+} from "#src/config/server.ts"
 
 /**
  * Root application router.

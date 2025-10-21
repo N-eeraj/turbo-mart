@@ -7,8 +7,8 @@ import {
   APP_PORT,
   PUBLIC_PATH,
   PUBLIC_FILE_STORAGE_PATH,
-} from "#src/config/server"
-import router from "#routes/index"
+} from "#src/config/server.ts"
+import router from "#src/routes/index.ts"
 import rateLimiter from "#middlewares/rateLimiter"
 import httpLogger from "#middlewares/logger"
 

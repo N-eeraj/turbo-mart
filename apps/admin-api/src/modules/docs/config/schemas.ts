@@ -5,10 +5,10 @@ import {
   Permissions,
 } from "@app/database/mongoose/models/Admin/User.ts"
 
-import ProfileSchema from "#docs/schemas/profile" with { type: "json" }
-import NotificationSchema from "#docs/schemas/notification" with { type: "json" }
-import CategorySchema from "#docs/schemas/catalogue/category" with { type: "json" }
-import SubcategorySchema from "#docs/schemas/catalogue/subcategory" with { type: "json" }
+import ProfileSchema from "#jsonDocs/schemas/profile" with { type: "json" }
+import NotificationSchema from "#jsonDocs/schemas/notification" with { type: "json" }
+import CategorySchema from "#jsonDocs/schemas/catalogue/category" with { type: "json" }
+import SubcategorySchema from "#jsonDocs/schemas/catalogue/subcategory" with { type: "json" }
 import {
   loginJSONSchema,
   forgotPasswordJSONSchema,

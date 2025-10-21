@@ -6,7 +6,7 @@ import {
   PUBLIC_FILE_STORAGE_PATH,
   PRIVATE_FILE_STORAGE_PATH,
   TEMPLATE_PATH,
-} from "#src/config/server"
+} from "#src/config/server.ts"
 
 /**
  * Resolves the given relative path to an absolute path within the application directory.

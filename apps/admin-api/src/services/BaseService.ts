@@ -6,7 +6,7 @@ import {
   APP_URL,
   STORAGE_DIR_NAME,
   PUBLIC_FILE_STORAGE_DIR_NAME,
-} from "#src/config/server"
+} from "#src/config/server.ts"
 import logger from "#utils/logger"
 import {
   multerToFile,

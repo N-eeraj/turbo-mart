@@ -5,12 +5,12 @@ import {
 } from "#middlewares/authentication"
 import upload from "#middlewares/multer"
 import ProfileController from "#controllers/profile/UserController"
-import notificationRouter from "#routes/api/profile/notifications"
+import notificationRouter from "#src/modules/profile/notifications/route.ts"
 
 /**
  * Profile APIs router.
  * 
- * Used in the api router (`src/routes/api/index.ts`) via `apiRouter.use("/profile", profileRouter)`.
+ * Used in the api router (`src/routes/api.ts`) via `apiRouter.use("/profile", profileRouter)`.
  */
 const profileRouter = express.Router()
 
