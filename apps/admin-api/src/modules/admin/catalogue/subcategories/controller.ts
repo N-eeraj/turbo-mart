@@ -67,6 +67,24 @@ export default class SubcategoryController extends BaseController {
   }
 
   /**
+   * @route GET /api/admin/catalogue/subcategories/attribute-types
+   * 
+   * Fetch attribute type list.
+   */
+  static async listAttributeTypes(_req: Request, res: Response) {
+    try {
+      const data = await SubcategoryService.listAttributeTypes()
+
+      super.sendSuccess(res, {
+        data,
+        message: "Fetched Attribute Types",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  /**
    * @route GET /api/admin/catalogue/subcategories/:subcategoryId
    * 
    * Get one subcategory by Id.

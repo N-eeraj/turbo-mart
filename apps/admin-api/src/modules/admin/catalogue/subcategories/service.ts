@@ -46,6 +46,11 @@ export type ParsedSubcategoryAttributeUpdateData = {
   >
 }
 
+export interface AttributeTypeMap {
+  name: typeof SubcategoryService.ATTRIBUTE_TYPES_MAP[AttributeType]
+  value: AttributeType
+}
+
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
   limit: 10,
   skip: 0,
@@ -55,6 +60,26 @@ const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
 }
 
 export default class SubcategoryService extends BaseService {
+  static ATTRIBUTE_TYPES_MAP = {
+    [AttributeType.TEXT]: "Text",
+    [AttributeType.NUMBER]: "Number",
+    [AttributeType.BOOLEAN]: "Boolean",
+    [AttributeType.SELECT]: "Select",
+    [AttributeType.MULTI_SELECT]: "Multi Select",
+    [AttributeType.COLOR]: "Color",
+    [AttributeType.DATE]: "Date",
+    [AttributeType.JSON]: "Key Value",
+  } as const
+
+  static ATTRIBUTE_TYPES_MAP_LIST: Array<AttributeTypeMap> = Object.entries(this.ATTRIBUTE_TYPES_MAP)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([ value, name ]) => {
+      return {
+        name,
+        value: Number(value),
+      }
+    })
+
   /**
    * Fetch the subcategories.
    * 
@@ -147,6 +172,15 @@ export default class SubcategoryService extends BaseService {
 
       throw error
     }
+  }
+
+  /**
+   * Fetch the list of admin permissions.
+   * 
+   * @returns the list of admin permissions.
+   */
+  static async listAttributeTypes(): Promise<Array<AttributeTypeMap>> {
+    return this.ATTRIBUTE_TYPES_MAP_LIST
   }
 
   static async getById(subcategoryId: SubcategoryObject["id"]): Promise<SubcategoryObject> {

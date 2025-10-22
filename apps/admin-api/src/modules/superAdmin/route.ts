@@ -18,7 +18,7 @@ const superAdminRouter = express.Router()
 /**
  * Admin management APIs router.
  * 
- * Used in the super admin router (`src/routes/api/superAdmin.ts`) via `superAdminRouter.use("/admin", adminManagementRouter)`.
+ * Used in the super admin router (`src/modules/superAdmin/route.ts`) via `superAdminRouter.use("/admin", adminManagementRouter)`.
  */
 const adminManagementRouter = express.Router()
 

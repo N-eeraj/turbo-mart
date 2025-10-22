@@ -6,7 +6,7 @@ import subcategoryRouter from "#catalogue/subcategories/route.ts"
 /**
  * Catalogue APIs router.
  * 
- * Used in the api router (`src/routes/api/admin/index.ts`) via `adminRouter.use("/catalogue", catalogueRouter)`.
+ * Used in the api router (`src/modules/admin/route.ts`) via `adminRouter.use("/catalogue", catalogueRouter)`.
  */
 const catalogueRouter = express.Router()
 

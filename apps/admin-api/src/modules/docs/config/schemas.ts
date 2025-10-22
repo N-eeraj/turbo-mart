@@ -4,6 +4,9 @@ import {
   Roles,
   Permissions,
 } from "@app/database/mongoose/models/Admin/User.ts"
+import {
+  AttributeType,
+} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
 
 import ProfileSchema from "#jsonDocs/schemas/profile" with { type: "json" }
 import NotificationSchema from "#jsonDocs/schemas/notification" with { type: "json" }
@@ -82,6 +85,21 @@ const PermissionsEnum = {
   ] satisfies Array<Permissions>,
 }
 
+const SubcategoryAttributeTypesEnum = {
+  type: "number",
+  description: "Types for subcategory attributes.\n- `0` - `TEXT`: Free-form text input.\n- `1` - `NUMBER`: Numeric value.\n- `2` - `BOOLEAN`: Boolean value.\n- `3` - `SELECT`: Single option from a predefined list.\n- `4` - `MULTI_SELECT`: Multiple options from a predefined list.\n- `5` - `COLOR`: Color value, for attributes that require a color.\n- `6` - `DATE`: Date or timestamp value.\n- `7` - `JSON`: Structured data stored as a key-value JSON object.",
+  enum: [
+    AttributeType.TEXT,
+    AttributeType.NUMBER,
+    AttributeType.BOOLEAN,
+    AttributeType.SELECT,
+    AttributeType.MULTI_SELECT,
+    AttributeType.COLOR,
+    AttributeType.DATE,
+    AttributeType.JSON,
+  ] satisfies Array<AttributeType>,
+}
+
 const ResponseSchemas = {
   ProfileSchema,
   NotificationSchema,
@@ -95,6 +113,7 @@ const UtilitySchemas = {
   SortOrderSchema,
   RolesEnum,
   PermissionsEnum,
+  SubcategoryAttributeTypesEnum,
 }
 
 const schemas = {
