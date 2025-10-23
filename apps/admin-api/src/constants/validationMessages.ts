@@ -105,6 +105,9 @@ export const ATTRIBUTE = {
   required: {
     valid: "Please select a boolean value",
   },
+  variant: {
+    valid: "Please select a boolean value",
+  },
   metadata: {
     text: {
       maxLength: {

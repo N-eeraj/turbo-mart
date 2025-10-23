@@ -251,6 +251,10 @@ const AttributeSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  variant: {
+    type: Boolean,
+    default: false,
+  },
 }, {
   discriminatorKey: "type",
 })
@@ -275,6 +279,7 @@ export function transformAttribute<T extends AttributeType>({
   name,
   type,
   required,
+  variant,
   metadata,
 }: Attribute<T>): AttributeObject<T> {
 
@@ -283,6 +288,7 @@ export function transformAttribute<T extends AttributeType>({
     name,
     type,
     required,
+    variant,
     metadata,
   }
 

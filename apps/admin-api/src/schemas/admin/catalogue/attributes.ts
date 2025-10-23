@@ -30,6 +30,11 @@ const attributeBaseSchema = z.object({
     .meta({
       description: "Indicates if the attribute is mandatory for products in the subcategory.",
     }),
+  variant: z.boolean({ error: ATTRIBUTE.variant.valid })
+    .optional()
+    .meta({
+      description: "Indicates if the attribute is a variant for products in the subcategory.",
+    }),
 })
 
 const attributeBaseSchemaWithoutId = attributeBaseSchema.omit({
