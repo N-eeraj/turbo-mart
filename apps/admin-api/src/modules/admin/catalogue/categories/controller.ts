@@ -50,6 +50,7 @@ export default class CategoryController extends BaseController {
       super.sendSuccess(res, {
         message: "Created Category",
         data,
+        status: 201,
       })
     } catch (error) {
       super.sendError(res, error)

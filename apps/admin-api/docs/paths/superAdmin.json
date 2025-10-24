@@ -91,7 +91,7 @@
         }
       },
       "responses": {
-        "200": {
+        "201": {
           "description": "Created new admin",
           "content": {
             "application/json": {

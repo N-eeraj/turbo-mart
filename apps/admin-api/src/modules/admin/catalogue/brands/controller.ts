@@ -50,6 +50,7 @@ export default class BrandController extends BaseController {
       super.sendSuccess(res, {
         message: "Created Brand",
         data,
+        status: 201,
       })
     } catch (error) {
       super.sendError(res, error)

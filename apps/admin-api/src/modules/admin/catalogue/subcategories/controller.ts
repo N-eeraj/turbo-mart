@@ -60,6 +60,7 @@ export default class SubcategoryController extends BaseController {
       super.sendSuccess(res, {
         message: "Created Subcategory",
         data,
+        status: 201,
       })
     } catch (error) {
       super.sendError(res, error)

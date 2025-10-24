@@ -50,6 +50,7 @@ export default class SuperAdminController extends BaseController {
       super.sendSuccess(res, {
         data,
         message: "Created Admin User",
+        status: 201,
       })
     } catch (error) {
       super.sendError(res, error)

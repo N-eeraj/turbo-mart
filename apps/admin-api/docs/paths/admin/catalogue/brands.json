@@ -91,7 +91,7 @@
         }
       },
       "responses": {
-        "200": {
+        "201": {
           "description": "Create brand.",
           "content": {
             "application/json": {
