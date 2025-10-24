@@ -175,3 +175,12 @@ export const ATTRIBUTE = {
     },
   },
 }
+
+export const BRAND = {
+  name: {
+    required: "Please enter a brand name",
+  },
+  slug: {
+    required: "Please enter a brand slug",
+  },
+}

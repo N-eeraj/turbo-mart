@@ -2,6 +2,7 @@ import express from "express"
 
 import categoryRouter from "#catalogue/categories/route.ts"
 import subcategoryRouter from "#catalogue/subcategories/route.ts"
+import brandRouter from "#catalogue/brands/routes.ts"
 
 /**
  * Catalogue APIs router.
@@ -12,5 +13,6 @@ const catalogueRouter = express.Router()
 
 catalogueRouter.use("/categories", categoryRouter)
 catalogueRouter.use("/subcategories", subcategoryRouter)
+catalogueRouter.use("/brands", brandRouter)
 
 export default catalogueRouter

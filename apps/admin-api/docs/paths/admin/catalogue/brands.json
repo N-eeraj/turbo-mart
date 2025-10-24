@@ -1,0 +1,532 @@
+{
+  "/api/admin/catalogue/brands": {
+    "get": {
+      "tags": ["Brand Management"],
+      "summary": "Brand List",
+      "description": "Fetches the list of brands.",
+      "parameters": [
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/LimitOptionSchema"
+          }
+        },
+        {
+          "name": "skip",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/SkipOptionSchema"
+          }
+        },
+        {
+          "name": "order",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/SortOrderSchema"
+          }
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetched list of brands",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/BrandSchema"
+                    }
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched Brands"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    },
+    "post": {
+      "tags": ["Brand Management"],
+      "summary": "Create Brand",
+      "description": "Create new brand.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BrandCreationSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Create brand.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/BrandSchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Created Brand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "409": {
+          "description": "Conflict error.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "A brand with the same unique field(s) already exists"
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "slug": {
+                        "type": "string",
+                        "example": "slug already in use"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a brand name"],
+                        "description": "Validation errors for the name field."
+                      },
+                      "slug": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a brand slug"],
+                        "description": "Validation errors for the slug field."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  },
+  "/api/admin/catalogue/brands/{brandId}": {
+    "get": {
+      "tags": ["Brand Management"],
+      "summary": "Fetch Single Brand",
+      "description": "Fetch single brand.",
+      "parameters": [
+        {
+          "name": "brandId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the brand.",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetched brand.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/BrandSchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched Brand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidBrandId"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Brand not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Brand not found",
+                    "description": "Error message: Couldn't find the brand."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    },
+    "patch": {
+      "tags": ["Brand Management"],
+      "summary": "Update Brand",
+      "description": "Update brand.",
+      "parameters": [
+        {
+          "name": "brandId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the brand.",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BrandUpdateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Update brand.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/BrandSchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Updated Brand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidBrandId"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Brand not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Brand not found",
+                    "description": "Error message: Couldn't find the brand."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Conflict error.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "A brand with the same unique field(s) already exists"
+                  },
+                  "errors": {
+                    "type": "object",
+                    "properties": {
+                      "slug": {
+                        "type": "string",
+                        "example": "slug already in use"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Validation error (if request body is missing required fields, or has invalid field values).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Validation Error",
+                    "description": "Error message."
+                  },
+                  "errors": {
+                    "type": "object",
+                    "description": "Validation error details for the fields.",
+                    "properties": {
+                      "name": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a brand name"],
+                        "description": "Validation errors for the name field."
+                      },
+                      "slug": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Please enter a brand slug"],
+                        "description": "Validation errors for the slug field."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    },
+    "delete": {
+      "tags": ["Brand Management"],
+      "summary": "Delete Brand",
+      "description": "Delete brand.",
+      "parameters": [
+        {
+          "name": "brandId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the brand.",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Delete brand.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Deleted Brand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidBrandId"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Brand not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Brand not found",
+                    "description": "Error message: Couldn't find the brand."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Conflict error.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Cannot delete: this brand has a linked subbrand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  }
+}

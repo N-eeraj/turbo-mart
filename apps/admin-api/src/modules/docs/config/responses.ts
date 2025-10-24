@@ -27,12 +27,14 @@ function getInvalidResourceId(resourceName: string): typeof InvalidId {
 const InvalidAdminId = getInvalidResourceId("admin")
 const InvalidCategoryId = getInvalidResourceId("category")
 const InvalidSubcategoryId = getInvalidResourceId("subcategory")
+const InvalidBrandId = getInvalidResourceId("brand")
 
 const InvalidIds = {
   InvalidAdminId,
   InvalidNotificationIds,
   InvalidCategoryId,
   InvalidSubcategoryId,
+  InvalidBrandId,
 }
 
 // extended response for password update from UnauthenticatedUser

@@ -5,6 +5,7 @@ import profileNotificationsPaths from "#jsonDocs/paths/profile/notifications" wi
 import superAdminPaths from "#jsonDocs/paths/superAdmin" with { type: "json" }
 import categoriesPaths from "#jsonDocs/paths/admin/catalogue/categories" with { type: "json" }
 import subcategoriesPaths from "#jsonDocs/paths/admin/catalogue/subcategories" with { type: "json" }
+import brandsPaths from "#jsonDocs/paths/admin/catalogue/brands" with { type: "json" }
 
 const profilePaths = {
   ...profileUserPaths,
@@ -14,6 +15,7 @@ const profilePaths = {
 const cataloguePaths = {
   ...categoriesPaths,
   ...subcategoriesPaths,
+  ...brandsPaths,
 }
 
 const adminPaths = {
