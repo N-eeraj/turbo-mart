@@ -184,3 +184,9 @@ export const BRAND = {
     required: "Please enter a brand slug",
   },
 }
+
+export const PRODUCT = {
+  name: {
+    required: "Please enter a brand name",
+  },
+}
