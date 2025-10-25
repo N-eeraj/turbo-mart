@@ -1,10 +1,8 @@
-import {
-  z,
-} from "zod"
+import * as z from "zod"
 
 import {
   PRODUCT,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 export const productCreationSchema = z.object({
   name: z.string({ error: PRODUCT.name.required })

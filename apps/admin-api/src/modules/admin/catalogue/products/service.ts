@@ -3,7 +3,7 @@ import type mongoose from "mongoose"
 import BaseService from "#services/BaseService"
 import type {
   ProductCreationData,
-} from "#schemas/admin/catalogue/product"
+} from "@app/schemas/admin/catalogue/product"
 
 export interface ListOptions {
   limit?: number

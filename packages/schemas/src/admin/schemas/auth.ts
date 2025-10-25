@@ -1,18 +1,15 @@
-import {
-  z,
-} from "zod"
-
+import * as z from "zod"
 
 import {
   userEmail,
   newPassword,
-} from "#schemas/common"
+} from "#admin/schemas/common.ts"
 import {
   PASSWORD,
   RESET_PASSWORD_URL,
   PASSWORD_RESET_TOKEN,
   LOGOUT_OTHERS_ON_RESET,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 export const loginSchema = z.object({
   email: userEmail,

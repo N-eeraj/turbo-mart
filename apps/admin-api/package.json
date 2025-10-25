@@ -16,9 +16,7 @@
     "#controllers/*": "./src/controllers/*.ts",
     "#services/*": "./src/services/*.ts",
     "#commands/*": "./src/commands/*.ts",
-    "#schemas/*": "./src/schemas/*.ts",
     "#utils/*": "./src/utils/*.ts",
-    "#constants/*": "./src/constants/*.ts",
     "#docs/*": "./src/modules/docs/*",
     "#catalogue/*": "./src/modules/admin/catalogue/*",
     "#src/*": "./src/*",
@@ -37,8 +35,7 @@
     "pino": "^9.9.0",
     "pino-http": "^10.5.0",
     "pino-pretty": "^13.1.1",
-    "swagger-ui-express": "^5.0.1",
-    "zod": "^4.0.17"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

@@ -1,6 +1,4 @@
-import {
-  z,
-} from "zod"
+import * as z from "zod"
 
 import {
   AttributeType,
@@ -8,7 +6,7 @@ import {
 
 import {
   ATTRIBUTE,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 const attributeBaseSchema = z.object({
   id: z.string({ error: ATTRIBUTE.id.required })

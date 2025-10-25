@@ -1,10 +1,8 @@
-import {
-  z,
-} from "zod"
+import * as z from "zod"
 
 import {
   CATEGORY,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 export const categoryCreationSchema = z.object({
   name: z.string({ error: CATEGORY.name.required })

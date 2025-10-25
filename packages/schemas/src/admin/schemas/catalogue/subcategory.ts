@@ -1,15 +1,13 @@
-import {
-  z,
-} from "zod"
+import * as z from "zod"
 
 import {
   attributeSchema,
   attributeSchemaWithoutId,
-} from "#schemas/admin/catalogue/attributes"
+} from "#admin/schemas/admin/catalogue/attributes.ts"
 import {
   SUB_CATEGORY,
   ATTRIBUTE,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 export const subcategoryCreationSchema = z.object({
   category: z.string({ error: SUB_CATEGORY.category.required })

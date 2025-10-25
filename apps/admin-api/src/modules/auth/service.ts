@@ -23,7 +23,7 @@ import {
   type LoginData,
   type ForgotPasswordData,
   type ResetPasswordData,
-} from "#schemas/auth"
+} from "@app/schemas/admin/auth"
 
 interface LoginResponse {
   user: AdminObject

@@ -1,0 +1,12 @@
+{
+  "name": "@app/schemas",
+  "version": "1.0.0",
+  "description": "Zod schemas for validations",
+  "type": "module",
+  "imports": {
+    "#admin/*": "./src/admin/*"
+  },
+  "exports": {
+    "./admin/*": "./src/admin/schemas/*.ts"
+  }
+}

@@ -10,7 +10,7 @@ import NotificationService, {
 import {
   notificationReadStatusSchema,
   notificationReadStatusBulkSchema,
-} from "#schemas/user"
+} from "@app/schemas/admin/user"
 
 /**
  * Controller for all notification related APIs routes.

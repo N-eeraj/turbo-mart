@@ -9,7 +9,7 @@ import BaseService from "#services/BaseService"
 import {
   BrandUpdateData,
   type BrandCreationData,
-} from "#schemas/admin/catalogue/brand"
+} from "@app/schemas/admin/catalogue/brand"
 
 export interface ListOptions {
   limit?: number

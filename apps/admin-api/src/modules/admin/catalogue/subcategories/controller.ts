@@ -12,7 +12,7 @@ import {
   subcategoryCreationSchema,
   subcategoryUpdateSchema,
   subcategoryAttributeUpdateSchema,
-} from "#schemas/admin/catalogue/subcategory"
+} from "@app/schemas/admin/catalogue/subcategory"
 
 /**
  * Controller for all subcategory related APIs routes.

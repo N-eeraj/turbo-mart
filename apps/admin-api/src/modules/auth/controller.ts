@@ -9,7 +9,7 @@ import {
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-} from "#schemas/auth"
+} from "@app/schemas/admin/auth"
 
 /**
  * Controller for all authentication related APIs routes.

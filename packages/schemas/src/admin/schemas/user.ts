@@ -1,6 +1,4 @@
-import {
-  z,
-} from "zod"
+import * as z from "zod"
 
 import {
   Roles,
@@ -10,7 +8,7 @@ import {
 import {
   userEmail,
   newPassword,
-} from "#schemas/common"
+} from "#admin/schemas/common.ts"
 import {
   USER_NAME,
   ROLE,
@@ -19,7 +17,7 @@ import {
   PROFILE_PICTURE,
   NOTIFICATION_STATE,
   NOTIFICATION_IDS,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 export const adminSchema = z.object({
   name: z.string({ error: USER_NAME.required })

@@ -10,7 +10,7 @@ import SuperAdminService, {
 import {
   adminCreationSchema,
   adminUpdateSchema,
-} from "#schemas/user"
+} from "@app/schemas/admin/user"
 
 /**
  * Controller for all super admin related APIs routes.

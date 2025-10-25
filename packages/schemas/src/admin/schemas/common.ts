@@ -1,11 +1,9 @@
-import {
-  z,
-} from "zod"
+import * as z from "zod"
 
 import {
   EMAIL,
   NEW_PASSWORD,
-} from "#constants/validationMessages"
+} from "#admin/constants/validationMessages.ts"
 
 export const userEmail = z.email({ error: (issue) => {
   if (!issue.input) return EMAIL.required

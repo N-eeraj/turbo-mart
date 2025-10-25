@@ -7,7 +7,7 @@ import BaseController from "#controllers/BaseController"
 import ProductService from "#catalogue/products/service.ts"
 import {
   productCreationSchema,
-} from "#schemas/admin/catalogue/product"
+} from "@app/schemas/admin/catalogue/product"
 
 /**
  * Controller for all product related APIs routes.

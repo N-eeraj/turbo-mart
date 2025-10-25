@@ -12,7 +12,7 @@ import BaseService from "#services/BaseService"
 import {
   type ProfileUpdateData,
   type PasswordUpdateData,
-} from "#schemas/user"
+} from "@app/schemas/admin/user"
 
 export default class ProfileService extends BaseService {
   /**

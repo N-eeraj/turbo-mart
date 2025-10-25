@@ -19,7 +19,7 @@ import {
   SubcategoryUpdateData,
   type SubcategoryCreationData,
   type SubcategoryAttributeUpdateData,
-} from "#schemas/admin/catalogue/subcategory"
+} from "@app/schemas/admin/catalogue/subcategory"
 
 export interface ListOptions {
   limit?: number

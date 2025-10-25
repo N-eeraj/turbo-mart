@@ -18,7 +18,7 @@ import {
   loginJSONSchema,
   forgotPasswordJSONSchema,
   resetPasswordJSONSchema,
-} from "#schemas/auth"
+} from "@app/schemas/admin/auth"
 import {
   profileUpdateJSONSchema,
   passwordUpdateJSONSchema,
@@ -28,24 +28,24 @@ import {
   adminJSONSchema,
   adminCreationJSONSchema,
   adminUpdateJSONSchema,
-} from "#schemas/user"
+} from "@app/schemas/admin/user"
 import {
   categoryCreationJSONSchema,
   categoryUpdateJSONSchema,
-} from "#schemas/admin/catalogue/category"
+} from "@app/schemas/admin/catalogue/category"
 import {
   subcategoryCreationJSONSchema,
   subcategoryUpdateJSONSchema,
   subcategoryAttributeUpdateJSONSchema,
-} from "#schemas/admin/catalogue/subcategory"
+} from "@app/schemas/admin/catalogue/subcategory"
 import {
   brandCreationJSONSchema,
   brandUpdateJSONSchema,
-} from "#schemas/admin/catalogue/brand"
+} from "@app/schemas/admin/catalogue/brand"
 import {
   productCreationJSONSchema,
   productUpdateJSONSchema,
-} from "#schemas/admin/catalogue/product"
+} from "@app/schemas/admin/catalogue/product"
 
 const LimitOptionSchema = {
   "type": "number",

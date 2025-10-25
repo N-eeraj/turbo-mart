@@ -10,7 +10,7 @@ import BrandService, {
 import {
   brandCreationSchema,
   brandUpdateSchema,
-} from "#schemas/admin/catalogue/brand"
+} from "@app/schemas/admin/catalogue/brand"
 
 /**
  * Controller for all brand related APIs routes.

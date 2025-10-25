@@ -12,7 +12,7 @@ import BaseService from "#services/BaseService"
 import {
   type AdminCreationData,
   type AdminUpdateData,
-} from "#schemas/user"
+} from "@app/schemas/admin/user"
 import {
   generateRandomString,
 } from "#utils/random"

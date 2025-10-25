@@ -13,7 +13,7 @@ import BaseService from "#services/BaseService"
 import {
   CategoryUpdateData,
   type CategoryCreationData,
-} from "#schemas/admin/catalogue/category"
+} from "@app/schemas/admin/catalogue/category"
 
 export interface ListOptions {
   limit?: number

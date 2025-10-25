@@ -9,7 +9,7 @@ import {
   profileUpdateSchema,
   passwordUpdateSchema,
   profilePictureSchema,
-} from "#schemas/user"
+} from "@app/schemas/admin/user"
 
 /**
  * Controller for all profile user related APIs routes.

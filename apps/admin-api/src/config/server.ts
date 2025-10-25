@@ -8,11 +8,11 @@ import env from "@app/load-env"
 export const ENVIRONMENT = env.ENVIRONMENT
 
 // url configurations
-export const APP_URL = process.env.APP_URL
-export const ADMIN_UI_URL = process.env.ADMIN_UI_URL
+export const APP_URL = env.ADMIN_API_URL
+export const ADMIN_UI_URL = env.ADMIN_UI_URL
 
 // server port configuration
-export const APP_PORT = Number(process.env.APP_PORT)
+export const APP_PORT = Number(env.ADMIN_PORT)
 
 // allowed origins configuration
 export const ALLOWED_ORIGINS = [

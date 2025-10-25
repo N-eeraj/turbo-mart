@@ -10,7 +10,7 @@ import CategoryService, {
 import {
   categoryCreationSchema,
   categoryUpdateSchema,
-} from "#schemas/admin/catalogue/category"
+} from "@app/schemas/admin/catalogue/category"
 
 /**
  * Controller for all category related APIs routes.
