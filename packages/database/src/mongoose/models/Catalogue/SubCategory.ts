@@ -74,7 +74,7 @@ export function transformSubcategory({
     category,
     name,
     slug,
-    attributes: (attributes ?? []).map(transformAttribute),
+    attributes: attributes?.map(transformAttribute),
     createdAt,
     updatedAt,
   }

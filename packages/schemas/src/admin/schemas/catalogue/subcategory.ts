@@ -3,7 +3,7 @@ import * as z from "zod"
 import {
   attributeSchema,
   attributeSchemaWithoutId,
-} from "#admin/schemas/admin/catalogue/attributes.ts"
+} from "#admin/schemas/catalogue/attributes.ts"
 import {
   SUB_CATEGORY,
   ATTRIBUTE,

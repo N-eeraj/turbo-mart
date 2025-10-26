@@ -282,6 +282,9 @@ export function transformAttribute<T extends AttributeType>({
   variant,
   metadata,
 }: Attribute<T>): AttributeObject<T> {
+  if (metadata && "_doc" in metadata && metadata._doc && typeof metadata._doc === "object" && "_id" in metadata._doc) {
+    delete metadata._doc._id
+  }
 
   const attribute = {
     id: _id,
