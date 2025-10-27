@@ -214,4 +214,24 @@ export const PRODUCT = {
       },
     },
   },
+  skuList: {
+    minLength: "Please add at least 1 SKU",
+    media: {
+      image: {
+        required: "Please choose an image",
+        maxSize: "Please use a smaller image (Max 512KB)",
+        valid: "Invalid image format (jpeg, png, webp, heic, gif)",
+      },
+      video: {
+        required: "Please choose an video",
+        maxSize: "Please use a smaller video (Max 5MB)",
+        valid: "Invalid video format (mp4, webm, ogg)",
+      },
+    },
+    variant: {
+      slug: {
+        required: "Please select the slug for this variant",
+      },
+    },
+  },
 }

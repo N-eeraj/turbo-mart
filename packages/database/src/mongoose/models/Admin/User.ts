@@ -104,8 +104,11 @@ const AdminSchema = new mongoose.Schema({
     default: undefined,
   },
   profilePicture: {
-    publicPath: String,
-    fileLocation: String,
+    type: {
+      publicPath: String,
+      fileLocation: String,
+    },
+    default: undefined,
   },
 }, {
   timestamps: true,
