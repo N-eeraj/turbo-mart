@@ -186,7 +186,32 @@ export const BRAND = {
 }
 
 export const PRODUCT = {
+  subcategory: {
+    required: "Please select a subcategory",
+  },
+  brand: {
+    required: "Please select a brand",
+  },
   name: {
-    required: "Please enter a brand name",
+    required: "Please enter a product name",
+  },
+  attributes: {
+    attribute: {
+      required: "Please select an attribute",
+    },
+    valueOrVariant: {
+      required: "Please enter a value or variants",
+      either: "Please enter either a value or a variant, not both",
+    },
+    value: "Please enter a value",
+    variants: {
+      minLength: "Please add at least 1 variant",
+      value: {
+        required: "Please enter a variant value",
+      },
+      slug: {
+        required: "Please enter a variant slug",
+      },
+    },
   },
 }
