@@ -25,6 +25,11 @@ const ProductSchema = new mongoose.Schema({
     ref: "Subcategory",
     required: true,
   },
+  brand: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Brand",
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -85,6 +90,7 @@ ProductSchema.index({
 export function transformProduct({
   _id,
   subcategory,
+  brand,
   name,
   attributes,
   variants,
@@ -94,6 +100,7 @@ export function transformProduct({
   const product: ProductObject = {
     id: _id,
     subcategory,
+    brand,
     name,
     attributes,
     variants,
