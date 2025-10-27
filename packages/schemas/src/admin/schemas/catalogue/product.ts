@@ -87,12 +87,45 @@ export const productCreationSchema = z.object({
       })
   )
     .optional(),
+  skuLists: z.array(
+    z.object({
+      media: z.array(
+        z.union([
+          z.file({ error: PRODUCT.skuList.media.image.required })
+            .max(5_24_288, { error: PRODUCT.skuList.media.image.maxSize })
+            .mime([
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/heic",
+              "image/gif",
+            ], { error: PRODUCT.skuList.media.image.valid }),
+          z.file({ error: PRODUCT.skuList.media.video.required })
+            .max(52_42_880, { error: PRODUCT.skuList.media.video.maxSize })
+            .mime([
+              "video/mp4",
+              "video/webm",
+              "video/ogg",
+            ], { error: PRODUCT.skuList.media.video.valid }),
+        ])
+      )
+        .optional()
+        .meta({
+          description: "Media for the SKU item.",
+        }),
+    })
+      .catchall(
+        z.string({ error: PRODUCT.skuList.variant.slug.required })
+          .nonempty(PRODUCT.skuList.variant.slug.required)
+          .trim()
+          .meta({
+            description: "Variant Id slug records.",
+          })
+      )
+  )
+    .min(1, { error: PRODUCT.skuList.minLength })
 })
 
-export const productUpdateSchema = productCreationSchema.partial()
-
 export const productCreationJSONSchema = z.toJSONSchema(productCreationSchema)
-export const productUpdateJSONSchema = z.toJSONSchema(productUpdateSchema)
 
 export type ProductCreationData = z.infer<typeof productCreationSchema>
-export type ProductUpdateData = z.infer<typeof productUpdateSchema>

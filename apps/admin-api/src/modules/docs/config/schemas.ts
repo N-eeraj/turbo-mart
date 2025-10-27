@@ -44,7 +44,6 @@ import {
 } from "@app/schemas/admin/catalogue/brand"
 import {
   productCreationJSONSchema,
-  productUpdateJSONSchema,
 } from "@app/schemas/admin/catalogue/product"
 
 const LimitOptionSchema = {
@@ -147,7 +146,6 @@ const schemas = {
   BrandCreationSchema: brandCreationJSONSchema,
   BrandUpdateSchema: brandUpdateJSONSchema,
   ProductCreationSchema: productCreationJSONSchema,
-  ProductUpdateSchema: productUpdateJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

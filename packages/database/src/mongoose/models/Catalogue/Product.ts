@@ -5,13 +5,38 @@ export type Product = mongoose.HydratedDocument<InferredProductSchemaType>
 export type ObjectKeys = keyof InferredProductSchemaType
 export type ProductObject = Pick<Product, ObjectKeys> & { id: Product["_id"] }
 
-const VariantSchema = new mongoose.Schema({
-  slug: {
+export enum MediaType {
+  IMAGE,
+  VIDEO,
+}
+
+const SKUSchema = new mongoose.Schema({
+  code: {
     type: String,
     required: true,
     unique: true, 
     lowercase: true,
   },
+  media: [
+    {
+      type: {
+        publicPath: {
+          type: String,
+          required: true,
+        },
+        fileLocation: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: Number,
+          enum: Object.values(MediaType).map(Number),
+          required: true,
+        },
+      },
+      default: undefined,
+    }
+  ],
 }, {
   strict: false,
 })
@@ -66,9 +91,9 @@ const ProductSchema = new mongoose.Schema({
     ],
     default: undefined,
   },
-  variants: {
+  skuList: {
     type: [
-      VariantSchema
+      SKUSchema
     ],
     default: undefined,
   },
@@ -78,6 +103,7 @@ const ProductSchema = new mongoose.Schema({
 
 ProductSchema.index({
   name: 1,
+  "skuList.code": 1,
 })
 
 /**
@@ -93,7 +119,7 @@ export function transformProduct({
   brand,
   name,
   attributes,
-  variants,
+  skuList,
   createdAt,
   updatedAt,
 }: Product): ProductObject {
@@ -103,7 +129,7 @@ export function transformProduct({
     brand,
     name,
     attributes,
-    variants,
+    skuList,
     createdAt,
     updatedAt,
   }
