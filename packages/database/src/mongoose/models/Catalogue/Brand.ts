@@ -53,6 +53,7 @@ export function transformBrand({
   return brand
 }
 
-const Brand = mongoose.model<Brand, mongoose.Model<Brand>>("Brand", BrandSchema)
+const Brand =  mongoose.models.Brand
+  || mongoose.model<Brand, mongoose.Model<Brand>>("Brand", BrandSchema)
 
 export default Brand

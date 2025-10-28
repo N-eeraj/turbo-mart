@@ -4,7 +4,7 @@ import {
   PRODUCT,
 } from "#admin/constants/validationMessages.ts"
 
-export const productCreationSchema = z.object({
+export const productSchema = z.object({
   subcategory: z.string({ error: PRODUCT.subcategory.required })
     .nonempty(PRODUCT.subcategory.required)
     .trim()
@@ -126,6 +126,11 @@ export const productCreationSchema = z.object({
     .min(1, { error: PRODUCT.skuList.minLength })
 })
 
+export const productCreationSchema = productSchema.omit({
+  skuLists: true,
+})
+
+export const productJSONSchema = z.toJSONSchema(productSchema)
 export const productCreationJSONSchema = z.toJSONSchema(productCreationSchema)
 
 export type ProductCreationData = z.infer<typeof productCreationSchema>

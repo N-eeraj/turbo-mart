@@ -137,6 +137,7 @@ export function transformProduct({
   return product
 }
 
-const Product = mongoose.model<Product, mongoose.Model<Product>>("Product", ProductSchema)
+const Product =  mongoose.models.Product
+  || mongoose.model<Product, mongoose.Model<Product>>("Product", ProductSchema)
 
 export default Product

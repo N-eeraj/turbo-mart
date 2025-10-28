@@ -22,7 +22,23 @@ export default class ProductController extends BaseController {
     try {
       const product = super.validateRequest(productCreationSchema, body)
 
-      const data = await ProductService.create(product)
+      const subcategory = super.parseObjectId(product.subcategory)
+      const brand = super.parseObjectId(product.brand)
+
+      if (!subcategory || !brand) {
+        throw {
+          status: 400,
+          message: "Invalid ids",
+          ...(!subcategory && { brand: product.brand }),
+          ...(!brand && { subcategory: product.subcategory }),
+        }
+      }
+
+      const data = await ProductService.create({
+        ...product,
+        subcategory,
+        brand,
+      })
 
       super.sendSuccess(res, {
         message: "Created Product",
