@@ -66,7 +66,9 @@ export default class ProductService extends BaseService {
    */
   static async create(product: ParsedProductCreationData): Promise<ProductObject> {
     await this.ensureBrand(product.brand)
-    const subcategory = await this.ensureSubcategory(product.subcategory)
-    console.log(subcategory)
+    const { attributes } = await this.ensureSubcategory(product.subcategory)
+    attributes.forEach((attribute) => {
+      console.log(attribute)
+    })
   }
 }
