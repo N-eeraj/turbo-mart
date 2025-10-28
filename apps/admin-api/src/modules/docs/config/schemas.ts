@@ -43,6 +43,7 @@ import {
   brandUpdateJSONSchema,
 } from "@app/schemas/admin/catalogue/brand"
 import {
+  productJSONSchema,
   productCreationJSONSchema,
 } from "@app/schemas/admin/catalogue/product"
 
@@ -115,6 +116,7 @@ const ResponseSchemas = {
   CategorySchema,
   SubcategorySchema,
   BrandSchema,
+  ProductSchema: productJSONSchema,
 }
 
 const UtilitySchemas = {

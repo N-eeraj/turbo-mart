@@ -182,6 +182,7 @@ AdminSchema.statics.authenticate = async function({ email, password }: LoginCred
 /**
  * Mongoose model for the Admin schema.
  */
-const Admin = mongoose.model<Admin, AdminModel>("Admin", AdminSchema)
+const Admin =  mongoose.models.Admin
+  || mongoose.model<Admin, AdminModel>("Admin", AdminSchema)
 
 export default Admin
