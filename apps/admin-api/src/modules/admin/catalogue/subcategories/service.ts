@@ -130,7 +130,6 @@ export default class SubcategoryService extends BaseService {
       })
       .skip(skip)
       .limit(limit)
-      .lean()
       .select({
         attributes: 0,
       })
