@@ -7,6 +7,10 @@ import Subcategory, {
   transformSubcategory,
 } from "@app/database/mongoose/models/Catalogue/SubCategory.ts"
 import Brand from "@app/database/mongoose/models/Catalogue/Brand.ts"
+import {
+  type AttributeObject,
+  type AttributeType,
+} from "@app/database/mongoose/models/Catalogue/Attributes.js"
 import type {
   ProductCreationData,
 } from "@app/schemas/admin/catalogue/product"
@@ -55,6 +59,59 @@ export default class ProductService extends BaseService {
     }
   }
 
+  private static validateProductAttributes(
+    attributes: Array<AttributeObject<AttributeType>>,
+    productAttributes: ParsedProductCreationData["attributes"],
+  ) {
+    const missingRequiredAttributes: Array<{
+      id: mongoose.Types.ObjectId
+      name: AttributeObject<AttributeType>["name"]
+    }> = []
+    const invalidAttributeData: Array<{
+      id: mongoose.Types.ObjectId
+      name: AttributeObject<AttributeType>["name"]
+      required: keyof NonNullable<typeof productAttributes>[string]
+    }> = []
+
+    if (productAttributes) {
+      attributes.forEach(({ id, name, required, type, variant, metadata }) => {
+        const productAttribute = productAttributes![id as unknown as string]
+
+        // ensure the required attribute is provided
+        if (required && !productAttribute) {
+          missingRequiredAttributes.push({
+            id,
+            name,
+          })
+        }
+
+        if (productAttribute) {
+          // ensure the attribute data matches the variant structure
+          if (variant && !productAttribute.variants) {
+            invalidAttributeData.push({
+              id,
+              name,
+              required: "variants",
+            })
+          } else if (!variant && !productAttribute.value) {
+            invalidAttributeData.push({
+              id,
+              name,
+              required: "value",
+            })
+          }
+        }
+      })
+    }
+
+    if (missingRequiredAttributes.length) {
+      console.log("Missing required attributes", missingRequiredAttributes)
+    }
+    if (invalidAttributeData.length) {
+      console.log("Invalid attribute data", invalidAttributeData)
+    }
+  }
+
   /**
    * Creates a new product.
    * 
@@ -67,8 +124,7 @@ export default class ProductService extends BaseService {
   static async create(product: ParsedProductCreationData): Promise<ProductObject> {
     await this.ensureBrand(product.brand)
     const { attributes } = await this.ensureSubcategory(product.subcategory)
-    attributes.forEach((attribute) => {
-      console.log(attribute)
-    })
+
+    this.validateProductAttributes(attributes, product.attributes)
   }
 }
