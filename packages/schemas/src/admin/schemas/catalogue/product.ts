@@ -26,15 +26,11 @@ export const productSchema = z.object({
       description: "Name of the product.",
       example: "iPhone 17",
     }),
-  attributes: z.array(
+  attributes: z.record(
+    z.string({ error: PRODUCT.attributes.attribute.required })
+      .nonempty(PRODUCT.attributes.attribute.required)
+      .trim(),
     z.object({
-      attribute: z.string({ error: PRODUCT.attributes.attribute.required })
-        .nonempty(PRODUCT.attributes.attribute.required)
-        .trim()
-        .meta({
-          description: "Attribute Id.",
-          example: "01abcd091ab01a0123ab012a",
-        }),
       value: z.unknown()
         .optional()
         .meta({
@@ -44,7 +40,7 @@ export const productSchema = z.object({
       variants: z.array(
         z.object({
           value: z.unknown()
-            .refine((value) => ![null, undefined, ""].includes(value as any) , {
+            .refine((value) => ![null, undefined, ""].includes(value as any), {
               error: PRODUCT.attributes.variants.value.required,
             })
             .meta({
@@ -66,27 +62,51 @@ export const productSchema = z.object({
           description: "List of values of a variant attribute.",
         }),
     })
-      .superRefine(({ value, variants }, ctx) => {
-        if (value === undefined && !variants) {
-          ctx.addIssue({
-            message: PRODUCT.attributes.valueOrVariant.required,
-            code: "custom"
-          })
-        } else if (value !== undefined && variants) {
-          ctx.addIssue({
-            message: PRODUCT.attributes.valueOrVariant.either,
-            code: "custom"
-          })
-        } else if (value === "" || value === null) {
-          ctx.addIssue({
-            message: PRODUCT.attributes.value,
-            path: ["value"],
-            code: "custom"
-          })
-        }
-      })
   )
-    .optional(),
+    .superRefine((attributes, ctx) => {
+      Object.entries(attributes)
+        .forEach(([ attribute, { value, variants } ]) => {
+          if (value === undefined && !variants) {
+            ctx.addIssue({
+              path: [attribute],
+              message: PRODUCT.attributes.valueOrVariant.required,
+              code: "custom"
+            })
+          } else if (value !== undefined && variants) {
+            ctx.addIssue({
+              path: [attribute],
+              message: PRODUCT.attributes.valueOrVariant.either,
+              code: "custom"
+            })
+          } else if (value === "" || value === null) {
+            ctx.addIssue({
+              message: PRODUCT.attributes.value,
+              path: [
+                attribute,
+                "value"
+              ],
+              code: "custom"
+            })
+          }
+        })
+    })
+    .optional()
+    .meta({
+      description: "Attribute record with the attribute id as the key, and a value/variants as the record value",
+      example: {
+        "01abcd091ab01a0123ab012a": {
+          value: "Snapdragon 8 Elite Gen 5",
+        },
+        "01abcd091ab01a0123ab012b": {
+          variants: [
+            {
+              value: "Black",
+              slug: "blk",
+            }
+          ],
+        },
+      },
+    }),
   skuLists: z.array(
     z.object({
       media: z.array(
