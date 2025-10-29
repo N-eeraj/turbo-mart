@@ -14,7 +14,7 @@ export type Subcategory = Omit<mongoose.HydratedDocument<InferredSubcategorySche
 export type ObjectKeys = Exclude<keyof InferredSubcategorySchemaType, "attributes">
 export type SubcategoryObject = Pick<Subcategory, ObjectKeys> & {
   id: Subcategory["_id"]
-  attributes: Array<AttributeObject<AttributeType>>
+  attributes?: Array<AttributeObject<AttributeType>>
 }
 
 /**

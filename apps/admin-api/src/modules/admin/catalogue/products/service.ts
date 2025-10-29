@@ -4,6 +4,7 @@ import {
   type ProductObject,
 } from "@app/database/mongoose/models/Catalogue/Product.ts"
 import Subcategory, {
+  SubcategoryObject,
   transformSubcategory,
 } from "@app/database/mongoose/models/Catalogue/SubCategory.ts"
 import Brand from "@app/database/mongoose/models/Catalogue/Brand.ts"
@@ -36,6 +37,15 @@ export type ParsedProductCreationData = Omit<ProductCreationData, "brand" | "sub
 }
 
 export default class ProductService extends BaseService {
+  /**
+   * Ensures that a subcategory with the given id exists.
+   * 
+   * @param subcategoryId - id of the subcategory to check.
+   * 
+   * @returns the subcategory found
+   * 
+   * @throws 404 error if subcategory is not found.
+   */
   private static async ensureSubcategory(subcategoryId: ProductObject["subcategory"]) {
     const subcategory = await Subcategory.findById(subcategoryId)
     if (subcategory) return transformSubcategory(subcategory)
@@ -47,6 +57,13 @@ export default class ProductService extends BaseService {
     }
   }
 
+  /**
+   * Ensures that a brand with the given id exists.
+   * 
+   * @param brandId - id of the brand to check.
+   * 
+   * @throws 404 error if brand is not found.
+   */
   private static async ensureBrand(brandId: ProductObject["brand"]) {
     const brand = await Brand.findById(brandId)
       .select({ _id: 1 })
@@ -59,8 +76,14 @@ export default class ProductService extends BaseService {
     }
   }
 
+  /**
+   * Validate the subcategory level attributes for a given product attribute.
+   * 
+   * @param attributes - The attributes in the subcategory.
+   * @param productAttributes - The product attributes to validate.
+   */
   private static validateProductAttributes(
-    attributes: Array<AttributeObject<AttributeType>>,
+    attributes: SubcategoryObject["attributes"],
     productAttributes: ParsedProductCreationData["attributes"],
   ) {
     const missingRequiredAttributes: Array<{
@@ -75,7 +98,7 @@ export default class ProductService extends BaseService {
 
     if (productAttributes) {
       attributes.forEach(({ id, name, required, type, variant, metadata }) => {
-        const productAttribute = productAttributes![id as unknown as string]
+        const productAttribute = productAttributes[id as unknown as string]
 
         // ensure the required attribute is provided
         if (required && !productAttribute) {
