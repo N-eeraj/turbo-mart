@@ -77,7 +77,7 @@
           }
         },
         "400": {
-          "description": "Invalid data error",
+          "description": "Invalid data error.",
           "content": {
             "application/json": {
               "schema": {
@@ -709,7 +709,7 @@
           }
         },
         "400": {
-          "description": "Invalid data error",
+          "description": "Invalid data error.",
           "content": {
             "application/json": {
               "schema": {

@@ -39,7 +39,7 @@
           }
         },
         "400": {
-          "description": "Invalid data error",
+          "description": "Invalid data error.",
           "content": {
             "application/json": {
               "examples": {
@@ -67,6 +67,29 @@
         },
         "403": {
           "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Not found error.",
+          "content": {
+            "application/json": {
+              "examples": {
+                "BrandNotFound": {
+                  "summary": "Brand not found",
+                  "value": {
+                    "success": false,
+                    "message": "Brand not found"
+                  }
+                },
+                "SubcategoryNotFound": {
+                  "summary": "Subcategory not found",
+                  "value": {
+                    "success": false,
+                    "message": "Subcategory not found"
+                  }
+                }
+              }
+            }
+          }
         },
         "422": {
           "description": "Validation error (if request body is missing required fields, or has invalid field values).",
