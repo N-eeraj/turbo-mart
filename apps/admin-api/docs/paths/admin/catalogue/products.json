@@ -95,80 +95,81 @@
           "description": "Validation error (if request body is missing required fields, or has invalid field values).",
           "content": {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "success": {
-                    "type": "boolean",
-                    "example": false,
-                    "description": "Indicates the request failed."
-                  },
-                  "message": {
-                    "type": "string",
-                    "example": "Validation Error",
-                    "description": "Error message."
-                  },
-                  "errors": {
-                    "type": "object",
-                    "description": "Validation error details for the fields.",
-                    "properties": {
-                      "subcategory": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "example": ["Please select a subcategory"],
-                        "description": "Validation errors for the subcategory field."
-                      },
-                      "brand": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "example": ["Please select a brand"],
-                        "description": "Validation errors for the brand field."
-                      },
-                      "name": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "example": ["Please enter a product name"],
-                        "description": "Validation errors for the name field."
-                      },
+              "examples": {
+                "ValidationError": {
+                  "summary": "Validation Error",
+                  "value": {
+                    "success": false,
+                    "message": "Validation Error",
+                    "errors": {
+                      "subcategory": [
+                        "Please select a subcategory"
+                      ],
+                      "brand": [
+                        "Please select a brand"
+                      ],
+                      "name": [
+                        "Please enter a product name"
+                      ],
                       "attributes": {
-                        "type": "object",
-                        "example": {
-                          "01abcd091ab01a0123ab012a": [
-                            "Please enter a value or variants"
-                          ],
-                          "01abcd091ab01a0123ab012b": {
-                            "value": [
-                              "Please enter a value"
-                            ]
-                          },
-                          "01abcd091ab01a0123ab012c": {
-                            "variants": [
-                              "Please add at least 1 variant"
-                            ]
-                          },
-                          "01abcd091ab01a0123ab012d": [
-                            "Please enter either a value or a variant, not both"
-                          ],
-                          "01abcd091ab01a0123ab012e": {
-                            "variants": {
-                              "0": {
-                                "value": [
-                                  "Please enter a variant value"
-                                ],
-                                "slug": [
-                                  "Please enter a variant slug"
-                                ]
-                              }
+                        "01abcd091ab01a0123ab012a": [
+                          "Please enter a value or variants"
+                        ],
+                        "01abcd091ab01a0123ab012b": {
+                          "value": [
+                            "Please enter a value"
+                          ]
+                        },
+                        "01abcd091ab01a0123ab012c": {
+                          "variants": [
+                            "Please add at least 1 variant"
+                          ]
+                        },
+                        "01abcd091ab01a0123ab012d": [
+                          "Please enter either a value or a variant, not both"
+                        ],
+                        "01abcd091ab01a0123ab012e": {
+                          "variants": {
+                            "0": {
+                              "value": [
+                                "Please enter a variant value"
+                              ],
+                              "slug": [
+                                "Please enter a variant slug"
+                              ]
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                },
+                "AttributeValidationError": {
+                  "summary": "Attribute Validation Error",
+                  "value": {
+                    "success": false,
+                    "message": "Product attributes don’t match the subcategory requirements",
+                    "errors": {
+                      "attributes": {
+                        "01abcd091ab01a0123ab012a": {
+                          "value": [
+                            "The selected subcategory requires variants"
+                          ]
                         },
-                        "description": "Validation errors for the attribute fields."
+                        "01abcd091ab01a0123ab012b": [
+                          "The selected subcategory requires this attribute"
+                        ],
+                        "01abcd091ab01a0123ab012c": {
+                          "variants": [
+                            "The selected subcategory requires a value"
+                          ]
+                        },
+                        "01abcd091ab01a0123ab012d": [
+                          "The selected subcategory requires this attribute"
+                        ],
+                        "01abcd091ab01a0123ab012e": [
+                          "The selected subcategory requires this attribute"
+                        ]
                       }
                     }
                   }

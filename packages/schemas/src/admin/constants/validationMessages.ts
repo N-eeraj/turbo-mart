@@ -209,7 +209,7 @@ export const PRODUCT = {
       subcategoryRequired: "The selected subcategory requires a value",
     },
     variants: {
-      subcategoryRequired: "",
+      subcategoryRequired: "The selected subcategory requires variants",
       minLength: "Please add at least 1 variant",
       value: {
         required: "Please enter a variant value",
