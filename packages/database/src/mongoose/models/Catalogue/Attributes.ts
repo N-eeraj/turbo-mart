@@ -26,6 +26,24 @@ export enum AttributeType {
   JSON,
 }
 
+export type SelectAttributeMetadataType = AttributeType.TEXT | AttributeType.NUMBER
+export type SelectAttributeType = AttributeType.SELECT | AttributeType.MULTI_SELECT
+type ItemsArray<T> = T extends mongoose.Types.DocumentArray<infer U> ? Array<U> : T
+
+type ListAttributeOptionSchema<T extends SelectAttributeMetadataType> = 
+  T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof ListTextOptionSchema> :
+  T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof ListNumberOptionSchema> :
+  never
+
+export type ListAttributeMetadataSchemaType<T extends SelectAttributeMetadataType> = {
+  metadata: {
+    type: T
+    options: ItemsArray<ListAttributeOptionSchema<T>["options"]>
+  }
+}
+
+type DefaultSelectAttributeMetadataType<T extends AttributeType> = T extends SelectAttributeType ? SelectAttributeMetadataType : never
+
 /**
  * Maps an AttributeType to its corresponding Mongoose metadata schema type.
  * 
@@ -43,28 +61,45 @@ export enum AttributeType {
  * | DATE                  | DateAttributeMetadataSchema          |
  * | JSON                  | JsonAttributeMetadataSchema          |
  */
-export type AttributeMetadataSchemaType<T extends AttributeType> = 
+export type AttributeMetadataSchemaType<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+> = 
   T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof TextAttributeMetadataSchema> :
   T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetadataSchema> :
-  T extends AttributeType.SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetadataSchema> :
-  T extends AttributeType.MULTI_SELECT ? mongoose.InferSchemaType<typeof ListAttributeMetadataSchema> :
+  T extends SelectAttributeType ? ListAttributeMetadataSchemaType<LT> :
   T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetadataSchema> :
   T extends AttributeType.JSON ? mongoose.InferSchemaType<typeof JsonAttributeMetadataSchema> :
   never
 
-export type MetadataSchemaType<T extends AttributeType> =
+export type MetadataSchemaType<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+> =
   AttributeMetadataSchemaType<T> extends never
     ? { metadata?: never }
-    : { metadata: AttributeMetadataSchemaType<T>["metadata"] }
+    : { metadata: AttributeMetadataSchemaType<T, LT>["metadata"] }
 
-export type InferredAttributeSchemaType<T extends AttributeType> =
+export type InferredAttributeSchemaType<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+> =
   Omit<mongoose.InferSchemaType<typeof AttributeSchema>, "type">
   & { type: T }
-  & MetadataSchemaType<T>
+  & MetadataSchemaType<T, LT>
 
-export type Attribute<T extends AttributeType> = InferredAttributeSchemaType<T> & { _id: mongoose.Types.ObjectId }
-export type ObjectKeys<T extends AttributeType> = keyof InferredAttributeSchemaType<T>
-export type AttributeObject<T extends AttributeType> = Pick<Attribute<T>, ObjectKeys<T>> & { id: Attribute<T>["_id"] }
+export type Attribute<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+> = InferredAttributeSchemaType<T, LT> & { _id: mongoose.Types.ObjectId }
+export type ObjectKeys<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+> = keyof InferredAttributeSchemaType<T, LT>
+export type AttributeObject<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+> = Pick<Attribute<T, LT>, ObjectKeys<T, LT>> & { id: Attribute<T, LT>["_id"] }
 
 /**
  * Mongoose schema for metadata of text attribute.
@@ -157,25 +192,22 @@ const ListNumberOptionSchema = new mongoose.Schema({
   options: {
     type: [
       {
-        type: {
-          value: {
-            type: Number,
-            required: true,
-          },
-          unit: {
-            type: String,
-            default: undefined,
-          },
-          template: {
-            type: String,
-            default: "{{value}}",
-          },
-          base: {
-            type: Number,
-            default: 1,
-          },
+        value: {
+          type: Number,
+          required: true,
         },
-        required: true,
+        unit: {
+          type: String,
+          default: undefined,
+        },
+        template: {
+          type: String,
+          default: "{{value}}",
+        },
+        base: {
+          type: Number,
+          default: 1,
+        },
       }
     ],
     default: [],
@@ -274,14 +306,17 @@ AttributeSchema.discriminator(AttributeType.JSON, JsonAttributeMetadataSchema)
  * 
  * @returns The transformed attribute object.
  */
-export function transformAttribute<T extends AttributeType>({
+export function transformAttribute<
+  T extends AttributeType,
+  LT extends SelectAttributeMetadataType = DefaultSelectAttributeMetadataType<T>
+>({
   _id,
   name,
   type,
   required,
   variant,
   metadata,
-}: Attribute<T>): AttributeObject<T> {
+}: Attribute<T, LT>): AttributeObject<T, LT> {
   if (metadata && "_doc" in metadata && metadata._doc && typeof metadata._doc === "object" && "_id" in metadata._doc) {
     delete metadata._doc._id
   }
@@ -295,7 +330,7 @@ export function transformAttribute<T extends AttributeType>({
     metadata,
   }
 
-  return attribute as AttributeObject<T>
+  return attribute as AttributeObject<T, LT>
 }
 
 export default AttributeSchema
