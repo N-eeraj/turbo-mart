@@ -86,15 +86,14 @@ export default class ProductService extends BaseService {
     metadata: AttributeObject<T>["metadata"],
     attribute: unknown,
   ): void {
-    if (!metadata) return
     if (type === AttributeType.TEXT) {
       const meta = (metadata as AttributeObject<AttributeType.TEXT>["metadata"])
-      if (meta?.maxLength) {
-        if (typeof attribute !== "string") {
-          throw {
-            message: ["Invalid attribute value, attribute requires string value"]
-          }
+      if (typeof attribute !== "string") {
+        throw {
+          message: ["Invalid attribute value, attribute requires string value"]
         }
+      }
+      if (meta?.maxLength) {
         if (attribute.length > meta.maxLength) {
           throw {
             message: [`Please enter a shorter attribute value in ${meta.maxLength} characters`]
@@ -105,12 +104,12 @@ export default class ProductService extends BaseService {
     }
     if (type === AttributeType.NUMBER) {
       const meta = (metadata as AttributeObject<AttributeType.NUMBER>["metadata"])
-      if (meta) {
-        if (typeof attribute !== "number") {
-          throw {
-            message: ["Invalid attribute value, attribute requires number value"]
-          }
+      if (typeof attribute !== "number") {
+        throw {
+          message: ["Invalid attribute value, attribute requires number value"]
         }
+      }
+      if (meta) {
         if (typeof meta.max === "number" && meta.max < attribute) {
           throw {
             message: [`Please enter a number within ${meta.max}, as the the attribute value`]
@@ -121,16 +120,15 @@ export default class ProductService extends BaseService {
             message: [`Please enter a number at least ${meta.min}, as the the attribute value`]
           }
         }
-        // if (meta.max < attribute || meta.min > atr) {
-        //   throw {
-        //     message: `Please enter a shorter attribute value in ${meta.maxLength} characters`
-        //   }
-        // }
       }
       return
     }
     if (type === AttributeType.BOOLEAN) {
-      const meta = (metadata as AttributeObject<AttributeType.BOOLEAN>["metadata"]) ?? {}
+      if (typeof attribute !== "boolean") {
+        throw {
+          message: ["Invalid attribute value, attribute requires boolean value"]
+        }
+      }
       return
     }
     if (type === AttributeType.SELECT) {
@@ -165,6 +163,10 @@ export default class ProductService extends BaseService {
     attributes: SubcategoryObject["attributes"],
     productAttributes: ParsedProductCreationData["attributes"],
   ): ParsedProductCreationData["attributes"] | undefined {
+    /**
+     * The list of attribute validations errors.
+     * Consists of both the attribute level error as well as the attribute value/variant errors.
+     */
     const attributeValidationErrors: Record<
       string,
       Array<string> | Partial<Record<
@@ -176,6 +178,42 @@ export default class ProductService extends BaseService {
     if (!attributes) return undefined
 
     if (productAttributes) {
+      /**
+       * A closure that wraps the `validateAttributeMetadata` function in a try/catch block.
+       * If an error occurs, it is added to the `attributeValidationErrors`.
+       * 
+       * @param type - The type of the attribute value.
+       * @param metadata - The metadata of the attribute that's used to validate the product attribute value.
+       * @param value - The product attribute value to validate.
+       * @param id - The attribute id
+       * @param key - The key to which the error has to be attached to.
+       * 
+       * @throws errors from `validateAttributeMetadata` that cannot be handled.
+       */
+      const tryCatchAttributeValidations = (
+        ...[type, metadata, value, id, key]: [
+          ...Parameters<typeof this.validateAttributeMetadata>,
+          NonNullable<SubcategoryObject["attributes"]>[number]["id"],
+          keyof AttributeRecord[keyof AttributeRecord],
+        ]
+      ) => {
+        try {
+          this.validateAttributeMetadata(
+            type,
+            metadata,
+            value,
+          )
+        } catch(error) {
+          if (error && typeof error === "object" && "message" in error && Array.isArray(error.message)) {
+            attributeValidationErrors[id.toString()] = {
+              [key]: error.message,
+            }
+          } else {
+            throw error
+          }
+        }
+      }
+
       attributes.forEach(({ id, name, required, type, variant, metadata }) => {
         const productAttribute = productAttributes[id as unknown as string]
 
@@ -196,25 +234,29 @@ export default class ProductService extends BaseService {
               }
             } else {
               productAttribute.variants.forEach((value) => {
-                this.validateAttributeMetadata(
+                tryCatchAttributeValidations(
                   type,
                   metadata,
                   value,
+                  id,
+                  "variants",
                 )
               })
             }
           } else { // handle value attribute
-            if (!productAttribute.value) { // handle missing value
+            if (productAttribute.value === null || productAttribute.value == undefined) { // handle missing value
               attributeValidationErrors[id.toString()] = {
                 value: [
                   PRODUCT.attributes.value.attributeRequired
                 ]
               }
             } else {
-              this.validateAttributeMetadata(
+              tryCatchAttributeValidations(
                 type,
                 metadata,
                 productAttribute.value,
+                id,
+                "value",
               )
             }
           }
@@ -242,7 +284,7 @@ export default class ProductService extends BaseService {
    * 
    * @throws If product creation fails.
    */
-  static async create(product: ParsedProductCreationData): Promise<ProductObject> {
+  static async create(product: ParsedProductCreationData): Promise<void> {
     await this.ensureBrand(product.brand)
     const { attributes } = await this.ensureSubcategory(product.subcategory)
 
