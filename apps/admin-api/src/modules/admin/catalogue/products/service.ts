@@ -6,11 +6,15 @@ import {
 import Subcategory, {
   SubcategoryObject,
   transformSubcategory,
-} from "@app/database/mongoose/models/Catalogue/SubCategory.ts"
+} from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
 import Brand from "@app/database/mongoose/models/Catalogue/Brand.ts"
 import type {
   ProductCreationData,
 } from "@app/schemas/admin/catalogue/product"
+import {
+  AttributeObject,
+  AttributeType
+} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
 import {
   PRODUCT,
 } from "@app/schemas/adminConstants/validationMessages"
@@ -77,6 +81,80 @@ export default class ProductService extends BaseService {
     }
   }
 
+  private static validateAttributeMetadata<T extends AttributeType>(
+    type: T,
+    metadata: AttributeObject<T>["metadata"],
+    attribute: unknown,
+  ): void {
+    if (!metadata) return
+    if (type === AttributeType.TEXT) {
+      const meta = (metadata as AttributeObject<AttributeType.TEXT>["metadata"])
+      if (meta?.maxLength) {
+        if (typeof attribute !== "string") {
+          throw {
+            message: ["Invalid attribute value, attribute requires string value"]
+          }
+        }
+        if (attribute.length > meta.maxLength) {
+          throw {
+            message: [`Please enter a shorter attribute value in ${meta.maxLength} characters`]
+          }
+        }
+      }
+      return
+    }
+    if (type === AttributeType.NUMBER) {
+      const meta = (metadata as AttributeObject<AttributeType.NUMBER>["metadata"])
+      if (meta) {
+        if (typeof attribute !== "number") {
+          throw {
+            message: ["Invalid attribute value, attribute requires number value"]
+          }
+        }
+        if (typeof meta.max === "number" && meta.max < attribute) {
+          throw {
+            message: [`Please enter a number within ${meta.max}, as the the attribute value`]
+          }
+        }
+        if (typeof meta.min === "number" && meta.min > attribute) {
+          throw {
+            message: [`Please enter a number at least ${meta.min}, as the the attribute value`]
+          }
+        }
+        // if (meta.max < attribute || meta.min > atr) {
+        //   throw {
+        //     message: `Please enter a shorter attribute value in ${meta.maxLength} characters`
+        //   }
+        // }
+      }
+      return
+    }
+    if (type === AttributeType.BOOLEAN) {
+      const meta = (metadata as AttributeObject<AttributeType.BOOLEAN>["metadata"]) ?? {}
+      return
+    }
+    if (type === AttributeType.SELECT) {
+      const meta = (metadata as AttributeObject<AttributeType.SELECT>["metadata"]) ?? {}
+      return
+    }
+    if (type === AttributeType.MULTI_SELECT) {
+      const meta = (metadata as AttributeObject<AttributeType.MULTI_SELECT>["metadata"]) ?? {}
+      return
+    }
+    if (type === AttributeType.COLOR) {
+      const meta = (metadata as AttributeObject<AttributeType.COLOR>["metadata"]) ?? {}
+      return
+    }
+    if (type === AttributeType.DATE) {
+      const meta = (metadata as AttributeObject<AttributeType.DATE>["metadata"]) ?? {}
+      return
+    }
+    if (type === AttributeType.JSON) {
+      const meta = (metadata as AttributeObject<AttributeType.JSON>["metadata"]) ?? {}
+      return
+    }
+  }
+
   /**
    * Validate the subcategory level attributes for a given product attribute.
    * 
@@ -109,18 +187,35 @@ export default class ProductService extends BaseService {
         }
 
         if (productAttribute) {
-          // ensure the attribute data matches the variant structure
-          if (variant && !productAttribute.variants) {
-            attributeValidationErrors[id.toString()] = {
-              variants: [
-                PRODUCT.attributes.value.subcategoryRequired,
-              ]
+          if (variant) { // handle variant attribute
+            if (!productAttribute.variants) { // handle missing variant
+              attributeValidationErrors[id.toString()] = {
+                variants: [
+                  PRODUCT.attributes.variants.attributeRequired,
+                ]
+              }
+            } else {
+              productAttribute.variants.forEach((value) => {
+                this.validateAttributeMetadata(
+                  type,
+                  metadata,
+                  value,
+                )
+              })
             }
-          } else if (!variant && !productAttribute.value) {
-            attributeValidationErrors[id.toString()] = {
-              value: [
-                PRODUCT.attributes.variants.subcategoryRequired
-              ]
+          } else { // handle value attribute
+            if (!productAttribute.value) { // handle missing value
+              attributeValidationErrors[id.toString()] = {
+                value: [
+                  PRODUCT.attributes.value.attributeRequired
+                ]
+              }
+            } else {
+              this.validateAttributeMetadata(
+                type,
+                metadata,
+                productAttribute.value,
+              )
             }
           }
         }

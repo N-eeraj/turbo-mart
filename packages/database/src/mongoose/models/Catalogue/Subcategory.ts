@@ -83,6 +83,6 @@ export function transformSubcategory({
 }
 
 const Subcategory = mongoose.models.Subcategory
-  || mongoose.model<Subcategory, mongoose.Model<Subcategory>>("Subcategory", SubcategorySchema, "subCategories")
+  || mongoose.model<Subcategory, mongoose.Model<Subcategory>>("Subcategory", SubcategorySchema)
 
 export default Subcategory
