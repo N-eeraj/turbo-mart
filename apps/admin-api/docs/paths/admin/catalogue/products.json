@@ -151,25 +151,19 @@
                     "message": "Product attributes don’t match the subcategory requirements",
                     "errors": {
                       "attributes": {
-                        "01abcd091ab01a0123ab012a": {
-                          "value": [
-                            "The selected subcategory requires variants"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012b": [
+                        "01abcd091ab01a0123ab012a": [
                           "The selected subcategory requires this attribute"
                         ],
-                        "01abcd091ab01a0123ab012c": {
-                          "variants": [
+                        "01abcd091ab01a0123ab012b": {
+                          "value": [
                             "The selected subcategory requires a value"
                           ]
                         },
-                        "01abcd091ab01a0123ab012d": [
-                          "The selected subcategory requires this attribute"
-                        ],
-                        "01abcd091ab01a0123ab012e": [
-                          "The selected subcategory requires this attribute"
-                        ]
+                        "01abcd091ab01a0123ab012c": {
+                          "variants": [
+                            "The selected subcategory requires variants"
+                          ]
+                        }
                       }
                     }
                   }

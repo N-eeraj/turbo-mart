@@ -131,7 +131,7 @@ export const ATTRIBUTE = {
       },
       base: {
         valid: "Please enter a valid number",
-        minValue: "Please enter a value of at least 1",
+        positive: "Please enter a positive number",
       },
     },
     list: {
