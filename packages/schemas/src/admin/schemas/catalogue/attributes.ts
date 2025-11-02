@@ -78,7 +78,7 @@ const numberAttributeTypeMetadata = {
         example: "{{value}} {{unit}}",
       }),
     base: z.number({ error: ATTRIBUTE.metadata.number.base.valid })
-      .min(1, { error: ATTRIBUTE.metadata.number.base.minValue })
+      .positive({ error: ATTRIBUTE.metadata.number.base.positive })
       .optional()
       .meta({
         description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",

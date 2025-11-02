@@ -87,13 +87,15 @@ export default class ProductService extends BaseService {
     attribute: unknown,
   ): void {
     if (type === AttributeType.TEXT) {
-      const meta = (metadata as AttributeObject<AttributeType.TEXT>["metadata"])
+      // ensure value is string
       if (typeof attribute !== "string") {
         throw {
           message: ["Invalid attribute value, attribute requires string value"]
         }
       }
+      const meta = (metadata as AttributeObject<AttributeType.TEXT>["metadata"])
       if (meta?.maxLength) {
+        // ensure value is within the max length if specified
         if (attribute.length > meta.maxLength) {
           throw {
             message: [`Please enter a shorter attribute value in ${meta.maxLength} characters`]
@@ -103,18 +105,21 @@ export default class ProductService extends BaseService {
       return
     }
     if (type === AttributeType.NUMBER) {
-      const meta = (metadata as AttributeObject<AttributeType.NUMBER>["metadata"])
+      // ensure value is number
       if (typeof attribute !== "number") {
         throw {
           message: ["Invalid attribute value, attribute requires number value"]
         }
       }
+      const meta = (metadata as AttributeObject<AttributeType.NUMBER>["metadata"])
       if (meta) {
+        // ensure value satisfies the max value if specified
         if (typeof meta.max === "number" && meta.max < attribute) {
           throw {
             message: [`Please enter a number within ${meta.max}, as the the attribute value`]
           }
         }
+        // ensure value satisfies the min value if specified
         if (typeof meta.min === "number" && meta.min > attribute) {
           throw {
             message: [`Please enter a number at least ${meta.min}, as the the attribute value`]
@@ -124,6 +129,7 @@ export default class ProductService extends BaseService {
       return
     }
     if (type === AttributeType.BOOLEAN) {
+      // ensure value is boolean
       if (typeof attribute !== "boolean") {
         throw {
           message: ["Invalid attribute value, attribute requires boolean value"]
@@ -132,11 +138,47 @@ export default class ProductService extends BaseService {
       return
     }
     if (type === AttributeType.SELECT) {
-      const meta = (metadata as AttributeObject<AttributeType.SELECT>["metadata"]) ?? {}
+      // ensure value is number
+      if (typeof attribute !== "number") {
+        throw {
+          message: ["Invalid attribute value, attribute requires the option index"]
+        }
+      }
+      const meta = (metadata as AttributeObject<AttributeType.SELECT>["metadata"])
+      // ensure the valid option index
+      if (attribute < 0 || attribute >= meta.options.length) {
+        throw {
+          message: ["Invalid attribute value, attribute out of bounds of option index"]
+        }
+      }
       return
     }
     if (type === AttributeType.MULTI_SELECT) {
+      // ensure value is array
+      if (!Array.isArray(attribute)) {
+        throw {
+          message: ["Invalid attribute value, attribute requires array value"]
+        }
+      }
       const meta = (metadata as AttributeObject<AttributeType.MULTI_SELECT>["metadata"]) ?? {}
+      if (attribute.length > meta.options.length) {
+        throw {
+          message: ["Invalid attribute value, attribute length can't be greater than options length"]
+        }
+      }
+      const validationErrors = attribute.reduce((errorAccumulator, option, optionIndex) => {
+        if (typeof option !== "number") {
+          errorAccumulator[optionIndex] =  ["Invalid attribute value, attribute requires the option index"]
+        } else if (option < 0 || option >= meta.options.length) {
+          errorAccumulator[optionIndex] =  ["Invalid attribute value, attribute out of bounds of option index"]
+        }
+        return errorAccumulator
+      }, {})
+      if (Object.keys(validationErrors).length) {
+        throw {
+          message: validationErrors
+        }
+      }
       return
     }
     if (type === AttributeType.COLOR) {
@@ -204,7 +246,7 @@ export default class ProductService extends BaseService {
             value,
           )
         } catch(error) {
-          if (error && typeof error === "object" && "message" in error && Array.isArray(error.message)) {
+          if (error && typeof error === "object" && "message" in error && (Array.isArray(error.message) || typeof error.message === "object")) {
             attributeValidationErrors[id.toString()] = {
               [key]: error.message,
             }
