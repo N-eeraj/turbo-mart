@@ -84,7 +84,7 @@ export default class ProductService extends BaseService {
   private static validateAttributeMetadata<T extends AttributeType>(
     type: T,
     metadata: AttributeObject<T>["metadata"],
-    attribute: unknown,
+    attribute: NonNullable<unknown>,
   ): void {
     if (type === AttributeType.TEXT) {
       // ensure value is string
@@ -232,11 +232,12 @@ export default class ProductService extends BaseService {
        * 
        * @throws errors from `validateAttributeMetadata` that cannot be handled.
        */
-      const tryCatchAttributeValidations = (
-        ...[type, metadata, value, id, key]: [
+      const tryCatchAttributeValidations = <T extends keyof AttributeRecord[keyof AttributeRecord]>(
+        ...[type, metadata, value, id, key, variantIndex]: [
           ...Parameters<typeof this.validateAttributeMetadata>,
           NonNullable<SubcategoryObject["attributes"]>[number]["id"],
-          keyof AttributeRecord[keyof AttributeRecord],
+          T,
+          ...(T extends "variants" ? [number] : [])
         ]
       ) => {
         try {
@@ -248,7 +249,8 @@ export default class ProductService extends BaseService {
         } catch(error) {
           if (error && typeof error === "object" && "message" in error && (Array.isArray(error.message) || typeof error.message === "object")) {
             attributeValidationErrors[id.toString()] = {
-              [key]: error.message,
+              ...( key === "value" && { [key]: error.message } ),
+              ...( key === "variants" && { [key]: { [variantIndex]: error.message } } ),
             }
           } else {
             throw error
@@ -275,13 +277,14 @@ export default class ProductService extends BaseService {
                 ]
               }
             } else {
-              productAttribute.variants.forEach((value) => {
+              productAttribute.variants.forEach(({ value }, variantIndex) => {
                 tryCatchAttributeValidations(
                   type,
                   metadata,
-                  value,
+                  value as NonNullable<unknown>,
                   id,
                   "variants",
+                  variantIndex,
                 )
               })
             }
