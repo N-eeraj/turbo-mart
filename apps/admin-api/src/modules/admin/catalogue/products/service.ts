@@ -145,7 +145,7 @@ export default class ProductService extends BaseService {
         }
       }
       const meta = (metadata as AttributeObject<AttributeType.SELECT>["metadata"])
-      // ensure the valid option index
+      // ensure valid option index
       if (attribute < 0 || attribute >= meta.options.length) {
         throw {
           message: ["Invalid attribute value, attribute out of bounds of option index"]
@@ -161,15 +161,16 @@ export default class ProductService extends BaseService {
         }
       }
       const meta = (metadata as AttributeObject<AttributeType.MULTI_SELECT>["metadata"]) ?? {}
+      // ensure value array length is not more than possible
       if (attribute.length > meta.options.length) {
         throw {
           message: ["Invalid attribute value, attribute length can't be greater than options length"]
         }
       }
-      const validationErrors = attribute.reduce((errorAccumulator, option, optionIndex) => {
-        if (typeof option !== "number") {
+      const validationErrors = attribute.reduce((errorAccumulator: Record<number, Array<string>>, option, optionIndex) => {
+        if (typeof option !== "number") { // ensure value is number
           errorAccumulator[optionIndex] =  ["Invalid attribute value, attribute requires the option index"]
-        } else if (option < 0 || option >= meta.options.length) {
+        } else if (option < 0 || option >= meta.options.length) { // ensure valid option index
           errorAccumulator[optionIndex] =  ["Invalid attribute value, attribute out of bounds of option index"]
         }
         return errorAccumulator
@@ -182,7 +183,28 @@ export default class ProductService extends BaseService {
       return
     }
     if (type === AttributeType.COLOR) {
-      const meta = (metadata as AttributeObject<AttributeType.COLOR>["metadata"]) ?? {}
+      const validationErrors: Record<string, Array<string>> = {}
+      // ensure value has a name property
+      if (!("name" in attribute)) {
+        validationErrors.name = ["Invalid attribute value, attribute requires color name"]
+      }
+      if ("hexCode" in attribute) { // ensure value has a hexCode property
+        if (typeof attribute.hexCode === "string") { // ensure hexCode is string
+          const HEX_CODE_REGEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i
+          if (!HEX_CODE_REGEX.test(attribute.hexCode)) { // ensure hexCode is valid
+            validationErrors.hexCode = ["Invalid attribute value, attribute hex code should be valid hex code"]
+          }
+        } else {
+          validationErrors.hexCode = ["Invalid attribute value, attribute hex code requires string value"]
+        }
+      } else {
+        validationErrors.hexCode = ["Invalid attribute value, attribute requires color hex code"]
+      }
+      if (Object.keys(validationErrors).length) {
+        throw {
+          message: validationErrors
+        }
+      }
       return
     }
     if (type === AttributeType.DATE) {
@@ -190,7 +212,7 @@ export default class ProductService extends BaseService {
       return
     }
     if (type === AttributeType.JSON) {
-      const meta = (metadata as AttributeObject<AttributeType.JSON>["metadata"]) ?? {}
+      // no validation
       return
     }
   }
