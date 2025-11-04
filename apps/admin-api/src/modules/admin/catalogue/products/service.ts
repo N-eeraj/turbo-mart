@@ -1,4 +1,5 @@
 import type mongoose from "mongoose"
+import * as z from "zod"
 
 import {
   type ProductObject,
@@ -87,98 +88,72 @@ export default class ProductService extends BaseService {
     attribute: NonNullable<unknown>,
   ): void {
     if (type === AttributeType.TEXT) {
-      // ensure value is string
-      if (typeof attribute !== "string") {
-        throw {
-          message: ["Invalid attribute value, attribute requires string value"]
-        }
-      }
       const meta = (metadata as AttributeObject<AttributeType.TEXT>["metadata"])
+      // ensure value is string
+      let schema = z.string({ error: "Invalid attribute value, attribute requires string value" })
+      // ensure value is within the max length if specified
       if (meta?.maxLength) {
-        // ensure value is within the max length if specified
-        if (attribute.length > meta.maxLength) {
-          throw {
-            message: [`Please enter a shorter attribute value in ${meta.maxLength} characters`]
-          }
-        }
+        schema = schema.max(meta.maxLength, { error: `Please enter a shorter attribute value in ${meta.maxLength} characters` })
       }
+      const { error } = schema.safeParse(attribute)
+      if (error) throw { message: z.treeifyError(error).errors }
       return
     }
     if (type === AttributeType.NUMBER) {
-      // ensure value is number
-      if (typeof attribute !== "number") {
-        throw {
-          message: ["Invalid attribute value, attribute requires number value"]
-        }
-      }
       const meta = (metadata as AttributeObject<AttributeType.NUMBER>["metadata"])
+      // ensure value is number
+      let schema = z.number({ error: "Invalid attribute value, attribute requires number value" })
       if (meta) {
         // ensure value satisfies the max value if specified
-        if (typeof meta.max === "number" && meta.max < attribute) {
-          throw {
-            message: [`Please enter a number within ${meta.max}, as the the attribute value`]
-          }
+        if (typeof meta.max === "number") {
+          schema = schema.max(meta.max, `Please enter a number within ${meta.max}, as the the attribute value`)
         }
         // ensure value satisfies the min value if specified
-        if (typeof meta.min === "number" && meta.min > attribute) {
-          throw {
-            message: [`Please enter a number at least ${meta.min}, as the the attribute value`]
-          }
+        if (typeof meta.min === "number") {
+          schema = schema.min(meta.min, `Please enter a number at least ${meta.min}, as the the attribute value`)
         }
       }
+      const { error } = schema.safeParse(attribute)
+      if (error) throw { message: z.treeifyError(error).errors }
       return
     }
     if (type === AttributeType.BOOLEAN) {
       // ensure value is boolean
-      if (typeof attribute !== "boolean") {
-        throw {
-          message: ["Invalid attribute value, attribute requires boolean value"]
-        }
-      }
+      let schema = z.boolean({ error: "Invalid attribute value, attribute requires boolean value" })
+      const { error } = schema.safeParse(attribute)
+      if (error) throw { message: z.treeifyError(error).errors }
       return
     }
     if (type === AttributeType.SELECT) {
-      // ensure value is number
-      if (typeof attribute !== "number") {
-        throw {
-          message: ["Invalid attribute value, attribute requires the option index"]
-        }
-      }
       const meta = (metadata as AttributeObject<AttributeType.SELECT>["metadata"])
-      // ensure valid option index
-      if (attribute < 0 || attribute >= meta.options.length) {
-        throw {
-          message: ["Invalid attribute value, attribute out of bounds of option index"]
-        }
-      }
+      const maxIndex = meta.options.length - 1
+      // ensure value is number and valid option index
+      let schema = z.number({ error: "Invalid attribute value, attribute requires the option index" })
+        .min(0, { error: "Invalid attribute value, option index should be at least 0" })
+        .max(maxIndex, { error: `Invalid attribute value, option index should be at most ${maxIndex}` })
+      const { error } = schema.safeParse(attribute)
+      if (error) throw { message: z.treeifyError(error).errors }
       return
     }
     if (type === AttributeType.MULTI_SELECT) {
-      // ensure value is array
-      if (!Array.isArray(attribute)) {
-        throw {
-          message: ["Invalid attribute value, attribute requires array value"]
-        }
-      }
       const meta = (metadata as AttributeObject<AttributeType.MULTI_SELECT>["metadata"]) ?? {}
-      // ensure value array length is not more than possible
-      if (attribute.length > meta.options.length) {
-        throw {
-          message: ["Invalid attribute value, attribute length can't be greater than options length"]
-        }
-      }
-      const validationErrors = attribute.reduce((errorAccumulator: Record<number, Array<string>>, option, optionIndex) => {
-        if (typeof option !== "number") { // ensure value is number
-          errorAccumulator[optionIndex] =  ["Invalid attribute value, attribute requires the option index"]
-        } else if (option < 0 || option >= meta.options.length) { // ensure valid option index
-          errorAccumulator[optionIndex] =  ["Invalid attribute value, attribute out of bounds of option index"]
-        }
-        return errorAccumulator
-      }, {})
-      if (Object.keys(validationErrors).length) {
-        throw {
-          message: validationErrors
-        }
+      const maxIndex = meta.options.length - 1
+      // ensure value is array & length is not more than possible
+      let schema = z.array(
+        // ensure value is number and valid option index
+        z.number({ error: "Invalid attribute value, attribute requires the option index" })
+          .min(0, { error: "Invalid attribute value, option index should be at least 0" })
+          .max(maxIndex, { error: `Invalid attribute value, option index should be at most ${maxIndex}` })
+      , { error: "Invalid attribute value, attribute requires array value" })
+        .max(maxIndex, { error: "Invalid attribute value, attribute length can't be greater than options length" })
+      const { error } = schema.safeParse(attribute)
+      if (error) {
+        const {
+          errors,
+          items,
+        } = z.treeifyError(error)
+        if (items) throw { message: Object.fromEntries(items.map(({ errors }, index) => ([ index, errors ]))) }
+        throw { message: errors }
       }
       return
     }
