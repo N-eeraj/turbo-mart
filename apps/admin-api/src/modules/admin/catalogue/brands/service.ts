@@ -60,7 +60,6 @@ export default class BrandService extends BaseService {
       })
       .skip(skip)
       .limit(limit)
-      .lean()
 
     return brands.map(transformBrand)
   }

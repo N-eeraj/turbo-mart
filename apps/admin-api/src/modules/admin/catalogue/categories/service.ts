@@ -64,7 +64,6 @@ export default class CategoryService extends BaseService {
       })
       .skip(skip)
       .limit(limit)
-      .lean()
 
     return categories.map(transformCategory)
   }
@@ -186,7 +185,7 @@ export default class CategoryService extends BaseService {
       category: categoryId,
     })
       .lean()
-      .select("_id")
+      .select({ _id: 1 })
 
     // throw not conflict error if a linked subcategory exists
     if (hasLinkedSubcategory) {
@@ -226,7 +225,7 @@ export default class CategoryService extends BaseService {
   }: ListOptions = DEFAULT_LIST_OPTIONS): Promise<Array<SubcategoryObject>> {
     const category = await Category.findById(categoryId)
       .lean()
-      .select("_id")
+      .select({ _id: 1 })
 
     // throw error if category is not found
     if (!category) {
@@ -256,7 +255,6 @@ export default class CategoryService extends BaseService {
       })
       .skip(skip)
       .limit(limit)
-      .lean()
       .select({
         category: 0,
         attributes: 0,
