@@ -104,13 +104,13 @@ export default class ProductService extends BaseService {
       // ensure value is number
       let schema = z.number({ error: "Invalid attribute value, attribute requires number value" })
       if (meta) {
-        // ensure value satisfies the max value if specified
-        if (typeof meta.max === "number") {
-          schema = schema.max(meta.max, `Please enter a number within ${meta.max}, as the the attribute value`)
-        }
         // ensure value satisfies the min value if specified
         if (typeof meta.min === "number") {
           schema = schema.min(meta.min, `Please enter a number at least ${meta.min}, as the the attribute value`)
+        }
+        // ensure value satisfies the max value if specified
+        if (typeof meta.max === "number") {
+          schema = schema.max(meta.max, `Please enter a number within ${meta.max}, as the the attribute value`)
         }
       }
       const { error } = schema.safeParse(attribute)
@@ -152,42 +152,94 @@ export default class ProductService extends BaseService {
           errors,
           items,
         } = z.treeifyError(error)
-        if (items) throw { message: Object.fromEntries(items.map(({ errors }, index) => ([ index, errors ]))) }
+        if (items) {
+          throw {
+            message: Object.fromEntries(
+              items.map(({ errors }, index) => ([ index, errors ]))
+            )
+          }
+        }
         throw { message: errors }
       }
       return
     }
     if (type === AttributeType.COLOR) {
-      const validationErrors: Record<string, Array<string>> = {}
-      // ensure value has a name property
-      if (!("name" in attribute)) {
-        validationErrors.name = ["Invalid attribute value, attribute requires color name"]
-      }
-      if ("hexCode" in attribute) { // ensure value has a hexCode property
-        if (typeof attribute.hexCode === "string") { // ensure hexCode is string
-          const HEX_CODE_REGEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i
-          if (!HEX_CODE_REGEX.test(attribute.hexCode)) { // ensure hexCode is valid
-            validationErrors.hexCode = ["Invalid attribute value, attribute hex code should be valid hex code"]
+      // ensure value is object
+      let schema = z.object({
+        name: z.string({ error: "Invalid attribute value, attribute requires color name" }), // ensure string name is present
+        hexCode: z.string({ error: "Invalid attribute value, attribute requires color hex code" }) // ensure string hex code is present
+          .regex(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i, { error: "Invalid attribute value, attribute requires a valid hex code" }), // ensure hex code is valid
+      }, { error: "Invalid attribute value, attribute requires record value" })
+      const { error } = schema.safeParse(attribute)
+      if (error) {
+        const {
+          errors,
+          properties,
+        } = z.treeifyError(error)
+        if (properties) {
+          throw {
+            message: Object.fromEntries(
+              Object.entries(properties)
+                .map(([ field, { errors } ]) => ([field, errors]))
+            )
           }
-        } else {
-          validationErrors.hexCode = ["Invalid attribute value, attribute hex code requires string value"]
         }
-      } else {
-        validationErrors.hexCode = ["Invalid attribute value, attribute requires color hex code"]
+        throw { message: errors }
       }
-      if (Object.keys(validationErrors).length) {
-        throw {
-          message: validationErrors
-        }
-      }
+      if (error) throw { message: z.treeifyError(error).errors }
       return
     }
     if (type === AttributeType.DATE) {
       const meta = (metadata as AttributeObject<AttributeType.DATE>["metadata"]) ?? {}
+      // ensure value is number
+      let schema = z.date({ error: "Invalid attribute value, attribute requires date value" })
+      if (meta) {
+        // ensure value satisfies the min value if specified
+        if (meta.min) {
+          schema = schema.min(meta.min, `Please enter a date after ${meta.min}, as the the attribute value`)
+        }
+        // ensure value satisfies the max value if specified
+        if (meta.max) {
+          schema = schema.max(meta.max, `Please enter a date before ${meta.max}, as the the attribute value`)
+        }
+      }
+      const { error } = schema.safeParse(attribute)
+      if (error) throw { message: z.treeifyError(error).errors }
       return
     }
     if (type === AttributeType.JSON) {
-      // no validation
+      // ensure value is object
+      let schema = z.record(
+        z.string({ error: "Invalid attribute value, attribute requires a string key" }) // ensure string key is present
+          .nonempty(PRODUCT.attributes.attribute.required)
+          .trim(),
+        // ensure string/number/boolean value is present
+        z.union([
+          z.string({ error: "Invalid attribute value, attribute requires string, number or boolean value" })
+            .trim(),
+          z.number({ error: "Invalid attribute value, attribute requires string, number or boolean value" }),
+          z.boolean({ error: "Invalid attribute value, attribute requires string, number or boolean value" }),
+        ])
+      , { error: "Invalid attribute value, attribute requires record value" })
+      const { error } = schema.safeParse(attribute)
+      if (error) {
+        const {
+          errors,
+          properties,
+        } = z.treeifyError(error)
+        if (properties) {
+          throw {
+            message: Object.fromEntries(
+              Object.entries(properties)
+                .map(([field, errors]) => ([
+                  field,
+                  Array.from(new Set(errors?.errors ?? []))
+                ]))
+            )
+          }
+        }
+        throw { message: errors }
+      }
       return
     }
   }

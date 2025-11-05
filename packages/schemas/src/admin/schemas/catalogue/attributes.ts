@@ -184,11 +184,6 @@ const dateAttributeTypeMetadata = {
 }
 const jsonAttributeTypeMetadata = {
   type: z.literal(AttributeType.JSON),
-  metadata: z.looseObject({})
-    .optional()
-    .meta({
-      description: "A JSON data to stored along the attribute value.",
-    }),
 }
 
 // number attribute schemas and super refine function
