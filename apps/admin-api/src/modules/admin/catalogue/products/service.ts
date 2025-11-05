@@ -1,7 +1,8 @@
 import type mongoose from "mongoose"
 import * as z from "zod"
 
-import {
+import Product, {
+  transformProduct,
   type ProductObject,
 } from "@app/database/mongoose/models/Catalogue/Product.ts"
 import Subcategory, {
@@ -82,6 +83,15 @@ export default class ProductService extends BaseService {
     }
   }
 
+  /**
+   * Validates the product attribute to the corresponding metadata in the subcategory.
+   * 
+   * @param type - Type of attribute.
+   * @param metadata - Metadata defined in the subcategory attribute.
+   * @param attribute - Product attribute provided.
+   * 
+   * @throws error if the attribute value doesn't meet the metadata validations
+   */
   private static validateAttributeMetadata<T extends AttributeType>(
     type: T,
     metadata: AttributeObject<T>["metadata"],
@@ -145,7 +155,7 @@ export default class ProductService extends BaseService {
           .min(0, { error: "Invalid attribute value, option index should be at least 0" })
           .max(maxIndex, { error: `Invalid attribute value, option index should be at most ${maxIndex}` })
       , { error: "Invalid attribute value, attribute requires array value" })
-        .max(maxIndex, { error: "Invalid attribute value, attribute length can't be greater than options length" })
+        .max(meta.options.length, { error: "Invalid attribute value, attribute length can't be greater than options length" })
       const { error } = schema.safeParse(attribute)
       if (error) {
         const {
@@ -253,7 +263,7 @@ export default class ProductService extends BaseService {
   private static validateProductAttributes(
     attributes: SubcategoryObject["attributes"],
     productAttributes: ParsedProductCreationData["attributes"],
-  ): ParsedProductCreationData["attributes"] | undefined {
+  ): void {
     /**
      * The list of attribute validations errors.
      * Consists of both the attribute level error as well as the attribute value/variant errors.
@@ -266,7 +276,7 @@ export default class ProductService extends BaseService {
       >>
     > = {}
 
-    if (!attributes) return undefined
+    if (!attributes) return
 
     if (productAttributes) {
       /**
@@ -365,8 +375,6 @@ export default class ProductService extends BaseService {
         attributes: attributeValidationErrors,
       }
     }
-
-    return productAttributes
   }
 
   /**
@@ -376,12 +384,44 @@ export default class ProductService extends BaseService {
    * 
    * @returns the newly created product.
    * 
+   * @throws 409 error if duplicate product name in same brand and subcategory.
    * @throws If product creation fails.
    */
-  static async create(product: ParsedProductCreationData): Promise<void> {
+  static async create(product: ParsedProductCreationData): Promise<ProductObject> {
     await this.ensureBrand(product.brand)
     const { attributes } = await this.ensureSubcategory(product.subcategory)
 
-    product.attributes = this.validateProductAttributes(attributes, product.attributes)
+    this.validateProductAttributes(attributes, product.attributes)
+
+    // ensure the product name is unique to the brand in the subcategory
+    const existingProduct = await Product.findOne({
+      subcategory: product.subcategory,
+      brand: product.brand,
+      name: product.name,
+    })
+      .select({ _id: 1 })
+    if (existingProduct) {
+      throw {
+        status: 409,
+        message: "Product with same name exists in this subcategory for this brand"
+      }
+    }
+
+    // transform attribute record to array
+    const createProduct = {
+      ...product,
+      ...(
+        product.attributes && {
+          attributes: Object.entries(product.attributes)
+          .map(([ attribute, data ]) => ({
+            attribute,
+            ...data,
+          }))
+        }
+      ),
+    }
+
+    const newProduct = await Product.create(createProduct)
+    return transformProduct(newProduct)
   }
 }

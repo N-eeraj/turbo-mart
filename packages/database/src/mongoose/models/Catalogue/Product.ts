@@ -19,23 +19,20 @@ const SKUSchema = new mongoose.Schema({
   },
   media: [
     {
-      type: {
-        publicPath: {
-          type: String,
-          required: true,
-        },
-        fileLocation: {
-          type: String,
-          required: true,
-        },
-        type: {
-          type: Number,
-          enum: Object.values(MediaType).map(Number),
-          required: true,
-        },
+      publicPath: {
+        type: String,
+        required: true,
       },
-      default: undefined,
-    }
+      fileLocation: {
+        type: String,
+        required: true,
+      },
+      type: {
+        type: Number,
+        enum: Object.values(MediaType).map(Number),
+        required: true,
+      },
+    },
   ],
 }, {
   strict: false,
@@ -69,7 +66,6 @@ const ProductSchema = new mongoose.Schema({
         },
         value: {
           type: mongoose.Schema.Types.Mixed,
-          default: undefined,
         },
         variants: {
           type: [
@@ -91,12 +87,9 @@ const ProductSchema = new mongoose.Schema({
     ],
     default: undefined,
   },
-  skuList: {
-    type: [
-      SKUSchema
-    ],
-    default: undefined,
-  },
+  skuList: [
+    SKUSchema
+  ],
 }, {
   timestamps: true,
 })

@@ -90,7 +90,6 @@ export default class SuperAdminService extends BaseService {
       })
       .skip(skip)
       .limit(limit)
-      .lean()
 
     return admins.map(transformUser)
   }
@@ -168,7 +167,6 @@ export default class SuperAdminService extends BaseService {
       _id: adminId,
       role: Roles.ADMIN,
     })
-      .lean()
 
     // throw not found error if admin is not found
     if (!admin) {
