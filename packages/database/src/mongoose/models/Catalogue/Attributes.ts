@@ -59,7 +59,6 @@ type DefaultSelectAttributeMetadataType<T extends AttributeType> = T extends Sel
  * | SELECT                | ListAttributeMetadataSchema          |
  * | MULTI_SELECT          | ListAttributeMetadataSchema          |
  * | DATE                  | DateAttributeMetadataSchema          |
- * | JSON                  | JsonAttributeMetadataSchema          |
  */
 export type AttributeMetadataSchemaType<
   T extends AttributeType,
@@ -69,7 +68,6 @@ export type AttributeMetadataSchemaType<
   T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetadataSchema> :
   T extends SelectAttributeType ? ListAttributeMetadataSchemaType<LT> :
   T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetadataSchema> :
-  T extends AttributeType.JSON ? mongoose.InferSchemaType<typeof JsonAttributeMetadataSchema> :
   never
 
 export type MetadataSchemaType<
@@ -255,18 +253,6 @@ const DateAttributeMetadataSchema = new mongoose.Schema({
 })
 
 /**
- * Mongoose schema for metadata of JSON attribute.
- */
-const JsonAttributeMetadataSchema = new mongoose.Schema({
-  metadata: {
-    type: mongoose.Schema.Types.Mixed,
-    default: undefined,
-  },
-}, {
-  _id: false,
-})
-
-/**
  * Mongoose schema for subcategory attribute.
  */
 const AttributeSchema = new mongoose.Schema({
@@ -297,7 +283,6 @@ AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetadataSchem
 AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetadataSchema)
-AttributeSchema.discriminator(AttributeType.JSON, JsonAttributeMetadataSchema)
 
 /**
  * Transforms an Attribute object by mapping internal `_id` to external `id`.
