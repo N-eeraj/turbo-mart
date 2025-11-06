@@ -116,12 +116,19 @@ export function transformProduct({
   createdAt,
   updatedAt,
 }: Product): ProductObject {
+  const _attributes = !attributes ? undefined : Object.fromEntries(
+    attributes.map(({ attribute, value, variants }) => ([
+      attribute,
+      value ? { value } : { variants },
+    ]))
+  )
+
   const product: ProductObject = {
     id: _id,
     subcategory,
     brand,
     name,
-    attributes,
+    attributes: _attributes,
     skuList,
     createdAt,
     updatedAt,
