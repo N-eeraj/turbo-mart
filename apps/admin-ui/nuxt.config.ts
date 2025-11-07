@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@vueuse/nuxt",
     "@pinia/nuxt",
+    "@vee-validate/nuxt",
   ],
   css: [
     "~/assets/css/tailwind.css",
