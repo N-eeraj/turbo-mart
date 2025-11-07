@@ -1,3 +1,7 @@
 <template>
-  Admin UI
+  <main>
+    <ShadcnButton>
+      Hi
+    </ShadcnButton>
+  </main>
 </template>
