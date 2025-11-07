@@ -5,7 +5,7 @@ import AdminUser, {
   transformUser,
   Permissions,
   type AdminObject,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 import sendMail from "@app/mailer"
 
 import BaseService from "#services/BaseService"

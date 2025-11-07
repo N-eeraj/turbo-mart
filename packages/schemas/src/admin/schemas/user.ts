@@ -3,12 +3,12 @@ import * as z from "zod"
 import {
   Roles,
   Permissions,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/enums/admin/user"
 
 import {
   userEmail,
   newPassword,
-} from "#admin/schemas/common.ts"
+} from "#admin/schemas/common"
 import {
   USER_NAME,
   ROLE,
@@ -17,7 +17,7 @@ import {
   PROFILE_PICTURE,
   NOTIFICATION_STATE,
   NOTIFICATION_IDS,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const adminSchema = z.object({
   name: z.string({ error: USER_NAME.required })

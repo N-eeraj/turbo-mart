@@ -61,7 +61,6 @@ AdminTokenSchema.statics.addToken = async function(adminId: AdminToken["admin"])
 /**
  * Mongoose model for the AdminToken schema.
  */
-const AdminToken =  mongoose.models.AdminToken
-  || mongoose.model<AdminToken, AdminTokenModel>("AdminToken", AdminTokenSchema, "adminTokens")
+const AdminToken = mongoose.model<AdminToken, AdminTokenModel>("AdminToken", AdminTokenSchema, "adminTokens")
 
 export default AdminToken

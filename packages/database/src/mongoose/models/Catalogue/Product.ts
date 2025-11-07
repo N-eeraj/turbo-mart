@@ -1,14 +1,13 @@
 import mongoose from "mongoose"
 
+import {
+  MediaType,
+} from "#mongoose/enums/catalogue/product"
+
 export type InferredProductSchemaType = mongoose.InferSchemaType<typeof ProductSchema>
 export type Product = mongoose.HydratedDocument<InferredProductSchemaType>
 export type ObjectKeys = keyof InferredProductSchemaType
 export type ProductObject = Pick<Product, ObjectKeys> & { id: Product["_id"] }
-
-export enum MediaType {
-  IMAGE,
-  VIDEO,
-}
 
 const SKUSchema = new mongoose.Schema({
   code: {
@@ -137,7 +136,10 @@ export function transformProduct({
   return product
 }
 
-const Product =  mongoose.models.Product
+const Product = mongoose.models.Product
   || mongoose.model<Product, mongoose.Model<Product>>("Product", ProductSchema)
 
 export default Product
+export {
+  MediaType,
+}

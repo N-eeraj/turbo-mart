@@ -1,8 +1,8 @@
-import connectMongoDB from "@app/database/mongoose/connect.ts"
-import Subcategory from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
+import connectMongoDB from "@app/database/mongoose/connect"
+import Subcategory from "@app/database/mongoose/models/Catalogue/Subcategory"
 import {
   AttributeType,
-} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 export default class Temporary {
   static async execute(..._args: Array<unknown>) {

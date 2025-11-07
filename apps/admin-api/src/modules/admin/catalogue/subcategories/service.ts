@@ -5,14 +5,14 @@ import Subcategory, {
   type Subcategory as SubcategoryType,
   type InferredSubcategorySchemaType,
   type SubcategoryObject,
-} from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
+} from "@app/database/mongoose/models/Catalogue/Subcategory"
 import {
   type CategoryObject,
-} from "@app/database/mongoose/models/Catalogue/Category.ts"
+} from "@app/database/mongoose/models/Catalogue/Category"
 import {
   AttributeType,
   type AttributeObject,
-} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 import BaseService from "#services/BaseService"
 import {

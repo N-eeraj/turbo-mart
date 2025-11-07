@@ -4,19 +4,19 @@ import * as z from "zod"
 import Product, {
   transformProduct,
   type ProductObject,
-} from "@app/database/mongoose/models/Catalogue/Product.ts"
+} from "@app/database/mongoose/models/Catalogue/Product"
 import Subcategory, {
   SubcategoryObject,
   transformSubcategory,
-} from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
-import Brand from "@app/database/mongoose/models/Catalogue/Brand.ts"
+} from "@app/database/mongoose/models/Catalogue/Subcategory"
+import Brand from "@app/database/mongoose/models/Catalogue/Brand"
 import type {
   ProductCreationData,
 } from "@app/schemas/admin/catalogue/product"
 import {
   AttributeObject,
   AttributeType
-} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 import {
   PRODUCT,
 } from "@app/schemas/adminConstants/validationMessages"

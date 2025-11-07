@@ -4,7 +4,7 @@
   "description": "Zod schemas for validations",
   "type": "module",
   "imports": {
-    "#admin/*": "./src/admin/*"
+    "#admin/*": "./src/admin/*.ts"
   },
   "exports": {
     "./admin/*": "./src/admin/schemas/*.ts",

@@ -2,8 +2,8 @@ import fs from "fs"
 
 import AdminUser, {
   Roles,
-} from "@app/database/mongoose/models/Admin/User.ts"
-import connectMongoDB from "@app/database/mongoose/connect.ts"
+} from "@app/database/mongoose/models/Admin/User"
+import connectMongoDB from "@app/database/mongoose/connect"
 
 import {
   PRIVATE_FILE_STORAGE_PATH,

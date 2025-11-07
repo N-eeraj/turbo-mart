@@ -1,0 +1,3 @@
+<template>
+  ERROR PAGE
+</template>

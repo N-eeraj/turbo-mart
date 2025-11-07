@@ -3,10 +3,10 @@ import bcrypt from "bcrypt"
 import AdminUser, {
   transformUser,
   type AdminObject,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 import Token, {
   type Token as TokenType,
-} from "@app/database/mongoose/models/Admin/Token.ts"
+} from "@app/database/mongoose/models/Admin/Token"
 
 import BaseService from "#services/BaseService"
 import {

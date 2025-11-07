@@ -8,14 +8,14 @@ import {
 import AdminUser, {
   transformUser,
   type AdminObject,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 import AdminToken, {
   type Token,
-} from "@app/database/mongoose/models/Admin/Token.ts"
-import db from "@app/database/drizzle/db.ts"
+} from "@app/database/mongoose/models/Admin/Token"
+import db from "@app/database/drizzle/db"
 import resetPassword, {
   UserType,
-} from "@app/database/drizzle/schemas/resetPassword.ts"
+} from "@app/database/drizzle/schemas/resetPassword"
 import sendMail from "@app/mailer"
 
 import BaseService from "#services/BaseService"

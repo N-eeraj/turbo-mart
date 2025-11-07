@@ -2,7 +2,7 @@ import * as z from "zod"
 
 import {
   PRODUCT,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const productSchema = z.object({
   subcategory: z.string({ error: PRODUCT.subcategory.required })

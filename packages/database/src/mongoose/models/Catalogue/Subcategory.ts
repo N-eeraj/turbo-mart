@@ -5,7 +5,7 @@ import AttributeSchema, {
   transformAttribute,
   type Attribute,
   type AttributeObject,
-} from "#mongoose/models/Catalogue/Attributes.ts"
+} from "#mongoose/models/Catalogue/Attributes"
 
 export type InferredSubcategorySchemaType = mongoose.InferSchemaType<typeof SubcategorySchema>
 export type Subcategory = Omit<mongoose.HydratedDocument<InferredSubcategorySchemaType>, "attributes"> & {

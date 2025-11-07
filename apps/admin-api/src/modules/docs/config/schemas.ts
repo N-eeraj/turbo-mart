@@ -3,10 +3,10 @@ import type mongoose from "mongoose"
 import {
   Roles,
   Permissions,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 import {
   AttributeType,
-} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 import ProfileSchema from "#jsonDocs/schemas/profile" with { type: "json" }
 import NotificationSchema from "#jsonDocs/schemas/notification" with { type: "json" }

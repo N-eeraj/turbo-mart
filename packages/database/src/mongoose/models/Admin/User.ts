@@ -1,6 +1,11 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
+import {
+  Roles,
+  Permissions,
+} from "#mongoose/enums/admin/user"
+
 export type InferredAdminSchemaType = mongoose.InferSchemaType<typeof AdminSchema>
 export type Admin = mongoose.HydratedDocument<InferredAdminSchemaType>
 export type ObjectKeys = Exclude<keyof InferredAdminSchemaType, "password" | "profilePicture" | "updatedAt">
@@ -34,40 +39,6 @@ interface LoginCredentials {
 }
 
 const SALT_ROUNDS = 10
-
-/**
- * Admin roles used for authorization and access control.
- *
- * @readonly
- * @enum
- * 
- * @property SUPER_ADMIN = 0 - Highest level admin with full privileges.
- * @property ADMIN = 1 - Standard admin with permission based access.
- */
-export enum Roles {
-  SUPER_ADMIN,
-  ADMIN,
-}
-
-/**
- * Permission levels representing different management roles and access rights.
- *
- * @readonly
- * @enum
- * 
- * @property RETAILER_MANAGER = 0 - Permission to manage retailers.
- * @property CATALOGUE_MANAGER = 1 - Permission to manage product catalogues.
- * @property DELIVERY_PERSON_MANAGER = 2 - Permission to manage delivery personnel.
- * @property FINANCE_MANAGER = 3 - Permission to manage financial operations.
- * @property DATA_ANALYST = 4 - Permission to analyze data and generate reports.
- */
-export enum Permissions {
-  RETAILER_MANAGER,
-  CATALOGUE_MANAGER,
-  DELIVERY_PERSON_MANAGER,
-  FINANCE_MANAGER,
-  DATA_ANALYST,
-}
 
 /**
  * Mongoose schema for admin users.
@@ -182,7 +153,10 @@ AdminSchema.statics.authenticate = async function({ email, password }: LoginCred
 /**
  * Mongoose model for the Admin schema.
  */
-const Admin =  mongoose.models.Admin
-  || mongoose.model<Admin, AdminModel>("Admin", AdminSchema)
+const Admin = mongoose.model<Admin, AdminModel>("Admin", AdminSchema)
 
 export default Admin
+export {
+  Roles,
+  Permissions,
+}

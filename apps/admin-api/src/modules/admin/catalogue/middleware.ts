@@ -1,6 +1,6 @@
 import {
   Permissions,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 
 import {
   authenticationMiddleware,

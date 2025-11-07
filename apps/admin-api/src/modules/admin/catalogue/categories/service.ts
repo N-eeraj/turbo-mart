@@ -3,11 +3,11 @@ import type mongoose from "mongoose"
 import Category, {
   transformCategory,
   type CategoryObject,
-} from "@app/database/mongoose/models/Catalogue/Category.ts"
+} from "@app/database/mongoose/models/Catalogue/Category"
 import Subcategory, {
   transformSubcategory,
   type SubcategoryObject,
-} from "@app/database/mongoose/models/Catalogue/Subcategory.ts"
+} from "@app/database/mongoose/models/Catalogue/Subcategory"
 
 import BaseService from "#services/BaseService"
 import {

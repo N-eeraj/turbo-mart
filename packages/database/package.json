@@ -7,11 +7,11 @@
     "drizzle:push": "npx drizzle-kit push --config ./src/drizzle/config.ts"
   },
   "imports": {
-    "#drizzle/*": "./src/drizzle/*",
-    "#mongoose/*": "./src/mongoose/*"
+    "#drizzle/*": "./src/drizzle/*.ts",
+    "#mongoose/*": "./src/mongoose/*.ts"
   },
   "exports": {
-    "./*": "./src/*"
+    "./*": "./src/*.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.4",

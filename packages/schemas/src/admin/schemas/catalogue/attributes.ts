@@ -2,11 +2,11 @@ import * as z from "zod"
 
 import {
   AttributeType,
-} from "@app/database/mongoose/models/Catalogue/Attributes.ts"
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 import {
   ATTRIBUTE,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 const attributeBaseSchema = z.object({
   id: z.string({ error: ATTRIBUTE.id.required })

@@ -2,7 +2,7 @@ import * as z from "zod"
 
 import {
   CATEGORY,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const categoryCreationSchema = z.object({
   name: z.string({ error: CATEGORY.name.required })

@@ -3,13 +3,13 @@ import * as z from "zod"
 import {
   userEmail,
   newPassword,
-} from "#admin/schemas/common.ts"
+} from "#admin/schemas/common"
 import {
   PASSWORD,
   RESET_PASSWORD_URL,
   PASSWORD_RESET_TOKEN,
   LOGOUT_OTHERS_ON_RESET,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const loginSchema = z.object({
   email: userEmail,

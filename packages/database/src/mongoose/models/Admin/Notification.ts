@@ -1,27 +1,13 @@
 import mongoose from "mongoose"
 
+import {
+  NotificationType,
+} from "#mongoose/enums/admin/notification"
+
 export type InferredNotificationSchemaType = mongoose.InferSchemaType<typeof NotificationSchema>
 export type Notification = mongoose.HydratedDocument<InferredNotificationSchemaType>
 export type ObjectKeys = Exclude<keyof InferredNotificationSchemaType, "admin" | "updatedAt">
 export type NotificationObject = Pick<Notification, ObjectKeys> & { id: Notification["_id"] }
-
-/**
- * Notification types for admins.
- *
- * @readonly
- * @enum
- * 
- * @property SYSTEM = 0 - System generated notification.
- * @property SELLER_REGISTRATION_REQUEST = 1 - A seller has requested for registration.
- * @property DELIVERY_PERSON_REGISTRATION_REQUEST = 2 - A delivery person has requested for registration.
- * @property SELLER_CATALOGUE_REQUEST = 3 - A seller has requested for a new catalogue.
- */
-export enum NotificationType {
-  SYSTEM,
-  SELLER_REGISTRATION_REQUEST,
-  DELIVERY_PERSON_REGISTRATION_REQUEST,
-  SELLER_CATALOGUE_REQUEST,
-}
 
 /**
  * Mongoose schema for admin user notifications.
@@ -93,3 +79,6 @@ export function transformNotification({
 const Notification = mongoose.model("Notification", NotificationSchema)
 
 export default Notification
+export {
+  NotificationType,
+}

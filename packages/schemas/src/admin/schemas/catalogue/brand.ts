@@ -2,7 +2,7 @@ import * as z from "zod"
 
 import {
   BRAND,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const brandCreationSchema = z.object({
   name: z.string({ error: BRAND.name.required })

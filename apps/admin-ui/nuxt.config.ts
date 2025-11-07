@@ -7,9 +7,18 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
+  routeRules: {
+    "*": {
+      prerender: false,
+    },
+    "/": {
+      prerender: true,
+    },
+  },
   modules: [
     "shadcn-nuxt",
     "@vueuse/nuxt",
+    "@pinia/nuxt",
   ],
   css: [
     "~/assets/css/tailwind.css",

@@ -6,12 +6,12 @@ import {
 
 import AdminToken, {
   type Token,
-} from "@app/database/mongoose/models/Admin/Token.ts"
+} from "@app/database/mongoose/models/Admin/Token"
 import {
   transformUser,
   type AdminObject,
   type Admin as AdminType,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 
 import {
   sendResponse,

@@ -53,7 +53,7 @@ export function transformCategory({
   return category
 }
 
-const Category =  mongoose.models.Category
+const Category = mongoose.models.Category
   || mongoose.model<Category, mongoose.Model<Category>>("Category", CategorySchema)
 
 export default Category

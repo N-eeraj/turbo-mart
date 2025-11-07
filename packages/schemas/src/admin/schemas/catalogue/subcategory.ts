@@ -3,11 +3,11 @@ import * as z from "zod"
 import {
   attributeSchema,
   attributeSchemaWithoutId,
-} from "#admin/schemas/catalogue/attributes.ts"
+} from "#admin/schemas/catalogue/attributes"
 import {
   SUB_CATEGORY,
   ATTRIBUTE,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const subcategoryCreationSchema = z.object({
   category: z.string({ error: SUB_CATEGORY.category.required })

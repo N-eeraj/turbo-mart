@@ -3,7 +3,7 @@ import type mongoose from "mongoose"
 import Brand, {
   transformBrand,
   type BrandObject,
-} from "@app/database/mongoose/models/Catalogue/Brand.ts"
+} from "@app/database/mongoose/models/Catalogue/Brand"
 
 import BaseService from "#services/BaseService"
 import {

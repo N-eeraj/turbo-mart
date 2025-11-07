@@ -3,7 +3,7 @@ import * as z from "zod"
 import {
   EMAIL,
   NEW_PASSWORD,
-} from "#admin/constants/validationMessages.ts"
+} from "#admin/constants/validationMessages"
 
 export const userEmail = z.email({ error: (issue) => {
   if (!issue.input) return EMAIL.required

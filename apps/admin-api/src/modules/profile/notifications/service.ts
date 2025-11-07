@@ -2,12 +2,12 @@ import type mongoose from "mongoose"
 
 import {
   type AdminObject,
-} from "@app/database/mongoose/models/Admin/User.ts"
+} from "@app/database/mongoose/models/Admin/User"
 import Notification, {
   transformNotification,
   type NotificationObject,
   type InferredNotificationSchemaType,
-} from "@app/database/mongoose/models/Admin/Notification.ts"
+} from "@app/database/mongoose/models/Admin/Notification"
 
 import BaseService from "#services/BaseService"
 
