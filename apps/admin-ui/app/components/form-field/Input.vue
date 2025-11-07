@@ -3,6 +3,20 @@ import type {
   InputTypeHTMLAttribute,
 } from "vue"
 
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "~/components/ui/form"
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+} from "~/components/ui/input-group"
+
 interface Props {
   name: string
   type?: InputTypeHTMLAttribute
@@ -20,7 +34,7 @@ function toggleInputType() {
 </script>
 
 <template>
-  <ShadcnFormField
+  <FormField
     :name
     v-slot="{
       componentField,
@@ -28,54 +42,54 @@ function toggleInputType() {
       errorMessage,
       ...formField
     }">
-    <ShadcnFormItem>
-      <ShadcnFormLabel v-if="label">
+    <FormItem>
+      <FormLabel v-if="label">
         {{ label }}
-      </ShadcnFormLabel>
-      <ShadcnFormControl>
+      </FormLabel>
+      <FormControl>
         <slot v-bind="{
           ...formField,
           componentField,
           errors,
           errorMessage,
         }">
-          <ShadcnInputGroup>
+          <InputGroup>
             <slot name="addon" />
-            <ShadcnInputGroupInput
+            <InputGroupInput
               v-bind="componentField"
               :type="inputType"
               :placeholder />
-            <ShadcnInputGroupAddon
+            <InputGroupAddon
               v-if="type === 'password'"
               align="inline-end">
-              <ShadcnButton
+              <BaseButton
                 variant="ghost"
                 type="button"
                 class="size-6 p-1 rounded-full cursor-pointer"
                 @click="toggleInputType">
                 <Icon name="mdi:eye" />
-              </ShadcnButton>
-            </ShadcnInputGroupAddon>
-            </ShadcnInputGroup>
+              </BaseButton>
+            </InputGroupAddon>
+            </InputGroup>
         </slot>
-      </ShadcnFormControl>
+      </FormControl>
 
       <slot
         name="description"
         :description>
-        <ShadcnFormDescription
+        <FormDescription
           v-if="description"
           class="text-xs">
           {{ description }}
-        </ShadcnFormDescription>
+        </FormDescription>
       </slot>
 
       <slot
         name="error"
         :errors
         :errorMessage>
-        <ShadcnFormMessage class="text-xs" />
+        <FormMessage class="text-xs" />
       </slot>
-    </ShadcnFormItem>
-  </ShadcnFormField>
+    </FormItem>
+  </FormField>
 </template>

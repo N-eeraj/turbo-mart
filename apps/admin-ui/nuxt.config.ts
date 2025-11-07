@@ -11,6 +11,11 @@ export default defineNuxtConfig({
       apiUrl: `${env.ADMIN_API_URL}/api`,
     },
   },
+  imports: {
+    dirs: [
+      "~/composables/**",
+    ],
+  },
   devtools: {
     enabled: true,
   },
@@ -36,8 +41,5 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
-  },
-  shadcn: {
-    prefix: "Shadcn",
   },
 })

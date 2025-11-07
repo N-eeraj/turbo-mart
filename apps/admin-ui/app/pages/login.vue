@@ -1,48 +1,17 @@
 <script setup lang="ts">
 import {
-  toTypedSchema,
-} from "@vee-validate/zod"
-import type z from "zod"
-import { toast } from "vue-sonner"
-
-import {
-  loginSchema,
-} from "@app/schemas/admin/auth"
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "~/components/ui/card"
 
 const {
-  handleSubmit,
-  setErrors,
-} = useForm({
-  validationSchema: toTypedSchema(loginSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>),
-})
-
-const onSubmit = handleSubmit(async (body) => {
-  try {
-    const {
-      message,
-      data,
-    } = await useApi("/auth/login", {
-      method: "POST",
-      body,
-    })
-    toast.success(message, {
-      richColors: true,
-    })
-  } catch (error: unknown) {
-    const {
-      status,
-      message,
-      errors,
-    } = error as ApiError
-    if (errors) {
-      setErrors(errors)
-    } else if (message) {
-      toast.error(message, {
-        richColors: true,
-      })
-    }
-  }
-})
+  formError,
+  isLoading,
+  onSubmit,
+} = useLogin()
 
 definePageMeta({
   auth: "guest",
@@ -55,31 +24,40 @@ definePageMeta({
     <form 
       class="w-10/11 max-w-sm"
       @submit="onSubmit">
-      <ShadcnCard class="md:gap-y-4">
-        <ShadcnCardHeader>
-          <ShadcnCardTitle class="text-xl">
+      <Card class="md:gap-y-4">
+        <CardHeader>
+          <CardTitle class="text-xl">
             Login
-          </ShadcnCardTitle>
-        </ShadcnCardHeader>
+          </CardTitle>
+        </CardHeader>
 
-        <ShadcnCardContent class="flex flex-col gap-y-4">
-          <BaseFormField
+        <CardContent class="flex flex-col gap-y-4">
+          <FormFieldInput
             name="email"
             label="Email"
             placeholder="Enter your email" />
-          <BaseFormField
+          <FormFieldInput
             name="password"
             type="password"
             label="Password"
             placeholder="Enter your password" />
-        </ShadcnCardContent>
 
-        <ShadcnCardFooter class="flex justify-between px-6">
-          <ShadcnButton class="w-full md:w-fit md:ml-auto cursor-pointer">
+          <!-- error message -->
+          <span
+            v-if="formError"
+            class="text-destructive text-xs">
+            {{ formError }}
+          </span>
+        </CardContent>
+
+        <CardFooter class="flex justify-between px-6">
+          <BaseButton
+            :loading="isLoading"
+            class="w-full min-w-20 md:w-fit md:ml-auto">
             Login
-          </ShadcnButton>
-        </ShadcnCardFooter>
-      </ShadcnCard>
+          </BaseButton>
+        </CardFooter>
+      </Card>
     </form>
   </section>
 </template>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
+const userStore = useUserStore()
+const {
+  user,
+} = storeToRefs(useUserStore())
 </script>
 
 <template>
   <main>
-    <NuxtLink to="/test">
-      <ShadcnButton>
-        TO TEST
-      </ShadcnButton>
-    </NuxtLink>
+    Welcome {{ user?.name }}
   </main>
 </template>
