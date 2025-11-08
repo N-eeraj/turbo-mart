@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   Button,
+  type ButtonVariants,
 } from "~/components/ui/button"
 import {
   Spinner,
@@ -10,6 +11,8 @@ import { cn } from "~/lib/utils"
 interface Props {
   disabled?: boolean
   loading?: boolean
+  variant?: ButtonVariants["variant"]
+  size?: ButtonVariants["size"]
 }
 const {
   loading,
@@ -25,6 +28,8 @@ const cursorClass = computed(() => {
 
 <template>
   <Button
+    :variant
+    :size
     :disabled="disabled || loading"
     :class="cn(
       'disabled:grayscale-50',
