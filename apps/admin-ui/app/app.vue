@@ -10,6 +10,16 @@ const {
   "server-ping",
   () => useApi("/ping"),
 )
+
+useHead({
+  title: "TurboMart | Admin",
+  link: [
+    {
+      rel: "icon",
+      href: "/images/admin-logo-white.svg",
+    },
+  ],
+})
 </script>
 
 <template>
