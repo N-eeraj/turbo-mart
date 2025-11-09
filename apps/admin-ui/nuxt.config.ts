@@ -33,6 +33,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vee-validate/nuxt",
     "@nuxt/icon",
+    "pinia-plugin-persistedstate",
   ],
   css: [
     "~/assets/css/tailwind.css",

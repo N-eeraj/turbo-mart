@@ -2,7 +2,7 @@
 const userStore = useUserStore()
 const {
   user,
-} = storeToRefs(useUserStore())
+} = storeToRefs(userStore)
 </script>
 
 <template>
