@@ -26,6 +26,9 @@ function setAuthToken({ value, expiresAt }: Token) {
   const seconds = Math.max(0, Math.floor((exp.getTime() - Date.now()) / 1000))
   document.cookie = `${AUTH_TOKEN_KEY}=${value}; max-age=${seconds}; path=/`
 }
+function removeAuthToken() {
+  document.cookie = `${AUTH_TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+}
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<AdminObject | null>()
@@ -40,6 +43,7 @@ export const useUserStore = defineStore("user", () => {
   const clearUser = () => {
     user.value = null
     token.value = null
+    removeAuthToken()
   }
   
   const isLoggedIn = computed(() => !!user.value && !!token.value)

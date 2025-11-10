@@ -29,7 +29,6 @@ const props = defineProps<Props>()
 const inputType = ref<InputTypeHTMLAttribute>(props.type ?? "text")
 function toggleInputType() {
   inputType.value = inputType.value === "password" ? "text" : "password"
-  console.log()
 }
 </script>
 

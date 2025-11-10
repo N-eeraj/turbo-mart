@@ -3,13 +3,10 @@ import { Toaster } from "~/components/ui/sonner"
 import "vue-sonner/style.css"
 
 const {
-  pending,
   error,
+  pending,
   refresh,
-} = useAsyncData(
-  "server-ping",
-  () => useApi("/ping"),
-)
+} = useInitialLoad()
 
 useHead({
   title: "TurboMart | Admin",

@@ -10,12 +10,27 @@ export interface ApiError {
   errors?: Record<string, unknown>
 }
 
-export default async function useApi(...[ endpoint, options ]: Parameters<typeof $fetch>): Promise<ApiSuccess> {
+export default async function useApi(
+  ...[
+    endpoint,
+    options = {},
+  ]: Parameters<typeof $fetch>
+): Promise<ApiSuccess> {
   const {
     public: { apiUrl },
   } = useRuntimeConfig()
+  const userStore = useUserStore()
+  const {
+    token,
+  } = storeToRefs(userStore)
 
   try {
+    if (token.value) {
+      options.headers = {
+        ...options.headers,
+        Authorization: token.value
+      }
+    }
     const response = await $fetch(apiUrl + endpoint, options)
     return response as ApiSuccess
   } catch (error) {
