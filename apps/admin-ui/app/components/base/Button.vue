@@ -2,11 +2,11 @@
 import {
   Button,
   type ButtonVariants,
-} from "~/components/ui/button"
+} from "@/components/ui/button"
 import {
   Spinner,
-} from "~/components/ui/spinner"
-import { cn } from "~/lib/utils"
+} from "@/components/ui/spinner"
+import { cn } from "@/lib/utils"
 
 interface Props {
   disabled?: boolean

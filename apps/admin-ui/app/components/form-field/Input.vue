@@ -10,12 +10,12 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from "~/components/ui/form"
+} from "@/components/ui/form"
 import {
   InputGroup,
   InputGroupInput,
   InputGroupAddon,
-} from "~/components/ui/input-group"
+} from "@/components/ui/input-group"
 
 interface Props {
   name: string

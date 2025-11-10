@@ -1,4 +1,8 @@
 import {
+  useCookies,
+} from "@vueuse/integrations/useCookies"
+
+import {
   type AdminData,
 } from "@app/schemas/admin/user"
 
@@ -13,37 +17,29 @@ interface Token {
   expiresAt: Date
 }
 
-
 const AUTH_TOKEN_KEY = "authToken"
-function getAuthToken(): Token["value"] | null {
-  const cookies = document.cookie.split("; ").find(row => row.startsWith(AUTH_TOKEN_KEY + "="))
-  if (!cookies) return null
-  const [_, value] = cookies.split("=")
-  return value ?? null
-}
-function setAuthToken({ value, expiresAt }: Token) {
-  const exp = new Date(expiresAt)
-  const seconds = Math.max(0, Math.floor((exp.getTime() - Date.now()) / 1000))
-  document.cookie = `${AUTH_TOKEN_KEY}=${value}; max-age=${seconds}; path=/`
-}
-function removeAuthToken() {
-  document.cookie = `${AUTH_TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
-}
 
 export const useUserStore = defineStore("user", () => {
-  const user = ref<AdminObject | null>()
-  const token = ref<Token["value"] | null>(getAuthToken())
+  const cookies = useCookies()
 
-  const setUser = (data: AdminObject) => user.value = data
-  const setToken = (tkn: Token) => {
-    token.value = tkn.value
-    setAuthToken(tkn)
+  const user = ref<AdminObject | null>()
+  const token = ref<Token["value"] | null>(cookies.get(AUTH_TOKEN_KEY))
+
+  const setUser = (data: AdminObject) => {
+    user.value = data
+  }
+
+  const setToken = ({ value, expiresAt }: Token) => {
+    token.value = value
+    cookies.set(AUTH_TOKEN_KEY, value, {
+      expires: new Date(expiresAt),
+    })
   }
 
   const clearUser = () => {
     user.value = null
     token.value = null
-    removeAuthToken()
+    cookies.remove(AUTH_TOKEN_KEY)
   }
   
   const isLoggedIn = computed(() => !!user.value && !!token.value)
