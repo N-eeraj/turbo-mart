@@ -2,7 +2,6 @@
 import {
   SidebarProvider,
   Sidebar,
-  SidebarTrigger,
 } from "@/components/ui/sidebar"
 </script>
 
@@ -13,9 +12,7 @@ import {
     </Sidebar>
 
     <main class="w-full min-h-svh overflow-hidden">
-      <div class="flex justify-between items-center h-12 px-2 bg-app-bar">
-        <SidebarTrigger class="cursor-pointer" />
-      </div>
+      <LayoutAppBar />
       <section class="p-2 md:p-4">
         <slot />
       </section>
