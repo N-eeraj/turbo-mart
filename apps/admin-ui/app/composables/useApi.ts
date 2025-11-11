@@ -21,8 +21,14 @@ export default async function useApi(
   } = useRuntimeConfig()
   const userStore = useUserStore()
   const {
+    clearUser,
+  } = userStore
+  const {
     token,
   } = storeToRefs(userStore)
+
+  const route = useRoute()
+  const router = useRouter()
 
   try {
     if (token.value) {
@@ -52,6 +58,14 @@ export default async function useApi(
           errorObject.errors = error.data.errors as ApiError["errors"]
         }
       }
+    }
+
+    if (
+      endpoint !== "/auth/login"
+      && errorObject.status === 401
+    ) {
+      clearUser()
+      router.replace(`/login?to=${route.fullPath}`)
     }
 
     throw errorObject
