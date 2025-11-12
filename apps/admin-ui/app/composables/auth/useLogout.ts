@@ -8,10 +8,10 @@ export default function useLogout(open: ModelRef<boolean>) {
   
   const router = useRouter()
   
-  const loading = ref(false)
+  const isLoading = ref(false)
   
   async function handleLogout() {
-    loading.value = true
+    isLoading.value = true
     try {
       const {
         message,
@@ -32,13 +32,13 @@ export default function useLogout(open: ModelRef<boolean>) {
         richColors: true,
       })
     } finally {
-      loading.value = false
+      isLoading.value = false
     }
   }
 
   return {
     open,
-    loading,
+    isLoading,
     handleLogout,
   }
 }

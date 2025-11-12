@@ -21,6 +21,7 @@ export default function useLogin() {
 
   const {
     handleSubmit,
+    controlledValues,
     setErrors,
   } = useForm({
     validationSchema: toTypedSchema(
@@ -77,6 +78,7 @@ export default function useLogin() {
   })
 
   return {
+    controlledValues,
     formError,
     isLoading,
     onSubmit,

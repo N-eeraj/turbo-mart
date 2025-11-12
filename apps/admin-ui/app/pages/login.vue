@@ -8,10 +8,16 @@ import {
 } from "@/components/ui/card"
 
 const {
+  controlledValues,
   formError,
   isLoading,
   onSubmit,
 } = useLogin()
+
+const showForgotPassword = ref(false)
+function openForgotPassword() {
+  showForgotPassword.value = true
+}
 
 definePageMeta({
   auth: "guest",
@@ -40,7 +46,17 @@ definePageMeta({
             name="password"
             type="password"
             label="Password"
-            placeholder="Enter your password" />
+            placeholder="Enter your password">
+            <template #description>
+              <BaseButton
+                variant="ghost"
+                type="button"
+                class="ml-auto text-sm text-foreground/80"
+                @click="openForgotPassword">
+                Forgot Password?
+              </BaseButton>
+            </template>
+          </FormFieldInput>
 
           <!-- error message -->
           <span
@@ -59,5 +75,9 @@ definePageMeta({
         </CardFooter>
       </Card>
     </form>
+
+    <AuthForgotPassword
+      v-model="showForgotPassword"
+      :email="controlledValues.email" />
   </section>
 </template>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import {
 } from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
 
 const open = defineModel({
   type: Boolean,
@@ -17,7 +18,7 @@ const open = defineModel({
 })
 
 const {
-  loading,
+  isLoading,
   handleLogout,
 } = useLogout(open)
 </script>
@@ -34,12 +35,14 @@ const {
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel class="cursor-pointer">
+        <AlertDialogCancel
+          :disabled="isLoading"
+          class="cursor-pointer">
           Cancel
         </AlertDialogCancel>
         <BaseButton
           variant="destructive"
-          :loading
+          :loading="isLoading"
           class="min-w-24"
           @click="handleLogout">
           Continue
