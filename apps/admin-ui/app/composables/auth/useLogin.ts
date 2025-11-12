@@ -55,7 +55,6 @@ export default function useLogin() {
       setToken(token)
 
       router.replace(route.query.to as string ?? "/")
-
       toast.success(message, {
         richColors: true,
       })

@@ -8,11 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import type z from "zod"
-
-import {
-  forgotPasswordSchema,
-} from "@app/schemas/admin/auth"
 
 interface Props {
   email: string
@@ -25,36 +20,10 @@ const open = defineModel({
 })
 
 const {
-  handleSubmit,
-  controlledValues,
-  setFieldValue,
-  setFieldTouched,
-  isFieldValid,
-  setErrors,
-} = useForm({
-  validationSchema: toTypedSchema(
-    forgotPasswordSchema.pick({
-      email: true,
-    }) as unknown as z.ZodType<any, z.ZodTypeDef, any>,
-  ),
-})
-
-const isLoading = ref(false)
-
-const onSubmit = handleSubmit(async (body) => {
-  isLoading.value = true
-  await new Promise(r => setTimeout(r, 1000))
-  console.log(body)
-  isLoading.value = false
-})
-
-watch(() => open.value, async (open) => {
-  if (open) {
-    setFieldValue("email", props.email)
-    await nextTick()
-    setFieldTouched("email", false)
-  }
-})
+  isLoading,
+  isInvalid,
+  onSubmit,
+} = useForgotPassword(open, computed(() => props.email))
 </script>
 
 <template>
@@ -80,7 +49,7 @@ watch(() => open.value, async (open) => {
           </AlertDialogCancel>
           <BaseButton
             variant="destructive"
-            :disabled="!isFieldValid('email')"
+            :disabled="isInvalid"
             :loading=isLoading
             class="min-w-36">
             Send Reset Link

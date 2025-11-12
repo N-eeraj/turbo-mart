@@ -1,5 +1,9 @@
-import { toast } from "vue-sonner"
-import { type ModelRef } from "vue"
+import {
+  toast,
+} from "vue-sonner"
+import {
+  type ModelRef,
+} from "vue"
 
 export default function useLogout(open: ModelRef<boolean>) {
   const {
