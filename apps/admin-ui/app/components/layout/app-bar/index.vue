@@ -8,6 +8,9 @@ import {
   <div class="flex justify-between items-center h-16 pl-2 pr-3 bg-app-bar">
     <SidebarTrigger class="cursor-pointer" />
 
-    <LayoutAppBarProfile />
+    <div class="flex items-center gap-x-2 md:gap-x-4">
+      <LayoutAppBarNotification />
+      <LayoutAppBarProfile />
+    </div>
   </div>
 </template>

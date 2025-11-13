@@ -49,6 +49,18 @@ function openConfirmation() {
         My Account
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
+
+      <NuxtLink to="/profile">
+        <DropdownMenuItem class="cursor-pointer">
+          <span>
+            Profile
+          </span>
+          <DropdownMenuShortcut>
+            <Icon name="lucide:user" />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </NuxtLink>
+
       <DropdownMenuItem
         class="cursor-pointer"
         @click="openConfirmation">
@@ -56,7 +68,7 @@ function openConfirmation() {
           Logout
         </span>
         <DropdownMenuShortcut>
-          <Icon name="mdi-logout" />
+          <Icon name="lucide:log-out" />
         </DropdownMenuShortcut>
       </DropdownMenuItem>
     </DropdownMenuContent>
