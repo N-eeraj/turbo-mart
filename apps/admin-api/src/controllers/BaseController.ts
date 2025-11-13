@@ -203,6 +203,22 @@ export default class BaseController {
    * 
    * @returns pagination queries.
    */
+  static parseBooleanQuery(queryValue: Request["query"]["key"]): boolean | undefined {
+    if (!queryValue || typeof queryValue !== "string") return undefined
+    if (queryValue === "true" || Number(queryValue) === 1) return true
+    if (queryValue === "false" || Number(queryValue) === 0) return false
+    return undefined
+  }
+
+  /**
+   * Parses the request query to get the common pagination queries.
+   * 
+   * @static
+   * 
+   * @param query - The Express `Request` query object.
+   * 
+   * @returns pagination queries.
+   */
   static parsePaginationQueries(query: Request["query"]): PaginationQueries {
     const paginationQueries: PaginationQueries = {}
 

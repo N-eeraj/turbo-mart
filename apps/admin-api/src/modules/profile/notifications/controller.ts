@@ -24,6 +24,7 @@ export default class NotificationController extends BaseController {
   static async list({ user, query }: Request, res: Response) {
     try {
       const paginationQueries: GetNotificationsOptions = super.parsePaginationQueries(query)
+      paginationQueries.isRead = super.parseBooleanQuery(query.isRead)
 
       const data = await NotificationService.list(user.id, paginationQueries)
 
@@ -95,6 +96,19 @@ export default class NotificationController extends BaseController {
 
       super.sendSuccess(res, {
         message: "Deleted Notifications",
+      })
+    } catch (error) {
+      super.sendError(res, error)
+    }
+  }
+
+  static async getUnreadCount({ user }: Request, res: Response) {
+    try {
+      const data = await NotificationService.getUnreadCount(user.id)
+
+      super.sendSuccess(res, {
+        data,
+        message: "Fetched Notification Count",
       })
     } catch (error) {
       super.sendError(res, error)

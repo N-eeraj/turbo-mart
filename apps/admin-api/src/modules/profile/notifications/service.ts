@@ -3,10 +3,10 @@ import type mongoose from "mongoose"
 import {
   type AdminObject,
 } from "@app/database/mongoose/models/Admin/User"
-import Notification, {
+import AdminNotification, {
   transformNotification,
-  type NotificationObject,
-  type InferredNotificationSchemaType,
+  type AdminNotificationObject,
+  type InferredAdminNotificationSchemaType,
 } from "@app/database/mongoose/models/Admin/Notification"
 
 import BaseService from "#services/BaseService"
@@ -43,14 +43,14 @@ export default class NotificationService extends BaseService {
       skip = DEFAULT_NOTIFICATION_OPTIONS.skip,
       order = DEFAULT_NOTIFICATION_OPTIONS.order,
     }: GetNotificationsOptions = DEFAULT_NOTIFICATION_OPTIONS
-  ): Promise<Array<NotificationObject>> {
+  ): Promise<Array<AdminNotificationObject>> {
     /**
      * Defines the query conditions for finding notifications.
      *
      * - `adminId` - The admin user ID.
      * - `isRead` - Checks if `readAt` field exists or doesn't exists if explicitly mentioned.
      */
-    const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
+    const filterQuery: mongoose.FilterQuery<InferredAdminNotificationSchemaType> = {
       admin: adminId,
     }
     // add readAt filter if it exists
@@ -60,7 +60,7 @@ export default class NotificationService extends BaseService {
       }
     }
 
-    const notifications = await Notification.find(filterQuery)
+    const notifications = await AdminNotification.find(filterQuery)
       .sort({
         createdAt: order,
       })
@@ -70,11 +70,28 @@ export default class NotificationService extends BaseService {
     return notifications.map(transformNotification)
   }
 
+  static async getUnreadCount(adminId: AdminObject["id"]): Promise<number> {
+    const [{ notificationCount }] = await AdminNotification.aggregate([
+      {
+        $match: {
+          admin: adminId,
+          readAt: {
+            $exists: false,
+          },
+        },
+      },
+      {
+        $count: "notificationCount",
+      },
+    ])
+    return notificationCount
+  }
+
   static async getById(
     adminId: AdminObject["id"],
-    notificationId: NotificationObject["id"]
-  ): Promise<NotificationObject> {
-    const notification = await Notification.findOne({
+    notificationId: AdminNotificationObject["id"]
+  ): Promise<AdminNotificationObject> {
+    const notification = await AdminNotification.findOne({
       _id: notificationId,
       admin: adminId,
     })
@@ -104,8 +121,8 @@ export default class NotificationService extends BaseService {
    */
   private static async validateUserNotificationAndGetQuery(
     adminId: AdminObject["id"],
-    notificationIds?: Array<NotificationObject["id"]>
-  ): Promise<mongoose.FilterQuery<InferredNotificationSchemaType>> {
+    notificationIds?: Array<AdminNotificationObject["id"]>
+  ): Promise<mongoose.FilterQuery<InferredAdminNotificationSchemaType>> {
     // ensure non empty array if notifications are passed
     if (notificationIds && !notificationIds.length) {
       throw {
@@ -114,7 +131,7 @@ export default class NotificationService extends BaseService {
       }
     }
 
-    const filterQuery: mongoose.FilterQuery<InferredNotificationSchemaType> = {
+    const filterQuery: mongoose.FilterQuery<InferredAdminNotificationSchemaType> = {
       ...(
         notificationIds && {
           _id: {
@@ -125,7 +142,7 @@ export default class NotificationService extends BaseService {
       admin: adminId,
     }
 
-    const notifications = await Notification.find(filterQuery)
+    const notifications = await AdminNotification.find(filterQuery)
       .select({ _id: 1 })
       .lean()
 
@@ -161,11 +178,11 @@ export default class NotificationService extends BaseService {
   static async updateReadStatuses(
     adminId: AdminObject["id"],
     read: boolean,
-    notificationIds?: Array<NotificationObject["id"]>
+    notificationIds?: Array<AdminNotificationObject["id"]>
   ): Promise<void> {
     const filterQuery = await NotificationService.validateUserNotificationAndGetQuery(adminId, notificationIds)
 
-    const updateQuery: mongoose.UpdateQuery<InferredNotificationSchemaType> = read ? {
+    const updateQuery: mongoose.UpdateQuery<InferredAdminNotificationSchemaType> = read ? {
       $set: {
         readAt: new Date(),
       },
@@ -175,7 +192,7 @@ export default class NotificationService extends BaseService {
       }
     }
 
-    await Notification.updateMany(filterQuery, updateQuery)
+    await AdminNotification.updateMany(filterQuery, updateQuery)
   }
 
   /**
@@ -188,10 +205,10 @@ export default class NotificationService extends BaseService {
    */
   static async delete(
     adminId: AdminObject["id"],
-    notificationIds?: Array<NotificationObject["id"]>
+    notificationIds?: Array<AdminNotificationObject["id"]>
   ): Promise<void> {
     const filterQuery = await NotificationService.validateUserNotificationAndGetQuery(adminId, notificationIds)
 
-    await Notification.deleteMany(filterQuery)
+    await AdminNotification.deleteMany(filterQuery)
   }
 }

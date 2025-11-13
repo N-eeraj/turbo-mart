@@ -4,15 +4,15 @@ import {
   NotificationType,
 } from "#mongoose/enums/admin/notification"
 
-export type InferredNotificationSchemaType = mongoose.InferSchemaType<typeof NotificationSchema>
-export type Notification = mongoose.HydratedDocument<InferredNotificationSchemaType>
-export type ObjectKeys = Exclude<keyof InferredNotificationSchemaType, "admin" | "updatedAt">
-export type NotificationObject = Pick<Notification, ObjectKeys> & { id: Notification["_id"] }
+export type InferredAdminNotificationSchemaType = mongoose.InferSchemaType<typeof AdminNotificationSchema>
+export type AdminNotification = mongoose.HydratedDocument<InferredAdminNotificationSchemaType>
+export type ObjectKeys = Exclude<keyof InferredAdminNotificationSchemaType, "admin" | "updatedAt">
+export type AdminNotificationObject = Pick<AdminNotification, ObjectKeys> & { id: AdminNotification["_id"] }
 
 /**
  * Mongoose schema for admin user notifications.
  */
-const NotificationSchema = new mongoose.Schema({
+const AdminNotificationSchema = new mongoose.Schema({
   admin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Admin",
@@ -41,14 +41,14 @@ const NotificationSchema = new mongoose.Schema({
   timestamps: true,
 })
 
-NotificationSchema.index({
+AdminNotificationSchema.index({
   admin: 1,
   readAt: 1,
   createdAt: 1,
 })
 
 /**
- * Transforms an Notification object by mapping internal `_id` to external `id` and returning only the required fields.
+ * Transforms an AdminNotification object by mapping internal `_id` to external `id` and returning only the required fields.
  * 
  * @param notification - The notification object to transform.
  * 
@@ -62,8 +62,8 @@ export function transformNotification({
   data,
   readAt,
   createdAt,
-}: Notification): NotificationObject {
-  const notification: NotificationObject = {
+}: AdminNotification): AdminNotificationObject {
+  const notification: AdminNotificationObject = {
     id: _id,
     type,
     title,
@@ -76,9 +76,9 @@ export function transformNotification({
   return notification
 }
 
-const Notification = mongoose.model("Notification", NotificationSchema)
+const AdminNotification = mongoose.model("AdminNotification", AdminNotificationSchema, "adminNotifications")
 
-export default Notification
+export default AdminNotification
 export {
-  NotificationType,
+  NotificationType as AdminNotificationType,
 }

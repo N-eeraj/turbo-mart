@@ -17,6 +17,8 @@ notificationRouter.route("/")
   .patch(authenticationMiddleware, NotificationController.updateReadStatusMultiple)
   .delete(authenticationMiddleware, NotificationController.deleteMultiple)
 
+notificationRouter.get("/unread-count", authenticationMiddleware ,NotificationController.getUnreadCount)
+
 notificationRouter.route("/:notificationId")
   .get(authenticationMiddleware, NotificationController.getById)
   .patch(authenticationMiddleware, NotificationController.updateReadStatus)
