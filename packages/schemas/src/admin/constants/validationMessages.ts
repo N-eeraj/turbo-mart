@@ -16,6 +16,11 @@ export const NEW_PASSWORD = {
   format: "Invalid password format"
 }
 
+export const CONFIRM_PASSWORD = {
+  ...PASSWORD,
+  mismatch: "Passwords do not match",
+}
+
 export const USER_NAME = {
   required: "Please enter a name",
 }

@@ -9,6 +9,7 @@ import {
   RESET_PASSWORD_URL,
   PASSWORD_RESET_TOKEN,
   LOGOUT_OTHERS_ON_RESET,
+  CONFIRM_PASSWORD,
 } from "#admin/constants/validationMessages"
 
 export const loginSchema = z.object({
@@ -53,10 +54,30 @@ export const resetPasswordSchema = z.object({
     }),
 })
 
+export const resetPasswordWithConfirmSchema = resetPasswordSchema.extend({
+  confirmPassword: z.string({ error: CONFIRM_PASSWORD.required })
+    .nonempty(CONFIRM_PASSWORD.required)
+    .meta({
+      description: "Re-enter password.",
+      example: "NewString123",
+    }),
+})
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        path: ["confirmPassword"],
+        code: "custom",
+        message: CONFIRM_PASSWORD.mismatch,
+      })
+    }
+  })
+
 export const loginJSONSchema = z.toJSONSchema(loginSchema)
 export const forgotPasswordJSONSchema = z.toJSONSchema(forgotPasswordSchema)
 export const resetPasswordJSONSchema = z.toJSONSchema(resetPasswordSchema)
+export const resetPasswordWithConfirmJSONSchema = z.toJSONSchema(resetPasswordWithConfirmSchema)
 
 export type LoginData = z.infer<typeof loginSchema>
 export type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
 export type ResetPasswordData = z.infer<typeof resetPasswordSchema>
+export type ResetPasswordWithConfirmData = z.infer<typeof resetPasswordWithConfirmSchema>

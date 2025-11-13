@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const token = computed(() => route.query.token)
+const token = computed(() => route.query.token as string ?? "")
 
 definePageMeta({
   layout: "empty",
@@ -10,13 +10,11 @@ definePageMeta({
 </script>
 
 <template>
-  <main>
-    <template v-if="token">
-      Continue to reset password?
-    </template>
+  <main class="flex flex-col justify-center items-center gap-y-2 h-svh">
+    <AuthResetTokenForm
+      v-if="token"
+      :token />
 
-    <template v-else>
-      Invalid token
-    </template>
+    <AuthResetTokenInvalid v-else />
   </main>
 </template>

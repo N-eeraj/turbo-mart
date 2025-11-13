@@ -42,16 +42,22 @@ function toggleInputType() {
       ...formField
     }">
     <FormItem>
-      <FormLabel v-if="label">
-        {{ label }}
-      </FormLabel>
-      <FormControl>
-        <slot v-bind="{
+      <slot
+        v-bind="{
           ...formField,
           componentField,
           errors,
           errorMessage,
         }">
+        <slot
+          name="label"
+          :label>
+          <FormLabel v-if="label">
+            {{ label }}
+          </FormLabel>
+        </slot>
+
+        <FormControl>
           <InputGroup>
             <slot name="addon" />
             <InputGroupInput
@@ -69,25 +75,25 @@ function toggleInputType() {
                 <Icon name="mdi:eye" />
               </BaseButton>
             </InputGroupAddon>
-            </InputGroup>
+          </InputGroup>
+        </FormControl>
+
+        <slot
+          name="description"
+          :description>
+          <FormDescription
+            v-if="description"
+            class="text-xs">
+            {{ description }}
+          </FormDescription>
         </slot>
-      </FormControl>
 
-      <slot
-        name="description"
-        :description>
-        <FormDescription
-          v-if="description"
-          class="text-xs">
-          {{ description }}
-        </FormDescription>
-      </slot>
-
-      <slot
-        name="error"
-        :errors
-        :errorMessage>
-        <FormMessage class="text-xs" />
+        <slot
+          name="error"
+          :errors
+          :errorMessage>
+          <FormMessage class="text-xs" />
+        </slot>
       </slot>
     </FormItem>
   </FormField>

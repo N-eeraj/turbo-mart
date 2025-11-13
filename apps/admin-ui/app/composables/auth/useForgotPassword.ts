@@ -21,10 +21,11 @@ export default function useForgotPassword(
     resetForm,
   } = useForm({
     validationSchema: toTypedSchema(
-      forgotPasswordSchema.pick({
-        email: true,
-      }) as unknown as z.ZodType<any, z.ZodTypeDef, any>,
+      forgotPasswordSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>,
     ),
+    initialValues: {
+      redirectUrl: `${location.origin}/reset-password`,
+    },
   })
 
   const isLoading = ref(false)
@@ -41,17 +42,14 @@ export default function useForgotPassword(
     }
   })
 
-  const onSubmit = handleSubmit(async ({ email }) => {
+  const onSubmit = handleSubmit(async (body) => {
     try {
       isLoading.value = true
       const {
         message,
       } = await useApi("/auth/forgot-password", {
         method: "POST",
-        body: {
-          email,
-          redirectUrl: `${location.origin}/reset-password`,
-        },
+        body,
       })
 
       isSuccess.value = true
