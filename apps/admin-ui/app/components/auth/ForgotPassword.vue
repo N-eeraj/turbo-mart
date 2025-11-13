@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 interface Props {
-  email: string
+  email?: string
 }
 
 const props = defineProps<Props>()
@@ -22,14 +22,43 @@ const open = defineModel({
 const {
   isLoading,
   isInvalid,
+  isSuccess,
   onSubmit,
-} = useForgotPassword(open, computed(() => props.email))
+} = useForgotPassword(
+  open,
+  computed(() => props.email)
+)
 </script>
 
 <template>
   <AlertDialog v-model:open="open">
     <AlertDialogContent>
+      <!-- success state -->
+      <template v-if="isSuccess">
+        <AlertDialogHeader class="items-center">
+          <AlertDialogTitle>
+            Password Reset Success
+          </AlertDialogTitle>
+          <img
+            src="/images/success.gif"
+            alt="success-decorator"
+            class="w-5/6 max-w-24" />
+          <AlertDialogDescription>
+            You'll receive an email to reset your password.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <BaseButton
+            variant="secondary"
+            @click="open = false">
+            Ok
+          </BaseButton>
+        </AlertDialogFooter>
+      </template>
+
+      <!-- reset request form -->
       <form
+        v-else
         class="space-y-4"
         @submit="onSubmit">
         <AlertDialogHeader class="text-start">

@@ -1,8 +1,4 @@
 import {
-  toast,
-} from "vue-sonner"
-import {
-  type ComputedGetter,
   type ModelRef,
 } from "vue"
 import type z from "zod"
@@ -11,7 +7,10 @@ import {
   forgotPasswordSchema,
 } from "@app/schemas/admin/auth"
 
-export default function useForgotPassword(open: ModelRef<boolean>, email: ComputedRef<string>) {
+export default function useForgotPassword(
+  open: ModelRef<boolean>,
+  email: ComputedRef<string | undefined>
+) {
   const {
     handleSubmit,
     setFieldValue,
@@ -29,6 +28,18 @@ export default function useForgotPassword(open: ModelRef<boolean>, email: Comput
   })
 
   const isLoading = ref(false)
+  const isSuccess = ref(false)
+
+  watch(() => open.value, async (open) => {
+    if (open) {
+      isSuccess.value = false
+      setFieldValue("email", email.value)
+      setTimeout(() => {
+        setFieldTouched("email", false)
+        setFieldError("email", undefined)
+      }, 50)
+    }
+  })
 
   const onSubmit = handleSubmit(async ({ email }) => {
     try {
@@ -43,11 +54,8 @@ export default function useForgotPassword(open: ModelRef<boolean>, email: Comput
         },
       })
 
+      isSuccess.value = true
       resetForm()
-      open.value = false
-      toast.success(message, {
-        richColors: true,
-      })
     } catch (error: unknown) {
       const {
         message,
@@ -63,21 +71,12 @@ export default function useForgotPassword(open: ModelRef<boolean>, email: Comput
     }
   })
 
-  watch(() => open.value, async (open) => {
-    if (open) {
-      setFieldValue("email", email.value)
-      setTimeout(() => {
-        setFieldTouched("email", false)
-        setFieldError("email", undefined)
-      }, 50)
-    }
-  })
-
   const isInvalid = computed(() => !isFieldValid('email'))
 
   return {
     isLoading,
     isInvalid,
+    isSuccess,
     onSubmit,
   }
 }

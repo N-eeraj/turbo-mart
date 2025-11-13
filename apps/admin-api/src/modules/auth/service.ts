@@ -127,17 +127,21 @@ export default class AuthService extends BaseService {
     const mailContent = await super.renderTemplate("passwordReset.ejs", {
       resetUrl,
     })
-    await sendMail({
-      recipients: [{
-        email: admin.email,
-      }],
-      category: "Password Reset",
-      subject: "Password Reset",
-      body: {
-        type: "html",
-        content: mailContent,
-      }
-    })
+    try {
+      await sendMail({
+        recipients: [{
+          email: admin.email,
+        }],
+        category: "Password Reset",
+        subject: "Password Reset",
+        body: {
+          type: "html",
+          content: mailContent,
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   /**
