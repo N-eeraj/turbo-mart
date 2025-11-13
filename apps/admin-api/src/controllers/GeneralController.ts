@@ -29,7 +29,6 @@ export default class GeneralController extends BaseController {
   static handleRouteNotFound(_req: Request, res: Response) {
     super.sendError(res, {
       status: 404,
-      errors: "Not Found",
       message: "Cannot find the URL",
     })
   }

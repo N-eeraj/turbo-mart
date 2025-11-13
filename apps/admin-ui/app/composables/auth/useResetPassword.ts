@@ -1,72 +1,59 @@
 import {
   toast,
 } from "vue-sonner"
+import {
+  resetPasswordWithConfirmSchema,
+} from "@app/schemas/admin/auth"
 import type z from "zod"
 
-import {
-  loginSchema,
-} from "@app/schemas/admin/auth"
-
-export default function useLogin() {
-  const route = useRoute()
+export default function useResetPassword(token: ComputedRef<string>) {
   const router = useRouter()
 
   const {
-    setUser,
-    setToken,
-  } = useUserStore()
-
-  const {
     handleSubmit,
-    controlledValues,
+    errors,
+    setFieldError,
     setErrors,
   } = useForm({
     validationSchema: toTypedSchema(
-      loginSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
+      resetPasswordWithConfirmSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>,
     ),
+    initialValues: {
+      token: token.value,
+    },
   })
 
   const isLoading = ref(false)
-  const formError = ref<string | null>()
 
   const onSubmit = handleSubmit(async (body) => {
-    formError.value = null
     try {
       isLoading.value = true
       const {
         message,
-        data,
-      } = await useApi("/auth/login", {
+      } = await useApi("/auth/reset-password", {
         method: "POST",
         body,
       })
 
-      const {
-        user,
-        token,
-      } = data as {
-        user: Parameters<typeof setUser>[0]
-        token: Parameters<typeof setToken>[0]
-      }
-      setUser(user)
-      setToken(token)
-
-      router.replace(route.query.to as string ?? "/")
       toast.success(message, {
         richColors: true,
+        description: "You can now login with your new password",
       })
+      router.push("/login")
     } catch (error: unknown) {
       const {
         status,
         message,
         errors,
       } = error as ApiError
-      if (errors) {
+      if (status === 422 && errors) {
         setErrors(errors as Record<string, Array<string>>)
+      } else if (status === 404 && message) {
+        setFieldError("token", message)
       } else if (message) {
-        if (status === 401) {
-          formError.value = message
-        }
+        toast.error(message, {
+          richColors: true,
+        })
       }
     } finally {
       isLoading.value = false
@@ -74,9 +61,8 @@ export default function useLogin() {
   })
 
   return {
-    controlledValues,
-    formError,
     isLoading,
+    errors,
     onSubmit,
   }
 }

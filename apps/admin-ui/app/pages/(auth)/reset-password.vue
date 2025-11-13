@@ -2,6 +2,11 @@
 const route = useRoute()
 
 const token = computed(() => route.query.token as string ?? "")
+const isTokenValid = ref(!!token.value)
+
+function setTokenInvalid() {
+  isTokenValid.value = false
+}
 
 definePageMeta({
   layout: "empty",
@@ -12,8 +17,9 @@ definePageMeta({
 <template>
   <main class="flex flex-col justify-center items-center gap-y-2 h-svh">
     <AuthResetTokenForm
-      v-if="token"
-      :token />
+      v-if="isTokenValid"
+      :token
+      @invalid-token="setTokenInvalid" />
 
     <AuthResetTokenInvalid v-else />
   </main>

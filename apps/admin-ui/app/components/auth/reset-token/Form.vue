@@ -7,11 +7,6 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 
-import {
-  resetPasswordWithConfirmSchema,
-} from "@app/schemas/admin/auth"
-import type z from "zod"
-
 interface Props {
   token: string
 }
@@ -19,26 +14,25 @@ const {
   token
 } = defineProps<Props>()
 
+const emit = defineEmits([
+  "invalidToken",
+])
+
 const {
-  handleSubmit,
-} = useForm({
-  validationSchema: toTypedSchema(
-    resetPasswordWithConfirmSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>,
-  ),
-  initialValues: {
-    token: token,
-  },
-})
+  errors,
+  isLoading,
+  onSubmit,
+} = useResetPassword(
+  computed(() => token)
+)
 
-const isLoading = ref(false)
-
-const onSubmit = handleSubmit(async (body) => {
-  console.log(body)
+watch(() => errors.value.token, () => {
+  emit("invalidToken")
 })
 </script>
 
 <template>
-  <form 
+  <form
     class="w-10/11 max-w-sm"
     @submit="onSubmit">
     <Card class="md:gap-y-4">
@@ -68,7 +62,7 @@ const onSubmit = handleSubmit(async (body) => {
         <BaseButton
           :loading="isLoading"
           class="w-full min-w-20 md:w-fit md:ml-auto">
-          Login
+          Reset Password
         </BaseButton>
       </CardFooter>
     </Card>

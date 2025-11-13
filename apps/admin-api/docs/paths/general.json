@@ -62,10 +62,6 @@
                     "type": "boolean",
                     "description": "Boolean indicating whether the request was successful."
                   },
-                  "errors": {
-                    "type": "string",
-                    "example": "Not Found"
-                  },
                   "message": {
                     "type": "string",
                     "example": "Cannot find the URL"
