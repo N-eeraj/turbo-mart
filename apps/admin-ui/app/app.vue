@@ -24,7 +24,7 @@ useHead({
 <template>
   <ScreenInitial v-if="pending" />
 
-  <ScreenServerUnreachable
+  <LazyScreenServerUnreachable
     v-else-if="error"
     @retry="refresh" />
 

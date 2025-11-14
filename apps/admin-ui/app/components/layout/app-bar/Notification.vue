@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Spinner from "@/components/ui/spinner/Spinner.vue"
 
 import {
   NotificationType,
@@ -18,11 +19,18 @@ interface Notification {
   type: NotificationType
   title: string
   message: string
-  data: Record<string, unknown>
+  data?: Record<string, unknown>
   createdAt: Date
 }
 
-const unreadNotificationCount = ref(0)
+const {
+  data: unreadNotificationCount,
+  pending: isLoadingUnreadNotificationCount,
+} = useLazyAsyncData(() => useApi("/profile/notifications/unread-count"), {
+  transform: ({ data }) => {
+    return (data ?? 0) as number
+  }
+})
 
 const {
   data: notifications,
@@ -55,7 +63,14 @@ const handleMarkAllAsRead = async () => {
           name="lucide:bell"
           :size="24" />
 
+        <div
+          v-if="isLoadingUnreadNotificationCount"
+          class="absolute -top-2 -right-2 grid place-content-center size-5 p-1 bg-primary text-primary-foreground leading-none rounded-lg">
+          <Spinner />
+        </div>
+
         <span
+          v-else-if="unreadNotificationCount"
           class="absolute -top-2 min-w-5 p-1 bg-primary text-primary-foreground leading-none rounded-lg"
           :class="unreadNotificationCount < 100 ? '-right-2' : '-right-4'">
           {{ unreadNotificationCount < 100 ? unreadNotificationCount : "99+" }}
@@ -72,8 +87,17 @@ const handleMarkAllAsRead = async () => {
       <DropdownMenuGroup class="max-h-48 overflow-y-auto">
         <DropdownMenuItem
           v-for="notification of notifications"
-          :key="notification.id">
-          {{ notification }}
+          :key="notification.id"
+          class="flex flex-col items-start">
+          <strong class="leading-none">
+            {{ notification.title }}
+          </strong>
+          <p class="text-sm text-foreground/70 line-clamp-2">
+            {{ notification.message }}
+          </p>
+          <span class="w-full text-xs text-foreground/70 text-end">
+            {{ useTimeAgo(notification.createdAt) }}
+          </span>
         </DropdownMenuItem>
         <BaseLinearProgress v-if="pending" />
       </DropdownMenuGroup>
