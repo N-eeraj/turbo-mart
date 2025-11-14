@@ -22,18 +22,14 @@ export default class BrandController extends BaseController {
    * Fetches the list of brands.
    */
   static async list({ query }: Request, res: Response) {
-    try {
-      const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+    const paginationQueries: ListOptions = super.parsePaginationQueries(query)
 
-      const data = await BrandService.list(paginationQueries)
+    const data = await BrandService.list(paginationQueries)
 
-      super.sendSuccess(res, {
-        message: "Fetched Brands",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Fetched Brands",
+      data,
+    })
   }
 
   /**
@@ -42,19 +38,15 @@ export default class BrandController extends BaseController {
    * Create new brand.
    */
   static async create({ body }: Request, res: Response) {
-    try {
-      const brand = super.validateRequest(brandCreationSchema, body)
+    const brand = super.validateRequest(brandCreationSchema, body)
 
-      const data = await BrandService.create(brand)
+    const data = await BrandService.create(brand)
 
-      super.sendSuccess(res, {
-        message: "Created Brand",
-        data,
-        status: 201,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Created Brand",
+      data,
+      status: 201,
+    })
   }
 
   /**
@@ -63,24 +55,20 @@ export default class BrandController extends BaseController {
    * Get one brand by Id.
    */
   static async getById({ params }: Request, res: Response) {
-    try {
-      const brandId = super.parseObjectId(params.brandId)
-      if (!brandId) {
-        throw {
-          status: 400,
-          message: "Invalid brand id",
-        }
+    const brandId = super.parseObjectId(params.brandId)
+    if (!brandId) {
+      throw {
+        status: 400,
+        message: "Invalid brand id",
       }
-
-      const data = await BrandService.getById(brandId)
-
-      super.sendSuccess(res, {
-        message: "Fetched Brand",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await BrandService.getById(brandId)
+
+    super.sendSuccess(res, {
+      message: "Fetched Brand",
+      data,
+    })
   }
 
   /**
@@ -89,26 +77,22 @@ export default class BrandController extends BaseController {
    * Update brand.
    */
   static async update({ params, body }: Request, res: Response) {
-    try {
-      const brandId = super.parseObjectId(params.brandId)
-      if (!brandId) {
-        throw {
-          status: 400,
-          message: "Invalid brand id",
-        }
+    const brandId = super.parseObjectId(params.brandId)
+    if (!brandId) {
+      throw {
+        status: 400,
+        message: "Invalid brand id",
       }
-
-      const brand = super.validateRequest(brandUpdateSchema, body)
-
-      const data = await BrandService.update(brandId, brand)
-
-      super.sendSuccess(res, {
-        message: "Updated Brand",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const brand = super.validateRequest(brandUpdateSchema, body)
+
+    const data = await BrandService.update(brandId, brand)
+
+    super.sendSuccess(res, {
+      message: "Updated Brand",
+      data,
+    })
   }
 
   /**
@@ -117,23 +101,19 @@ export default class BrandController extends BaseController {
    * Delete brand.
    */
   static async delete({ params }: Request, res: Response) {
-    try {
-      const brandId = super.parseObjectId(params.brandId)
-      if (!brandId) {
-        throw {
-          status: 400,
-          message: "Invalid brand id",
-        }
+    const brandId = super.parseObjectId(params.brandId)
+    if (!brandId) {
+      throw {
+        status: 400,
+        message: "Invalid brand id",
       }
-
-      const data = await BrandService.delete(brandId)
-
-      super.sendSuccess(res, {
-        message: "Deleted Brand",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await BrandService.delete(brandId)
+
+    super.sendSuccess(res, {
+      message: "Deleted Brand",
+      data,
+    })
   }
 }

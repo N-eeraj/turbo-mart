@@ -22,18 +22,14 @@ export default class SuperAdminController extends BaseController {
    * Fetch all admin users.
    */
   static async listAdmins({ query }: Request, res: Response) {
-    try {
-      const paginationQueries: GetAdminUsersOptions = super.parsePaginationQueries(query)
+    const paginationQueries: GetAdminUsersOptions = super.parsePaginationQueries(query)
 
-      const data = await SuperAdminService.listAdmins(paginationQueries)
+    const data = await SuperAdminService.listAdmins(paginationQueries)
 
-      super.sendSuccess(res, {
-        message: "Fetched Admin Users",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Fetched Admin Users",
+      data,
+    })
   }
 
   /**
@@ -42,19 +38,15 @@ export default class SuperAdminController extends BaseController {
    * Create a new admin user.
    */
   static async createAdmin({ body }: Request, res: Response) {
-    try {
-      const admin = super.validateRequest(adminCreationSchema, body)
+    const admin = super.validateRequest(adminCreationSchema, body)
 
-      const data = await SuperAdminService.createAdmin(admin)
+    const data = await SuperAdminService.createAdmin(admin)
 
-      super.sendSuccess(res, {
-        data,
-        message: "Created Admin User",
-        status: 201,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      data,
+      message: "Created Admin User",
+      status: 201,
+    })
   }
 
   /**
@@ -63,16 +55,12 @@ export default class SuperAdminController extends BaseController {
    * Fetch admin permission list.
    */
   static async listAdminPermissions(_req: Request, res: Response) {
-    try {
-      const data = await SuperAdminService.listAdminPermissions()
+    const data = await SuperAdminService.listAdminPermissions()
 
-      super.sendSuccess(res, {
-        data,
-        message: "Fetched Admin Permissions",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      data,
+      message: "Fetched Admin Permissions",
+    })
   }
 
   /**
@@ -81,24 +69,20 @@ export default class SuperAdminController extends BaseController {
    * Fetch admin user by id.
    */
   static async getAdminById({ params }: Request, res: Response) {
-    try {
-      const adminId = super.parseObjectId(params.adminId)
-      if (!adminId) {
-        throw {
-          status: 400,
-          message: "Invalid admin id",
-        }
+    const adminId = super.parseObjectId(params.adminId)
+    if (!adminId) {
+      throw {
+        status: 400,
+        message: "Invalid admin id",
       }
-
-      const data = await SuperAdminService.getAdminById(adminId)
-
-      super.sendSuccess(res, {
-        data,
-        message: "Fetched Admin User",
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await SuperAdminService.getAdminById(adminId)
+
+    super.sendSuccess(res, {
+      data,
+      message: "Fetched Admin User",
+    })
   }
 
   /**
@@ -107,50 +91,42 @@ export default class SuperAdminController extends BaseController {
    * Update admin user by id.
    */
   static async updateAdmin({ params, body }: Request, res: Response) {
-    try {
-      const adminId = super.parseObjectId(params.adminId)
-      if (!adminId) {
-        throw {
-          status: 400,
-          message: "Invalid admin id",
-        }
+    const adminId = super.parseObjectId(params.adminId)
+    if (!adminId) {
+      throw {
+        status: 400,
+        message: "Invalid admin id",
       }
-
-      const admin = super.validateRequest(adminUpdateSchema, body)
-
-      const data = await SuperAdminService.updateAdmin(adminId, admin)
-
-      super.sendSuccess(res, {
-        data,
-        message: "Updated Admin User",
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const admin = super.validateRequest(adminUpdateSchema, body)
+
+    const data = await SuperAdminService.updateAdmin(adminId, admin)
+
+    super.sendSuccess(res, {
+      data,
+      message: "Updated Admin User",
+    })
   }
 
   /**
    * @route DELETE /api/super-admin/admin/:adminId
    * 
-   * Delete admin user by id.
-   */
-  static async deleteAdmin({ params }: Request, res: Response) {
-    try {
-      const adminId = super.parseObjectId(params.adminId)
-      if (!adminId) {
-        throw {
-          status: 400,
-          message: "Invalid admin id",
-        }
+  * Delete admin user by id.
+  */
+static async deleteAdmin({ params }: Request, res: Response) {
+    const adminId = super.parseObjectId(params.adminId)
+    if (!adminId) {
+      throw {
+        status: 400,
+        message: "Invalid admin id",
       }
-
-      await SuperAdminService.deleteAdmin(adminId)
-
-      super.sendSuccess(res, {
-        message: "Deleted Admin User",
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    await SuperAdminService.deleteAdmin(adminId)
+
+    super.sendSuccess(res, {
+      message: "Deleted Admin User",
+    })
   }
 }

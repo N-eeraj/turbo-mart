@@ -21,18 +21,14 @@ export default class AuthController extends BaseController {
    * Validates login credentials and logs in the user.
    */
   static async login({ body }: Request, res: Response) {
-    try {
-      const credentials = super.validateRequest(loginSchema, body)
+    const credentials = super.validateRequest(loginSchema, body)
 
-      const data = await AuthService.login(credentials)
+    const data = await AuthService.login(credentials)
 
-      super.sendSuccess(res, {
-        message: "Login successful",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Login successful",
+      data,
+    })
   }
 
   /**
@@ -41,15 +37,11 @@ export default class AuthController extends BaseController {
    * Logs out the user by removing the authentication token.
    */
   static async logout({ token }: Request, res: Response) {
-    try {
-      await AuthService.logout(token)
+    await AuthService.logout(token)
 
-      super.sendSuccess(res, {
-        message: "Logout successful",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Logout successful",
+    })
   }
 
   /**
@@ -58,17 +50,13 @@ export default class AuthController extends BaseController {
    * Sends the password reset email.
    */
   static async forgotPassword({ body }: Request, res: Response) {
-    try {
-      const payload = super.validateRequest(forgotPasswordSchema, body)
+    const payload = super.validateRequest(forgotPasswordSchema, body)
 
-      await AuthService.forgotPassword(payload)
+    await AuthService.forgotPassword(payload)
 
-      super.sendSuccess(res, {
-        message: "Requested Password Reset",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Requested Password Reset",
+    })
   }
 
   /**
@@ -77,16 +65,12 @@ export default class AuthController extends BaseController {
    * Update the user password.
    */
   static async resetPassword({ body }: Request, res: Response) {
-    try {
-      const payload = super.validateRequest(resetPasswordSchema, body)
+    const payload = super.validateRequest(resetPasswordSchema, body)
 
-      await AuthService.resetPassword(payload)
+    await AuthService.resetPassword(payload)
 
-      super.sendSuccess(res, {
-        message: "Password Reset Successfully",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Password Reset Successfully",
+    })
   }
 }
