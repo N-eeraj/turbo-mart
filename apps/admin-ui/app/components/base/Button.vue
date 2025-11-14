@@ -35,11 +35,14 @@ const cursorClass = computed(() => {
     :disabled="disabled || loading"
     :class="cn(
       'disabled:grayscale-50',
+      loading && 'relative',
       cursorClass,
     )">
-    <Spinner v-if="loading" />
-    <template v-else>
+    <Spinner
+      v-if="loading"
+      class="absolute top-1/2 left-1/2 [&+*]:opacity-0 -translate-x-1/2 -translate-y-1/2" />
+    <div>
       <slot />
-    </template>
+    </div>
   </Button>
 </template>

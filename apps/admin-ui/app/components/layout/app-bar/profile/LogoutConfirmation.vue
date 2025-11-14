@@ -42,7 +42,6 @@ const {
         <BaseButton
           variant="destructive"
           :loading="isLoading"
-          class="min-w-24"
           @click="handleLogout">
           Continue
         </BaseButton>

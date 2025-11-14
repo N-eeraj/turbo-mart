@@ -61,7 +61,7 @@ watch(() => errors.value.token, () => {
       <CardFooter class="flex justify-between px-6">
         <BaseButton
           :loading="isLoading"
-          class="w-full min-w-20 md:w-fit md:ml-auto">
+          class="w-full md:w-fit md:ml-auto">
           Reset Password
         </BaseButton>
       </CardFooter>

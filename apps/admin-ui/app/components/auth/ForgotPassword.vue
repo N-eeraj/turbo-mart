@@ -79,8 +79,7 @@ const {
           <BaseButton
             variant="destructive"
             :disabled="isInvalid"
-            :loading=isLoading
-            class="min-w-36">
+            :loading=isLoading>
             Send Reset Link
           </BaseButton>
         </AlertDialogFooter>
