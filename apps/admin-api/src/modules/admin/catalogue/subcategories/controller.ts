@@ -24,26 +24,22 @@ export default class SubcategoryController extends BaseController {
    * Fetches the list of subcategories.
    */
   static async list({ query }: Request, res: Response) {
-    try {
-      const paginationQueries: ListOptions = super.parsePaginationQueries(query)
-      const categoryIds = super.parseResourceIdQueries(
-        query,
-        "categories",
-        "Invalid category id"
-      )
+    const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+    const categoryIds = super.parseResourceIdQueries(
+      query,
+      "categories",
+      "Invalid category id"
+    )
 
-      const data = await SubcategoryService.list({
-        ...paginationQueries,
-        categories: categoryIds,
-      })
+    const data = await SubcategoryService.list({
+      ...paginationQueries,
+      categories: categoryIds,
+    })
 
-      super.sendSuccess(res, {
-        message: "Fetched Subcategories",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Fetched Subcategories",
+      data,
+    })
   }
 
   /**
@@ -52,19 +48,15 @@ export default class SubcategoryController extends BaseController {
    * Create new subcategory.
    */
   static async create({ body }: Request, res: Response) {
-    try {
-      const subcategory = super.validateRequest(subcategoryCreationSchema, body)
+    const subcategory = super.validateRequest(subcategoryCreationSchema, body)
 
-      const data = await SubcategoryService.create(subcategory)
+    const data = await SubcategoryService.create(subcategory)
 
-      super.sendSuccess(res, {
-        message: "Created Subcategory",
-        data,
-        status: 201,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Created Subcategory",
+      data,
+      status: 201,
+    })
   }
 
   /**
@@ -73,16 +65,12 @@ export default class SubcategoryController extends BaseController {
    * Fetch attribute type list.
    */
   static async listAttributeTypes(_req: Request, res: Response) {
-    try {
-      const data = await SubcategoryService.listAttributeTypes()
+    const data = await SubcategoryService.listAttributeTypes()
 
-      super.sendSuccess(res, {
-        data,
-        message: "Fetched Attribute Types",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      data,
+      message: "Fetched Attribute Types",
+    })
   }
 
   /**
@@ -91,24 +79,20 @@ export default class SubcategoryController extends BaseController {
    * Get one subcategory by Id.
    */
   static async getById({ params }: Request, res: Response) {
-    try {
-      const subcategoryId = super.parseObjectId(params.subcategoryId)
-      if (!subcategoryId) {
-        throw {
-          status: 400,
-          message: "Invalid subcategory id",
-        }
+    const subcategoryId = super.parseObjectId(params.subcategoryId)
+    if (!subcategoryId) {
+      throw {
+        status: 400,
+        message: "Invalid subcategory id",
       }
-
-      const data = await SubcategoryService.getById(subcategoryId)
-
-      super.sendSuccess(res, {
-        message: "Fetched Subcategory",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await SubcategoryService.getById(subcategoryId)
+
+    super.sendSuccess(res, {
+      message: "Fetched Subcategory",
+      data,
+    })
   }
 
   /**
@@ -117,26 +101,22 @@ export default class SubcategoryController extends BaseController {
    * Update subcategory.
    */
   static async update({ params, body }: Request, res: Response) {
-    try {
-      const subcategoryId = super.parseObjectId(params.subcategoryId)
-      if (!subcategoryId) {
-        throw {
-          status: 400,
-          message: "Invalid subcategory id",
-        }
+    const subcategoryId = super.parseObjectId(params.subcategoryId)
+    if (!subcategoryId) {
+      throw {
+        status: 400,
+        message: "Invalid subcategory id",
       }
-
-      const subcategory = super.validateRequest(subcategoryUpdateSchema, body)
-
-      const data = await SubcategoryService.update(subcategoryId, subcategory)
-
-      super.sendSuccess(res, {
-        message: "Updated Subcategory",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const subcategory = super.validateRequest(subcategoryUpdateSchema, body)
+
+    const data = await SubcategoryService.update(subcategoryId, subcategory)
+
+    super.sendSuccess(res, {
+      message: "Updated Subcategory",
+      data,
+    })
   }
 
   /**
@@ -145,24 +125,20 @@ export default class SubcategoryController extends BaseController {
    * Delete subcategory.
    */
   static async delete({ params }: Request, res: Response) {
-    try {
-      const subcategoryId = super.parseObjectId(params.subcategoryId)
-      if (!subcategoryId) {
-        throw {
-          status: 400,
-          message: "Invalid subcategory id",
-        }
+    const subcategoryId = super.parseObjectId(params.subcategoryId)
+    if (!subcategoryId) {
+      throw {
+        status: 400,
+        message: "Invalid subcategory id",
       }
-
-      const data = await SubcategoryService.delete(subcategoryId)
-
-      super.sendSuccess(res, {
-        message: "Deleted Subcategory",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await SubcategoryService.delete(subcategoryId)
+
+    super.sendSuccess(res, {
+      message: "Deleted Subcategory",
+      data,
+    })
   }
 
   /**
@@ -171,50 +147,46 @@ export default class SubcategoryController extends BaseController {
    * Set subcategory attributes.
    */
   static async setAttributes({ params, body }: Request, res: Response) {
-    try {
-      const subcategoryId = super.parseObjectId(params.subcategoryId)
-      if (!subcategoryId) {
-        throw {
-          status: 400,
-          message: "Invalid subcategory id",
-        }
+    const subcategoryId = super.parseObjectId(params.subcategoryId)
+    if (!subcategoryId) {
+      throw {
+        status: 400,
+        message: "Invalid subcategory id",
       }
-
-      const attributeData = super.validateRequest(subcategoryAttributeUpdateSchema, body)
-
-      const {
-        validIds: validUpdateIds,
-        invalidIds: invalidUpdateIds,
-      } = super.parseObjectIdBulk((attributeData.update ?? []).map(({ id }) => id))
-
-      const {
-        validIds: validDeleteIds,
-        invalidIds: invalidDeleteIds,
-      } = super.parseObjectIdBulk(attributeData.delete ?? [])
-
-      if (invalidUpdateIds.length || invalidDeleteIds.length) {
-        throw {
-          status: 400,
-          message: "Invalid attribute ids",
-          ...(invalidUpdateIds.length && { update: invalidUpdateIds }),
-          ...(invalidDeleteIds.length && { delete: invalidDeleteIds }),
-        }
-      }
-
-      const parsedAttributeData: ParsedSubcategoryAttributeUpdateData = {
-        create: attributeData.create ?? [],
-        update: (attributeData.update ?? []).map((attribute, index) => ({ ...attribute, id: validUpdateIds[index] })),
-        delete: validDeleteIds,
-      }
-
-      const data = await SubcategoryService.setAttributes(subcategoryId, parsedAttributeData)
-
-      super.sendSuccess(res, {
-        message: "Updated Subcategory Attributes",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const attributeData = super.validateRequest(subcategoryAttributeUpdateSchema, body)
+
+    const {
+      validIds: validUpdateIds,
+      invalidIds: invalidUpdateIds,
+    } = super.parseObjectIdBulk((attributeData.update ?? []).map(({ id }) => id))
+
+    const {
+      validIds: validDeleteIds,
+      invalidIds: invalidDeleteIds,
+    } = super.parseObjectIdBulk(attributeData.delete ?? [])
+
+    if (invalidUpdateIds.length || invalidDeleteIds.length) {
+      throw {
+        status: 400,
+        message: "Invalid attribute ids",
+        ...(invalidUpdateIds.length && { update: invalidUpdateIds }),
+        ...(invalidDeleteIds.length && { delete: invalidDeleteIds }),
+      }
+    }
+
+    const parsedAttributeData: ParsedSubcategoryAttributeUpdateData = {
+      create: attributeData.create ?? [],
+      update: (attributeData.update ?? []).map((attribute, index) => ({ ...attribute, id: validUpdateIds[index] })),
+      delete: validDeleteIds,
+    }
+
+    const data = await SubcategoryService.setAttributes(subcategoryId, parsedAttributeData)
+
+    super.sendSuccess(res, {
+      message: "Updated Subcategory Attributes",
+      data,
+    })
   }
 }

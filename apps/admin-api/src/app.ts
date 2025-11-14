@@ -11,6 +11,7 @@ import {
 import router from "#routes/index"
 import rateLimiter from "#middlewares/rateLimiter"
 import httpLogger from "#middlewares/logger"
+import errorHandler from "#middlewares/errorHandler"
 
 const app = express()
 
@@ -26,6 +27,8 @@ app.use(rateLimiter)
 app.use(httpLogger)
 
 app.use(router)
+
+app.use(errorHandler)
 
 connectMongoDB(() => {
   app.listen(APP_PORT, () => {

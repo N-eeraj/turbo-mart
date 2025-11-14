@@ -22,18 +22,14 @@ export default class NotificationController extends BaseController {
    * Get the user notifications.
    */
   static async list({ user, query }: Request, res: Response) {
-    try {
-      const paginationQueries: GetNotificationsOptions = super.parsePaginationQueries(query)
+    const paginationQueries: GetNotificationsOptions = super.parsePaginationQueries(query)
 
-      const data = await NotificationService.list(user.id, paginationQueries)
+    const data = await NotificationService.list(user.id, paginationQueries)
 
-      super.sendSuccess(res, {
-        data,
-        message: "Fetched User Notifications",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      data,
+      message: "Fetched User Notifications",
+    })
   }
 
   /**
@@ -42,40 +38,36 @@ export default class NotificationController extends BaseController {
    * Set the read status for multiple notifications.
    */
   static async updateReadStatusMultiple({ user, body }: Request, res: Response) {
-    try {
+    const {
+      read,
+      notifications,
+    } = super.validateRequest(notificationReadStatusBulkSchema, body)
+
+    let notificationIds
+
+    if (notifications) {
       const {
-        read,
-        notifications,
-      } = super.validateRequest(notificationReadStatusBulkSchema, body)
+        validIds,
+        invalidIds,
+      } = super.parseObjectIdBulk(notifications)
 
-      let notificationIds
-
-      if (notifications) {
-        const {
-          validIds,
+      if (invalidIds.length) {
+        throw {
+          status: 400,
+          message: "Invalid notification id",
           invalidIds,
-        } = super.parseObjectIdBulk(notifications)
-
-        if (invalidIds.length) {
-          throw {
-            status: 400,
-            message: "Invalid notification id",
-            invalidIds,
-          }
         }
-
-        notificationIds = validIds
       }
 
-      const data = await NotificationService.updateReadStatuses(user.id, read, notificationIds)
-
-      super.sendSuccess(res, {
-        data,
-        message: `Marked Notifications as ${read ? "Read" : "Unread"}`,
-      })
-    } catch (error) {
-      super.sendError(res, error)
+      notificationIds = validIds
     }
+
+    const data = await NotificationService.updateReadStatuses(user.id, read, notificationIds)
+
+    super.sendSuccess(res, {
+      data,
+      message: `Marked Notifications as ${read ? "Read" : "Unread"}`,
+    })
   }
 
   /**
@@ -84,21 +76,17 @@ export default class NotificationController extends BaseController {
    * Delete multiple notifications.
    */
   static async deleteMultiple({ user, query }: Request, res: Response) {
-    try {
-      const notificationIds = super.parseResourceIdQueries(
-        query,
-        "notificationIds",
-        "Invalid notification id"
-      )
+    const notificationIds = super.parseResourceIdQueries(
+      query,
+      "notificationIds",
+      "Invalid notification id"
+    )
 
-      await NotificationService.delete(user.id, notificationIds)
+    await NotificationService.delete(user.id, notificationIds)
 
-      super.sendSuccess(res, {
-        message: "Deleted Notifications",
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Deleted Notifications",
+    })
   }
 
   /**
@@ -107,24 +95,20 @@ export default class NotificationController extends BaseController {
    * Get the user notification.
    */
   static async getById({ user, params }: Request, res: Response) {
-    try {
-      const notificationId = super.parseObjectId(params.notificationId)
-      if (notificationId === null) {
-        throw {
-          status: 400,
-          message: "Invalid notification id",
-        }
+    const notificationId = super.parseObjectId(params.notificationId)
+    if (notificationId === null) {
+      throw {
+        status: 400,
+        message: "Invalid notification id",
       }
-
-      const data = await NotificationService.getById(user.id, notificationId)
-
-      super.sendSuccess(res, {
-        data,
-        message: "Fetched Notification",
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await NotificationService.getById(user.id, notificationId)
+
+    super.sendSuccess(res, {
+      data,
+      message: "Fetched Notification",
+    })
   }
 
   /**
@@ -133,28 +117,24 @@ export default class NotificationController extends BaseController {
    * Set the read status for single notification.
    */
   static async updateReadStatus({ user, params, body }: Request, res: Response) {
-    try {
-      const notificationId = super.parseObjectId(params.notificationId)
-      if (notificationId === null) {
-        throw {
-          status: 400,
-          message: "Invalid notification id",
-        }
+    const notificationId = super.parseObjectId(params.notificationId)
+    if (notificationId === null) {
+      throw {
+        status: 400,
+        message: "Invalid notification id",
       }
-
-      const {
-        read,
-      } = super.validateRequest(notificationReadStatusSchema, body)
-
-      const data = await NotificationService.updateReadStatuses(user.id, read, [notificationId])
-
-      super.sendSuccess(res, {
-        data,
-        message: `Marked Notification as ${read ? "Read" : "Unread"}`,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const {
+      read,
+    } = super.validateRequest(notificationReadStatusSchema, body)
+
+    const data = await NotificationService.updateReadStatuses(user.id, read, [notificationId])
+
+    super.sendSuccess(res, {
+      data,
+      message: `Marked Notification as ${read ? "Read" : "Unread"}`,
+    })
   }
 
   /**
@@ -163,22 +143,18 @@ export default class NotificationController extends BaseController {
    * Delete single notification.
    */
   static async delete({ user, params }: Request, res: Response) {
-    try {
-      const notificationId = super.parseObjectId(params.notificationId)
-      if (notificationId === null) {
-        throw {
-          status: 400,
-          message: "Invalid notification id",
-        }
+    const notificationId = super.parseObjectId(params.notificationId)
+    if (notificationId === null) {
+      throw {
+        status: 400,
+        message: "Invalid notification id",
       }
-
-      await NotificationService.delete(user.id, [notificationId])
-
-      super.sendSuccess(res, {
-        message: "Deleted Notification",
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    await NotificationService.delete(user.id, [notificationId])
+
+    super.sendSuccess(res, {
+      message: "Deleted Notification",
+    })
   }
 }

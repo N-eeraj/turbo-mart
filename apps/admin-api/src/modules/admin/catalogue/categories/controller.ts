@@ -22,18 +22,14 @@ export default class CategoryController extends BaseController {
    * Fetches the list of categories.
    */
   static async list({ query }: Request, res: Response) {
-    try {
-      const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+    const paginationQueries: ListOptions = super.parsePaginationQueries(query)
 
-      const data = await CategoryService.list(paginationQueries)
+    const data = await CategoryService.list(paginationQueries)
 
-      super.sendSuccess(res, {
-        message: "Fetched Categories",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Fetched Categories",
+      data,
+    })
   }
 
   /**
@@ -42,19 +38,15 @@ export default class CategoryController extends BaseController {
    * Create new category.
    */
   static async create({ body }: Request, res: Response) {
-    try {
-      const category = super.validateRequest(categoryCreationSchema, body)
+    const category = super.validateRequest(categoryCreationSchema, body)
 
-      const data = await CategoryService.create(category)
+    const data = await CategoryService.create(category)
 
-      super.sendSuccess(res, {
-        message: "Created Category",
-        data,
-        status: 201,
-      })
-    } catch (error) {
-      super.sendError(res, error)
-    }
+    super.sendSuccess(res, {
+      message: "Created Category",
+      data,
+      status: 201,
+    })
   }
 
   /**
@@ -63,24 +55,20 @@ export default class CategoryController extends BaseController {
    * Get one category by Id.
    */
   static async getById({ params }: Request, res: Response) {
-    try {
-      const categoryId = super.parseObjectId(params.categoryId)
-      if (!categoryId) {
-        throw {
-          status: 400,
-          message: "Invalid category id",
-        }
+    const categoryId = super.parseObjectId(params.categoryId)
+    if (!categoryId) {
+      throw {
+        status: 400,
+        message: "Invalid category id",
       }
-
-      const data = await CategoryService.getById(categoryId)
-
-      super.sendSuccess(res, {
-        message: "Fetched Category",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await CategoryService.getById(categoryId)
+
+    super.sendSuccess(res, {
+      message: "Fetched Category",
+      data,
+    })
   }
 
   /**
@@ -89,26 +77,22 @@ export default class CategoryController extends BaseController {
    * Update category.
    */
   static async update({ params, body }: Request, res: Response) {
-    try {
-      const categoryId = super.parseObjectId(params.categoryId)
-      if (!categoryId) {
-        throw {
-          status: 400,
-          message: "Invalid category id",
-        }
+    const categoryId = super.parseObjectId(params.categoryId)
+    if (!categoryId) {
+      throw {
+        status: 400,
+        message: "Invalid category id",
       }
-
-      const category = super.validateRequest(categoryUpdateSchema, body)
-
-      const data = await CategoryService.update(categoryId, category)
-
-      super.sendSuccess(res, {
-        message: "Updated Category",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const category = super.validateRequest(categoryUpdateSchema, body)
+
+    const data = await CategoryService.update(categoryId, category)
+
+    super.sendSuccess(res, {
+      message: "Updated Category",
+      data,
+    })
   }
 
   /**
@@ -117,24 +101,20 @@ export default class CategoryController extends BaseController {
    * Delete category.
    */
   static async delete({ params }: Request, res: Response) {
-    try {
-      const categoryId = super.parseObjectId(params.categoryId)
-      if (!categoryId) {
-        throw {
-          status: 400,
-          message: "Invalid category id",
-        }
+    const categoryId = super.parseObjectId(params.categoryId)
+    if (!categoryId) {
+      throw {
+        status: 400,
+        message: "Invalid category id",
       }
-
-      const data = await CategoryService.delete(categoryId)
-
-      super.sendSuccess(res, {
-        message: "Deleted Category",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+
+    const data = await CategoryService.delete(categoryId)
+
+    super.sendSuccess(res, {
+      message: "Deleted Category",
+      data,
+    })
   }
 
   /**
@@ -143,24 +123,20 @@ export default class CategoryController extends BaseController {
    * Fetches the list of subcategories of the given category.
    */
   static async listSubcategories({ params, query }: Request, res: Response) {
-    try {
-      const categoryId = super.parseObjectId(params.categoryId)
-      if (!categoryId) {
-        throw {
-          status: 400,
-          message: "Invalid category id",
-        }
+    const categoryId = super.parseObjectId(params.categoryId)
+    if (!categoryId) {
+      throw {
+        status: 400,
+        message: "Invalid category id",
       }
-      const paginationQueries: ListOptions = super.parsePaginationQueries(query)
-
-      const data = await CategoryService.listSubcategories(categoryId, paginationQueries)
-
-      super.sendSuccess(res, {
-        message: "Fetched Subcategories",
-        data,
-      })
-    } catch (error) {
-      super.sendError(res, error)
     }
+    const paginationQueries: ListOptions = super.parsePaginationQueries(query)
+
+    const data = await CategoryService.listSubcategories(categoryId, paginationQueries)
+
+    super.sendSuccess(res, {
+      message: "Fetched Subcategories",
+      data,
+    })
   }
 }
