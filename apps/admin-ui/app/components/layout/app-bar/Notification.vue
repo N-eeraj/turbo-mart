@@ -11,6 +11,9 @@ import {
 import Spinner from "@/components/ui/spinner/Spinner.vue"
 
 import {
+  toast,
+} from "vue-sonner"
+import {
   NotificationType,
 } from "@app/database/mongoose/enums/admin/notification"
 
@@ -32,29 +35,88 @@ const {
   }
 })
 
+const notifications = ref<Array<Notification>>([])
+
+const NOTIFICATION_QUERY_LIMIT = 10
+const endOfList = ref(false)
+
+// data fetching
 const {
-  data: notifications,
+  data: notificationsData,
   pending,
   refresh,
-} = useLazyAsyncData(() => useApi("/profile/notifications"), {
+} = useLazyAsyncData(() => useApi("/profile/notifications", {
+  query: {
+    skip: notifications.value.length,
+    limit: NOTIFICATION_QUERY_LIMIT,
+    isRead: false,
+  }
+}), {
   immediate: false,
   transform: ({ data }) => {
     return (data ?? []) as Array<Notification>
   }
 })
+watch(() => notificationsData.value, (notification) => {
+  if (notification) {
+    notifications.value.push(...notification)
+    endOfList.value = notification.length < NOTIFICATION_QUERY_LIMIT
+  }
+})
 
-const handleNotificationFetch = (menuOpen: boolean) => {
-  if (!menuOpen) return
-  refresh()
+const handleDropDownOpen = (menuOpen: boolean) => {
+  if (menuOpen) {
+    refresh()
+  } else {
+    notifications.value = []
+    reset()
+  }
 }
 
+const notificationListElement = useTemplateRef<HTMLElement>("notification-list")
+const {
+  reset,
+} = useInfiniteScroll(
+  notificationListElement,
+  () => {
+    refresh()
+  },
+  {
+    distance: 10,
+    canLoadMore: () => {
+      return !pending.value && !endOfList.value
+    },
+  }
+)
+
+const isMarkingNotificationRead = ref(false)
 const handleMarkAllAsRead = async () => {
-  console.log("Mark notifications read")
+  try {
+    isMarkingNotificationRead.value = true
+    const {
+      message,
+    } = await useApi("/profile/notifications", {
+      method: "PATCH",
+      body: {
+        read: true,
+      }
+    })
+    notifications.value = []
+    unreadNotificationCount.value = 0
+    toast.success(message)
+  } catch (error: unknown) {
+    const {
+      message,
+    } = error as ApiError
+    toast.error(message)
+  } finally {
+    isMarkingNotificationRead.value = false
+  }
 }
 </script>
 
 <template>
-  <DropdownMenu @update:open="handleNotificationFetch">
+  <DropdownMenu @update:open="handleDropDownOpen">
     <DropdownMenuTrigger as-child>
       <BaseButton
         variant="secondary"
@@ -84,10 +146,15 @@ const handleMarkAllAsRead = async () => {
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
 
-      <DropdownMenuGroup class="max-h-48 overflow-y-auto">
+      <DropdownMenuGroup
+        v-if="pending || notifications.length"
+        ref="notification-list"
+        as="ul"
+        class="max-h-48 overflow-y-auto">
         <DropdownMenuItem
           v-for="notification of notifications"
           :key="notification.id"
+          as="li"
           class="flex flex-col items-start">
           <strong class="leading-none">
             {{ notification.title }}
@@ -101,9 +168,21 @@ const handleMarkAllAsRead = async () => {
         </DropdownMenuItem>
         <BaseLinearProgress v-if="pending" />
       </DropdownMenuGroup>
+
+      <div
+        v-else
+        class="flex flex-col justify-center items-center min-h-24">
+        <strong class="text-sm">
+          You're all caught up
+        </strong>
+        <span class="text-foreground/60 text-xs">
+          You have no Unread Notifications
+        </span>
+      </div>
+
       <DropdownMenuSeparator />
 
-      <div class="flex justify-between items-center px-2 py-1">
+      <div class="flex justify-between items-center px-2">
         <NuxtLink
           to="/profile/notifications">
           <BaseButton
@@ -113,8 +192,10 @@ const handleMarkAllAsRead = async () => {
           </BaseButton>
         </NuxtLink>
         <BaseButton
+          v-if="unreadNotificationCount"
           variant="secondary"
           size="sm"
+          :loading="isMarkingNotificationRead"
           class="text-xs"
           @click="handleMarkAllAsRead">
           Mart all as read

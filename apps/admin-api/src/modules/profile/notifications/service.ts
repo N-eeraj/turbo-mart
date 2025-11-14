@@ -71,7 +71,7 @@ export default class NotificationService extends BaseService {
   }
 
   static async getUnreadCount(adminId: AdminObject["id"]): Promise<number> {
-    const [{ notificationCount }] = await AdminNotification.aggregate([
+    const [{ notificationCount = 0 } = {}] = await AdminNotification.aggregate([
       {
         $match: {
           admin: adminId,
