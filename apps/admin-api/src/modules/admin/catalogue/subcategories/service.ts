@@ -96,9 +96,13 @@ export default class SubcategoryService extends BaseService {
     search = DEFAULT_LIST_OPTIONS.search,
     categories = DEFAULT_LIST_OPTIONS.categories,
   }: ListOptions = DEFAULT_LIST_OPTIONS): Promise<Array<SubcategoryObject>> {
-    const searchRegex = {
-      $regex: new RegExp(search, "i"),
-    }
+    const searchFields = super.getRegexSearchList(
+      search,
+      [
+        "name",
+        "slug",
+      ] satisfies Array<keyof InferredSubcategorySchemaType>,
+    )
 
     /**
      * Defines the query conditions for finding subcategories.
@@ -107,14 +111,7 @@ export default class SubcategoryService extends BaseService {
      * - `categories` - The categories to filter.
      */
     const filterQuery: mongoose.FilterQuery<InferredSubcategorySchemaType> = {
-      $or: [
-        {
-          name: searchRegex,
-        },
-        {
-          slug: searchRegex,
-        },
-      ],
+      $or: searchFields,
     }
 
     // add categories filter if it exists

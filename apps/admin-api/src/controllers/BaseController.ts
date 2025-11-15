@@ -195,13 +195,13 @@ export default class BaseController {
   }
 
   /**
-   * Parses the request query to get the common pagination queries.
+   * Parses the request query value to get the boolean value.
    * 
    * @static
    * 
-   * @param query - The Express `Request` query object.
+   * @param queryValue - The value of the request query.
    * 
-   * @returns pagination queries.
+   * @returns boolean value of the query.
    */
   static parseBooleanQuery(queryValue: Request["query"]["key"]): boolean | undefined {
     if (!queryValue || typeof queryValue !== "string") return undefined

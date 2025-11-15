@@ -5,6 +5,7 @@ import AdminUser, {
   transformUser,
   Permissions,
   type AdminObject,
+  type InferredAdminSchemaType,
 } from "@app/database/mongoose/models/Admin/User"
 import sendMail from "@app/mailer"
 
@@ -70,20 +71,16 @@ export default class SuperAdminService extends BaseService {
     order = DEFAULT_ADMIN_USERS_OPTIONS.order,
     search = DEFAULT_ADMIN_USERS_OPTIONS.search,
   }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminObject>> {
-    const searchRegex = {
-      $regex: new RegExp(search, "i"),
-    }
-
+    const searchFields = super.getRegexSearchList(
+      search,
+      [
+        "name",
+        "email",
+      ] satisfies Array<keyof InferredAdminSchemaType>,
+    )
     const admins = await AdminUser.find({
       role: Roles.ADMIN,
-      $or: [
-        {
-          name: searchRegex,
-        },
-        {
-          email: searchRegex,
-        },
-      ],
+      $or: searchFields,
     })
       .sort({
         createdAt: order,
