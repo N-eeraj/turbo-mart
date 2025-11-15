@@ -3,6 +3,7 @@ import type mongoose from "mongoose"
 import Brand, {
   transformBrand,
   type BrandObject,
+  type InferredBrandSchemaType,
 } from "@app/database/mongoose/models/Catalogue/Brand.ts"
 
 import BaseService from "#services/BaseService"
@@ -41,19 +42,16 @@ export default class BrandService extends BaseService {
     order = DEFAULT_LIST_OPTIONS.order,
     search = DEFAULT_LIST_OPTIONS.search,
   }: ListOptions = DEFAULT_LIST_OPTIONS): Promise<Array<BrandObject>> {
-    const searchRegex = {
-      $regex: new RegExp(search, "i"),
-    }
+    const searchFields = super.getRegexSearchList(
+      search,
+      [
+        "name",
+        "slug",
+      ] satisfies Array<keyof InferredBrandSchemaType>,
+    )
 
     const brands = await Brand.find({
-      $or: [
-        {
-          name: searchRegex,
-        },
-        {
-          slug: searchRegex,
-        },
-      ],
+      $or: searchFields,
     })
       .sort({
         createdAt: order,

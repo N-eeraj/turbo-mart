@@ -36,6 +36,7 @@ export default class BaseService {
    * Logs a message with the specified log level.
    * 
    * @static
+   * 
    * @param message - The message to log.
    * @param level (default: "info") - The log level.
    */
@@ -44,9 +45,44 @@ export default class BaseService {
   }
 
   /**
+   * Converts a list of field names and a search query in to a regex search array.
+   * 
+   * @static
+   * 
+   * @param searchQuery - Search query value.
+   * @param fieldNames - List of names of the mongoose model fields to search the query in.
+   * 
+   * @returns a regex search array.
+   * 
+   * @example
+   * const regexSearchArray = BaseService.getRegexSearchList(
+   *  "searchQuery", [
+   *    "field1",
+   *    "field2",
+   * ])
+   * MongooseModel.find({
+   *  $or: regexSearchArray,
+   * })
+   */
+  static getRegexSearchList(
+    searchQuery: string,
+    fieldNames: Array<string>
+  ): Array<{ [fieldName: string]: { $regex: RegExp } }> {
+    const searchRegex = {
+      $regex: new RegExp(searchQuery, "i"),
+    }
+
+    return fieldNames
+      .map((fieldName) => ({
+        [fieldName]: searchRegex,
+      }))
+  }
+
+  /**
    * Checks if the given error is a MongoDB duplicate key error (codeName: "DuplicateKey").
    * 
    * @static
+   * 
    * @param error - The error object to check.
    * 
    * @returns `true` if the error is a duplicate key error, otherwise `false`.
@@ -87,6 +123,7 @@ export default class BaseService {
    * Converts the multer file object to native file (if file exists).
    * 
    * @static
+   * 
    * @param file - Multer file object to be converted to file.
    * 
    * @returns File or null.
@@ -99,6 +136,7 @@ export default class BaseService {
    * Saves a native `File` object to the local storage directory.
    * 
    * @static
+   * 
    * @param file - The `File` object to save (browser or polyfilled).
    * @param fileName - The name to use for the saved file (including extension).
    * @param fileLocation - Relative subdirectory under `storage/files/public` or `storage/files/private` where the file should be stored.
@@ -153,7 +191,9 @@ export default class BaseService {
    * Retrieves the file extension from the given File object.
    *
    * @static
+   * 
    * @param file - The file object.
+   * 
    * @returns The file extension (e.g., "pdf", "png").
    */
   static getFileExtension(file: File): string {
@@ -164,6 +204,7 @@ export default class BaseService {
    * Remove the file from the local storage directory.
    * 
    * @static
+   * 
    * @param path - The relative file path from `storage` directory to delete the file.
    */
   static async removeFileFromStorage(path: string): Promise<void> {

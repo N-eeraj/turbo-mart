@@ -3,6 +3,7 @@ import type mongoose from "mongoose"
 import Category, {
   transformCategory,
   type CategoryObject,
+  type InferredCategorySchemaType,
 } from "@app/database/mongoose/models/Catalogue/Category.ts"
 import Subcategory, {
   transformSubcategory,
@@ -45,19 +46,16 @@ export default class CategoryService extends BaseService {
     order = DEFAULT_LIST_OPTIONS.order,
     search = DEFAULT_LIST_OPTIONS.search,
   }: ListOptions = DEFAULT_LIST_OPTIONS): Promise<Array<CategoryObject>> {
-    const searchRegex = {
-      $regex: new RegExp(search, "i"),
-    }
+    const searchFields = super.getRegexSearchList(
+      search,
+      [
+        "name",
+        "slug",
+      ] satisfies Array<keyof InferredCategorySchemaType>,
+    )
 
     const categories = await Category.find({
-      $or: [
-        {
-          name: searchRegex,
-        },
-        {
-          slug: searchRegex,
-        },
-      ],
+      $or: searchFields,
     })
       .sort({
         createdAt: order,
@@ -235,20 +233,17 @@ export default class CategoryService extends BaseService {
       }
     }
 
-    const searchRegex = {
-      $regex: new RegExp(search, "i"),
-    }
+    const searchFields = super.getRegexSearchList(
+      search,
+      [
+        "name",
+        "slug",
+      ] satisfies Array<keyof InferredCategorySchemaType>,
+    )
 
     const subcategories = await Subcategory.find({
       category,
-      $or: [
-        {
-          name: searchRegex,
-        },
-        {
-          slug: searchRegex,
-        },
-      ],
+      $or: searchFields,
     })
       .sort({
         createdAt: order,
