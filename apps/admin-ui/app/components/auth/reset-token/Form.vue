@@ -19,8 +19,8 @@ const emit = defineEmits([
 ])
 
 const {
+  isSubmitting,
   errors,
-  isLoading,
   onSubmit,
 } = useResetPassword(
   computed(() => token)
@@ -60,7 +60,7 @@ watch(() => errors.value.token, () => {
 
       <CardFooter class="flex justify-between px-6">
         <BaseButton
-          :loading="isLoading"
+          :loading="isSubmitting"
           class="w-full md:w-fit md:ml-auto">
           Reset Password
         </BaseButton>

@@ -13,6 +13,7 @@ export default function useForgotPassword(
 ) {
   const {
     handleSubmit,
+    isSubmitting,
     setFieldValue,
     setFieldTouched,
     isFieldValid,
@@ -28,7 +29,6 @@ export default function useForgotPassword(
     },
   })
 
-  const isLoading = ref(false)
   const isSuccess = ref(false)
 
   watch(() => open.value, async (open) => {
@@ -44,7 +44,6 @@ export default function useForgotPassword(
 
   const onSubmit = handleSubmit(async (body) => {
     try {
-      isLoading.value = true
       const {
         message,
       } = await useApi("/auth/forgot-password", {
@@ -64,15 +63,13 @@ export default function useForgotPassword(
       } else if (message) {
         setFieldError("email", message)
       }
-    } finally {
-      isLoading.value = false
     }
   })
 
   const isInvalid = computed(() => !isFieldValid('email'))
 
   return {
-    isLoading,
+    isSubmitting,
     isInvalid,
     isSuccess,
     onSubmit,

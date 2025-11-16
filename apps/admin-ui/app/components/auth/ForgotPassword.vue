@@ -20,7 +20,7 @@ const open = defineModel({
 })
 
 const {
-  isLoading,
+  isSubmitting,
   isInvalid,
   isSuccess,
   onSubmit,
@@ -72,14 +72,14 @@ const {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            :disabled="isLoading"
+            :disabled="isSubmitting"
             class="cursor-pointer">
             Cancel
           </AlertDialogCancel>
           <BaseButton
             variant="destructive"
             :disabled="isInvalid"
-            :loading=isLoading>
+            :loading=isSubmitting>
             Send Reset Link
           </BaseButton>
         </AlertDialogFooter>

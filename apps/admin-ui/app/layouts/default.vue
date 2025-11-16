@@ -7,15 +7,13 @@ import {
 
 <template>
   <SidebarProvider>
-    <Sidebar collapsible="icon">
-      <LayoutSidebarHeader />
-    </Sidebar>
+    <LayoutSidebar />
 
-    <main class="w-full min-h-svh overflow-hidden">
+    <section class="w-full min-h-svh overflow-hidden">
       <LayoutAppBar />
-      <section class="p-2 md:p-4">
+      <main class="p-2 md:p-4">
         <slot />
-      </section>
-    </main>
+      </main>
+    </section>
   </SidebarProvider>
 </template>

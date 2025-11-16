@@ -31,11 +31,11 @@ function openConfirmation() {
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger class="flex items-center gap-x-2 h-full cursor-pointer">
-      <Avatar class="size-10">
+      <Avatar class="size-8 md:size-10">
         <AvatarImage
           :src="user?.profilePicture ?? ''"
           alt="user.name" />
-        <AvatarFallback>
+        <AvatarFallback class="text-primary">
           {{ userInitials }}
         </AvatarFallback>
       </Avatar>

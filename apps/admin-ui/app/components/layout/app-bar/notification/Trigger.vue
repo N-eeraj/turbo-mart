@@ -15,20 +15,17 @@ defineProps<Props>()
   <DropdownMenuTrigger as-child>
     <BaseButton
       variant="secondary"
-      class="relative size-10 text-center content-center p-0">
+      class="relative size-8 md:size-10 text-center content-center p-0">
       <Icon
         name="lucide:bell"
-        :size="24" />
+        class="text-lg md:text-xl" />
 
-      <div
+      <Spinner
         v-if="isLoadingUnreadNotificationCount"
-        class="absolute -top-2 -right-2 grid place-content-center size-5 p-1 bg-primary text-primary-foreground leading-none rounded-lg">
-        <Spinner />
-      </div>
-
+        class="absolute -top-2 -right-2 size-3.5 md:size-5 text-primary stroke-3" />
       <span
         v-else-if="unreadNotificationCount"
-        class="absolute -top-2 min-w-5 p-1 bg-primary text-primary-foreground leading-none rounded-lg"
+        class="absolute -top-2 md:min-w-5 p-0.5 md:p-1 bg-primary text-primary-foreground text-xs md:text-sm leading-none rounded-lg"
         :class="unreadNotificationCount < 100 ? '-right-2' : '-right-4'">
         {{ unreadNotificationCount < 100 ? unreadNotificationCount : "99+" }}
       </span>

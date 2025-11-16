@@ -12,6 +12,7 @@ export default function useResetPassword(token: ComputedRef<string>) {
   const {
     handleSubmit,
     errors,
+    isSubmitting,
     setFieldError,
     setErrors,
   } = useForm({
@@ -23,11 +24,8 @@ export default function useResetPassword(token: ComputedRef<string>) {
     },
   })
 
-  const isLoading = ref(false)
-
   const onSubmit = handleSubmit(async (body) => {
     try {
-      isLoading.value = true
       const {
         message,
       } = await useApi("/auth/reset-password", {
@@ -55,13 +53,11 @@ export default function useResetPassword(token: ComputedRef<string>) {
           richColors: true,
         })
       }
-    } finally {
-      isLoading.value = false
     }
   })
 
   return {
-    isLoading,
+    isSubmitting,
     errors,
     onSubmit,
   }

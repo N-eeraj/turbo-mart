@@ -14,7 +14,7 @@ const emit = defineEmits([
 const {
   controlledValues,
   formError,
-  isLoading,
+  isSubmitting,
   onSubmit,
 } = useLogin()
 
@@ -65,7 +65,7 @@ defineExpose({
 
       <CardFooter class="flex justify-between px-6">
         <BaseButton
-          :loading="isLoading"
+          :loading="isSubmitting"
           class="w-full md:w-fit md:ml-auto">
           Login
         </BaseButton>

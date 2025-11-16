@@ -19,6 +19,7 @@ export default function useLogin() {
   const {
     handleSubmit,
     controlledValues,
+    isSubmitting,
     setErrors,
   } = useForm({
     validationSchema: toTypedSchema(
@@ -26,13 +27,11 @@ export default function useLogin() {
     ),
   })
 
-  const isLoading = ref(false)
   const formError = ref<string | null>()
 
   const onSubmit = handleSubmit(async (body) => {
     formError.value = null
     try {
-      isLoading.value = true
       const {
         message,
         data,
@@ -68,15 +67,13 @@ export default function useLogin() {
           formError.value = message
         }
       }
-    } finally {
-      isLoading.value = false
     }
   })
 
   return {
     controlledValues,
+    isSubmitting,
     formError,
-    isLoading,
     onSubmit,
   }
 }
