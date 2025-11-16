@@ -14,14 +14,13 @@ import {
   AvatarFallback,
 } from "@/components/ui/avatar"
 
-const userStore = useUserStore()
 const {
   user,
-} = storeToRefs(userStore)
-
-const userInitials = computed(() => user.value?.name.split(" ", 2).map(([i]) => i?.toUpperCase()).join(""))
-
-const profilePicture = computed(() => user.value?.profilePicture ?? "")
+  userInitials,
+  profilePicture,
+  openProfilePictureView,
+  toggleProfilePictureView,
+} = useProfilePicture()
 </script>
 
 <template>
@@ -29,7 +28,7 @@ const profilePicture = computed(() => user.value?.profilePicture ?? "")
     <DropdownMenuTrigger
       as="div"
       class="relative group cursor-pointer">
-      <Avatar class="size-30">
+      <Avatar class="size-30 md:size-36">
         <AvatarImage
           :src="profilePicture"
           alt="user.name"
@@ -58,7 +57,8 @@ const profilePicture = computed(() => user.value?.profilePicture ?? "")
       <DropdownMenuGroup class="min-w-48">
         <DropdownMenuItem
           v-if="profilePicture"
-          class="cursor-pointer">
+          class="cursor-pointer"
+          @click="toggleProfilePictureView">
           <DropdownMenuShortcut class="ml-0">
             <Icon
               name="lucide:eye"
@@ -108,4 +108,10 @@ const profilePicture = computed(() => user.value?.profilePicture ?? "")
       </DropdownMenuGroup>
     </DropdownMenuContent>
   </DropdownMenu>
+
+  <ProfilePictureView
+    :open="openProfilePictureView"
+    :src="profilePicture"
+    :alt="user?.name"
+    @close="toggleProfilePictureView" />
 </template>
