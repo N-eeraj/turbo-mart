@@ -9,9 +9,9 @@ import {
   <SidebarProvider>
     <LayoutSidebar />
 
-    <section class="w-full min-h-svh overflow-hidden">
+    <section class="flex flex-col w-full min-h-svh">
       <LayoutAppBar />
-      <main class="p-2 md:p-4">
+      <main class="flex-1 p-2 md:p-4">
         <slot />
       </main>
     </section>

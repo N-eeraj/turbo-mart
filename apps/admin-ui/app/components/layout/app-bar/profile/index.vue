@@ -34,7 +34,8 @@ function openConfirmation() {
       <Avatar class="size-8 md:size-10">
         <AvatarImage
           :src="user?.profilePicture ?? ''"
-          alt="user.name" />
+          alt="user.name"
+          class="object-cover" />
         <AvatarFallback class="text-primary">
           {{ userInitials }}
         </AvatarFallback>
