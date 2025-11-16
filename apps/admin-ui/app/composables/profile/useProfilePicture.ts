@@ -12,11 +12,18 @@ export default function useProfilePicture() {
     openProfilePictureView.value = !openProfilePictureView.value
   }
 
+  const openProfilePictureRemove = ref(false)
+  const toggleProfilePictureRemove = () => {
+    openProfilePictureRemove.value = !openProfilePictureRemove.value
+  }
+
   return {
     user,
     userInitials,
     profilePicture,
     openProfilePictureView,
+    openProfilePictureRemove,
     toggleProfilePictureView,
+    toggleProfilePictureRemove,
   }
 }

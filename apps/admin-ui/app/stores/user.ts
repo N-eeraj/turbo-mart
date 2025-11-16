@@ -44,6 +44,11 @@ export const useUserStore = defineStore("user", () => {
   
   const isLoggedIn = computed(() => !!user.value && !!token.value)
 
+  const setProfilePicture = (src: AdminObject["profilePicture"] = undefined) => {
+    if (!user.value) throw "User not set"
+    user.value.profilePicture = src
+  }
+
   return {
     user,
     token,
@@ -51,6 +56,7 @@ export const useUserStore = defineStore("user", () => {
     setUser,
     setToken,
     clearUser,
+    setProfilePicture,
   }
 }, {
   persist: [

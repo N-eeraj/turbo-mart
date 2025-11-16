@@ -19,7 +19,9 @@ const {
   userInitials,
   profilePicture,
   openProfilePictureView,
+  openProfilePictureRemove,
   toggleProfilePictureView,
+  toggleProfilePictureRemove,
 } = useProfilePicture()
 </script>
 
@@ -94,7 +96,9 @@ const {
         <template v-if="profilePicture">
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem class="hover:bg-destructive/20! hover:*:text-red-300! cursor-pointer">
+          <DropdownMenuItem
+            class="hover:bg-destructive/20! pointer-coarse:bg-destructive/20! hover:*:text-red-300! pointer-coarse:*:text-red-300! cursor-pointer"
+            @click="toggleProfilePictureRemove">
             <DropdownMenuShortcut class="ml-0">
               <Icon
                 name="lucide:trash-2"
@@ -114,4 +118,6 @@ const {
     :src="profilePicture"
     :alt="user?.name"
     @close="toggleProfilePictureView" />
+
+  <ProfilePictureRemove v-model="openProfilePictureRemove"/>
 </template>

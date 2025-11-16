@@ -27,12 +27,12 @@ const emit = defineEmits([
     </div>
     <Transition
       enter-from-class="w-30 md:w-36 opacity-0"
-      enter-active-class="duration-500"
+      enter-active-class="duration-200 md:duration-500"
       leave-to-class="w-30 md:w-36 opacity-0"
       leave-active-class="duration-200">
       <div
         v-if="open"
-        class="fixed top-1/2 left-1/2 w-2/3 max-w-md aspect-square rounded-none -translate-x-1/2 -translate-y-1/2 z-50">
+        class="fixed top-1/2 left-1/2 w-11/12 max-w-md aspect-square rounded-none -translate-x-1/2 -translate-y-1/2 z-50">
         <img
           :src
           :alt
