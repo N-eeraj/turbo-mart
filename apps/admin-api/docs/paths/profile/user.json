@@ -283,7 +283,9 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "type": "null"
+                    "type": "string",
+                    "description": "URL to access the profile picture",
+                    "example": "https://admin-api/images/profile-pictures/1763285384027.png"
                   },
                   "message": {
                     "type": "string",

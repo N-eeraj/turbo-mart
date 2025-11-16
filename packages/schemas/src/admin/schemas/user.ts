@@ -71,9 +71,11 @@ export const profilePictureSchema = z.object({
   profilePicture: z.file({ error: PROFILE_PICTURE.required })
     .max(1_048_576, { error: PROFILE_PICTURE.maxSize })
     .mime([
+      "image/jpg",
       "image/jpeg",
       "image/png",
       "image/webp",
+      "image/avif",
       "image/heic",
     ], { error: PROFILE_PICTURE.valid })
     .meta({

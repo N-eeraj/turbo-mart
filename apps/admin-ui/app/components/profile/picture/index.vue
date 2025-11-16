@@ -15,12 +15,14 @@ import {
 } from "@/components/ui/avatar"
 
 const {
+  ALLOWED_MIMES,
   user,
   userInitials,
   profilePicture,
   openProfilePictureView,
   openProfilePictureRemove,
   toggleProfilePictureView,
+  handleFileSelection,
   toggleProfilePictureRemove,
 } = useProfilePicture()
 </script>
@@ -82,7 +84,14 @@ const {
           </span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem class="cursor-pointer">
+        <DropdownMenuItem
+          as="label"
+          class="cursor-pointer">
+          <input
+            type="file"
+            class="hidden"
+            :accept="ALLOWED_MIMES.join(', ')"
+            @change="handleFileSelection" />
           <DropdownMenuShortcut class="ml-0">
             <Icon
               name="lucide:folder-open"

@@ -39,7 +39,7 @@ export const PERMISSIONS = {
 export const PROFILE_PICTURE = {
   required: "Please choose a file",
   maxSize: "Please use a smaller file (Max 1MB)",
-  valid: "Invalid file format (jpeg, png, webp, heic)",
+  valid: "Invalid file format, use (jpg, jpeg, png, webp, avif, heic)",
 }
 
 export const RESET_PASSWORD_URL = {
