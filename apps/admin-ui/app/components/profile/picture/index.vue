@@ -20,8 +20,11 @@ const {
   userInitials,
   profilePicture,
   openProfilePictureView,
+  openCamera,
   openProfilePictureRemove,
   toggleProfilePictureView,
+  toggleCamera,
+  handleCameraCapture,
   handleFileSelection,
   toggleProfilePictureRemove,
 } = useProfilePicture()
@@ -73,7 +76,9 @@ const {
           </span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem class="cursor-pointer">
+        <DropdownMenuItem
+          class="cursor-pointer"
+          @click="toggleCamera">
           <DropdownMenuShortcut class="ml-0">
             <Icon
               name="lucide:camera"
@@ -127,6 +132,12 @@ const {
     :src="profilePicture"
     :alt="user?.name"
     @close="toggleProfilePictureView" />
+
+  <BaseCamera
+    v-if="openCamera"
+    :resolution="{ width: 720, height: 720 }"
+    @capture="handleCameraCapture"
+    @close="toggleCamera" />
 
   <ProfilePictureRemove v-model="openProfilePictureRemove"/>
 </template>

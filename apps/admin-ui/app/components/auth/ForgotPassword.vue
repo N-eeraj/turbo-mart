@@ -12,8 +12,8 @@ import {
 interface Props {
   email?: string
 }
-
 const props = defineProps<Props>()
+
 const open = defineModel({
   type: Boolean,
   required: true,

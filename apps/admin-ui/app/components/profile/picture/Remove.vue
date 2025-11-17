@@ -2,6 +2,9 @@
 import {
   toast,
 } from "vue-sonner"
+import {
+  VisuallyHidden,
+} from "reka-ui"
 
 import {
   AlertDialog,
@@ -13,9 +16,6 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
-import {
-  VisuallyHidden,
-} from "reka-ui"
 import {
   buttonVariants,
 } from "@/components/ui/button"

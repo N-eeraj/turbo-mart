@@ -35,13 +35,8 @@ export default function useProfilePicture() {
     openProfilePictureView.value = !openProfilePictureView.value
   }
 
-  const handleFileSelection = (event: Event) => {
-    const {
-      files,
-    } = event.target as HTMLInputElement
-    if (!files?.length || !files[0]) return
-    const selectedFile = files[0]
-    const extension = selectedFile.name.split(".")[1]
+  const validateFile = (file: File) => {
+    const extension = file.name.split(".").at(-1)
     if (!extension || !ALLOWED_EXTENSIONS.includes(extension)) {
       toast.error("Invalid file type", {
         description: PROFILE_PICTURE.valid,
@@ -50,9 +45,9 @@ export default function useProfilePicture() {
           description: "text-muted-foreground!",
         },
       })
-      return
+      return false
     }
-    if (selectedFile.size > MAX_FILE_SIZE) {
+    if (file.size > MAX_FILE_SIZE) {
       toast.error("File too large", {
         description: PROFILE_PICTURE.maxSize,
         position: "top-right",
@@ -60,9 +55,31 @@ export default function useProfilePicture() {
           description: "text-muted-foreground!",
         },
       })
-      return
+      return false
     }
-    updateProfilePicture(selectedFile)
+    return true
+  }
+
+  const openCamera = ref(false)
+  const toggleCamera = () => {
+    openCamera.value = !openCamera.value
+  }
+  const handleCameraCapture = (file: File) => {
+    toggleCamera()
+    if (validateFile(file)) {
+      updateProfilePicture(file)
+    }
+  }
+
+  const handleFileSelection = (event: Event) => {
+    const {
+      files,
+    } = event.target as HTMLInputElement
+    if (!files?.length || !files[0]) return
+    const selectedFile = files[0]
+    if (validateFile(selectedFile)) {
+      updateProfilePicture(selectedFile)
+    }
   }
 
   const updateProfilePicture = async (file: File) => {
@@ -120,8 +137,11 @@ export default function useProfilePicture() {
     userInitials,
     profilePicture,
     openProfilePictureView,
+    openCamera,
     openProfilePictureRemove,
     toggleProfilePictureView,
+    toggleCamera,
+    handleCameraCapture,
     handleFileSelection,
     toggleProfilePictureRemove,
   }

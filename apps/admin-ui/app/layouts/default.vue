@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   SidebarProvider,
-  Sidebar,
 } from "@/components/ui/sidebar"
 </script>
 
