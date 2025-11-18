@@ -44,9 +44,7 @@ export default function useForgotPassword(
 
   const onSubmit = handleSubmit(async (body) => {
     try {
-      const {
-        message,
-      } = await useApi("/auth/forgot-password", {
+      await useApi("/auth/forgot-password", {
         method: "POST",
         body,
       })

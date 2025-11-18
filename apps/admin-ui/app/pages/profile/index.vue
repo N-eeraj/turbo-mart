@@ -1,6 +1,3 @@
-<script setup lang="ts">
-</script>
-
 <template>
   <section class="flex flex-col items-center py-1">
     <h1 class="w-full text-xl md:text-2xl font-medium">
@@ -8,5 +5,7 @@
     </h1>
 
     <ProfilePicture />
+
+    <ProfileForm />
   </section>
 </template>
