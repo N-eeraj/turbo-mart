@@ -159,6 +159,10 @@ export default class ProfileService extends BaseService {
       }
     }
 
+    if (user.profilePicture?.fileLocation && user.profilePicture.fileLocation !== relativePath) {
+      super.removeFileFromStorage(user.profilePicture.fileLocation)
+    }
+
     return publicPath
   }
 
