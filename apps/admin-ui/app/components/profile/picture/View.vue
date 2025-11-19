@@ -18,7 +18,7 @@ const emit = defineEmits([
       class="fixed top-0 left-0 size-full bg-secondary z-50">
       <BaseButton
         variant="ghost"
-        class="absolute top-2 md:top-3 right-2 md:right-6 p-0 cursor-pointer"
+        class="absolute top-2 md:top-3 right-2 md:right-6 p-0"
         @click="emit('close')">
         <Icon
           name="lucide:x"

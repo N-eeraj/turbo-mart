@@ -16,6 +16,9 @@ import {
   InputGroupInput,
   InputGroupAddon,
 } from "@/components/ui/input-group"
+import {
+  cn,
+} from "@/lib/utils"
 
 interface Props {
   name: string
@@ -23,6 +26,8 @@ interface Props {
   label?: string
   placeholder?: string
   description?: any
+  disabled?: boolean
+  readonly?: boolean
 }
 const props = defineProps<Props>()
 
@@ -58,12 +63,18 @@ function toggleInputType() {
         </slot>
 
         <FormControl>
-          <InputGroup>
+          <InputGroup :class="cn(
+            readonly && 'border-input/50',
+          )">
             <slot name="addon" />
             <InputGroupInput
               v-bind="componentField"
               :type="inputType"
-              :placeholder />
+              :placeholder
+              :disabled="disabled || readonly"
+              :class="cn(
+                readonly && 'opacity-100!',
+              )" />
             <InputGroupAddon
               v-if="type === 'password'"
               align="inline-end">

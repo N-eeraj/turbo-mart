@@ -15,6 +15,7 @@ interface Props {
   loading?: boolean
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
+
 }
 const {
   loading,
@@ -38,11 +39,14 @@ const cursorClass = computed(() => {
       loading && 'relative',
       cursorClass,
     )">
-    <Spinner
-      v-if="loading"
-      class="absolute top-1/2 left-1/2 [&+*]:opacity-0 -translate-x-1/2 -translate-y-1/2" />
-    <div>
-      <slot />
-    </div>
+    <template v-if="loading">
+      <Spinner
+        v-if="loading"
+        class="absolute top-1/2 left-1/2 [&+*]:opacity-0 -translate-x-1/2 -translate-y-1/2" />
+      <div>
+        <slot />
+      </div>
+    </template>
+    <slot v-else />
   </Button>
 </template>

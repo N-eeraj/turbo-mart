@@ -40,7 +40,7 @@ function openConfirmation() {
           {{ userInitials }}
         </AvatarFallback>
       </Avatar>
-      <strong class="text-sm">
+      <strong class="max-w-40 text-sm text-start truncate text-wrap line-clamp-2">
         {{ user?.name }}
       </strong>
     </DropdownMenuTrigger>

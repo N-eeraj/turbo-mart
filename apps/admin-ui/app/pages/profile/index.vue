@@ -5,7 +5,6 @@
     </h1>
 
     <ProfilePicture />
-
     <ProfileForm />
   </section>
 </template>
