@@ -3,6 +3,8 @@ import * as z from "zod"
 import {
   userEmail,
   newPassword,
+  confirmPassword,
+  passwordConfirmationSuperRefine,
 } from "#admin/schemas/common"
 import {
   PASSWORD,
@@ -55,22 +57,16 @@ export const resetPasswordSchema = z.object({
 })
 
 export const resetPasswordWithConfirmSchema = resetPasswordSchema.extend({
-  confirmPassword: z.string({ error: CONFIRM_PASSWORD.required })
-    .nonempty(CONFIRM_PASSWORD.required)
-    .meta({
-      description: "Re-enter password.",
-      example: "NewString123",
-    }),
+  confirmPassword,
 })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (password !== confirmPassword) {
-      ctx.addIssue({
-        path: ["confirmPassword"],
-        code: "custom",
-        message: CONFIRM_PASSWORD.mismatch,
-      })
-    }
-  })
+  .superRefine((values, ctx) => passwordConfirmationSuperRefine(
+    values,
+    ctx,
+    {
+      passwordKey: "password",
+      confirmPasswordKey: "confirmPassword",
+    },
+  ))
 
 export const loginJSONSchema = z.toJSONSchema(loginSchema)
 export const forgotPasswordJSONSchema = z.toJSONSchema(forgotPasswordSchema)

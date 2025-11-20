@@ -8,6 +8,8 @@ import {
 import {
   userEmail,
   newPassword,
+  confirmPassword,
+  passwordConfirmationSuperRefine,
 } from "#admin/schemas/common"
 import {
   USER_NAME,
@@ -67,6 +69,18 @@ export const passwordUpdateSchema = z.object({
   newPassword,
 })
 
+export const passwordUpdateWithConfirmSchema = passwordUpdateSchema.extend({
+  confirmPassword,
+})
+  .superRefine((values, ctx) => passwordConfirmationSuperRefine(
+    values,
+    ctx,
+    {
+      passwordKey: "newPassword",
+      confirmPasswordKey: "confirmPassword",
+    },
+  ))
+
 export const profilePictureSchema = z.object({
   profilePicture: z.file({ error: PROFILE_PICTURE.required })
     .max(1_048_576, { error: PROFILE_PICTURE.maxSize })
@@ -116,6 +130,7 @@ export const adminUpdateSchema = adminCreationSchema.partial()
 export const adminJSONSchema = z.toJSONSchema(adminSchema)
 export const profileUpdateJSONSchema = z.toJSONSchema(profileUpdateSchema)
 export const passwordUpdateJSONSchema = z.toJSONSchema(passwordUpdateSchema)
+export const passwordUpdateWithConfirmJSONSchema = z.toJSONSchema(passwordUpdateWithConfirmSchema)
 export const profilePictureJSONSchema = z.toJSONSchema(profilePictureSchema)
 export const notificationReadStatusJSONSchema = z.toJSONSchema(notificationReadStatusSchema)
 export const notificationReadStatusBulkJSONSchema = z.toJSONSchema(notificationReadStatusBulkSchema)
@@ -125,6 +140,7 @@ export const adminUpdateJSONSchema = z.toJSONSchema(adminUpdateSchema)
 export type AdminData = z.infer<typeof adminSchema>
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>
 export type PasswordUpdateData = z.infer<typeof passwordUpdateSchema>
+export type PasswordUpdateWithConfirmData = z.infer<typeof passwordUpdateWithConfirmSchema>
 export type ProfilePictureData = z.infer<typeof profilePictureSchema>
 export type NotificationReadStatusSchema = z.infer<typeof notificationReadStatusSchema>
 export type NotificationReadStatusBulkSchema = z.infer<typeof notificationReadStatusBulkSchema>

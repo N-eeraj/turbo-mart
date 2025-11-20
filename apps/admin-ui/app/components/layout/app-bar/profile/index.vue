@@ -62,6 +62,17 @@ function openConfirmation() {
         </DropdownMenuItem>
       </NuxtLink>
 
+      <NuxtLink to="/profile/password">
+        <DropdownMenuItem class="cursor-pointer">
+          <span>
+            Password
+          </span>
+          <DropdownMenuShortcut>
+            <Icon name="lucide:lock" />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </NuxtLink>
+
       <DropdownMenuItem
         class="cursor-pointer"
         @click="openConfirmation">

@@ -1,10 +1,11 @@
 import {
   toast,
 } from "vue-sonner"
+import type z from "zod"
+
 import {
   resetPasswordWithConfirmSchema,
 } from "@app/schemas/admin/auth"
-import type z from "zod"
 
 export default function useResetPassword(token: ComputedRef<string>) {
   const router = useRouter()
