@@ -10,6 +10,11 @@ export interface ApiError {
   errors?: Record<string, unknown>
 }
 
+const BYPASS_AUTH_REDIRECTS: Array<Parameters<typeof $fetch>[0]> = [
+  "/auth/login",
+  "/profile/password",
+]
+
 export default async function useApi(
   ...[
     endpoint,
@@ -61,7 +66,7 @@ export default async function useApi(
     }
 
     if (
-      endpoint !== "/auth/login"
+      !BYPASS_AUTH_REDIRECTS.includes(endpoint)
       && errorObject.status === 401
     ) {
       clearUser()

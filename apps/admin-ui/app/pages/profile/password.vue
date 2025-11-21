@@ -1,25 +1,8 @@
 <script setup lang="ts">
-import type z from "zod"
-
-import {
-  passwordUpdateWithConfirmSchema,
-} from "@app/schemas/admin/user"
-
 const {
   isSubmitting,
-  handleSubmit,
-} = useForm({
-  validationSchema: toTypedSchema(
-    passwordUpdateWithConfirmSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>,
-  ),
-})
-
-const onSubmit = handleSubmit(async ({ password, newPassword }) => {
-  console.log({
-    password,
-    newPassword,
-  })
-})
+  onSubmit,
+} = usePasswordUpdate()
 </script>
 
 <template>
