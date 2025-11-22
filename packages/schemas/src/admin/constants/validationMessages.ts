@@ -13,7 +13,8 @@ export const NEW_PASSWORD = {
   lowercaseRequired: "Please include at least 1 lowercase",
   uppercaseRequired: "Please include at least 1 uppercase",
   numberRequired: "Please include at least 1 number",
-  format: "Invalid password format"
+  format: "Invalid password format",
+  passwordReuse: "The new password cannot be the same as the old password.",
 }
 
 export const CONFIRM_PASSWORD = {

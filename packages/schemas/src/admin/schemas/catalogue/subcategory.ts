@@ -54,8 +54,8 @@ function SubcategoryAttributeUpdateSuperRefine(
       path: [
         "root",
       ],
-      code: "custom",
       message: SUB_CATEGORY.attributes.missingFields,
+      code: "custom",
     })
   }
 
@@ -164,8 +164,8 @@ function SubcategoryAttributeUpdateSuperRefine(
         pathIndex,
         key,
       ],
-      code: "custom",
       message,
+      code: "custom",
     })
   })
 }

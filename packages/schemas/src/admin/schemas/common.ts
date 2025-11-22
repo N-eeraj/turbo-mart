@@ -47,8 +47,8 @@ export function passwordConfirmationSuperRefine(
   if (values[passwordKey] !== values[confirmPasswordKey]) {
     ctx.addIssue({
       path: [confirmPasswordKey],
-      code: "custom",
       message: CONFIRM_PASSWORD.mismatch,
+      code: "custom",
     })
   }
 }

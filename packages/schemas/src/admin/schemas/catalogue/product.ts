@@ -80,11 +80,11 @@ export const productSchema = z.object({
             })
           } else if (value === "" || value === null) {
             ctx.addIssue({
-              message: PRODUCT.attributes.value.required,
               path: [
                 attribute,
                 "value"
               ],
+              message: PRODUCT.attributes.value.required,
               code: "custom"
             })
           }

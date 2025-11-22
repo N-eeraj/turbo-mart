@@ -16,6 +16,7 @@ import {
   ROLE,
   PERMISSIONS,
   PASSWORD,
+  NEW_PASSWORD,
   PROFILE_PICTURE,
   NOTIFICATION_STATE,
   NOTIFICATION_IDS,
@@ -59,7 +60,7 @@ export const profileUpdateSchema = adminSchema.pick({
   email: true,
 })
 
-export const passwordUpdateSchema = z.object({
+const passwordUpdateBaseSchema = z.object({
   password: z.string({ error: PASSWORD.required })
     .nonempty(PASSWORD.required)
     .meta({
@@ -69,17 +70,36 @@ export const passwordUpdateSchema = z.object({
   newPassword,
 })
 
-export const passwordUpdateWithConfirmSchema = passwordUpdateSchema.extend({
+const passwordReuseSuperRefine = (
+  { password, newPassword }: Record<"password" | "newPassword", string>,
+  ctx: z.RefinementCtx,
+) => {
+  if (password === newPassword) {
+    ctx.addIssue({
+      path: ["newPassword"],
+      message: NEW_PASSWORD.passwordReuse,
+      code: "custom",
+    })
+  }
+}
+
+export const passwordUpdateSchema = passwordUpdateBaseSchema
+  .superRefine(passwordReuseSuperRefine)
+
+export const passwordUpdateWithConfirmSchema = passwordUpdateBaseSchema.extend({
   confirmPassword,
 })
-  .superRefine((values, ctx) => passwordConfirmationSuperRefine(
-    values,
-    ctx,
-    {
-      passwordKey: "newPassword",
-      confirmPasswordKey: "confirmPassword",
-    },
-  ))
+  .superRefine((values, ctx) => {
+    passwordConfirmationSuperRefine(
+      values,
+      ctx,
+      {
+        passwordKey: "newPassword",
+        confirmPasswordKey: "confirmPassword",
+      },
+    )
+    passwordReuseSuperRefine(values, ctx)
+  })
 
 export const profilePictureSchema = z.object({
   profilePicture: z.file({ error: PROFILE_PICTURE.required })
