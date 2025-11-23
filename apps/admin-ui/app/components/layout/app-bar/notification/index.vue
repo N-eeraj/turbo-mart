@@ -17,7 +17,7 @@ const {
   fetchNotifications,
   resetInfiniteScroll,
   handleMarkAllAsRead,
-} = useNotifications()
+} = useUnreadNotifications()
 
 const handleDropDownOpen = (menuOpen: boolean) => {
   if (menuOpen) {

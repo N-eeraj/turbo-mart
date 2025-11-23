@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   type Notification,
-} from "@/composables/useNotifications"
+} from "@/composables/profile/useUnreadNotifications"
 
 defineProps<Notification>()
 </script>

@@ -4,37 +4,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import {
+  cn,
+} from "@/lib/utils"
 
-const NOTIFICATION_TYPE = [
-  {
-    label: "All",
-    value: undefined,
-  },
-  {
-    label: "Unread",
-    value: true,
-  },
-  {
-    label: "Read",
-    value: false,
-  },
-] as const
-
-const route = useRoute()
-
-const notificationIndex = ref(0)
-
-const handleNotificationTypeChange = (value: string | number) => {
-  console.log(NOTIFICATION_TYPE[Number(value)])
-}
-
-onMounted(() => {
-  notificationIndex.value = Math.max(
-    0,
-    NOTIFICATION_TYPE
-      .findIndex(({ label }) => label.toLocaleLowerCase() === route.query.type)
-  )
-})
+const {
+  NOTIFICATION_TYPE,
+  notificationTypeIndex,
+  notifications,
+  isLoadingNotifications,
+  handleNotificationTypeChange,
+} = useNotificationPage()
 </script>
 
 <template>
@@ -43,20 +23,31 @@ onMounted(() => {
   </h1>
 
   <Tabs
-    v-model="notificationIndex"
-    class="max-md:mt-2"
+    v-model="notificationTypeIndex"
+    class="max-md:mt-2 mb-3"
     @update:model-value="handleNotificationTypeChange">
     <TabsList class="flex md:justify-end items-center w-full md:w-fit ml-auto">
       <TabsTrigger
         v-for="({ label }, index) in NOTIFICATION_TYPE"
         :value="index"
         :key="index"
-        class="min-w-20 cursor-pointer">
+        :class="cn(
+          'min-w-20 cursor-pointer',
+          notificationTypeIndex === index && 'text-primary',
+        )">
         {{ label }}
       </TabsTrigger>
     </TabsList>
   </Tabs>
 
-  <ul class="mt-2">
+  <ul
+    v-if="notifications.length"
+    class="flex-1 grow shrink basis-0 pb-4 overflow-y-auto">
+    <li
+      v-for="notification in notifications"
+      :key="notification.id">
+      <Notification v-bind="notification" />
+    </li>
   </ul>
+  <BaseLinearProgress v-if="isLoadingNotifications" />
 </template>
