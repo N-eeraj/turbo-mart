@@ -10,7 +10,7 @@ import {
 
     <section class="flex flex-col w-full min-h-svh">
       <LayoutAppBar />
-      <main class="flex-1 p-2 md:p-4">
+      <main class="flex flex-col flex-1 px-4 py-2 md:py-4">
         <slot />
       </main>
     </section>
