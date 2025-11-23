@@ -12,7 +12,7 @@ const {
 <template>
   <form
     v-if="user"
-    class="flex flex-col gap-y-4 w-5/6 max-w-xl mt-4"
+    class="flex flex-col gap-y-4 w-full max-w-xl mt-4"
     @submit="onSubmit">
     <FormFieldInput
       name="name"
