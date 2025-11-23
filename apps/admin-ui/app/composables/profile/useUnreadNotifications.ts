@@ -14,20 +14,19 @@ export interface Notification {
   createdAt: Date
 }
 
-export default function useNotifications() {
-  
+const NOTIFICATION_QUERY_LIMIT = 6 as const
+
+export default function useUnreadNotifications() {
   const {
     data: unreadNotificationCount,
     pending: isLoadingUnreadNotificationCount,
   } = useLazyAsyncData(() => useApi("/profile/notifications/unread-count"), {
     transform: ({ data }) => {
       return (data ?? 0) as number
-    }
+    },
   })
   
   const notifications = ref<Array<Notification>>([])
-  
-  const NOTIFICATION_QUERY_LIMIT = 10
   const endOfList = ref(false)
   
   // data fetching
@@ -40,12 +39,12 @@ export default function useNotifications() {
       skip: notifications.value.length,
       limit: NOTIFICATION_QUERY_LIMIT,
       isRead: false,
-    }
+    },
   }), {
     immediate: false,
     transform: ({ data }) => {
       return (data ?? []) as Array<Notification>
-    }
+    },
   })
   watch(() => notificationsData.value, (notification) => {
     if (notification) {
