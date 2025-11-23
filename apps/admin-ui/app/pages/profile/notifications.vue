@@ -42,6 +42,7 @@ const {
 
   <ul
     v-if="notifications.length"
+    ref="notification-list"
     class="flex-1 grow shrink basis-0 pb-4 overflow-y-auto">
     <li
       v-for="notification in notifications"
@@ -49,5 +50,6 @@ const {
       <Notification v-bind="notification" />
     </li>
   </ul>
+
   <BaseLinearProgress v-if="isLoadingNotifications" />
 </template>

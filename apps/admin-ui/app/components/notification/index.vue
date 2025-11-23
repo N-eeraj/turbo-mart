@@ -2,8 +2,17 @@
 import {
   type Notification,
 } from "@/composables/profile/useUnreadNotifications"
+import {
+  cn,
+} from "@/lib/utils"
 
-defineProps<Notification>()
+interface Props extends Notification {
+  clampMessage?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  clampMessage: false,
+})
 </script>
 
 <template>
@@ -11,7 +20,11 @@ defineProps<Notification>()
     <strong class="leading-none">
       {{ title }}
     </strong>
-    <p class="text-sm text-foreground/70 line-clamp-2">
+    <p
+      :class="cn(
+        'text-sm text-foreground/70',
+        clampMessage && 'line-clamp-2',
+      )">
       {{ message }}
     </p>
     <span class="w-full text-xs text-foreground/70 text-end">

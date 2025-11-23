@@ -52,7 +52,9 @@ const handleDropDownOpen = (menuOpen: boolean) => {
           v-for="notification of notifications"
           :key="notification.id"
           as="li">
-          <Notification v-bind="notification" />
+          <Notification
+            v-bind="notification"
+            clamp-message />
         </DropdownMenuItem>
         <BaseLinearProgress v-if="isLoadingNotifications" />
       </DropdownMenuGroup>
