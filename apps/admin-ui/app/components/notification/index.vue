@@ -16,7 +16,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="flex flex-col items-start w-full">
+  <div class="flex flex-col items-start w-full p-1 @sm:p-2.5 rounded-sm duration-300">
     <strong class="leading-none">
       {{ title }}
     </strong>

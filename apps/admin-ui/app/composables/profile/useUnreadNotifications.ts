@@ -13,6 +13,7 @@ export interface Notification {
   message: string
   data?: Record<string, unknown>
   createdAt: Date
+  readAt?: Date
 }
 
 const NOTIFICATION_QUERY_LIMIT = 6 as const
