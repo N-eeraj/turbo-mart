@@ -23,9 +23,12 @@ export default function useNotificationPage() {
   const route = useRoute()
   const router = useRouter()
 
+  // notifications fetching and listing
   const notificationTypeIndex = ref(0)
   const notifications = ref<Array<Notification>>([])
   const endOfList = ref(false)
+
+  const currentNotificationType = computed(() => NOTIFICATION_TYPE[notificationTypeIndex.value])
 
   const {
     data: notificationsData,
@@ -35,7 +38,7 @@ export default function useNotificationPage() {
     query: {
       skip: notifications.value.length,
       limit: NOTIFICATION_QUERY_LIMIT,
-      isRead: NOTIFICATION_TYPE[notificationTypeIndex.value]?.value,
+      isRead: currentNotificationType.value?.value,
     },
   }), {
     transform: ({ data }) => {
@@ -95,11 +98,26 @@ export default function useNotificationPage() {
     resetInfiniteScroll()
   })
 
+  // notification actions
+  const selectedNotifications = ref<Array<Notification["id"]>>([])
+  const handleNotificationToggle = (value: boolean | "indeterminate", notificationId: Notification["id"]) => {
+    if (value === "indeterminate") return
+    if (value) {
+      selectedNotifications.value.push(notificationId)
+    } else {
+      selectedNotifications.value = selectedNotifications.value.filter(id => id !== notificationId)
+    }
+  }
+
   return {
     NOTIFICATION_TYPE,
     notificationTypeIndex,
+    currentNotificationType,
     notifications,
     isLoadingNotifications,
     handleNotificationTypeChange,
+
+    selectedNotifications,
+    handleNotificationToggle,
   }
 }
