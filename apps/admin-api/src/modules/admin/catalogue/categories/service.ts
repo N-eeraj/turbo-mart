@@ -59,6 +59,7 @@ export default class CategoryService extends BaseService {
     })
       .sort({
         createdAt: order,
+        _id: order,
       })
       .skip(skip)
       .limit(limit)
@@ -247,6 +248,7 @@ export default class CategoryService extends BaseService {
     })
       .sort({
         createdAt: order,
+        _id: order,
       })
       .skip(skip)
       .limit(limit)

@@ -124,6 +124,7 @@ export default class SubcategoryService extends BaseService {
     const subcategories = await Subcategory.find(filterQuery)
       .sort({
         createdAt: order,
+        _id: order,
       })
       .skip(skip)
       .limit(limit)

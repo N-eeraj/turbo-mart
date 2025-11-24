@@ -84,6 +84,7 @@ export default class SuperAdminService extends BaseService {
     })
       .sort({
         createdAt: order,
+        _id: order,
       })
       .skip(skip)
       .limit(limit)

@@ -55,6 +55,7 @@ export default class BrandService extends BaseService {
     })
       .sort({
         createdAt: order,
+        _id: order,
       })
       .skip(skip)
       .limit(limit)
