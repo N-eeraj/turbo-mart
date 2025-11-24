@@ -63,6 +63,7 @@ export default class NotificationService extends BaseService {
     const notifications = await AdminNotification.find(filterQuery)
       .sort({
         createdAt: order,
+        _id: order,
       })
       .skip(skip)
       .limit(limit)
