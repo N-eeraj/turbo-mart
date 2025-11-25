@@ -26,7 +26,7 @@ const {
     v-if="notifications.length"
     v-model:selection="selectedNotifications"
     :notifications
-    :mute-read="notificationTypeIndex === 0"
+    :mute-read="!notificationTypeIndex"
     @update-selection="handleNotificationToggle" />
 
   <!-- empty state -->
@@ -46,4 +46,7 @@ const {
   </div>
 
   <BaseLinearProgress v-if="isLoadingNotifications" />
+
+  <NotificationActions
+    :selected-notifications />
 </template>
