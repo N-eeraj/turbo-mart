@@ -38,7 +38,7 @@ function handleSelectionUpdate(value: boolean | "indeterminate", id: Notificatio
     <li
       v-for="notification in notifications"
       :key="notification.id"
-      class="px-2 hover:bg-secondary has-[button[data-state='checked']]:bg-primary/20">
+      class="px-2 hover:bg-secondary has-[button[data-state='checked']]:bg-primary/20 has-[button[data-state='checked']]:hover:bg-primary/30 duration-100">
       <label class="flex items-start gap-x-2 cursor-pointer">
         <Checkbox
           v-if="selectedNotifications"
