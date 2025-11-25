@@ -100,12 +100,15 @@ export default function useNotificationPage() {
 
   // notification actions
   const selectedNotifications = ref<Array<Notification["id"]>>([])
-  const handleNotificationToggle = (value: boolean | "indeterminate", notificationId: Notification["id"]) => {
+  const handleNotificationToggle = ({ value, id }: {
+    value: boolean | "indeterminate"
+    id: Notification["id"]
+  }) => {
     if (value === "indeterminate") return
     if (value) {
-      selectedNotifications.value.push(notificationId)
+      selectedNotifications.value.push(id)
     } else {
-      selectedNotifications.value = selectedNotifications.value.filter(id => id !== notificationId)
+      selectedNotifications.value = selectedNotifications.value.filter(notificationId => notificationId !== id)
     }
   }
 
