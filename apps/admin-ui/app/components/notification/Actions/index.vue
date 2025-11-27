@@ -1,44 +1,9 @@
 <script setup lang="ts">
-const ACTIONS = [
-  {
-    icon: "lucide:mail-open",
-    tooltip: "Mark as Read",
-    color: "primary",
-    onClick: () => console.log("primary"),
-  },
-  {
-    icon: "clarity:email-outline-badged",
-    tooltip: "Mark as Unread",
-    color: "secondary",
-    onClick: () => console.log("secondary"),
-  },
-  {
-    icon: "lucide:trash-2",
-    tooltip: "Delete",
-    color: "destructive",
-    onClick: () => console.log("destructive"),
-  },
-  {
-    icon: "lucide:x",
-    tooltip: "Cancel",
-    color: "neutral",
-    onClick: () => console.log("neutral"),
-  },
-] as const
-
-const notificationContext = inject<AllNotificationsContext>("all-notifications")
-if (!notificationContext) {
-  throw new Error("Notification context is not provided")
-}
 const {
-  notifications,
+  actions,
   selectedNotifications,
-} = notificationContext
-
-const notificationSelections = computed(() => {
-  return notifications.value
-    .filter(notification => selectedNotifications.value.includes(notification.id))
-})
+  handleAction,
+} = useNotificationActions()
 </script>
 
 <template>
@@ -55,11 +20,11 @@ const notificationSelections = computed(() => {
     <!-- actions -->
     <ul class="flex items-center gap-x-3">
       <li
-        v-for="({ onClick, ...action }, index) in ACTIONS"
-        :key="index">
+        v-for="({ id, ...action }) in actions"
+        :key="id">
         <NotificationActionsButton
           v-bind="action"
-          @click="onClick" />
+          @click="handleAction(id)" />
       </li>
     </ul>
   </div>

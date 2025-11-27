@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   type Notification,
-} from "@/composables/profile/useUnreadNotifications"
+} from "@/composables/profile/notifications/useUnreadNotifications"
 import {
   cn,
 } from "@/lib/utils"

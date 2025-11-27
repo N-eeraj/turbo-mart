@@ -43,7 +43,7 @@ function handleSelectionUpdate(
       <label class="flex items-start gap-x-2 cursor-pointer">
         <Checkbox
           v-if="selectedNotifications"
-          :model-value="selectedNotifications.includes(notification.id)"
+          :model-value="selectedNotifications.some(({ id }) => id === notification.id)"
           :value="notification.id"
           class="mt-2.5 border-primary"
           @update:model-value="value => handleSelectionUpdate(value, notification.id)" />
