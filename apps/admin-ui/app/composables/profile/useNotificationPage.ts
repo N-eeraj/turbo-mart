@@ -19,6 +19,23 @@ const NOTIFICATION_TYPE = [
 
 const NOTIFICATION_QUERY_LIMIT = 12 as const
 
+export interface HandleNotificationToggleParameters {
+  value: boolean | "indeterminate"
+  id: Notification["id"]
+}
+
+export interface AllNotificationsContext {
+  NOTIFICATION_TYPE: typeof NOTIFICATION_TYPE
+  notificationTypeIndex: Ref<number>
+  currentNotificationType: ComputedRef<typeof NOTIFICATION_TYPE[number]>
+  notifications: Ref<Array<Notification>>
+  isLoadingNotifications: Ref<boolean>
+  handleNotificationTypeChange: (value: string | number) => void
+
+  selectedNotifications: Ref<Array<Notification["id"]>>
+  handleNotificationToggle: (parameters: HandleNotificationToggleParameters) => void
+}
+
 export default function useNotificationPage() {
   const route = useRoute()
   const router = useRouter()
@@ -28,7 +45,7 @@ export default function useNotificationPage() {
   const notifications = ref<Array<Notification>>([])
   const endOfList = ref(false)
 
-  const currentNotificationType = computed(() => NOTIFICATION_TYPE[notificationTypeIndex.value])
+  const currentNotificationType = computed<typeof NOTIFICATION_TYPE[number]>(() => NOTIFICATION_TYPE[notificationTypeIndex.value]!)
 
   const {
     data: notificationsData,
@@ -100,10 +117,7 @@ export default function useNotificationPage() {
 
   // notification actions
   const selectedNotifications = ref<Array<Notification["id"]>>([])
-  const handleNotificationToggle = ({ value, id }: {
-    value: boolean | "indeterminate"
-    id: Notification["id"]
-  }) => {
+  const handleNotificationToggle = ({ value, id }: HandleNotificationToggleParameters) => {
     if (value === "indeterminate") return
     if (value) {
       selectedNotifications.value.push(id)
@@ -112,7 +126,7 @@ export default function useNotificationPage() {
     }
   }
 
-  return {
+  const allNotificationsContext: AllNotificationsContext = {
     NOTIFICATION_TYPE,
     notificationTypeIndex,
     currentNotificationType,
@@ -123,4 +137,8 @@ export default function useNotificationPage() {
     selectedNotifications,
     handleNotificationToggle,
   }
+
+  provide<AllNotificationsContext>("all-notifications", allNotificationsContext)
+
+  return allNotificationsContext
 }

@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import {
-  type Notification,
-} from "@/composables/profile/useUnreadNotifications"
-interface Props {
-  selectedNotifications: Array<Notification["id"]>
-}
-defineProps<Props>()
-
 const ACTIONS = [
   {
     icon: "lucide:mail-open",
@@ -15,7 +7,7 @@ const ACTIONS = [
     onClick: () => console.log("primary"),
   },
   {
-    icon: "lucide:mail",
+    icon: "clarity:email-outline-badged",
     tooltip: "Mark as Unread",
     color: "secondary",
     onClick: () => console.log("secondary"),
@@ -33,6 +25,20 @@ const ACTIONS = [
     onClick: () => console.log("neutral"),
   },
 ] as const
+
+const notificationContext = inject<AllNotificationsContext>("all-notifications")
+if (!notificationContext) {
+  throw new Error("Notification context is not provided")
+}
+const {
+  notifications,
+  selectedNotifications,
+} = notificationContext
+
+const notificationSelections = computed(() => {
+  return notifications.value
+    .filter(notification => selectedNotifications.value.includes(notification.id))
+})
 </script>
 
 <template>

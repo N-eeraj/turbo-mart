@@ -1,14 +1,15 @@
 <script setup lang="ts">
+import {
+  cn,
+} from "@/lib/utils"
+
 const {
-  NOTIFICATION_TYPE,
   notificationTypeIndex,
   currentNotificationType,
   notifications,
   isLoadingNotifications,
-  handleNotificationTypeChange,
 
   selectedNotifications,
-  handleNotificationToggle,
 } = useNotificationPage()
 </script>
 
@@ -17,17 +18,14 @@ const {
     Notifications
   </h1>
 
-  <NotificationTabs
-    v-model="notificationTypeIndex"
-    :tabs="NOTIFICATION_TYPE"
-    @update="handleNotificationTypeChange" />
+  <NotificationTabs />
 
   <NotificationList
     v-if="notifications.length"
-    v-model:selection="selectedNotifications"
-    :notifications
     :mute-read="!notificationTypeIndex"
-    @update-selection="handleNotificationToggle" />
+    :class="cn(
+      selectedNotifications.length && 'pb-11 md:pb-13',
+    )" />
 
   <!-- empty state -->
   <div
@@ -39,7 +37,7 @@ const {
     <span class="text-foreground/60 text-sm">
       You have no
       <template v-if="notificationTypeIndex !== 0">
-        {{ currentNotificationType?.label }}
+        {{ currentNotificationType.label }}
       </template>
       Notifications
     </span>
@@ -47,6 +45,5 @@ const {
 
   <BaseLinearProgress v-if="isLoadingNotifications" />
 
-  <NotificationActions
-    :selected-notifications />
+  <NotificationActions />
 </template>
