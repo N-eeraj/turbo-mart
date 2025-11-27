@@ -7,9 +7,6 @@ import {
 import {
   cn,
 } from "@/lib/utils"
-import {
-  type AllNotificationsContext,
-} from "@/composables/profile/useNotificationPage"
 
 const notificationContext = inject<AllNotificationsContext>("all-notifications")
 if (!notificationContext) {

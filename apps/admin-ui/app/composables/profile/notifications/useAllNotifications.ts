@@ -1,6 +1,6 @@
 import {
   type Notification,
-} from "@/composables/profile/useUnreadNotifications"
+} from "@/composables/profile/notifications/useUnreadNotifications"
 
 const NOTIFICATION_TYPE = [
   {
@@ -24,6 +24,11 @@ export interface HandleNotificationToggleParameters {
   id: Notification["id"]
 }
 
+export interface SelectedNotification {
+  id: Notification["id"]
+  isRead: boolean
+}
+
 export interface AllNotificationsContext {
   NOTIFICATION_TYPE: typeof NOTIFICATION_TYPE
   notificationTypeIndex: Ref<number>
@@ -32,11 +37,11 @@ export interface AllNotificationsContext {
   isLoadingNotifications: Ref<boolean>
   handleNotificationTypeChange: (value: string | number) => void
 
-  selectedNotifications: Ref<Array<Notification["id"]>>
+  selectedNotifications: Ref<Array<SelectedNotification>>
   handleNotificationToggle: (parameters: HandleNotificationToggleParameters) => void
 }
 
-export default function useNotificationPage() {
+export default function useAllNotifications() {
   const route = useRoute()
   const router = useRouter()
 
@@ -116,13 +121,18 @@ export default function useNotificationPage() {
   })
 
   // notification actions
-  const selectedNotifications = ref<Array<Notification["id"]>>([])
+  const selectedNotifications = ref<Array<SelectedNotification>>([])
   const handleNotificationToggle = ({ value, id }: HandleNotificationToggleParameters) => {
     if (value === "indeterminate") return
     if (value) {
-      selectedNotifications.value.push(id)
+      selectedNotifications.value.push({
+        id,
+        isRead: Boolean(
+          notifications.value.find(notification => notification.id === id)?.readAt
+        ),
+      })
     } else {
-      selectedNotifications.value = selectedNotifications.value.filter(notificationId => notificationId !== id)
+      selectedNotifications.value = selectedNotifications.value.filter((notification) => notification.id !== id)
     }
   }
 

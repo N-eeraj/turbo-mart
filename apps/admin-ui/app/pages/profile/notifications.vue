@@ -10,7 +10,7 @@ const {
   isLoadingNotifications,
 
   selectedNotifications,
-} = useNotificationPage()
+} = useAllNotifications()
 </script>
 
 <template>
