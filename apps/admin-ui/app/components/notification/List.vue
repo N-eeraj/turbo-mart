@@ -5,26 +5,27 @@ import {
 import {
   cn,
 } from "@/lib/utils"
-import {
-  type Notification,
-} from "@/composables/profile/useUnreadNotifications"
 
 interface Props {
-  notifications: Array<Notification>
   muteRead?: boolean
 }
 defineProps<Props>()
 
-const selectedNotifications = defineModel("selection", {
-  type: Array<Notification["id"]>,
-})
+const notificationContext = inject<AllNotificationsContext>("all-notifications")
+if (!notificationContext) {
+  throw new Error("Notification context is not provided")
+}
+const {
+  notifications,
+  selectedNotifications,
+  handleNotificationToggle,
+} = notificationContext
 
-const emit = defineEmits([
-  "updateSelection",
-])
-
-function handleSelectionUpdate(value: boolean | "indeterminate", id: Notification["id"]) {
-  emit("updateSelection", {
+function handleSelectionUpdate(
+  value: boolean | "indeterminate",
+  id: typeof notifications.value[number]["id"]
+) {
+  handleNotificationToggle({
     id,
     value,
   })
