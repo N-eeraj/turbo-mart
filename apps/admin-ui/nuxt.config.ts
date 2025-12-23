@@ -27,6 +27,14 @@ export default defineNuxtConfig({
       prerender: true,
     },
   },
+  extends: [
+    "./layers/analytics",
+    "./layers/catalogue-management",
+    "./layers/delivery-person-management",
+    "./layers/finance-management",
+    "./layers/retailer-management",
+    "./layers/super-admin",
+  ],
   modules: [
     "shadcn-nuxt",
     "@vueuse/nuxt",
