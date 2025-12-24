@@ -8,7 +8,7 @@ import {
 </script>
 
 <template>
-  <SidebarHeader>
+  <SidebarHeader class="flex justify-center items-center h-16">
     <SidebarMenu>
       <SidebarMenuItem class="flex flex-row items-center gap-x-4">
         <NuxtLink

@@ -7,5 +7,6 @@ import {
 <template>
   <Sidebar collapsible="icon">
     <LayoutSidebarHeader />
+    <LayoutSidebarContent />
   </Sidebar>
 </template>
