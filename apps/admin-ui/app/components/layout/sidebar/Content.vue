@@ -3,16 +3,8 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 
 const navigation = [
   {
@@ -21,6 +13,7 @@ const navigation = [
   },
   {
     title: "Admin Management",
+    collapsible: true,
     items: [
       {
         title: "All Admins",
@@ -32,6 +25,27 @@ const navigation = [
       },
     ],
   },
+  {
+    title: "Catalogue Management",
+    items: [
+      {
+        title: "Categories",
+        url: "/catalogue/categories",
+      },
+      {
+        title: "Subcategories",
+        url: "/catalogue/subcategories",
+      },
+      {
+        title: "Brands",
+        url: "/catalogue/brands",
+      },
+      {
+        title: "Products",
+        url: "/catalogue/products",
+      },
+    ],
+  },
 ]
 </script>
 
@@ -39,49 +53,30 @@ const navigation = [
   <SidebarContent class="gap-0">
     <template
       v-for="item in navigation">
-      <Collapsible
-        v-if="item.items"
-        :key="item.title"
-        :title="item.title"
-        default-open
-        class="group/collapsible">
-        <SidebarGroup>
-          <SidebarGroupLabel
-            as-child
-            class="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-            <CollapsibleTrigger class="cursor-pointer">
-              {{ item.title }}
-              <Icon
-                name="lucide:chevron-right"
-                class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-            </CollapsibleTrigger>
+      <template v-if="item.items">
+        <!-- Collapsible Menu Items -->
+        <LayoutSidebarCollapsibleGroup
+          v-if="item.collapsible"
+          v-bind="item" />
+
+        <!-- Grouped Menu Items -->
+        <SidebarGroup v-else>
+          <SidebarGroupLabel>
+            {{ item.title }}
           </SidebarGroupLabel>
-          <CollapsibleContent>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem
-                  v-for="childItem in item.items"
-                  :key="childItem.title">
-                  <SidebarMenuButton as-child>
-                    <NuxtLink :to="childItem.url">
-                      {{ childItem.title }}
-                    </NuxtLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </CollapsibleContent>
+          <SidebarMenu>
+            <LayoutSidebarMenuItem
+              v-for="childItem in item.items"
+              :key="childItem.title"
+              v-bind="childItem" />
+          </SidebarMenu>
         </SidebarGroup>
-      </Collapsible>
+      </template>
+
+      <!-- Individual Menu Item -->
       <SidebarGroup v-else>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton as-child>
-              <NuxtLink :to="item.url">
-                {{ item.title }}
-              </NuxtLink>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <LayoutSidebarMenuItem v-bind="item" />
         </SidebarMenu>
       </SidebarGroup>
     </template>
