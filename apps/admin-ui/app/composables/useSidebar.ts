@@ -7,10 +7,12 @@ const NAVIGATION = [
   {
     title: "Home",
     url: "/",
+    icon: "lucide:home",
   },
   {
     title: "Admin Management",
     collapsible: true,
+    icon: "lucide:user-cog",
     items: [
       {
         title: "All Admins",
@@ -27,6 +29,7 @@ const NAVIGATION = [
   },
   {
     title: "Catalogue Management",
+    icon: "ph:cube-focus",
     items: [
       {
         title: "Categories",

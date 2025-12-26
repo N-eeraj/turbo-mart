@@ -17,6 +17,7 @@ interface Props {
     title: string
     url: string
   }>
+  icon?: string
 }
 
 defineProps<Props>()
@@ -30,8 +31,14 @@ defineProps<Props>()
       <SidebarGroupLabel
         as-child
         class="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-        <CollapsibleTrigger class="cursor-pointer">
-          {{ title }}
+        <CollapsibleTrigger class="flex items-center gap-x-2 text-sidebar-foreground/70 text-xs font-medium cursor-pointer">
+          <Icon
+            v-if="icon"
+            :name="icon"
+            class="shrink-0" />
+          <span>
+            {{ title }}
+          </span>
           <Icon
             name="lucide:chevron-right"
             class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />

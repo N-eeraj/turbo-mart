@@ -10,7 +10,7 @@ import {
 <template>
   <SidebarHeader class="flex justify-center items-center h-16">
     <SidebarMenu>
-      <SidebarMenuItem class="flex flex-row items-center gap-x-4">
+      <SidebarMenuItem>
         <NuxtLink
           to="/"
           class="w-full">

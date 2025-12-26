@@ -23,8 +23,14 @@ const {
 
         <!-- Grouped Menu Items -->
         <SidebarGroup v-else>
-          <SidebarGroupLabel>
-            {{ item.title }}
+          <SidebarGroupLabel class="flex items-center gap-x-2">
+            <Icon
+              v-if="item.icon"
+              :name="item.icon"
+              class="shrink-0" />
+            <span>
+              {{ item.title }}
+            </span>
           </SidebarGroupLabel>
           <SidebarMenu>
             <LayoutSidebarMenuItem

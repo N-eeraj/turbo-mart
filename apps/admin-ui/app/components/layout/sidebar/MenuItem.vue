@@ -7,6 +7,7 @@ import {
 interface Props {
   title: string
   url: string
+  icon?: string
 }
 
 const props = defineProps<Props>()
@@ -18,12 +19,20 @@ const isActive = computed(() => props.url === route.path)
 
 <template>
   <SidebarMenuItem>
-    <SidebarMenuButton
-      as-child
-      :is-active>
-      <NuxtLink :to="url">
-        {{ title }}
-      </NuxtLink>
-    </SidebarMenuButton>
+    <NuxtLink
+      :to="url"
+      class="flex flex-row items-center gap-x-2">
+      <SidebarMenuButton :is-active>
+        <Icon
+          :name="icon ?? 'lucide:home'"
+          class="shrink-0"
+          :class="{
+            'invisible': !icon,
+          }" />
+        <span>
+          {{ title }}
+        </span>
+      </SidebarMenuButton>
+    </NuxtLink>
   </SidebarMenuItem>
 </template>
