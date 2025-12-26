@@ -6,47 +6,9 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar"
 
-const navigation = [
-  {
-    title: "Home",
-    url: "/",
-  },
-  {
-    title: "Admin Management",
-    collapsible: true,
-    items: [
-      {
-        title: "All Admins",
-        url: "/admin",
-      },
-      {
-        title: "Create Admin",
-        url: "/admin/create",
-      },
-    ],
-  },
-  {
-    title: "Catalogue Management",
-    items: [
-      {
-        title: "Categories",
-        url: "/catalogue/categories",
-      },
-      {
-        title: "Subcategories",
-        url: "/catalogue/subcategories",
-      },
-      {
-        title: "Brands",
-        url: "/catalogue/brands",
-      },
-      {
-        title: "Products",
-        url: "/catalogue/products",
-      },
-    ],
-  },
-]
+const {
+  navigation,
+} = useSidebar()
 </script>
 
 <template>
