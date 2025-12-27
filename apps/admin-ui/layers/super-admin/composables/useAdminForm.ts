@@ -11,10 +11,12 @@ interface PermissionMap {
   name: string
   value: Permissions
 }
+interface Parameters {
+  initialValues: Record<string, unknown>
+  submitHandler: (_body: any) => Promise<ApiSuccess>
+}
 
-export default function useAdminForm() {
-  const router = useRouter()
-
+export default function useAdminForm({ submitHandler, initialValues = {} }: Parameters) {
   const {
     handleSubmit,
     isSubmitting,
@@ -24,6 +26,7 @@ export default function useAdminForm() {
     validationSchema: toTypedSchema(
       adminCreationSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
     ),
+    initialValues,
   })
   
   const {
@@ -49,11 +52,7 @@ export default function useAdminForm() {
     try {
       const {
         message,
-      } = await useApi("/super-admin/admin", {
-        method: "POST",
-        body,
-      })
-      router.push("/admin")
+      } = await submitHandler(body)
       toast.success(message)
     } catch (error: unknown) {
       const {

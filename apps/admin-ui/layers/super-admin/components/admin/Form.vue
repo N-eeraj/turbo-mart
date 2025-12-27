@@ -1,11 +1,17 @@
 <script setup lang="ts">
+interface Props {
+  initialValues: Record<string, unknown>
+  submitHandler: (_body: any) => Promise<ApiSuccess>
+}
+const props = defineProps<Props>()
+
 const {
   permissions,
   isLoadingPermissions,
   isSubmitting,
   isInvalid,
   onSubmit,
-} = useAdminForm()
+} = useAdminForm(props)
 </script>
 
 <template>
