@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {
-  ALL_ADMINS,
+  EDIT_ADMIN,
 } from "~/constants/breadcrumbs"
 </script>
 
 <template>
   <BaseHeader
-    title="All Admins"
-    :breadcrumbs="ALL_ADMINS" />
+    title="Edit Admin"
+    :breadcrumbs="EDIT_ADMIN" />
+
+  <AdminForm />
 </template>

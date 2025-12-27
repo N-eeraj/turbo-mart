@@ -14,14 +14,21 @@ const HOME = {
   url: "/",
   icon: "lucide:home"
 } satisfies Breadcrumb
+
+const route = useRoute()
+
 const breadcrumbs = computed(() => ([
   ...(!props.hideHome ? [HOME] : []),
-  ...props.items,
+  ...props.items
+    .map(({ url, ...item }) => ({
+      ...item,
+      url: url.replace(/\{(\w+)\}/g, (_, key) => route.params[key] as string)
+    })),
 ]))
 </script>
 
 <template>
-  <ul class="flex items-center gap-x-2 text-sm text-foreground/75">
+  <ul class="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-foreground/75">
     <li
       v-for="({ text, url, icon }, index) in breadcrumbs"
       :key="index"
