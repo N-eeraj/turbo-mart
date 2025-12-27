@@ -6,7 +6,7 @@ import type {
 export default function useSidebar() {
   const {
     user,
-    checkUserHasAnyAccess,
+    hasRoleAndAnyPermissions,
   } = useUser()
 
   const navigation = computed<Sidebar>(() => {
@@ -16,9 +16,9 @@ export default function useSidebar() {
 
     // return role & permission based navigation
     return NAVIGATION.reduce((sidebar: Sidebar, navigation: Sidebar[number]) => {
-      const hasNavigationAccess = checkUserHasAnyAccess(navigation)
+      const hasNavigationAccess = hasRoleAndAnyPermissions(navigation)
       if (hasNavigationAccess) {
-        const filteredItems = navigation.items ? navigation.items.filter(checkUserHasAnyAccess) : navigation.items
+        const filteredItems = navigation.items ? navigation.items.filter(hasRoleAndAnyPermissions) : navigation.items
 
         sidebar.push({
           ...navigation,

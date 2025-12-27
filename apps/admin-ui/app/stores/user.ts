@@ -6,7 +6,7 @@ import {
   type AdminData,
 } from "@app/schemas/admin/user"
 
-interface AdminObject extends AdminData {
+export interface AdminObject extends AdminData {
   id: string
   createdAt: Date
   profilePicture?: string
