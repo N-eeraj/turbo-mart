@@ -10,3 +10,10 @@ import {
     <LayoutSidebarContent />
   </Sidebar>
 </template>
+
+<style>
+/* open mobile sidebar UI */
+[data-state="open"][data-mobile="true"][data-sidebar="sidebar"] {
+  z-index: 150 !important;
+}
+</style>

@@ -15,7 +15,6 @@ interface Props {
   loading?: boolean
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
-
 }
 const {
   loading,

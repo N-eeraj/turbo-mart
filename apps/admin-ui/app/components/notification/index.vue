@@ -9,7 +9,6 @@ import {
 interface Props extends Notification {
   clampMessage?: boolean
 }
-
 withDefaults(defineProps<Props>(), {
   clampMessage: false,
 })

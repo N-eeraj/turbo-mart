@@ -23,7 +23,7 @@ defineProps<NavigationGroup>()
       <SidebarGroupLabel
         as-child
         class="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-        <CollapsibleTrigger class="flex items-center gap-x-2 text-sidebar-foreground/70 text-xs font-medium cursor-pointer">
+        <CollapsibleTrigger class="flex items-center gap-x-2 text-sidebar-foreground/70 text-sm font-medium cursor-pointer">
           <Icon
             v-if="icon"
             :name="icon"
@@ -42,7 +42,8 @@ defineProps<NavigationGroup>()
           <LayoutSidebarMenuItem
             v-for="childItem in items"
             :key="childItem.title"
-            v-bind="childItem" />
+            v-bind="childItem"
+            class="text-xs" />
           </SidebarMenu>
         </SidebarGroupContent>
       </CollapsibleContent>

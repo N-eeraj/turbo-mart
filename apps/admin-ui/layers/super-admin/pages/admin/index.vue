@@ -1,7 +1,15 @@
 <script setup lang="ts">
-  
+const BREADCRUMBS = [
+  {
+    text: "All Admins",
+    url: "/admin",
+    icon: "lucide:users",
+  },
+] satisfies Breadcrumb
 </script>
 
 <template>
-  Admin
+  <BaseHeader
+    title="All Admins"
+    :breadcrumbs="BREADCRUMBS" />
 </template>
