@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type {
-  InputTypeHTMLAttribute,
-} from "vue"
-
+  SelectItemProps,
+  SelectRootProps,
+} from "reka-ui"
 import {
   FormField,
   FormItem,
@@ -12,29 +12,23 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import {
-  InputGroup,
-  InputGroupInput,
-  InputGroupAddon,
-} from "@/components/ui/input-group"
-import {
-  cn,
-} from "@/lib/utils"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-interface Props {
+interface Props extends SelectRootProps {
   name: string
-  type?: InputTypeHTMLAttribute
+  options: Array<SelectItemProps>
   label?: string
   placeholder?: string
   description?: any
-  disabled?: boolean
+  loading?: boolean
   readonly?: boolean
 }
 const props = defineProps<Props>()
-
-const inputType = ref<InputTypeHTMLAttribute>(props.type ?? "text")
-function toggleInputType() {
-  inputType.value = inputType.value === "password" ? "text" : "password"
-}
 </script>
 
 <template>
@@ -63,30 +57,27 @@ function toggleInputType() {
         </slot>
 
         <FormControl>
-          <InputGroup :class="cn(
-            readonly && 'border-input/50',
-          )">
-            <slot name="addon" />
-            <InputGroupInput
-              v-bind="componentField"
-              :type="inputType"
-              :placeholder
-              :disabled="disabled || readonly"
-              :class="cn(
-                readonly && 'opacity-100!',
-              )" />
-            <InputGroupAddon
-              v-if="type === 'password'"
-              align="inline-end">
-              <BaseButton
-                variant="ghost"
-                type="button"
-                class="size-6 p-1 rounded-full cursor-pointer"
-                @click="toggleInputType">
-                <Icon name="mdi:eye" />
-              </BaseButton>
-            </InputGroupAddon>
-          </InputGroup>
+          <Select
+            v-bind="componentField"
+            :multiple
+            :disabled="disabled || readonly || loading">
+            <div class="flex flex-col">
+              <SelectTrigger class="w-full cursor-pointer">
+                <SelectValue :placeholder />
+              </SelectTrigger>
+              <BaseLinearProgress
+                v-if="loading"
+                class="h-0.5!" />
+            </div>
+            <SelectContent>
+              <SelectItem
+                v-for="({ textValue, value }) in options"
+                :value
+                class="cursor-pointer">
+                {{ textValue }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </FormControl>
 
         <slot

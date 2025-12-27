@@ -7,6 +7,7 @@ interface Props {
   title: string
   breadcrumbs: Array<Breadcrumb>
   hideHome?: boolean
+  separationIcon?: string
 }
 defineProps<Props>()
 </script>
@@ -15,7 +16,8 @@ defineProps<Props>()
   <div class="space-y-1">
     <BaseBreadcrumbs
       :items="breadcrumbs"
-      :hide-home />
+      :hide-home
+      :separation-icon />
 
     <div class="flex justify-between items-center w-full">
       <div class="flex items-center gap-x-1">

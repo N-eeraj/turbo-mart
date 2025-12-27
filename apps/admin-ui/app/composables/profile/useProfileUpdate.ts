@@ -41,9 +41,7 @@ export default function useProfileUpdate() {
     }
   }
 
-  const isInvalid = computed(() => {
-    return !isFieldValid("name") || !isFieldValid("email")
-  })
+  const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("email"))
 
   const onSubmit = handleSubmit(async (body) => {
     if (!enableEdit.value) return

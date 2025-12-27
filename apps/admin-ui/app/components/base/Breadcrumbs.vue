@@ -6,8 +6,11 @@ import type {
 interface Props {
   items: Array<Breadcrumb>
   hideHome?: boolean
+  separationIcon?: string
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  separationIcon: "lucide:chevron-right"
+})
 
 const HOME = {
   text: "Home",
@@ -28,29 +31,31 @@ const breadcrumbs = computed(() => ([
 </script>
 
 <template>
-  <ul class="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-foreground/75">
+  <ul class="flex items-center flex-wrap gap-x-1 gap-y-1 text-sm text-foreground/75">
     <li
-      v-for="({ text, url, icon }, index) in breadcrumbs"
+      v-for="(item, index) in breadcrumbs"
       :key="index"
-      class="flex items-center gap-x-0.5 hover:text-foreground duration-300"
+      class="flex items-center gap-x-1 hover:text-foreground duration-300"
       :class="{
         'text-primary hover:text-primary/85': index + 1 === breadcrumbs.length,
       }">
       <NuxtLink
-        :to="url"
+        :to="item.url"
         class="flex items-center gap-x-1">
-        <slot name="item">
+        <slot
+          name="item"
+          v-bind="item">
           <Icon
-            v-if="icon"
-            :name="icon" />
+            v-if="item.icon"
+            :name="item.icon" />
           <span>
-            {{ text }}
+            {{ item.text }}
           </span>
         </slot>
       </NuxtLink>
       <Icon
         v-if="index + 1 < breadcrumbs.length"
-        name="lucide:chevron-right" />
+        :name="separationIcon" />
     </li>
   </ul>
 </template>

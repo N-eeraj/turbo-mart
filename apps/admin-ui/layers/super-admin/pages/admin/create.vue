@@ -9,5 +9,5 @@ import {
     title="Create Admin"
     :breadcrumbs="CREATE_ADMIN" />
 
-  <AdminForm />
+  <AdminForm class="mt-4" />
 </template>
