@@ -23,9 +23,11 @@ const ADMIN_NAVIGATION = [
         url: "/admin/create",
       },
     ],
-    roles: [
-      Roles.SUPER_ADMIN,
-    ],
+    access: {
+      roles: [
+        Roles.SUPER_ADMIN,
+      ],
+    },
   },
 ] as const satisfies Array<NavigationGroup>
 
@@ -51,9 +53,11 @@ const CATALOGUE_NAVIGATION = [
         url: "/catalogue/products",
       },
     ],
-    permissions: [
-      Permissions.CATALOGUE_MANAGER,
-    ],
+    access: {
+      permissions: [
+        Permissions.CATALOGUE_MANAGER,
+      ],
+    }
   },
 ] as const satisfies Array<NavigationGroup>
 

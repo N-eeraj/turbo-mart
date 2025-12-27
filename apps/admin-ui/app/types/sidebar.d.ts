@@ -3,11 +3,30 @@ import type {
   Permissions,
 } from "@app/database/mongoose/enums/admin/user"
 
+interface AccessControl {
+  roles: Array<Roles>
+  permissions: Array<Permissions>
+  permissionType?: "any" | "all"
+}
+
+interface OrAccessControl {
+  or: AccessControl
+}
+
+interface AndAccessControl {
+  and: AccessControl
+}
+
+type Access =
+  Pick<AccessControl, "roles">
+  | Omit<AccessControl, "roles">
+  | OrAccessControl
+  | AndAccessControl
+
 interface NavigationBase {
   title: string
   icon?: string
-  roles?: Array<Roles>
-  permissions?: Array<Permissions>
+  access?: Access
 }
 
 export interface NavigationItem extends NavigationBase {
