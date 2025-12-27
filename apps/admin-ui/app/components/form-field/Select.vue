@@ -62,8 +62,12 @@ const props = defineProps<Props>()
             :multiple
             :disabled="disabled || readonly || loading">
             <div class="flex flex-col">
-              <SelectTrigger class="w-full cursor-pointer">
-                <SelectValue :placeholder />
+              <SelectTrigger class="w-full h-fit! cursor-pointer">
+                <slot
+                  name="trigger"
+                  v-bind="componentField">
+                  <SelectValue :placeholder class="text-start whitespace-break-spaces" />
+                </slot>
               </SelectTrigger>
               <BaseLinearProgress
                 v-if="loading"

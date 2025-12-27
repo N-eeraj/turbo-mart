@@ -113,17 +113,21 @@ export default class SuperAdminService extends BaseService {
 
       const adminUser = await AdminUser.create(data)
       const mailContent = await super.renderTemplate("adminCreation.ejs", data)
-      await sendMail({
-        recipients: [{
-          email: admin.email,
-        }],
-        category: "Admin Creation",
-        subject: "Admin Creation",
-        body: {
-          type: "html",
-          content: mailContent,
-        }
-      })
+      try {
+        await sendMail({
+          recipients: [{
+            email: admin.email,
+          }],
+          category: "Admin Creation",
+          subject: "Admin Creation",
+          body: {
+            type: "html",
+            content: mailContent,
+          }
+        })
+      } catch (error) {
+        super.log(error ?? "Failed to send email", "error")
+      }
 
       return transformUser(adminUser)
     } catch (error) {

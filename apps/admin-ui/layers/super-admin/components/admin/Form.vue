@@ -23,7 +23,6 @@ const {
     <FormFieldSelect
       name="permissions"
       label="Select Permissions"
-      placeholder="Permissions"
       :options="permissions"
       :loading="isLoadingPermissions"
       multiple />
