@@ -19,7 +19,9 @@ const isActive = computed(() => props.url === route.path)
     <NuxtLink
       :to="url"
       class="flex flex-row items-center gap-x-2">
-      <SidebarMenuButton :is-active>
+      <SidebarMenuButton
+        :is-active
+        class=" cursor-pointer">
         <Icon
           :name="icon ?? 'lucide:home'"
           class="shrink-0"

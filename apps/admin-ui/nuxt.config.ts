@@ -19,14 +19,6 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
-  routeRules: {
-    "*": {
-      prerender: false,
-    },
-    "/": {
-      prerender: true,
-    },
-  },
   extends: [
     "./layers/analytics",
     "./layers/catalogue-management",
