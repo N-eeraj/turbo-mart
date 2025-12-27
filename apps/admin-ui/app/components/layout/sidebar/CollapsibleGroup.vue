@@ -10,17 +10,9 @@ import {
   SidebarGroupContent,
   SidebarMenu,
 } from "@/components/ui/sidebar"
+import type { NavigationGroup } from "@/types/sidebar"
 
-interface Props {
-  title: string
-  items: Array<{
-    title: string
-    url: string
-  }>
-  icon?: string
-}
-
-defineProps<Props>()
+defineProps<NavigationGroup>()
 </script>
 
 <template>

@@ -3,14 +3,11 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
+import type {
+  NavigationItem,
+} from "@/types/sidebar"
 
-interface Props {
-  title: string
-  url: string
-  icon?: string
-}
-
-const props = defineProps<Props>()
+const props = defineProps<NavigationItem>()
 
 const route = useRoute()
 
