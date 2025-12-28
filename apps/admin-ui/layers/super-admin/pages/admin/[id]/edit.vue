@@ -3,21 +3,21 @@ import {
   EDIT_ADMIN,
 } from "~/constants/breadcrumbs"
 
-const route = useRoute()
 const router = useRouter()
+
+const {
+  adminId,
+  data: adminData,
+  isLoading: adminLoading,
+} = useAdminData()
+
 async function submitHandler(body: any) {
-  const response = await useApi(`/super-admin/admin/${route.params.id}`, {
+  const response = await useApi(`/super-admin/admin/${adminId.value}`, {
     method: "PATCH",
     body,
   })
-  router.push("/admin")
+  router.push(`/admin/${adminId.value}`)
   return response
-}
-
-const adminData = {
-  name: "John Doe",
-  email: "email@example.com",
-  permissions: [0,1],
 }
 </script>
 
@@ -26,7 +26,10 @@ const adminData = {
     title="Edit Admin"
     :breadcrumbs="EDIT_ADMIN" />
 
+  <BaseLinearProgress v-if="adminLoading" />
+
   <AdminForm
+    v-else
     :submit-handler
     :initial-values="adminData"
     class="mt-4" />
