@@ -9,7 +9,6 @@ const {
   page,
   search,
   order,
-  toggleOrder,
 } = useAdminListData()
 </script>
 
@@ -26,14 +25,8 @@ const {
         placeholder="Search"
         clearable />
 
-      <BaseButton
-        variant="outline"
-        size="icon"
-        @click="toggleOrder">
-        <Icon :name="order === 'asc' ? 'lucide:arrow-up' : 'lucide:arrow-down'" />
-      </BaseButton>
+      <BaseSortButton v-model="order" />
     </div>
-
 
     <BaseLinearProgress v-if="isLoading" />
     <template v-else>

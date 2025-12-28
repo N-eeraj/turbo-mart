@@ -1,7 +1,9 @@
 import {
   toast,
 } from "vue-sonner"
-import type { Order } from "~/types/ui"
+import type {
+  Order,
+} from "~/types/ui"
 
 const LIMIT = 10
 
@@ -26,7 +28,8 @@ export default function useAdminListData() {
       }
     }),
     {
-      transform: ({ data }) => data,
+      transform: ({ data }) => (data as Array<AdminDataObject>)
+        .map(({ role, permissions, ...admin }) => admin),
       watch: [
         () => page.value,
         () => order.value,
@@ -37,13 +40,18 @@ export default function useAdminListData() {
   const isLoading = computed(() => status.value === "pending")
 
   watch(() => error.value, (error) => {
-    toast.error(error?.cause?.message ?? "Oops! Something went wrong")
+    if (
+      error?.cause
+      && typeof error?.cause === "object" 
+      && "message" in error?.cause
+      && typeof error.cause.message === "string"
+    ) {
+      toast.error(error.cause.message)
+    } else {
+      toast.error("Oops! Something went wrong")
+    }
     navigateTo("/")
   })
-
-  const toggleOrder = () => {
-    order.value = order.value === "asc" ? "desc" : "asc"
-  }
 
   watchDebounced(
     search,
@@ -60,6 +68,5 @@ export default function useAdminListData() {
     page,
     search,
     order,
-    toggleOrder,
   }
 }

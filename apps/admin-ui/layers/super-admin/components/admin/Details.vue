@@ -14,7 +14,9 @@ interface Props {
   }>
   createdAt: Date
 }
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const formattedDate = useDateFormat(props.createdAt, "DD/MM/YYYY")
 </script>
 
 <template>
@@ -49,6 +51,15 @@ defineProps<Props>()
           {{ name }}
         </li>
       </ul>
+    </div>
+
+    <div class="text-sm">
+      <span class="text-foreground/75">
+        Admin Since:
+      </span>
+      <span>
+        {{ formattedDate }}
+      </span>
     </div>
   </section>
 </template>
