@@ -16,7 +16,7 @@ const {
 
 <template>
   <form
-    class="grid sm:grid-cols-2 gap-x-4 gap-y-3 w-full max-w-3xl"
+    class="grid sm:grid-cols-2 gap-4 w-full max-w-3xl"
     @submit="onSubmit">
     <FormFieldInput
       name="name"
@@ -36,7 +36,7 @@ const {
     <BaseButton
       :disabled="isInvalid"
       :loading="isSubmitting"
-      class="sm:col-span-full justify-self-end flex items-center gap-x-2 md:max-w-fit">
+      class="sm:col-span-full justify-self-end flex items-center gap-x-2 w-full sm:max-w-fit">
       Submit
     </BaseButton>
   </form>

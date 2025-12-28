@@ -5,7 +5,7 @@ import {
 </script>
 
 <template>
-  <div class="sticky top-0 flex justify-between items-center h-12 md:h-16 pl-2 pr-3 bg-app-bar z-100">
+  <div class="sticky top-0 flex justify-between items-center h-12 md:h-16 pl-2 pr-3 bg-app-bar z-50">
     <SidebarTrigger class="md:invisible cursor-pointer" />
 
     <div class="flex items-center gap-x-2 md:gap-x-4">

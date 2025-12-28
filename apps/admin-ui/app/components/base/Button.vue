@@ -16,14 +16,11 @@ interface Props {
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
 }
-const {
-  loading,
-  disabled,
-} = defineProps<Props>()
+const props = defineProps<Props>()
 
 const cursorClass = computed(() => {
-  if (loading) return "cursor-progress"
-  if (disabled) return "cursor-not-allowed"
+  if (props.loading) return "cursor-progress"
+  if (props.disabled) return "cursor-not-allowed"
   return "cursor-pointer"
 })
 </script>

@@ -37,7 +37,7 @@ async function capture() {
         <slot name="close">
           <BaseButton
             variant="ghost"
-            class="absolute top-2 left-2 grid place-content-center size-10 rounded-full z-101"
+            class="absolute top-2 left-2 grid place-content-center size-10 rounded-full z-51"
             @click="emit('close')">
             <Icon
               name="lucide:x"

@@ -10,7 +10,7 @@ export default function useAdminData() {
     `admin-${adminId.value}`,
     () => useApi(`/super-admin/admin/${adminId.value}`),
     {
-      transform: ({ data }) => data
+      transform: ({ data }) => data,
     }
   )
 

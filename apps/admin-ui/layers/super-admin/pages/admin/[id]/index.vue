@@ -7,6 +7,14 @@ const {
   data: adminData,
   isLoading: adminLoading,
 } = useAdminData()
+
+const {
+  showConfirmation,
+  isLoading: isDeleting,
+  onDelete,
+  confirm: confirmDelete,
+  cancel: cancelDelete,
+} = useAdminDelete()
 </script>
 
 <template>
@@ -17,17 +25,24 @@ const {
       #right
       v-if="adminData">
       <div class="flex items-center gap-x-3">
-        <NuxtLink :to="`/admin/${adminData.id}/edit`">
+        <NuxtLink
+          :to="`/admin/${adminData.id}/edit`"
+          :class="{
+            'pointer-events-none': isDeleting,
+          }">
           <BaseButton
             variant="outline"
-            size="icon">
+            size="icon"
+            :disabled="isDeleting">
             <Icon name="lucide:pencil" />
           </BaseButton>
         </NuxtLink>
         <BaseButton
           variant="ghost"
           size="icon"
-          class="hover:bg-destructive/20 text-destructive hover:text-destructive duration-300">
+          :loading="isDeleting"
+          class="hover:bg-destructive/20 text-destructive hover:text-destructive duration-300"
+          @click="onDelete">
           <Icon name="lucide:trash-2" />
         </BaseButton>
       </div>
@@ -41,4 +56,9 @@ const {
     class="mt-4">
     {{ adminData }}
   </section>
+
+  <AdminDeleteConfirmation
+    :open="showConfirmation"
+    @confirm="confirmDelete"
+    @cancel="cancelDelete" />
 </template>
