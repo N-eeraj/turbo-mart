@@ -111,7 +111,7 @@ export default class SuperAdminService extends BaseService {
       .skip(skip)
       .limit(limit)
 
-    return admins.map(this.transformAdminUser)
+    return admins.map(admin => this.transformAdminUser(admin))
   }
 
   /**

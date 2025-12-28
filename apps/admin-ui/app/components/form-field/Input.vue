@@ -28,6 +28,7 @@ interface Props {
   description?: any
   disabled?: boolean
   readonly?: boolean
+  clearable?: boolean
 }
 const props = defineProps<Props>()
 
@@ -75,6 +76,17 @@ function toggleInputType() {
               :class="cn(
                 readonly && 'opacity-100!',
               )" />
+            <InputGroupAddon
+              v-if="clearable && componentField.modelValue"
+              align="inline-end">
+              <BaseButton
+                variant="ghost"
+                type="button"
+                class="size-6 p-1 rounded-full cursor-pointer"
+                @click="formField.setValue('')">
+                <Icon name="lucide:x" />
+              </BaseButton>
+            </InputGroupAddon>
             <InputGroupAddon
               v-if="type === 'password'"
               align="inline-end">

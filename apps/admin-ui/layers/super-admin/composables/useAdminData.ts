@@ -23,7 +23,7 @@ export default function useAdminData() {
 
   watch(() => error.value, (error) => {
     toast.error(error?.cause?.message ?? "Oops! Something went wrong")
-    navigateTo(`/admin`)
+    navigateTo("/admin")
   })
 
   const permissionMappedData = computed(() => {
@@ -32,7 +32,6 @@ export default function useAdminData() {
       permissions: (data.value?.permissions ?? []).map(({ value }) => value),
     }
   })
-  
 
   return {
     adminId,
