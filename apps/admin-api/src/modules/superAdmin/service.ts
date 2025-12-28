@@ -4,6 +4,7 @@ import AdminUser, {
   Roles,
   transformUser,
   Permissions,
+  type Admin as AdminType,
   type AdminObject,
   type InferredAdminSchemaType,
 } from "@app/database/mongoose/models/Admin/User"
@@ -18,7 +19,6 @@ import {
   generateRandomString,
 } from "#utils/random"
 
-
 export interface GetAdminUsersOptions {
   limit?: number
   skip?: number
@@ -29,6 +29,10 @@ export interface GetAdminUsersOptions {
 export interface PermissionMap {
   name: typeof SuperAdminService.PERMISSIONS_MAP[Permissions]
   value: Permissions
+}
+
+export interface AdminDataObject extends Omit<AdminObject, "permissions"> {
+  permissions: Array<PermissionMap>
 }
 
 const DEFAULT_ADMIN_USERS_OPTIONS: Required<GetAdminUsersOptions> = {
@@ -57,6 +61,24 @@ export default class SuperAdminService extends BaseService {
     })
 
   /**
+   * Transform the admin mongoose document to `AdminDataObject` type.
+   * 
+   * @param admin - Pagination query options.
+   * 
+   * @returns transformed admin user with permissions array with name and value.
+   */
+  private static transformAdminUser(admin: AdminType): AdminDataObject {
+    const {
+      permissions,
+      ...transformedUser
+    } = transformUser(admin)
+    return {
+      ...transformedUser,
+      permissions: this.PERMISSIONS_MAP_LIST.filter((permission) => permissions?.includes(permission.value)),
+    }
+  }
+
+  /**
    * Fetch the admin users with the "ADMIN" role.
    * 
    * @param paginationQueries - Pagination query options.
@@ -70,7 +92,7 @@ export default class SuperAdminService extends BaseService {
     skip = DEFAULT_ADMIN_USERS_OPTIONS.skip,
     order = DEFAULT_ADMIN_USERS_OPTIONS.order,
     search = DEFAULT_ADMIN_USERS_OPTIONS.search,
-  }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminObject>> {
+  }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminDataObject>> {
     const searchFields = super.getRegexSearchList(
       search,
       [
@@ -89,7 +111,7 @@ export default class SuperAdminService extends BaseService {
       .skip(skip)
       .limit(limit)
 
-    return admins.map(transformUser)
+    return admins.map(this.transformAdminUser)
   }
 
   /**
@@ -164,7 +186,7 @@ export default class SuperAdminService extends BaseService {
    * @throws 404 error if admin user not found.
    * @throws If database lookup fails.
    */
-  static async getAdminById(adminId: AdminObject["id"]): Promise<AdminObject> {
+  static async getAdminById(adminId: AdminObject["id"]): Promise<AdminDataObject> {
     const admin = await AdminUser.findOne({
       _id: adminId,
       role: Roles.ADMIN,
@@ -178,7 +200,7 @@ export default class SuperAdminService extends BaseService {
       }
     }
 
-    return transformUser(admin)
+    return this.transformAdminUser(admin)
   }
 
   /**

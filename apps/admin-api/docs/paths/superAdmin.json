@@ -53,7 +53,7 @@
                   "data": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/ProfileSchema"
+                      "$ref": "#/components/schemas/DetailedProfileSchema"
                     }
                   },
                   "message": {
@@ -313,7 +313,7 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "$ref": "#/components/schemas/ProfileSchema"
+                    "$ref": "#/components/schemas/DetailedProfileSchema"
                   },
                   "message": {
                     "type": "string",

@@ -47,6 +47,27 @@ import {
   productCreationJSONSchema,
 } from "@app/schemas/admin/catalogue/product"
 
+const DetailedProfileSchema = {
+  type: ProfileSchema.type,
+  properties: {
+    ...ProfileSchema.properties,
+    permissions: {
+      "type": "array",
+      items: {
+        type: "object",
+        properties: {
+          name: {
+            "type": "string",
+          },
+          value: {
+            "$ref": "#/components/schemas/PermissionsEnum"
+          },
+        }
+      },
+    },
+  },
+}
+
 const LimitOptionSchema = {
   "type": "number",
   "description": "Number of records to be retrieved.",
@@ -112,6 +133,7 @@ const SubcategoryAttributeTypesEnum = {
 
 const ResponseSchemas = {
   ProfileSchema,
+  DetailedProfileSchema,
   NotificationSchema,
   CategorySchema,
   SubcategorySchema,

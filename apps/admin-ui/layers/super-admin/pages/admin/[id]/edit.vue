@@ -5,7 +5,7 @@ import {
 
 const {
   adminId,
-  data: adminData,
+  permissionMappedData,
   isLoading: adminLoading,
 } = useAdminData()
 
@@ -29,6 +29,6 @@ async function submitHandler(body: any) {
   <AdminForm
     v-else
     :submit-handler
-    :initial-values="adminData"
+    :initial-values="permissionMappedData"
     class="mt-4" />
 </template>

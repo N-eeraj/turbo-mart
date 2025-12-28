@@ -26,9 +26,18 @@ export default function useAdminData() {
     navigateTo(`/admin`)
   })
 
+  const permissionMappedData = computed(() => {
+    return {
+      ...data.value,
+      permissions: (data.value?.permissions ?? []).map(({ value }) => value),
+    }
+  })
+  
+
   return {
     adminId,
     data,
     isLoading,
+    permissionMappedData,
   }
 }

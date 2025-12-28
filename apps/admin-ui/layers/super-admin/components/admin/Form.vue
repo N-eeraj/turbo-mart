@@ -37,7 +37,7 @@ const {
       :disabled="isInvalid"
       :loading="isSubmitting"
       class="sm:col-span-full justify-self-end flex items-center gap-x-2 w-full sm:max-w-fit">
-      Submit
+      {{ !!initialValues ? "Update" : "Submit" }}
     </BaseButton>
   </form>
 </template>
