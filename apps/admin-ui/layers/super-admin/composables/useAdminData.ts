@@ -1,3 +1,7 @@
+import {
+  toast,
+} from "vue-sonner"
+
 export default function useAdminData() {
   const route = useRoute()
 
@@ -6,6 +10,7 @@ export default function useAdminData() {
   const {
     data,
     status,
+    error,
   } = useLazyAsyncData(
     `admin-${adminId.value}`,
     () => useApi(`/super-admin/admin/${adminId.value}`),
@@ -15,6 +20,11 @@ export default function useAdminData() {
   )
 
   const isLoading = computed(() => status.value === "pending")
+
+  watch(() => error.value, (error) => {
+    toast.error(error?.cause?.message ?? "Oops! Something went wrong")
+    navigateTo(`/admin`)
+  })
 
   return {
     adminId,

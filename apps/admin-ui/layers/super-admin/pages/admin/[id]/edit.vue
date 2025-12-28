@@ -3,8 +3,6 @@ import {
   EDIT_ADMIN,
 } from "~/constants/breadcrumbs"
 
-const router = useRouter()
-
 const {
   adminId,
   data: adminData,
@@ -16,7 +14,7 @@ async function submitHandler(body: any) {
     method: "PATCH",
     body,
   })
-  router.push(`/admin/${adminId.value}`)
+  navigateTo(`/admin/${adminId.value}`)
   return response
 }
 </script>

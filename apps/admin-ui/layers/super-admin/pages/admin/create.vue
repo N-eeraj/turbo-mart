@@ -3,13 +3,12 @@ import {
   CREATE_ADMIN,
 } from "~/constants/breadcrumbs"
 
-const router = useRouter()
 async function submitHandler(body: any) {
   const response = await useApi("/super-admin/admin", {
     method: "POST",
     body,
   })
-  router.push("/admin")
+  navigateTo("/admin")
   return response
 }
 </script>

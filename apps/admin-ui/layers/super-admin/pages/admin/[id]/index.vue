@@ -51,11 +51,10 @@ const {
 
   <BaseLinearProgress v-if="adminLoading" />
 
-  <section
+  <AdminDetails
     v-else
-    class="mt-4">
-    {{ adminData }}
-  </section>
+    v-bind="adminData"
+    class="mt-4" />
 
   <AdminDeleteConfirmation
     :open="showConfirmation"
