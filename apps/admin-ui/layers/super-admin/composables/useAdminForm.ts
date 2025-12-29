@@ -7,10 +7,6 @@ import {
   adminCreationSchema,
 } from "@app/schemas/admin/user"
 
-interface PermissionMap {
-  name: string
-  value: Permissions
-}
 interface Parameters {
   initialValues: Record<string, unknown>
   submitHandler: (_body: any) => Promise<ApiSuccess>
@@ -28,26 +24,14 @@ export default function useAdminForm({ submitHandler, initialValues = {} }: Para
     ),
     initialValues,
   })
-  
+
   const {
     data: permissions,
-    status: loadingPermissions,
-  } = useLazyAsyncData(
-    "admin-permissions",
-    () => useApi("/super-admin/admin/permissions"),
-    {
-      transform: ({ data }) => (data as Array<PermissionMap>)
-        .map(({ name, value }) => ({
-          textValue: name,
-          value,
-        })),
-      default: () => ([]),
-    }
-  )
-  const isLoadingPermissions = computed(() => loadingPermissions.value === "pending")
-  
+    isLoadingPermissions: isLoadingPermissions,
+  } = useAdminPermissions()
+
   const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("email") || !isFieldValid("permissions"))
-  
+
   const onSubmit = handleSubmit(async (body) => {
     try {
       const {

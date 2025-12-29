@@ -55,7 +55,12 @@ const paginationProps = computed(() => {
         v-model:order="order"
         :hide-search
         :hide-sort>
-        <slot name="filter-addon" />
+        <template #addon-left>
+          <slot name="filter-addon-left" />
+        </template>
+        <template #addon-right>
+          <slot name="filter-addon-right" />
+        </template>
       </DataTableFilter>
     </slot>
 

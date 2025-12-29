@@ -16,6 +16,8 @@ const order = defineModel<Order>("order")
 
 <template>
   <div class="flex justify-end items-center gap-x-3">
+    <slot name="addon-left" />
+
     <FormFieldInput
       v-if="!hideSearch"
       name="search"
@@ -27,6 +29,6 @@ const order = defineModel<Order>("order")
       v-if="!hideSort"
       v-model="order" />
 
-    <slot />
+    <slot name="addon-right" />
   </div>
 </template>

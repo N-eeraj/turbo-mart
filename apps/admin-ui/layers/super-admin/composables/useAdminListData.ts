@@ -30,6 +30,9 @@ export default function useAdminListData() {
   const search = ref("")
   const order = ref<Order>("asc")
   const hasNextPage = ref(true)
+  const filters = reactive({
+    permissions: null,
+  })
 
   const {
     data,
@@ -98,6 +101,11 @@ export default function useAdminListData() {
   )
 
   const {
+    data: permissions,
+    isLoadingPermissions: isLoadingPermissions,
+  } = useAdminPermissions()
+
+  const {
     showConfirmation: showDeleteConfirmation,
     confirm: confirmDelete,
     cancel: cancelDelete,
@@ -124,7 +132,10 @@ export default function useAdminListData() {
     hasNextPage,
     search,
     order,
+    filters,
     columns: COLUMNS,
+    permissions,
+    isLoadingPermissions,
     handleDelete,
     showDeleteConfirmation,
     deletingIds,

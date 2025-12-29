@@ -10,7 +10,10 @@ const {
   hasNextPage,
   search,
   order,
+  filters,
   columns,
+  permissions,
+  isLoadingPermissions,
   handleDelete,
   showDeleteConfirmation,
   deletingIds,
@@ -36,9 +39,22 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     :has-next="hasNextPage"
     :loading="isLoading"
     class="mt-4">
+    <template #filter-addon-left>
+      <div class="max-w-80">
+        <FormFieldSelect
+          v-model="filters.permissions"
+          name="filter.permissions"
+          placeholder="Filter by Permission"
+          :options="permissions"
+          :loading="isLoadingPermissions"
+          multiple />
+      </div>
+    </template>
+
     <template #table-cell-createdAt="{ row }">
       {{ formatDate(row.original.createdAt) }}
     </template>
+
     <template #table-cell-id="{ row }">
       <AdminListActions
         :id="row.original.id"
