@@ -5,15 +5,17 @@ import {
 </script>
 
 <template>
-  <Sidebar collapsible="icon">
+  <Sidebar
+    collapsible="icon"
+    class="z-51">
     <LayoutSidebarHeader />
     <LayoutSidebarContent />
   </Sidebar>
 </template>
 
 <style>
-/* open mobile sidebar UI */
-[data-state="open"][data-mobile="true"][data-sidebar="sidebar"] {
+/* Sidebar UI */
+[data-state="open"][data-sidebar="sidebar"] {
   z-index: 150 !important;
 }
 </style>

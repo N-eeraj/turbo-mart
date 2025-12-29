@@ -9,6 +9,7 @@ const {
   page,
   search,
   order,
+  columns,
 } = useAdminListData()
 </script>
 
@@ -21,6 +22,7 @@ const {
     v-model:search="search"
     v-model:order="order"
     :data
+    :columns
     :loading="isLoading"
     class="mt-4" />
 </template>

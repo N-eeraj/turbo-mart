@@ -1,10 +1,17 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TData, TValue">
 import type {
   Order,
   DataTableProps,
 } from "~/types/dataTable"
 
-interface Props extends DataTableProps {}
+type PropsBase = DataTableProps<TData, TValue>
+interface Props {
+  columns: PropsBase["columns"]
+  data: PropsBase["data"]
+  hideSearch: PropsBase["hideSearch"]
+  hideSort: PropsBase["hideSort"]
+  loading?: PropsBase["loading"]
+}
 defineProps<Props>()
 
 const search = defineModel<string>("search")
@@ -24,10 +31,9 @@ const order = defineModel<Order>("order")
       </DataTableFilter>
     </slot>
 
-    <BaseLinearProgress v-if="loading"  />
-
-    <template v-else>
-      {{ data }}
-    </template>
+    <DataTableTableRoot
+      :data
+      :columns
+      :loading />
   </section>
 </template>

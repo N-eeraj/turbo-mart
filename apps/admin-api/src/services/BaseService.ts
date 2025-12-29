@@ -69,7 +69,7 @@ export default class BaseService {
     fieldNames: Array<string>
   ): Array<{ [fieldName: string]: { $regex: RegExp } }> {
     const searchRegex = {
-      $regex: new RegExp(searchQuery, "i"),
+      $regex: new RegExp(searchQuery.trim(), "i"),
     }
 
     return fieldNames

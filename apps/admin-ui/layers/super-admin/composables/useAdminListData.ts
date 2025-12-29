@@ -6,6 +6,24 @@ import type {
 } from "~/types/dataTable"
 
 const LIMIT = 10
+const COLUMNS = [
+  {
+    id: "name",
+    header: "Name",
+  },
+  {
+    id: "email",
+    header: "Email",
+  },
+  {
+    id: "createdAt",
+    header: "Since",
+  },
+  {
+    id: "id",
+    header: "Actions",
+  },
+]
 
 export default function useAdminListData() {
   const page = ref(1)
@@ -54,8 +72,18 @@ export default function useAdminListData() {
   })
 
   watchDebounced(
-    search,
-    () => {
+    () => search.value,
+    (toSearch, fromSearch) => {
+      if (
+        (
+          !toSearch.trim().length
+          || toSearch.trim() === fromSearch.trim()
+        )
+        && !(
+          fromSearch.trim().length
+          && !toSearch.trim().length
+        )
+      ) return
       page.value = 1
       refresh()
     },
@@ -68,5 +96,6 @@ export default function useAdminListData() {
     page,
     search,
     order,
+    columns: COLUMNS,
   }
 }
