@@ -57,31 +57,13 @@ const props = defineProps<Props>()
         </slot>
 
         <FormControl>
-          <Select
+          <BaseSelect
             v-bind="componentField"
             :multiple
-            :disabled="disabled || readonly || loading">
-            <div class="flex flex-col">
-              <SelectTrigger class="w-full h-fit! cursor-pointer">
-                <slot
-                  name="trigger"
-                  v-bind="componentField">
-                  <SelectValue :placeholder class="text-start whitespace-break-spaces" />
-                </slot>
-              </SelectTrigger>
-              <BaseLinearProgress
-                v-if="loading"
-                class="h-0.5!" />
-            </div>
-            <SelectContent>
-              <SelectItem
-                v-for="({ textValue, value }) in options"
-                :value
-                class="cursor-pointer">
-                {{ textValue }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+            :options
+            :loading
+            :placeholder
+            :disabled="disabled || readonly || loading" />
         </FormControl>
 
         <slot

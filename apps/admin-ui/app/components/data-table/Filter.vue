@@ -15,7 +15,7 @@ const order = defineModel<Order>("order")
 </script>
 
 <template>
-  <div class="flex justify-end items-center gap-x-3">
+  <div class="flex justify-end items-center flex-wrap gap-3">
     <slot name="addon-left" />
 
     <FormFieldInput

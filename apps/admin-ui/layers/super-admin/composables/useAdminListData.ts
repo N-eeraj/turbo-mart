@@ -31,7 +31,7 @@ export default function useAdminListData() {
   const order = ref<Order>("asc")
   const hasNextPage = ref(true)
   const filters = reactive({
-    permissions: null,
+    permissions: [],
   })
 
   const {

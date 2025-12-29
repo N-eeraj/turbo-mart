@@ -40,15 +40,13 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     :loading="isLoading"
     class="mt-4">
     <template #filter-addon-left>
-      <div class="max-w-80">
-        <FormFieldSelect
-          v-model="filters.permissions"
-          name="filter.permissions"
-          placeholder="Filter by Permission"
-          :options="permissions"
-          :loading="isLoadingPermissions"
-          multiple />
-      </div>
+      <BaseSelect
+        v-model="filters.permissions"
+        placeholder="Filter by Permission"
+        :options="permissions"
+        :loading="isLoadingPermissions"
+        multiple
+        class="max-w-72" />
     </template>
 
     <template #table-cell-createdAt="{ row }">
