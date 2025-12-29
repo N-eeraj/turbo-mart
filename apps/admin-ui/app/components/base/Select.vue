@@ -19,7 +19,14 @@ interface Props extends SelectRootProps {
 }
 const props = defineProps<Props>()
 const modelValue = defineModel<AcceptableValue | AcceptableValue[] | undefined>()
+const emit = defineEmits([
+  "change",
+])
 const attrs = useAttrs()
+
+watch(() => modelValue.value, (modelValue) => {
+  emit("change", modelValue)
+})
 </script>
 
 <template>

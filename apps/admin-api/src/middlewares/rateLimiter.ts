@@ -8,7 +8,7 @@ import rateLimit from "express-rate-limit"
  */
 const rateLimiter = rateLimit({
   windowMs: 60_000, // 1 minute
-  max: 60, // limit to 60 requests per minute
+  max: 600, // limit to 60 requests per minute
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, res) => {

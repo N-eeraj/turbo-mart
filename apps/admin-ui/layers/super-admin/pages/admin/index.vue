@@ -10,7 +10,7 @@ const {
   hasNextPage,
   search,
   order,
-  filters,
+  permissionsFilter,
   columns,
   permissions,
   isLoadingPermissions,
@@ -41,9 +41,9 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     class="mt-4">
     <template #filter-addon-left>
       <BaseSelect
-        v-model="filters.permissions"
+        v-model="permissionsFilter"
         placeholder="Filter by Permission"
-        :options="permissions"
+        :options="permissions.map((permission) => ({ value: String(permission.value), textValue: permission.textValue }))"
         :loading="isLoadingPermissions"
         multiple
         class="max-w-72" />

@@ -2,6 +2,9 @@ import {
   toast,
 } from "vue-sonner"
 import type {
+  Permissions,
+} from "@app/database/mongoose/models/Admin/User"
+import type {
   Order,
 } from "~/types/dataTable"
 
@@ -26,13 +29,14 @@ const COLUMNS = [
 ]
 
 export default function useAdminListData() {
-  const page = ref(1)
-  const search = ref("")
-  const order = ref<Order>("asc")
+  const page = useRouteQuery("page", 1)
+  const search = useRouteQuery("search")
+  const order = useRouteQuery<Order>("order", "asc")
   const hasNextPage = ref(true)
-  const filters = reactive({
-    permissions: [],
-  })
+  const permissionsFilter = useRouteQuery<Array<Permissions>>("permissions-filter", [])
+  const filters = computed(() => ({
+    permissions: permissionsFilter.value,
+  }))
 
   const {
     data,
@@ -47,7 +51,7 @@ export default function useAdminListData() {
         limit: LIMIT + 1, // fetch one extra item to determine if a next page exists
         order: order.value,
         search: search.value,
-        filters,
+        filters: filters.value,
       }
     }),
     {
@@ -142,7 +146,7 @@ export default function useAdminListData() {
     hasNextPage,
     search,
     order,
-    filters,
+    permissionsFilter,
     columns: COLUMNS,
     permissions,
     isLoadingPermissions,
