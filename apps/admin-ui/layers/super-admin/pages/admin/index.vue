@@ -17,20 +17,10 @@ const {
     title="All Admins"
     :breadcrumbs="ALL_ADMINS" />
 
-  <section class="mt-4">
-    <div class="flex justify-end items-center gap-x-3">
-      <FormFieldInput
-        name="search"
-        v-model="search"
-        placeholder="Search"
-        clearable />
-
-      <BaseSortButton v-model="order" />
-    </div>
-
-    <BaseLinearProgress v-if="isLoading" />
-    <template v-else>
-      {{ data }}
-    </template>
-  </section>
+  <DataTable
+    v-model:search="search"
+    v-model:order="order"
+    :data
+    :loading="isLoading"
+    class="mt-4" />
 </template>

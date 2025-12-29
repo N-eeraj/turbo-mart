@@ -77,8 +77,11 @@ function toggleInputType() {
                 readonly && 'opacity-100!',
               )" />
             <InputGroupAddon
-              v-if="clearable && componentField.modelValue"
-              align="inline-end">
+              v-if="clearable"
+              align="inline-end"
+              :class="cn(
+                !componentField.modelValue && 'invisible',
+              )">
               <BaseButton
                 variant="ghost"
                 type="button"
