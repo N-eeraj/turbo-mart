@@ -16,17 +16,20 @@ interface Props extends SelectRootProps {
   options: Array<SelectItemProps>
   placeholder?: string
   loading?: boolean
+  clearable?: boolean
 }
 const props = defineProps<Props>()
-const modelValue = defineModel<AcceptableValue | AcceptableValue[] | undefined>()
-const emit = defineEmits([
-  "change",
-])
+const modelValue = defineModel<AcceptableValue | Array<AcceptableValue> | undefined>()
 const attrs = useAttrs()
 
-watch(() => modelValue.value, (modelValue) => {
-  emit("change", modelValue)
-})
+const showClearAction = computed(() => props.clearable && (
+  props.multiple ?
+    (modelValue.value as Array<AcceptableValue> | undefined)?.length
+    : modelValue.value
+))
+function clearModelValue() {
+  modelValue.value = props.multiple ? [] : null
+}
 </script>
 
 <template>
@@ -36,21 +39,31 @@ watch(() => modelValue.value, (modelValue) => {
     :disabled
     :default-open
     :default-value>
-    <div class="flex flex-col">
-      <SelectTrigger
-        v-bind="attrs"
-        class="w-full h-fit! cursor-pointer">
-        <slot
-          name="trigger"
-          v-bind="props">
-          <SelectValue
-            :placeholder
-            class="text-start whitespace-break-spaces" />
-        </slot>
-      </SelectTrigger>
-      <BaseLinearProgress
-        v-if="loading"
-        class="h-0.5!" />
+    <div class="flex items-center gap-x-1">
+      <div class="flex flex-col">
+        <SelectTrigger
+          v-bind="attrs"
+          class="w-full h-fit! cursor-pointer">
+          <slot
+            name="trigger"
+            v-bind="props">
+            <SelectValue
+              :placeholder
+              class="text-start whitespace-break-spaces" />
+          </slot>
+        </SelectTrigger>
+        <BaseLinearProgress
+          v-if="loading"
+          class="h-0.5!" />
+      </div>
+      <BaseButton
+        v-if="showClearAction"
+        variant="ghost"
+        type="button"
+        class="size-6 p-1 rounded-full"
+        @click.stop="clearModelValue">
+        <Icon name="lucide:x" />
+      </BaseButton>
     </div>
     <SelectContent>
       <SelectItem
@@ -58,7 +71,11 @@ watch(() => modelValue.value, (modelValue) => {
         :key="String(value)"
         :value
         class="cursor-pointer">
-        {{ textValue }}
+        <slot
+          name="option"
+          v-bind="{ textValue, value, modelValue }">
+          {{ textValue }}
+        </slot>
       </SelectItem>
     </SelectContent>
   </Select>

@@ -26,6 +26,7 @@ interface Props extends SelectRootProps {
   placeholder?: string
   description?: any
   loading?: boolean
+  clearable?: boolean
   readonly?: boolean
 }
 const props = defineProps<Props>()
@@ -63,7 +64,18 @@ const props = defineProps<Props>()
             :options
             :loading
             :placeholder
-            :disabled="disabled || readonly || loading" />
+            :disabled="disabled || readonly || loading">
+            <template #trigger="data">
+              <slot
+                name="trigger"
+                v-bind="data" />
+            </template>
+            <template #option="data">
+              <slot
+                name="option"
+                v-bind="data" />
+            </template>
+          </BaseSelect>
         </FormControl>
 
         <slot

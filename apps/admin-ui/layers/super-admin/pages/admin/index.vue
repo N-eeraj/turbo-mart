@@ -40,13 +40,26 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     :loading="isLoading"
     class="mt-4">
     <template #filter-addon-left>
-      <BaseSelect
-        v-model="permissionsFilter"
-        placeholder="Filter by Permission"
-        :options="permissions.map((permission) => ({ value: String(permission.value), textValue: permission.textValue }))"
-        :loading="isLoadingPermissions"
-        multiple
-        class="max-w-72" />
+      <div>
+        <small class="text-xs text-foreground/50">
+          Filter by Permissions
+        </small>
+        <BaseSelect
+          v-model="permissionsFilter"
+          :options="permissions"
+          :loading="isLoadingPermissions"
+          multiple
+          clearable>
+          <template #trigger="{ modelValue }">
+            <template v-if="!modelValue?.length">
+              Select Permissions
+            </template>
+            <template v-else-if="modelValue.length > 2">
+              {{ modelValue.length }} Selected
+            </template>
+          </template>
+        </BaseSelect>
+      </div>
     </template>
 
     <template #table-cell-createdAt="{ row }">

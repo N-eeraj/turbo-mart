@@ -118,6 +118,9 @@ export default function useAdminListData() {
     data: permissions,
     isLoadingPermissions: isLoadingPermissions,
   } = useAdminPermissions()
+  const stringMappedPermissions = computed(() => (permissions.value ?? [])
+    .map((permission) => ({ value: String(permission.value), textValue: permission.textValue }))
+  )
 
   const {
     showConfirmation: showDeleteConfirmation,
@@ -148,7 +151,7 @@ export default function useAdminListData() {
     order,
     permissionsFilter,
     columns: COLUMNS,
-    permissions,
+    permissions: stringMappedPermissions,
     isLoadingPermissions,
     handleDelete,
     showDeleteConfirmation,
