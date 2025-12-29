@@ -29,6 +29,7 @@ export type PaginationQueries = Partial<{
   skip: number
   order: mongoose.SortOrder
   search: string
+  filters: Record<string, unknown>
 }>
 
 /**
@@ -239,6 +240,11 @@ export default class BaseController {
     // search query
     if (typeof query.search === "string") {
       paginationQueries.search = query.search
+    }
+
+    // filters
+    if (typeof query.filters === "string") {
+      paginationQueries.filters = JSON.parse(query.filters)
     }
 
     return paginationQueries

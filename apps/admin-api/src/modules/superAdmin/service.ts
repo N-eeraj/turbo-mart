@@ -24,6 +24,9 @@ export interface GetAdminUsersOptions {
   skip?: number
   search?: string
   order?: mongoose.SortOrder
+  filters?: {
+    permissions?: Array<Permissions>
+  }
 }
 
 export interface PermissionMap {
@@ -35,7 +38,7 @@ export interface AdminDataObject extends Omit<AdminObject, "permissions"> {
   permissions: Array<PermissionMap>
 }
 
-const DEFAULT_ADMIN_USERS_OPTIONS: Required<GetAdminUsersOptions> = {
+const DEFAULT_ADMIN_USERS_OPTIONS: Required<Omit<GetAdminUsersOptions, "filters">> = {
   limit: 10,
   skip: 0,
   order: "descending",
@@ -92,6 +95,7 @@ export default class SuperAdminService extends BaseService {
     skip = DEFAULT_ADMIN_USERS_OPTIONS.skip,
     order = DEFAULT_ADMIN_USERS_OPTIONS.order,
     search = DEFAULT_ADMIN_USERS_OPTIONS.search,
+    filters,
   }: GetAdminUsersOptions = DEFAULT_ADMIN_USERS_OPTIONS): Promise<Array<AdminDataObject>> {
     const searchFields = super.getRegexSearchList(
       search,
@@ -100,10 +104,18 @@ export default class SuperAdminService extends BaseService {
         "email",
       ] satisfies Array<keyof InferredAdminSchemaType>,
     )
-    const admins = await AdminUser.find({
+
+    const filterQuery: mongoose.FilterQuery<InferredAdminSchemaType> = {
       role: Roles.ADMIN,
       $or: searchFields,
-    })
+    }
+    if (filters?.permissions?.length) {
+      filterQuery.permissions = {
+        $all: filters?.permissions,
+      }
+    }
+
+    const admins = await AdminUser.find(filterQuery)
       .sort({
         createdAt: order,
         _id: order,

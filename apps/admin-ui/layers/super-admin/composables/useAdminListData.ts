@@ -47,6 +47,7 @@ export default function useAdminListData() {
         limit: LIMIT + 1, // fetch one extra item to determine if a next page exists
         order: order.value,
         search: search.value,
+        filters,
       }
     }),
     {
@@ -81,6 +82,11 @@ export default function useAdminListData() {
     navigateTo("/")
   })
 
+  const resetAndRefresh = () => {
+    page.value = 1
+    refresh()
+  }
+
   watchDebounced(
     () => search.value,
     (toSearch, fromSearch) => {
@@ -94,11 +100,15 @@ export default function useAdminListData() {
           && !toSearch.trim().length
         )
       ) return
-      page.value = 1
-      refresh()
+      resetAndRefresh()
     },
-    { debounce: 500, maxWait: 1000 },
+    { debounce: 500},
   )
+
+  watchDebounced(filters, resetAndRefresh, {
+    debounce: 500,
+    deep: true,
+  })
 
   const {
     data: permissions,
