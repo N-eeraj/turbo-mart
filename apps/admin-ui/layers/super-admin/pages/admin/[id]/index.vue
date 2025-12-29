@@ -15,6 +15,18 @@ const {
   confirm: confirmDelete,
   cancel: cancelDelete,
 } = useAdminDelete()
+
+const route = useRoute()
+async function handleDelete() {
+  await onDelete(
+    route.params.id,
+    {
+      onSuccess: () => navigateTo("/admin", {
+        replace: true,
+      }),
+    }
+  )
+}
 </script>
 
 <template>
@@ -47,7 +59,7 @@ const {
             size="icon"
             :loading="isDeleting"
             class="hover:bg-destructive/20 text-destructive hover:text-destructive duration-300"
-            @click="onDelete">
+            @click="handleDelete">
             <Icon name="lucide:trash-2" />
           </BaseButton>
         </BaseTooltip>

@@ -90,6 +90,26 @@ export default function useAdminListData() {
     { debounce: 500, maxWait: 1000 },
   )
 
+  const {
+    showConfirmation: showDeleteConfirmation,
+    confirm: confirmDelete,
+    cancel: cancelDelete,
+    onDelete,
+  } = useAdminDelete()
+
+  const deletingIds = ref<Array<AdminObject["id"]>>([])
+
+  const handleDelete = async (id: AdminObject["id"]) => {
+    await onDelete(
+      id,
+      {
+        onConfirm: () => deletingIds.value.push(id),
+        onSuccess: () => refresh(),
+      }
+    )
+    deletingIds.value = deletingIds.value.filter((adminId) => adminId !== id)
+  }
+
   return {
     data,
     isLoading,
@@ -97,5 +117,10 @@ export default function useAdminListData() {
     search,
     order,
     columns: COLUMNS,
+    handleDelete,
+    showDeleteConfirmation,
+    deletingIds,
+    confirmDelete,
+    cancelDelete,
   }
 }

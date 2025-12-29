@@ -2,10 +2,13 @@ import {
   toast,
 } from "vue-sonner"
 
-export default function useAdminDelete() {
-  const route = useRoute()
-  const router = useRouter()
+interface Options {
+  onSuccess?: (_response: globalThis.ApiSuccess) => void
+  onConfirm?: () => void
+  onCancel?: () => void
+}
 
+export default function useAdminDelete() {
   const {
     isRevealed,
     reveal,
@@ -15,18 +18,21 @@ export default function useAdminDelete() {
 
   const isLoading = ref(false)
 
-  const onDelete = async () => {
+  const onDelete = async (id: AdminObject["id"], {
+    onSuccess,
+    onConfirm,
+    onCancel,
+  }: Options = {}) => {
     const { isCanceled } = await reveal()
-    if (isCanceled) return
+    if (isCanceled) return onCancel?.()
+    onConfirm?.()
     try {
       isLoading.value = true
-      const {
-        message,
-      } = await useApi(`/super-admin/admin/${route.params.id}`, {
+      const response = await useApi(`/super-admin/admin/${id}`, {
         method: "DELETE",
       })
-      toast.success(message)
-      router.replace("/admin")
+      toast.success(response.message)
+      onSuccess?.(response)
     } catch (error: unknown) {
       const {
         message,

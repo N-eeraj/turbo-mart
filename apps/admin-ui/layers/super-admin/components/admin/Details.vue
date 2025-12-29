@@ -22,7 +22,11 @@ const formattedDate = useDateFormat(props.createdAt, "DD/MM/YYYY")
 <template>
   <section class="space-y-4 md:space-y-5">
     <!-- Profile Details -->
-    <div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 items-center w-full">
+    <div
+      class="grid gap-x-4 gap-y-1 items-center w-full"
+      :class="{
+        'grid-cols-[auto_1fr]': profilePicture,
+      }">
       <img
         v-if="profilePicture"
         :src="profilePicture"
