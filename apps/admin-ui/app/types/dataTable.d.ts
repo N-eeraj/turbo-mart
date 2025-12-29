@@ -27,4 +27,7 @@ export interface DataTableProps<TData, TValue> extends
     columns: Array<ColumnDef<TData, TValue>>
     data: Array<TData>
     loading?: boolean
+    totalPages?: number
+    isInfinite?: boolean
+    hasNext?: boolean
   }

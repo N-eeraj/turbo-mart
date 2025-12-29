@@ -4,7 +4,10 @@ import type {
   FilterProps,
 } from "~/types/dataTable"
 
-interface Props extends FilterProps {}
+interface Props {
+  hideSearch: FilterProps["hideSearch"]
+  hideSort: FilterProps["hideSort"]
+}
 defineProps<Props>()
 
 const search = defineModel<string>("search")
