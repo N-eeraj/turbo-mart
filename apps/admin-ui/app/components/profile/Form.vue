@@ -72,7 +72,7 @@ const {
           Edit
         </span>
         <Icon
-          name="lucide:pencil"
+          name="lucide:pen"
           class="md:hidden!" />
       </BaseButton>
     </Transition>

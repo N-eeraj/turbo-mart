@@ -24,6 +24,7 @@ defineProps<Props>()
         <BaseLinearProgress />
       </TableCell>
     </TableRow>
+
     <template v-else-if="table.getRowModel().rows?.length">
       <TableRow
         v-for="row in table.getRowModel().rows"
@@ -32,10 +33,15 @@ defineProps<Props>()
         <TableCell
           v-for="cell in row.getVisibleCells()"
           :key="cell.id">
-          {{ row.original[cell.column.columnDef.id] }}
+          <slot
+            :name="cell.column.columnDef.id"
+            v-bind="cell">
+            {{ row.original[cell.column.columnDef.id] }}
+          </slot>
         </TableCell>
       </TableRow>
     </template>
+
     <template v-else>
       <TableRow>
         <TableCell

@@ -34,6 +34,21 @@ const order = defineModel<Order>("order")
     <DataTableTableRoot
       :data
       :columns
-      :loading />
+      :loading>
+      <template
+        v-for="column in columns"
+        #[`header-${column.id}`]="header">
+        <slot
+          :name="`table-header-${column.id}`"
+          v-bind="header" />
+      </template>
+      <template
+        v-for="column in columns"
+        #[`cell-${column.id}`]="cell">
+        <slot
+          :name="`table-cell-${column.id}`"
+          v-bind="cell" />
+      </template>
+    </DataTableTableRoot>
   </section>
 </template>

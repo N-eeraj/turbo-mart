@@ -35,7 +35,7 @@ const {
               variant="outline"
               size="icon"
               :disabled="isDeleting">
-              <Icon name="lucide:pencil" />
+              <Icon name="lucide:pen" />
             </BaseButton>
           </NuxtLink>
         </BaseTooltip>

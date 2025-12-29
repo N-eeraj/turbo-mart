@@ -17,7 +17,7 @@ const COLUMNS = [
   },
   {
     id: "createdAt",
-    header: "Since",
+    header: "Joined On",
   },
   {
     id: "id",

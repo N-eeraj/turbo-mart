@@ -24,5 +24,24 @@ const {
     :data
     :columns
     :loading="isLoading"
-    class="mt-4" />
+    class="mt-4">
+      <template #table-cell-id="{ row }">
+        <NuxtLink :to="`/admin/${row.original.id}`">
+          <BaseButton
+            variant="ghost"
+            size="icon"
+            tabindex="-1">
+            <Icon name="lucide:eye" />
+          </BaseButton>
+        </NuxtLink>
+        <NuxtLink :to="`/admin/${row.original.id}/edit`">
+          <BaseButton
+            variant="ghost"
+            size="icon"
+            tabindex="-1">
+            <Icon name="lucide:pen" />
+          </BaseButton>
+        </NuxtLink>
+      </template>
+    </DataTable>
 </template>

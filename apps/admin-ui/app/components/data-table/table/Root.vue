@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/table"
 
 const props = defineProps<{
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: Array<ColumnDef<TData, TValue>>
+  data: Array<TData>
   loading?: boolean
 }>()
 
@@ -25,11 +25,28 @@ const table = useVueTable({
 <template>
   <div class="border rounded-md">
     <Table>
-      <DataTableTableHeader :table />
+      <DataTableTableHeader :table>
+        <template
+          v-for="column in columns"
+          #[column.id]="header">
+          <slot
+            :name="`header-${column.id}`"
+            v-bind="header" />
+        </template>
+      </DataTableTableHeader>
+
       <DataTableTableBody
         :columns
         :table
-        :loading />
+        :loading>
+        <template
+          v-for="column in columns"
+          #[column.id]="cell">
+          <slot
+            :name="`cell-${column.id}`"
+            v-bind="cell" />
+        </template>
+      </DataTableTableBody>
     </Table>
   </div>
 </template>

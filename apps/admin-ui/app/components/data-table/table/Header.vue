@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="TData, TValue">
+<script setup lang="ts" generic="TData">
 import {
   FlexRender,
 } from "@tanstack/vue-table"
@@ -25,10 +25,14 @@ defineProps<Props>()
       <TableHead
         v-for="header in headerGroup.headers"
         :key="header.id">
-        <FlexRender
-          v-if="!header.isPlaceholder"
-          :render="header.column.columnDef.header"
-          :props="header.getContext()" />
+        <slot
+          :name="header.id"
+          v-bind="header">
+          <FlexRender
+            v-if="!header.isPlaceholder"
+            :render="header.column.columnDef.header"
+            :props="header.getContext()" />
+        </slot>
       </TableHead>
     </TableRow>
   </TableHeader>
