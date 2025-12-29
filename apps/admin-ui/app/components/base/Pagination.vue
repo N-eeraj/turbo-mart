@@ -31,17 +31,22 @@ const showNext = computed(() => {
   else if (props.total) return page.value < props.total
   return true
 })
+
+const totalPages = computed(() => {
+  if (!props.isInfinite) return props.total
+  if (props.hasNext) return page.value + 1
+  return page.value
+})
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <Pagination
       v-model:page="page"
-      v-slot="{ page }"
       show-edges
       :items-per-page="1"
       :sibling-count="1"
-      :total="isInfinite ? page + 1 : total">
+      :total="totalPages">
       <PaginationContent v-slot="{ items }">
         <PaginationPrevious
           v-if="page !== 1"

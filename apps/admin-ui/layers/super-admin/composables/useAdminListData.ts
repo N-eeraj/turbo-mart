@@ -29,6 +29,7 @@ export default function useAdminListData() {
   const page = ref(1)
   const search = ref("")
   const order = ref<Order>("asc")
+  const hasNextPage = ref(true)
 
   const {
     data,
@@ -40,7 +41,7 @@ export default function useAdminListData() {
     () => useApi("/super-admin/admin", {
       query: {
         skip: (page.value - 1) * LIMIT,
-        limit: LIMIT,
+        limit: LIMIT + 1, // fetch one extra item to determine if a next page exists
         order: order.value,
         search: search.value,
       }
@@ -55,7 +56,13 @@ export default function useAdminListData() {
     }
   )
 
+  const adminData = computed(() => data.value?.slice(0, LIMIT)) // slice to page size; extra item indicates if more pages exist
   const isLoading = computed(() => status.value === "pending")
+
+  watch(() => data.value, (data) => {
+    if (!data) return
+    hasNextPage.value = data.length > LIMIT
+  })
 
   watch(() => error.value, (error) => {
     if (
@@ -111,9 +118,10 @@ export default function useAdminListData() {
   }
 
   return {
-    data,
+    data: adminData,
     isLoading,
     page,
+    hasNextPage,
     search,
     order,
     columns: COLUMNS,

@@ -7,6 +7,7 @@ const {
   data,
   isLoading,
   page,
+  hasNextPage,
   search,
   order,
   columns,
@@ -31,6 +32,8 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     v-model:page="page"
     :data
     :columns
+    :is-infinite="true"
+    :has-next="hasNextPage"
     :loading="isLoading"
     class="mt-4">
     <template #table-cell-createdAt="{ row }">

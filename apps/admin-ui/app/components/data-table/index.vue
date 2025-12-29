@@ -15,7 +15,7 @@ interface Props {
   isInfinite?: PropsBase["isInfinite"]
   hasNext?: PropsBase["hasNext"]
 }
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   totalPages: 1,
   isInfinite: false,
   hasNext: false,
@@ -25,6 +25,25 @@ const search = defineModel<string>("search")
 const order = defineModel<Order>("order")
 const page = defineModel<number>("page", {
   default: 1,
+})
+
+const showPagination = computed(() => {
+  if (props.isInfinite) {
+    if (page.value === 1 && !props.hasNext) return false
+    return true
+  }
+  return props.totalPages && props.totalPages > 1
+})
+const paginationProps = computed(() => {
+  if (props.isInfinite) {
+    return {
+      isInfinite: true,
+      hasNext: props.hasNext,
+    }
+  }
+  return {
+    total: props.totalPages,
+  }
 })
 </script>
 
@@ -62,15 +81,9 @@ const page = defineModel<number>("page", {
     </DataTableTableRoot>
 
     <BasePagination
-      v-if="isInfinite"
+      v-if="showPagination"
       v-model="page"
-      :is-infinite
-      :has-next
-      class="ml-auto" />
-    <BasePagination
-      v-else-if="totalPages && totalPages > 1"
-      v-model="page"
-      :total="totalPages"
+      v-bind="paginationProps"
       class="ml-auto" />
   </section>
 </template>
