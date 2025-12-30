@@ -14,6 +14,7 @@ interface Props {
   totalPages?: PropsBase["totalPages"]
   isInfinite?: PropsBase["isInfinite"]
   hasNext?: PropsBase["hasNext"]
+  filterContainerClass?: PropsBase["filterContainerClass"]
 }
 const props = withDefaults(defineProps<Props>(), {
   totalPages: 1,
@@ -54,7 +55,8 @@ const paginationProps = computed(() => {
         v-model:search="search"
         v-model:order="order"
         :hide-search
-        :hide-sort>
+        :hide-sort
+        :class="filterContainerClass">
         <template #addon-left>
           <slot name="filter-addon-left" />
         </template>

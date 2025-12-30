@@ -8,7 +8,7 @@ async function submitHandler(body: any) {
     method: "POST",
     body,
   })
-  navigateTo(`/admin/${response.data.id}`)
+  navigateTo(`/admins/${response.data.id}`)
   return response
 }
 </script>

@@ -30,7 +30,7 @@ const COLUMNS = [
 
 export default function useAdminListData() {
   const page = useRouteQuery("page", 1)
-  const search = useRouteQuery("search")
+  const search = useRouteQuery("search", "")
   const order = useRouteQuery<Order>("order", "asc")
   const hasNextPage = ref(true)
   const permissionsFilter = useRouteQuery<Array<Permissions>>("permissions-filter", [])

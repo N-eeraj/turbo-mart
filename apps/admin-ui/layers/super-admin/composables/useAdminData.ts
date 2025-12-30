@@ -42,7 +42,7 @@ export default function useAdminData() {
     } else {
       toast.error("Oops! Something went wrong")
     }
-    navigateTo("/admin")
+    navigateTo("/admins")
   })
 
   const permissionMappedData = computed(() => {

@@ -40,7 +40,7 @@ function clearModelValue() {
     :default-open
     :default-value>
     <div class="flex items-center gap-x-1">
-      <div class="flex flex-col">
+      <div class="flex flex-col w-full">
         <SelectTrigger
           v-bind="attrs"
           class="w-full h-fit! cursor-pointer">

@@ -16,11 +16,11 @@ const ADMIN_NAVIGATION = [
     items: [
       {
         title: "All Admins",
-        url: "/admin",
+        url: "/admins",
       },
       {
         title: "Create Admin",
-        url: "/admin/create",
+        url: "/admins/create",
       },
     ],
     access: {

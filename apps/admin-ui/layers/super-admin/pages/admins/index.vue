@@ -38,10 +38,11 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     :is-infinite="true"
     :has-next="hasNextPage"
     :loading="isLoading"
-    class="mt-4">
+    class="mt-2 md:mt-0"
+    filter-container-class="items-end!">
     <template #filter-addon-left>
-      <div>
-        <small class="text-xs text-foreground/50">
+      <div class="space-y-1">
+        <small class="inline-block text-xs text-foreground/50">
           Filter by Permissions
         </small>
         <BaseSelect

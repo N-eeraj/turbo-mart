@@ -21,7 +21,7 @@ async function handleDelete() {
   await onDelete(
     route.params.id,
     {
-      onSuccess: () => navigateTo("/admin", {
+      onSuccess: () => navigateTo("/admins", {
         replace: true,
       }),
     }
@@ -39,7 +39,7 @@ async function handleDelete() {
       <div class="flex items-center gap-x-3">
         <BaseTooltip tooltip="Edit">
           <NuxtLink
-            :to="`/admin/${adminData.id}/edit`"
+            :to="`/admins/${adminData.id}/edit`"
             :class="{
               'pointer-events-none': isDeleting,
             }">

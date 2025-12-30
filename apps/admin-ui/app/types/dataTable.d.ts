@@ -30,4 +30,5 @@ export interface DataTableProps<TData, TValue> extends
     totalPages?: number
     isInfinite?: boolean
     hasNext?: boolean
+    filterContainerClass?: string
   }

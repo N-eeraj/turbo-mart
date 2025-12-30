@@ -14,7 +14,7 @@ async function submitHandler(body: any) {
     method: "PATCH",
     body,
   })
-  navigateTo(`/admin/${adminId.value}`)
+  navigateTo(`/admins/${adminId.value}`)
   return response
 }
 </script>

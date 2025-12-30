@@ -14,7 +14,7 @@ const emit = defineEmits([
   <div class="flex items-center gap-x-2">
     <BaseTooltip tooltip="View">
       <NuxtLink
-        :to="`/admin/${id}`"
+        :to="`/admins/${id}`"
         :class="{
           'pointer-events-none': isDeleting,
         }">
@@ -29,7 +29,7 @@ const emit = defineEmits([
 
     <BaseTooltip tooltip="Edit">
       <NuxtLink
-        :to="`/admin/${id}/edit`"
+        :to="`/admins/${id}/edit`"
         :class="{
           'pointer-events-none': isDeleting,
         }">
