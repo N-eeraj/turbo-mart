@@ -1,53 +1,14 @@
-import {
-  toast,
-} from "vue-sonner"
-
-interface Options {
-  onSuccess?: (_response: globalThis.ApiSuccess) => void
-  onConfirm?: () => void
-  onCancel?: () => void
-}
-
 export default function useCategoryDelete() {
   const {
-    isRevealed,
-    reveal,
-    confirm,
-    cancel,
-  } = useConfirmDialog()
+    onDelete,
+    ...deleteResource
+  } = useResourceDelete()
 
-  const isLoading = ref(false)
-
-  const onDelete = async (id: AdminObject["id"], {
-    onSuccess,
-    onConfirm,
-    onCancel,
-  }: Options = {}) => {
-    const { isCanceled } = await reveal()
-    if (isCanceled) return onCancel?.()
-    onConfirm?.()
-    try {
-      isLoading.value = true
-      const response = await useApi(`/admin/catalogue/categories/${id}`, {
-        method: "DELETE",
-      })
-      toast.success(response.message)
-      onSuccess?.(response)
-    } catch (error: unknown) {
-      const {
-        message,
-      } = error as ApiError
-      toast.error(message)
-    } finally {
-      isLoading.value = false
-    }
-  }
+  const handleDelete = (id: string, options: DeleteResourceOptions) =>
+      onDelete(`/admin/catalogue/categories/${id}`, options)
 
   return {
-    showConfirmation: isRevealed,
-    isLoading,
-    onDelete,
-    confirm,
-    cancel,
+    ...deleteResource,
+    onDelete: handleDelete,
   }
 }

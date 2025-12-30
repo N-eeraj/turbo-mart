@@ -12,7 +12,6 @@ export interface AdminDataObject extends Omit<AdminObject, "permissions"> {
 export default function useAdminData() {
   const route = useRoute()
   const adminId = computed(() => route.params.id)
-  console.log(adminId.value)
 
   const {
     data,
