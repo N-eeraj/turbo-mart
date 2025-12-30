@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// import useCatalogueForm from "~/composables/catalogue/useCatalogueForm"
-
 interface Props {
   initialValues: Record<string, unknown>
   submitHandler: (_body: any) => Promise<ApiSuccess>
@@ -11,7 +9,7 @@ const {
   isSubmitting,
   isInvalid,
   onSubmit,
-} = useCatalogueForm(props)
+} = useCategoryForm(props)
 </script>
 
 <template>

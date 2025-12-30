@@ -12,7 +12,7 @@ interface Parameters {
   submitHandler: (_body: any) => Promise<ApiSuccess>
 }
 
-export default function useCatalogueForm({ submitHandler, initialValues = {} }: Parameters) {
+export default function useCategoryForm({ submitHandler, initialValues = {} }: Parameters) {
   const {
     handleSubmit,
     isSubmitting,
