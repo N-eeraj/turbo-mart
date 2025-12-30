@@ -35,10 +35,10 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     v-model:page="page"
     :data
     :columns
-    :is-infinite="true"
+    is-infinite
     :has-next="hasNextPage"
     :loading="isLoading"
-    class="mt-2 md:mt-0"
+    class="basis-0 grow mt-2 md:mt-0"
     filter-container-class="items-end!">
     <template #filter-addon-left>
       <div class="space-y-1">

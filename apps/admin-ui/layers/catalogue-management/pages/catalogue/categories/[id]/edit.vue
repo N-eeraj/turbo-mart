@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {
-  ALL_CATEGORIES,
+  EDIT_CATEGORY,
 } from "~/constants/breadcrumbs"
 </script>
 
 <template>
   <BaseHeader
-    title="All Categories"
-    :breadcrumbs="ALL_CATEGORIES" />
+    title="Edit Category"
+    :breadcrumbs="EDIT_CATEGORY" />
 </template>

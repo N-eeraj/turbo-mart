@@ -18,7 +18,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <TableHeader>
+  <TableHeader class="bg-secondary">
     <TableRow
       v-for="headerGroup in table.getHeaderGroups()"
       :key="headerGroup.id">
