@@ -8,9 +8,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  type ButtonVariants,
+} from "@/components/ui/button"
 
 interface Props {
   open: boolean
+  variant?: ButtonVariants["variant"]
 }
 defineProps<Props>()
 
@@ -25,11 +29,12 @@ const emit = defineEmits([
     <AlertDialogContent class="p-4">
       <AlertDialogHeader>
         <AlertDialogTitle>
-          Confirmation Needed
+          <slot name="title">
+            Confirmation Needed
+          </slot>
         </AlertDialogTitle>
         <AlertDialogDescription>
-          You are about to delete this admin user.
-          This action is irreversible, are you sure you want to continue?
+          <slot name="description" />
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
@@ -39,7 +44,7 @@ const emit = defineEmits([
           Cancel
         </AlertDialogCancel>
         <BaseButton
-          variant="destructive"
+          :variant
           @click="emit('confirm')">
           Confirm
         </BaseButton>

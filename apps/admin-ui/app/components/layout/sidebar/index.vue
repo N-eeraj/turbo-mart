@@ -7,7 +7,7 @@ import {
 <template>
   <Sidebar
     collapsible="icon"
-    class="z-51">
+    class="z-50">
     <LayoutSidebarHeader />
     <LayoutSidebarContent />
   </Sidebar>
@@ -16,6 +16,6 @@ import {
 <style>
 /* Sidebar UI */
 [data-state="open"][data-sidebar="sidebar"] {
-  z-index: 150 !important;
+  z-index: 50 !important;
 }
 </style>

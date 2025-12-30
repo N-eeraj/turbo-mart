@@ -9,17 +9,16 @@ const {
 } = useAdminData()
 
 const {
-  showConfirmation,
+  showConfirmation: showDeleteConfirmation,
   isLoading: isDeleting,
   onDelete,
   confirm: confirmDelete,
   cancel: cancelDelete,
 } = useAdminDelete()
 
-const route = useRoute()
 async function handleDelete() {
   await onDelete(
-    route.params.id,
+    adminData.value.id,
     {
       onSuccess: () => navigateTo("/admins", {
         replace: true,
@@ -74,8 +73,14 @@ async function handleDelete() {
     v-bind="adminData"
     class="mt-4" />
 
-  <AdminDeleteConfirmation
-    :open="showConfirmation"
+  <BaseConfirmation
+    :open="showDeleteConfirmation"
+    variant="destructive"
     @confirm="confirmDelete"
-    @cancel="cancelDelete" />
+    @cancel="cancelDelete">
+    <template #description>
+      You are about to delete this admin user.
+      This action is irreversible, are you sure you want to continue?
+    </template>
+  </BaseConfirmation>
 </template>

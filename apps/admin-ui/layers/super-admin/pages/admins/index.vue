@@ -21,7 +21,7 @@ const {
   cancelDelete,
 } = useAdminListData()
 
-const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
+const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
 </script>
 
 <template>
@@ -75,8 +75,14 @@ const formatDate = (createdAt) => useDateFormat(createdAt, "DD/MM/YYYY")
     </template>
   </DataTable>
 
-  <AdminDeleteConfirmation
+  <BaseConfirmation
     :open="showDeleteConfirmation"
+    variant="destructive"
     @confirm="confirmDelete"
-    @cancel="cancelDelete" />
+    @cancel="cancelDelete">
+    <template #description>
+      You are about to delete this admin user.
+      This action is irreversible, are you sure you want to continue?
+    </template>
+  </BaseConfirmation>
 </template>

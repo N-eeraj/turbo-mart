@@ -18,7 +18,7 @@ async function submitHandler(body: any) {
     title="Create Category"
     :breadcrumbs="CREATE_CATEGORY" />
 
-  <CatalogueCategoriesForm
+  <CatalogueCategoryForm
     :submit-handler
     class="mt-4" />
 </template>
