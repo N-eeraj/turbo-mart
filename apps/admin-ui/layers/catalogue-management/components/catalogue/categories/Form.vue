@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// import useCatalogueForm from "~/composables/catalogue/useCatalogueForm"
+
 interface Props {
   initialValues: Record<string, unknown>
   submitHandler: (_body: any) => Promise<ApiSuccess>
@@ -6,12 +8,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const {
-  permissions,
-  isLoadingPermissions,
   isSubmitting,
   isInvalid,
   onSubmit,
-} = useAdminForm(props)
+} = useCatalogueForm(props)
 </script>
 
 <template>
@@ -22,14 +22,9 @@ const {
       name="name"
       label="Name" />
     <FormFieldInput
-      name="email"
-      label="Email" />
-    <FormFieldSelect
-      name="permissions"
-      label="Select Permissions"
-      :options="permissions"
-      :loading="isLoadingPermissions"
-      multiple />
+      name="slug"
+      label="Slug"
+      description="Unique and short name (slug) of the category." />
 
     <BaseButton
       :disabled="isInvalid"

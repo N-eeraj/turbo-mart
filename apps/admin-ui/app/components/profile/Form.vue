@@ -18,14 +18,12 @@ const {
       name="name"
       :value="user.name"
       label="Name"
-      :readonly="!enableEdit"
-      class="w-full" />
+      :readonly="!enableEdit" />
     <FormFieldInput
       name="email"
       :value="user.email"
       label="Email"
-      :readonly="!enableEdit"
-      class="w-full" />
+      :readonly="!enableEdit" />
 
     <Transition
       mode="out-in"
