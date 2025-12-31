@@ -25,12 +25,7 @@ const {
       name="slug"
       label="Slug"
       description="Unique and short name (slug) of the subcategory." />
-    <FormFieldSelect
-      name="category"
-      label="Select Category"
-      :options="categories"
-      :loading="isLoadingCategories" />
-    <BaseCombobox
+    <FormFieldCombobox
       name="category"
       placeholder="Select Category"
       :options="categories"

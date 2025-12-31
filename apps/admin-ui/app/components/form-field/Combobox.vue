@@ -51,24 +51,30 @@ const props = defineProps<Props>()
         </slot>
 
         <FormControl>
-          <BaseSelect
+          <BaseCombobox
             v-bind="componentField"
             :multiple
             :options
             :loading
             :placeholder
+            :clearable
             :disabled="disabled || readonly || loading">
             <template #trigger="data">
               <slot
                 name="trigger"
                 v-bind="data" />
             </template>
-            <template #option="data">
+            <template #empty="data">
               <slot
-                name="option"
+                name="empty"
                 v-bind="data" />
             </template>
-          </BaseSelect>
+            <template #item="data">
+              <slot
+                name="item"
+                v-bind="data" />
+            </template>
+          </BaseCombobox>
         </FormControl>
 
         <slot

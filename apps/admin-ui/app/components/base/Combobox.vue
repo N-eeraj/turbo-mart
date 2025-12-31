@@ -38,7 +38,9 @@ function selectOptions(selectedValue: AcceptableValue) {
   if (!props.multiple) {
     modelValue.value = selectedValue === modelValue.value ? null : selectedValue
     open.value = false
-    selectedOptions.value = props.options.find(option => option.value === modelValue.value)?.textValue
+    nextTick(() => {
+      selectedOptions.value = props.options.find(option => option.value === modelValue.value)?.textValue
+    })
     return
   }
   // is multiple
@@ -52,40 +54,64 @@ function selectOptions(selectedValue: AcceptableValue) {
       modelValue.value = [selectedValue]
     }
   }
-  const selected = props.options.reduce((selected: Array<string>, { value, textValue }) => {
-    if ((modelValue.value as Array<AcceptableValue> | undefined ?? []).includes(value)) {
-      selected.push(textValue as string)
-    }
-    return selected
-  }, [])
-  selectedOptions.value = selected.join(", ")
+  nextTick(() => {
+    const selected = props.options.reduce((selected: Array<string>, { value, textValue }) => {
+      if ((modelValue.value as Array<AcceptableValue> | undefined ?? []).includes(value)) {
+        selected.push(textValue as string)
+      }
+      return selected
+    }, [])
+    selectedOptions.value = selected.join(", ")
+  })
 }
 
 function isSelected(option: AcceptableValue): boolean {
   if (!props.multiple) return (modelValue.value === option)
   return (modelValue.value as Array<AcceptableValue> ?? []).includes(option)
 }
+
+const showClearAction = computed(() => props.clearable && (
+  props.multiple ?
+    (modelValue.value as Array<AcceptableValue> | undefined)?.length
+    : modelValue.value
+))
+function resetModelValue() {
+  modelValue.value = props.multiple ? [] : null
+  selectedOptions.value = undefined
+}
 </script>
 
 <template>
   <Popover v-model:open="open">
-    <PopoverTrigger as-child>
-      <BaseButton
-        variant="outline"
-        role="combobox"
-        type="button"
-        :aria-expanded="open"
-        class="justify-between">
-        <slot
-          name="trigger"
-          :model-value>
-          {{ selectedOptions || placeholder }}
-        <Icon
-          name="lucide:chevrons-up-down"
-          class="opacity-50" />
-      </slot>
-    </BaseButton>
-    </PopoverTrigger>
+    <div class="flex flex-col w-full">
+      <PopoverTrigger as-child>
+        <BaseButton
+          variant="outline"
+          role="combobox"
+          type="button"
+          :aria-expanded="open"
+          class="justify-between">
+          <slot
+            name="trigger"
+            :model-value>
+            {{ selectedOptions || placeholder }}
+          <Icon
+            name="lucide:chevrons-up-down"
+            class="ml-auto opacity-50" />
+          <BaseButton
+            v-if="showClearAction"
+            variant="ghost"
+            class="p-0"
+            @click.stop="resetModelValue">
+            <Icon name="lucide:x" />
+          </BaseButton>
+        </slot>
+      </BaseButton>
+      <BaseLinearProgress
+        v-if="loading"
+        class="h-0.5!" />
+      </PopoverTrigger>
+    </div>
     <PopoverContent class="p-0">
       <Command>
         <CommandInput
