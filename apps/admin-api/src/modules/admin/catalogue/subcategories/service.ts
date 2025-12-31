@@ -131,6 +131,13 @@ export default class SubcategoryService extends BaseService {
       .select({
         attributes: 0,
       })
+      .populate({
+        path: "category",
+        select: {
+          name: 1,
+          slug: 1,
+        }
+      })
 
     return subcategories.map(transformSubcategory)
   }
@@ -154,8 +161,16 @@ export default class SubcategoryService extends BaseService {
         name,
         slug,
       })
+      const populatedSubcategory = await subcategory
+        .populate({
+          path: "category",
+          select: {
+            name: 1,
+            slug: 1,
+          }
+        })
 
-      return transformSubcategory(subcategory)
+      return transformSubcategory(populatedSubcategory)
     } catch (error) {
       const [isDuplicateKeyError, conflicts] = super.checkDuplicateKeyError(error)
       // throw conflict error
@@ -192,6 +207,13 @@ export default class SubcategoryService extends BaseService {
    */
   static async getById(subcategoryId: SubcategoryObject["id"]): Promise<SubcategoryObject> {
     const subcategory = await Subcategory.findById(subcategoryId)
+      .populate({
+        path: "category",
+        select: {
+          name: 1,
+          slug: 1,
+        }
+      })
 
     // throw error if subcategory is not found
     if (!subcategory) {
@@ -233,6 +255,13 @@ export default class SubcategoryService extends BaseService {
           new: true,
         }
       )
+      .populate({
+        path: "category",
+        select: {
+          name: 1,
+          slug: 1,
+        }
+      })
 
       // throw error if subcategory is not found
       if (!updatedSubcategory) {

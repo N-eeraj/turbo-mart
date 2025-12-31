@@ -51,6 +51,10 @@ const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
     :loading="isLoading"
     class="basis-0 grow mt-2"
     filter-container-class="items-end!">
+    <template #table-cell-category="{ row }">
+      {{ row.original.category.name }}
+    </template>
+
     <template #table-cell-createdAt="{ row }">
       {{ formatDate(row.original.createdAt) }}
     </template>

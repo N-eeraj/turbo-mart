@@ -6,16 +6,22 @@ import AttributeSchema, {
   type Attribute,
   type AttributeObject,
 } from "#mongoose/models/Catalogue/Attributes"
+import {
+  type CategoryObject,
+  type Category,
+} from "#mongoose/models/Catalogue/Category"
 
 export type InferredSubcategorySchemaType = mongoose.InferSchemaType<typeof SubcategorySchema>
 export type Subcategory = Omit<mongoose.HydratedDocument<InferredSubcategorySchemaType>, "attributes"> & {
   attributes: Array<Attribute<AttributeType>>
 }
-export type ObjectKeys = Exclude<keyof InferredSubcategorySchemaType, "attributes">
+export type ObjectKeys = Exclude<keyof InferredSubcategorySchemaType, "attributes" | "category">
 export type SubcategoryObject = Pick<Subcategory, ObjectKeys> & {
   id: Subcategory["_id"]
+  category: Pick<CategoryObject, "id" | "name" | "slug">
   attributes?: Array<AttributeObject<AttributeType>>
 }
+type TransformParams = Omit<Subcategory, "category"> & { category: Pick<Category, "_id" | "name" | "slug"> }
 
 /**
  * Mongoose schema for catalogue subcategory.
@@ -68,10 +74,14 @@ export function transformSubcategory({
   attributes,
   createdAt,
   updatedAt,
-}: Subcategory): SubcategoryObject {
+}: TransformParams): SubcategoryObject {
   const subcategory: SubcategoryObject = {
     id: _id,
-    category,
+    category: {
+      id: category._id,
+      name: category.name,
+      slug: category.slug,
+    },
     name,
     slug,
     attributes: attributes?.map(transformAttribute),
