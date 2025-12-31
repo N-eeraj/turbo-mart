@@ -180,6 +180,16 @@ export default class SubcategoryService extends BaseService {
     return this.ATTRIBUTE_TYPES_MAP_LIST
   }
 
+  /**
+   * Fetches the details of subcategory by id.
+   * 
+   * @param subcategoryId - Id of the subcategory.
+   * 
+   * @returns subcategory.
+   * 
+   * @throws 404 error if subcategory not found.
+   * @throws If database lookup fails.
+   */
   static async getById(subcategoryId: SubcategoryObject["id"]): Promise<SubcategoryObject> {
     const subcategory = await Subcategory.findById(subcategoryId)
 
