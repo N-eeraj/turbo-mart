@@ -30,6 +30,11 @@ const {
       label="Select Category"
       :options="categories"
       :loading="isLoadingCategories" />
+    <BaseCombobox
+      name="category"
+      placeholder="Select Category"
+      :options="categories"
+      :loading="isLoadingCategories" />
 
     <BaseButton
       :disabled="isInvalid"
