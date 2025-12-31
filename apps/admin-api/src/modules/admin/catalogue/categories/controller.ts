@@ -72,6 +72,21 @@ export default class CategoryController extends BaseController {
   }
 
   /**
+   * @route GET /api/admin/catalogue/categories/slug/:slug
+   * 
+   * Get one category by slug.
+   */
+  static async getBySlug({ params }: Request, res: Response) {
+    const categorySlug = params.slug
+    const data = await CategoryService.getBySlug(categorySlug)
+
+    super.sendSuccess(res, {
+      message: "Fetched Category",
+      data,
+    })
+  }
+
+  /**
    * @route PATCH /api/admin/catalogue/categories/:categoryId
    * 
    * Update category.

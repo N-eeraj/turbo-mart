@@ -19,6 +19,8 @@ categoryRouter.route("/:categoryId")
   .patch(catalogueManagementMiddlewares, CategoryController.update)
   .delete(catalogueManagementMiddlewares, CategoryController.delete)
 
+categoryRouter.get("/slug/:slug", catalogueManagementMiddlewares, CategoryController.getBySlug)
+
 categoryRouter.get("/:categoryId/subcategories", catalogueManagementMiddlewares, CategoryController.listSubcategories)
 
 export default categoryRouter

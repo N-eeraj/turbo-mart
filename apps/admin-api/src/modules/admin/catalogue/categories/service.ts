@@ -102,8 +102,44 @@ export default class CategoryService extends BaseService {
     }
   }
 
+  /**
+   * Fetches the details of category by id.
+   * 
+   * @param categoryId - Id of the category.
+   * 
+   * @returns category.
+   * 
+   * @throws 404 error if category not found.
+   * @throws If database lookup fails.
+   */
   static async getById(categoryId: CategoryObject["id"]): Promise<CategoryObject> {
     const category = await Category.findById(categoryId)
+
+    // throw error if category is not found
+    if (!category) {
+      throw {
+        status: 404,
+        message: "Category not found",
+      }
+    }
+
+    return transformCategory(category)
+  }
+
+  /**
+   * Fetches the details of category by slug.
+   * 
+   * @param categorySlug - Slug of the category.
+   * 
+   * @returns category.
+   * 
+   * @throws 404 error if category not found.
+   * @throws If database lookup fails.
+   */
+  static async getBySlug(categorySlug: CategoryObject["slug"]): Promise<CategoryObject> {
+    const category = await Category.findOne({
+      slug: categorySlug,
+    })
 
     // throw error if category is not found
     if (!category) {

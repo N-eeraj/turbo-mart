@@ -98,6 +98,16 @@ export default class BrandService extends BaseService {
     }
   }
 
+  /**
+   * Fetches the details of brand by id.
+   * 
+   * @param brandId - Id of the brand.
+   * 
+   * @returns brand.
+   * 
+   * @throws 404 error if brand not found.
+   * @throws If database lookup fails.
+   */
   static async getById(brandId: BrandObject["id"]): Promise<BrandObject> {
     const brand = await Brand.findById(brandId)
 
