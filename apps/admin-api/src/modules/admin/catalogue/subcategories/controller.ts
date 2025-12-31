@@ -48,9 +48,27 @@ export default class SubcategoryController extends BaseController {
    * Create new subcategory.
    */
   static async create({ body }: Request, res: Response) {
-    const subcategory = super.validateRequest(subcategoryCreationSchema, body)
+    const {
+      category,
+      ...subcategory
+    } = super.validateRequest(subcategoryCreationSchema, body)
+    const categoryId = super.parseObjectId(category)
+    if (!categoryId) {
+      throw {
+        status: 422,
+        message: "Invalid category id",
+        errors: {
+          category: [
+            "Invalid category id"
+          ],
+        }
+      }
+    }
 
-    const data = await SubcategoryService.create(subcategory)
+    const data = await SubcategoryService.create({
+      ...subcategory,
+      category: categoryId,
+    })
 
     super.sendSuccess(res, {
       message: "Created Subcategory",

@@ -29,6 +29,7 @@ export interface ListOptions {
   categories?: Array<CategoryObject["id"]>
 }
 
+type CategoryId = CategoryObject["id"]
 type AttributeId = AttributeObject<AttributeType>["id"]
 
 type ParseStringId<TItem> =
@@ -154,7 +155,7 @@ export default class SubcategoryService extends BaseService {
    * @throws 409 error if slug is already in use.
    * @throws If subcategory creation fails.
    */
-  static async create({ category, name, slug }: SubcategoryCreationData): Promise<SubcategoryObject> {
+  static async create({ category, name, slug }: Omit<SubcategoryCreationData, "category"> & { category: CategoryId }): Promise<SubcategoryObject> {
     try {
       const subcategory = await Subcategory.create({
         category,
