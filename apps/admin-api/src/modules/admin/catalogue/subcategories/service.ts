@@ -241,6 +241,13 @@ export default class SubcategoryService extends BaseService {
     const subcategory = await Subcategory.findOne({
       slug: subcategorySlug,
     })
+    .populate({
+      path: "category",
+      select: {
+        name: 1,
+        slug: 1,
+      }
+    })
 
     // throw error if subcategory is not found
     if (!subcategory) {

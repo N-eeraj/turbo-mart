@@ -25,6 +25,23 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
     initialValues,
   })
 
+  const {
+    data: categoriesData,
+    isLoading: isLoadingCategories,
+    page,
+    hasNextPage,
+    search,
+  } = useCategoryListData()
+  const categories = ref([])
+  watch(() => categoriesData.value, () => {
+    if (!categoriesData.value) return
+    categories.value = categoriesData.value
+      .map(({ id, name }) => ({
+        value: id,
+        textValue: name,
+      }))
+  })
+
   const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("slug"))
 
   const onSubmit = handleSubmit(async (body) => {
@@ -50,6 +67,8 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
   })
 
   return {
+    categories,
+    isLoadingCategories,
     isInvalid,
     isSubmitting,
     onSubmit,

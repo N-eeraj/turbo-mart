@@ -1,18 +1,18 @@
 export default function useSubcategoryData() {
   const route = useRoute()
-  const subcategoryId = computed(() => route.params.id)
+  const subcategorySlug = computed(() => route.params.slug)
 
   const {
     data,
     isLoading,
   } = useResourceData({
-    key: `subcategory-${subcategoryId.value}`,
-    endpoint: `/admin/catalogue/subcategories/${subcategoryId.value}`,
+    key: `subcategory-${subcategorySlug.value}`,
+    endpoint: `/admin/catalogue/subcategories/slug/${subcategorySlug.value}`,
     onError: () => navigateTo("/catalogue/subcategories"),
   })
 
   return {
-    subcategoryId,
+    subcategorySlug,
     data,
     isLoading,
   }

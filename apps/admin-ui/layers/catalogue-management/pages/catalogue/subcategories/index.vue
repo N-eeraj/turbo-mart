@@ -66,8 +66,8 @@ const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
     <template #table-cell-id="{ row }">
       <DataTableActions
         :is-deleting="deletingIds.includes(row.original.id)"
-        @view="navigateTo(`/catalogue/subcategories/${row.original.id}`)"
-        @edit="navigateTo(`/catalogue/subcategories/${row.original.id}/edit`)"
+        @view="navigateTo(`/catalogue/subcategories/${row.original.slug}`)"
+        @edit="navigateTo(`/catalogue/subcategories/${row.original.slug}/edit`)"
         @delete="handleDelete(row.original.id)" />
     </template>
   </DataTable>
