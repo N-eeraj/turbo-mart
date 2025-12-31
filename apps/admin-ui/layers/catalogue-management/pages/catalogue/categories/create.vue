@@ -8,7 +8,7 @@ async function submitHandler(body: any) {
     method: "POST",
     body,
   })
-  navigateTo(`/catalogue/categories/${response.data.id}`)
+  navigateTo(`/catalogue/categories/${response.data.slug}`)
   return response
 }
 </script>

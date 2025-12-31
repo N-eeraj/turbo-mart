@@ -4,17 +4,16 @@ import {
 } from "~/constants/breadcrumbs"
 
 const {
-  categoryId,
   data,
   isLoading: categoryLoading,
 } = useCategoryData()
 
 async function submitHandler(body: any) {
-  const response = await useApi(`/admin/catalogue/categories/${categoryId.value}`, {
+  const response = await useApi(`/admin/catalogue/categories/${data.value.id}`, {
     method: "PATCH",
     body,
   })
-  navigateTo(`/catalogue/categories/${response.data.id}`)
+  navigateTo(`/catalogue/categories/${response.data.slug}`)
   return response
 }
 </script>

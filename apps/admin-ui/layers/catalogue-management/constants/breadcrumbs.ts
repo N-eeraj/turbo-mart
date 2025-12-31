@@ -20,7 +20,7 @@ export const VIEW_CATEGORY = [
   ...ALL_CATEGORIES,
   {
     text: "View Category",
-    url: "/catalogue/categories/{id}",
+    url: "/catalogue/categories/{slug}",
     icon: "tabler:category",
   },
 ] satisfies Breadcrumb
@@ -29,7 +29,7 @@ export const EDIT_CATEGORY = [
   ...VIEW_CATEGORY,
   {
     text: "Edit Category",
-    url: "/catalogue/categories/{id}/edit",
+    url: "/catalogue/categories/{slug}/edit",
     icon: "lucide:pencil",
   },
 ] satisfies Breadcrumb
@@ -56,7 +56,7 @@ export const VIEW_SUBCATEGORY = [
   ...ALL_SUBCATEGORIES,
   {
     text: "View Subcategory",
-    url: "/catalogue/subcategories/{id}",
+    url: "/catalogue/subcategories/{slug}",
     icon: "tabler:category",
   },
 ] satisfies Breadcrumb
@@ -65,7 +65,7 @@ export const EDIT_SUBCATEGORY = [
   ...VIEW_SUBCATEGORY,
   {
     text: "Edit Subcategory",
-    url: "/catalogue/subcategories/{id}/edit",
+    url: "/catalogue/subcategories/{slug}/edit",
     icon: "lucide:pencil",
   },
 ] satisfies Breadcrumb
@@ -92,7 +92,7 @@ export const VIEW_BRAND = [
   ...ALL_BRANDS,
   {
     text: "View Brand",
-    url: "/catalogue/brands/{id}",
+    url: "/catalogue/brands/{slug}",
     icon: "mdi:tag-outline",
   },
 ] satisfies Breadcrumb
@@ -101,7 +101,7 @@ export const EDIT_BRAND = [
   ...VIEW_BRAND,
   {
     text: "Edit Brand",
-    url: "/catalogue/brands/{id}/edit",
+    url: "/catalogue/brands/{slug}/edit",
     icon: "mdi:tag-edit-outline",
   },
 ] satisfies Breadcrumb
@@ -128,7 +128,7 @@ export const VIEW_PRODUCT = [
   ...ALL_PRODUCTS,
   {
     text: "View Product",
-    url: "/catalogue/products/{id}",
+    url: "/catalogue/products/{slug}",
     icon: "lucide:box",
   },
 ] satisfies Breadcrumb
@@ -137,7 +137,7 @@ export const EDIT_PRODUCT = [
   ...VIEW_PRODUCT,
   {
     text: "Edit Product",
-    url: "/catalogue/products/{id}/edit",
+    url: "/catalogue/products/{slug}/edit",
     icon: "lucide:pencil",
   },
 ] satisfies Breadcrumb

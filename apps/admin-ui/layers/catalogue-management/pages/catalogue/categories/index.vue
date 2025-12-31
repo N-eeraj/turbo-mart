@@ -24,7 +24,21 @@ const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
 <template>
   <BaseHeader
     title="All Categories"
-    :breadcrumbs="ALL_CATEGORIES" />
+    :breadcrumbs="ALL_CATEGORIES">
+    <template #right>
+      <NuxtLink to="/catalogue/categories/create">
+        <BaseButton
+          variant="outline"
+          size="sm"
+          class="flex items-center gap-x-1.5">
+          <Icon name="tabler:category-plus" />
+          <span>
+            Create Category
+          </span>
+        </BaseButton>
+      </NuxtLink>
+    </template>
+  </BaseHeader>
 
   <DataTable
     v-model:search="search"
@@ -35,7 +49,7 @@ const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
     is-infinite
     :has-next="hasNextPage"
     :loading="isLoading"
-    class="basis-0 grow mt-2 md:mt-0"
+    class="basis-0 grow mt-2"
     filter-container-class="items-end!">
     <template #table-cell-createdAt="{ row }">
       {{ formatDate(row.original.createdAt) }}
@@ -48,8 +62,8 @@ const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
     <template #table-cell-id="{ row }">
       <DataTableActions
         :is-deleting="deletingIds.includes(row.original.id)"
-        @view="navigateTo(`/catalogue/categories/${row.original.id}`)"
-        @edit="navigateTo(`/catalogue/categories/${row.original.id}/edit`)"
+        @view="navigateTo(`/catalogue/categories/${row.original.slug}`)"
+        @edit="navigateTo(`/catalogue/categories/${row.original.slug}/edit`)"
         @delete="handleDelete(row.original.id)" />
     </template>
   </DataTable>

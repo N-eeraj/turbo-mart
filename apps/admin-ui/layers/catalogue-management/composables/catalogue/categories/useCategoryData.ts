@@ -1,19 +1,12 @@
 export default function useCategoryData() {
   const route = useRoute()
-  const categoryId = computed(() => route.params.id)
+  const categorySlug = computed(() => route.params.slug)
 
-  const {
-    data,
-    isLoading,
-  } = useResourceData({
-    key: `category-${categoryId.value}`,
-    endpoint: `/admin/catalogue/categories/${categoryId.value}`,
+  const resourceData = useResourceData({
+    key: `category-${categorySlug.value}`,
+    endpoint: `/admin/catalogue/categories/slug/${categorySlug.value}`,
     onError: () => navigateTo("/catalogue/categories"),
   })
 
-  return {
-    categoryId,
-    data,
-    isLoading,
-  }
+  return resourceData
 }
