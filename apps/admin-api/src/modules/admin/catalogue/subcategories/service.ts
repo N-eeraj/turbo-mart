@@ -228,6 +228,32 @@ export default class SubcategoryService extends BaseService {
   }
 
   /**
+   * Fetches the details of subcategory by slug.
+   * 
+   * @param subcategorySlug - Slug of the subcategory.
+   * 
+   * @returns subcategory.
+   * 
+   * @throws 404 error if subcategory not found.
+   * @throws If database lookup fails.
+   */
+  static async getBySlug(subcategorySlug: SubcategoryObject["slug"]): Promise<SubcategoryObject> {
+    const subcategory = await Subcategory.findOne({
+      slug: subcategorySlug,
+    })
+
+    // throw error if subcategory is not found
+    if (!subcategory) {
+      throw {
+        status: 404,
+        message: "Subcategory not found",
+      }
+    }
+
+    return transformSubcategory(subcategory)
+  }
+
+  /**
    * Update the subcategory.
    * 
    * @param subcategoryId - id of the subcategory to update.

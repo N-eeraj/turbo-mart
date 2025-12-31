@@ -21,6 +21,8 @@ subcategoryRouter.route("/:subcategoryId")
   .patch(catalogueManagementMiddlewares, SubcategoryController.update)
   .delete(catalogueManagementMiddlewares, SubcategoryController.delete)
 
+subcategoryRouter.get("/slug/:slug", catalogueManagementMiddlewares, SubcategoryController.getBySlug)
+
 subcategoryRouter.patch("/:subcategoryId/attributes", catalogueManagementMiddlewares, SubcategoryController.setAttributes)
 
 export default subcategoryRouter

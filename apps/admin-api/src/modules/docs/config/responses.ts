@@ -18,7 +18,7 @@ import notificationNotFound from "#jsonDocs/responses/partials/notificationNotFo
  * @returns response for the invalid resource.
  */
 function getInvalidResourceId(resourceName: string): typeof InvalidId {
-  const invalidResourceId = {...InvalidId}
+  const invalidResourceId = JSON.parse(JSON.stringify(InvalidId))
   invalidResourceId.content["application/json"].schema.properties.message.example = `Invalid ${resourceName} id`
   return invalidResourceId
 }

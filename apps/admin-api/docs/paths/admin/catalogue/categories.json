@@ -539,7 +539,7 @@
           "name": "slug",
           "in": "path",
           "required": true,
-          "description": "slug of the category.",
+          "description": "Slug of the category.",
             "schema": {
             "type": "string"
           }

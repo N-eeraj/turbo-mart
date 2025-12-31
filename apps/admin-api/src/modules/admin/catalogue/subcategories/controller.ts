@@ -112,6 +112,21 @@ export default class SubcategoryController extends BaseController {
       data,
     })
   }
+  
+    /**
+     * @route GET /api/admin/catalogue/subcategories/slug/:slug
+     * 
+     * Get one subcategory by slug.
+     */
+    static async getBySlug({ params }: Request, res: Response) {
+      const subcategorySlug = params.slug
+      const data = await SubcategoryService.getBySlug(subcategorySlug)
+  
+      super.sendSuccess(res, {
+        message: "Fetched Subcategory",
+        data,
+      })
+    }
 
   /**
    * @route PATCH /api/admin/catalogue/subcategories/:subcategoryId
