@@ -68,10 +68,7 @@ SubcategorySchema.index({
  */
 export function transformSubcategory({
   _id,
-  category: {
-    _id: categoryId,
-    ...category
-  },
+  category,
   name,
   slug,
   attributes,
@@ -81,8 +78,9 @@ export function transformSubcategory({
   const subcategory: SubcategoryObject = {
     id: _id,
     category: {
-      ...category,
-      id: categoryId,
+      id: category._id,
+      name: category.name,
+      slug: category.slug,
     },
     name,
     slug,
