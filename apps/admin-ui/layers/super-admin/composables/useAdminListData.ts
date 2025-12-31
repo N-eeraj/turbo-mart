@@ -19,7 +19,7 @@ const COLUMNS = [
 
 export default function useAdminListData() {
   const permissionsFilter = useRouteQuery<Array<string>>("permissions-filter", [])
-  const additionalQuery = computed(() => ({
+  const additionalQueries = computed(() => ({
     filters: {
       permissions: permissionsFilter.value,
     }
@@ -28,7 +28,7 @@ export default function useAdminListData() {
   const resourceList = useResourceListData({
     key: "admin-list",
     endpoint: "/super-admin/admin",
-    query: additionalQuery,
+    query: additionalQueries,
     onError: () => navigateTo("/"),
   })
 
