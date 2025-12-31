@@ -38,7 +38,7 @@ async function handleDelete() {
       <div class="flex items-center gap-x-3">
         <BaseTooltip tooltip="Edit">
           <NuxtLink
-            :to="`/catalogue/categories/${categoryData.id}/edit`"
+            :to="`/catalogue/categories/${categoryData.slug}/edit`"
             :class="{
               'pointer-events-none': isDeleting,
             }">
