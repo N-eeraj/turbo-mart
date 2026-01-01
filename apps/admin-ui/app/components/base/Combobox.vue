@@ -35,8 +35,6 @@ const search = defineModel<string>("search", {
 
 const open = ref(false)
 
-const selectedOptions = ref<string>()
-
 function selectOptions(selectedValue: AcceptableValue) {
   if (!props.multiple) {
     modelValue.value = selectedValue === modelValue.value ? null : selectedValue
@@ -75,42 +73,38 @@ watch(() => open.value, () => {
   search.value = ""
 })
 
+const optionsMap = ref(new Map())
 watch(
-  [
-    () => modelValue.value,
-    () => props.options,
-  ],
-  ([value, options]) => {
-    nextTick(() => {
-      // empty state
-      if (!value || !(value as Array<AcceptableValue>).length) {
-        selectedOptions.value = undefined
-        return
-      }
-
-      // skip if options aren't available
-      if (!options) return
-
-      // single select
-      if (!props.multiple) {
-        selectedOptions.value = props.options.find(option => option.value === modelValue.value)?.textValue
-        return
-      }
-
-      // multi select
-      const selected = props.options.reduce((selected: Array<string>, { value, textValue }) => {
-        if ((modelValue.value as Array<AcceptableValue> | undefined ?? []).includes(value)) {
-          selected.push(textValue as string)
-        }
-        return selected
-      }, [])
-      selectedOptions.value = selected.join(", ")
+  () => props.options,
+  (options) => {
+    options.forEach(({ value, textValue }) => {
+      optionsMap.value.set(value, textValue)
     })
-  },
-  {
+  }, {
     immediate: true,
   }
 )
+
+const selectedOptions = computed(() => {
+  const value = modelValue.value
+
+  // handle empty state
+  if (!value || !(value as Array<AcceptableValue>).length) {
+    return undefined
+  }
+
+  // handle single select
+  if (!props.multiple) {
+    return optionsMap.value.get(value)
+  }
+
+  // handle multi select
+  const valueArray = value as Array<AcceptableValue>
+  
+  return valueArray
+    .map((value) => optionsMap.value.get(value))  
+    .join(", ")
+})
 
 async function handleSearchMount(commandInput: any) {
   // set `filterState.search` as `search` ref on re-mount
