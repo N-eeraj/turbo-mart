@@ -8,14 +8,6 @@ const {
   isLoading: subcategoryLoading,
 } = useSubcategoryData()
 
-const initialValues = computed(() => {
-  if (!data.value) return undefined
-  return {
-    ...data.value,
-    category: data.value.category.id,
-  }
-})
-
 async function submitHandler(body: any) {
   const response = await useApi(`/admin/catalogue/subcategories/${data.value.id}`, {
     method: "PATCH",
@@ -36,6 +28,6 @@ async function submitHandler(body: any) {
   <CatalogueSubcategoryForm
     v-else
     :submit-handler
-    :initial-values
+    :initial-values="data"
     class="mt-4" />
 </template>

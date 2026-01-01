@@ -9,6 +9,13 @@ import {
 import {
   subcategoryCreationSchema,
 } from "@app/schemas/admin/catalogue/subcategory"
+import {
+  type CategoryCreationData,
+} from "@app/schemas/admin/catalogue/category"
+
+interface SubcategoryCategory extends CategoryCreationData {
+  id: string
+}
 
 interface Parameters {
   initialValues: Record<string, unknown>
@@ -16,17 +23,24 @@ interface Parameters {
 }
 
 export default function useSubcategoryForm({ submitHandler, initialValues = {} }: Parameters) {
+  const initialCategory = computed<SubcategoryCategory | undefined>(() => {
+    if (!initialValues.category) return undefined
+    return initialValues.category as SubcategoryCategory
+  })
+
   const {
     handleSubmit,
     isSubmitting,
-    values,
     isFieldValid,
     setErrors,
   } = useForm({
     validationSchema: toTypedSchema(
       subcategoryCreationSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
     ),
-    initialValues,
+    initialValues: {
+      ...initialValues,
+      category: initialCategory.value?.id,
+    },
   })
 
   const {
@@ -36,7 +50,18 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
     hasNextPage,
     search: categorySearch,
   } = useCategoryListData()
-  const categories = ref<Array<SelectItemProps>>([])
+
+  const categories = ref<Array<SelectItemProps>>(
+    initialCategory.value
+      ? [
+        {
+          value: initialCategory.value.id,
+          textValue: initialCategory.value.name,
+        }
+      ]
+      : []
+  )
+
   watch(() => categoriesData.value, () => {
     if (!categoriesData.value) return
     categories.value = categoriesData.value
