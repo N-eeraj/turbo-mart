@@ -1,3 +1,13 @@
+import {
+  type CategoryCreationData,
+} from "@app/schemas/admin/catalogue/category"
+
+interface Category extends CategoryCreationData {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 const COLUMNS = [
   {
     id: "name",
@@ -22,7 +32,7 @@ const COLUMNS = [
 ]
 
 export default function useCategoryListData() {
-  const resourceList = useResourceListData({
+  const resourceList = useResourceListData<Category>({
     key: "categories-list",
     endpoint: "/admin/catalogue/categories",
     onError: () => navigateTo("/"),

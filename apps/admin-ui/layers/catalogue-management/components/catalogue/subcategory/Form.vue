@@ -7,6 +7,7 @@ const props = defineProps<Props>()
 
 const {
   categories,
+  categorySearch,
   isLoadingCategories,
   isSubmitting,
   isInvalid,
@@ -27,6 +28,7 @@ const {
       description="Unique and short name (slug) of the subcategory." />
     <FormFieldCombobox
       name="category"
+      v-model:search="categorySearch"
       placeholder="Select Category"
       :options="categories"
       :loading="isLoadingCategories" />

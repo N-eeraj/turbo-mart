@@ -23,6 +23,9 @@ interface Props extends SelectRootProps {
   readonly?: boolean
 }
 const props = defineProps<Props>()
+const search = defineModel<string>("search", {
+  default: "",
+})
 </script>
 
 <template>
@@ -53,6 +56,7 @@ const props = defineProps<Props>()
         <FormControl>
           <BaseCombobox
             v-bind="componentField"
+            v-model:search="search"
             :multiple
             :options
             :loading

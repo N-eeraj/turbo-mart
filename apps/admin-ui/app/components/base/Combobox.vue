@@ -29,6 +29,9 @@ interface Props extends SelectRootProps {
 }
 const props = defineProps<Props>()
 const modelValue = defineModel<AcceptableValue | Array<AcceptableValue> | undefined>()
+const search = defineModel<string>("search", {
+  default: "",
+})
 
 const open = ref(false)
 
@@ -79,6 +82,15 @@ function resetModelValue() {
   modelValue.value = props.multiple ? [] : null
   selectedOptions.value = undefined
 }
+
+watch(() => open.value, () => {
+  search.value = ""
+})
+
+// set `filterState.search` as `search` ref on re-mount
+function handleSearchMount(commandInput: any) {
+  commandInput.component.setupState.filterState.search = search.value
+}
 </script>
 
 <template>
@@ -108,15 +120,18 @@ function resetModelValue() {
         </slot>
       </BaseButton>
       <BaseLinearProgress
-        v-if="loading"
+        v-if="loading && !open"
         class="h-0.5!" />
       </PopoverTrigger>
     </div>
+
     <PopoverContent class="p-0">
-      <Command>
+      <Command v-if="!loading">
         <CommandInput
+          v-model="search"
           class="h-9"
-          :placeholder />
+          :placeholder
+          @vue:mounted="handleSearchMount" />
         <CommandList>
           <CommandEmpty>
             <slot name="empty">

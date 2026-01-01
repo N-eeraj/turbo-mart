@@ -2,6 +2,9 @@ import {
   toast,
 } from "vue-sonner"
 import type z from "zod"
+import {
+  type SelectItemProps,
+} from "reka-ui"
 
 import {
   subcategoryCreationSchema,
@@ -16,6 +19,7 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
   const {
     handleSubmit,
     isSubmitting,
+    values,
     isFieldValid,
     setErrors,
   } = useForm({
@@ -30,9 +34,9 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
     isLoading: isLoadingCategories,
     page,
     hasNextPage,
-    search,
+    search: categorySearch,
   } = useCategoryListData()
-  const categories = ref([])
+  const categories = ref<Array<SelectItemProps>>([])
   watch(() => categoriesData.value, () => {
     if (!categoriesData.value) return
     categories.value = categoriesData.value
@@ -42,7 +46,7 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
       }))
   })
 
-  const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("slug"))
+  const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("slug")) || !isFieldValid("category")
 
   const onSubmit = handleSubmit(async (body) => {
     try {
@@ -69,6 +73,7 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
   return {
     categories,
     isLoadingCategories,
+    categorySearch,
     isInvalid,
     isSubmitting,
     onSubmit,
