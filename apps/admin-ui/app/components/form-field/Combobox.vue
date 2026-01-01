@@ -68,6 +68,11 @@ const search = defineModel<string>("search", {
                 name="trigger"
                 v-bind="data" />
             </template>
+            <template #trigger-value="data">
+              <slot
+                name="trigger-value"
+                v-bind="data" />
+            </template>
             <template #empty="data">
               <slot
                 name="empty"

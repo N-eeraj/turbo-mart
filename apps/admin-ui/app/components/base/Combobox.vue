@@ -41,9 +41,6 @@ function selectOptions(selectedValue: AcceptableValue) {
   if (!props.multiple) {
     modelValue.value = selectedValue === modelValue.value ? null : selectedValue
     open.value = false
-    nextTick(() => {
-      selectedOptions.value = props.options.find(option => option.value === modelValue.value)?.textValue
-    })
     return
   }
   // is multiple
@@ -57,15 +54,6 @@ function selectOptions(selectedValue: AcceptableValue) {
       modelValue.value = [selectedValue]
     }
   }
-  nextTick(() => {
-    const selected = props.options.reduce((selected: Array<string>, { value, textValue }) => {
-      if ((modelValue.value as Array<AcceptableValue> | undefined ?? []).includes(value)) {
-        selected.push(textValue as string)
-      }
-      return selected
-    }, [])
-    selectedOptions.value = selected.join(", ")
-  })
 }
 
 function isSelected(option: AcceptableValue): boolean {
@@ -81,12 +69,48 @@ const showClearAction = computed(() => props.clearable && (
 
 function resetModelValue() {
   modelValue.value = props.multiple ? [] : null
-  selectedOptions.value = undefined
 }
 
 watch(() => open.value, () => {
   search.value = ""
 })
+
+watch(
+  [
+    () => modelValue.value,
+    () => props.options,
+  ],
+  ([value, options]) => {
+    nextTick(() => {
+      // empty state
+      if (!value || !(value as Array<AcceptableValue>).length) {
+        selectedOptions.value = undefined
+        return
+      }
+
+      // skip if options aren't available
+      if (!options) return
+
+      // single select
+      if (!props.multiple) {
+        selectedOptions.value = props.options.find(option => option.value === modelValue.value)?.textValue
+        return
+      }
+
+      // multi select
+      const selected = props.options.reduce((selected: Array<string>, { value, textValue }) => {
+        if ((modelValue.value as Array<AcceptableValue> | undefined ?? []).includes(value)) {
+          selected.push(textValue as string)
+        }
+        return selected
+      }, [])
+      selectedOptions.value = selected.join(", ")
+    })
+  },
+  {
+    immediate: true,
+  }
+)
 
 async function handleSearchMount(commandInput: any) {
   // set `filterState.search` as `search` ref on re-mount
@@ -110,8 +134,18 @@ async function handleSearchMount(commandInput: any) {
           class="justify-between">
           <slot
             name="trigger"
-            :model-value>
-            {{ selectedOptions || placeholder }}
+            :model-value
+            :selected-options>
+            <slot
+              v-if="modelValue"
+              name="trigger-value"
+              :model-value
+              :selected-options>
+              {{ selectedOptions }}
+            </slot>
+            <template v-else>
+              {{ placeholder }}
+            </template>
           <Icon
             name="lucide:chevrons-up-down"
             class="ml-auto opacity-50" />
@@ -123,10 +157,10 @@ async function handleSearchMount(commandInput: any) {
             <Icon name="lucide:x" />
           </BaseButton>
         </slot>
-      </BaseButton>
-      <BaseLinearProgress
-        v-if="loading && !open"
-        class="h-0.5!" />
+        </BaseButton>
+        <BaseLinearProgress
+          v-if="loading && !open"
+          class="h-0.5!" />
       </PopoverTrigger>
     </div>
 
@@ -189,5 +223,4 @@ async function handleSearchMount(commandInput: any) {
       </Command>
     </PopoverContent>
   </Popover>
-
 </template>
