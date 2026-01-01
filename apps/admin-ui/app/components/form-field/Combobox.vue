@@ -78,6 +78,11 @@ const search = defineModel<string>("search", {
                 name="item"
                 v-bind="data" />
             </template>
+            <template #loading-popover="data">
+              <slot
+                name="loading-popover"
+                v-bind="data" />
+            </template>
           </BaseCombobox>
         </FormControl>
 

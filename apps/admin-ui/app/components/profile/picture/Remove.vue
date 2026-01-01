@@ -62,7 +62,7 @@ async function handleRemove() {
         <p>
           Are you sure you want to remove your profile picture?
         </p>
-        <!-- hidden to suppress aria standard warnings  -->
+        <!-- Hidden to suppress aria standard warnings  -->
         <VisuallyHidden>
           <AlertDialogTitle />
           <AlertDialogDescription />

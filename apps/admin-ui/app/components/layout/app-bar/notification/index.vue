@@ -42,7 +42,7 @@ const handleDropDownOpen = (menuOpen: boolean) => {
 
       <DropdownMenuSeparator />
 
-      <!-- unread notifications list -->
+      <!-- Unread Notifications List -->
       <DropdownMenuGroup
         v-if="isLoadingNotifications || notifications.length"
         ref="notification-list"
@@ -59,7 +59,7 @@ const handleDropDownOpen = (menuOpen: boolean) => {
         <BaseLinearProgress v-if="isLoadingNotifications" />
       </DropdownMenuGroup>
 
-      <!-- empty state -->
+      <!-- Empty State -->
       <div
         v-else
         class="flex flex-col justify-center items-center min-h-24">

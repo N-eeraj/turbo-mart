@@ -33,7 +33,7 @@ const {
 <template>
   <AlertDialog v-model:open="open">
     <AlertDialogContent>
-      <!-- success state -->
+      <!-- Success State -->
       <template v-if="isSuccess">
         <AlertDialogHeader class="items-center">
           <AlertDialogTitle>
@@ -56,7 +56,7 @@ const {
         </AlertDialogFooter>
       </template>
 
-      <!-- reset request form -->
+      <!-- Reset Request Form -->
       <form
         v-else
         class="space-y-4"

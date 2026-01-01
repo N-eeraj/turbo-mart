@@ -17,7 +17,7 @@ const {
       Notifications Selected
     </span>
 
-    <!-- actions -->
+    <!-- Actions -->
     <ul class="flex items-center gap-x-3">
       <li
         v-for="({ id, ...action }) in actions"

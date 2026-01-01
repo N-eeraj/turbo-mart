@@ -78,6 +78,7 @@ const showClearAction = computed(() => props.clearable && (
     (modelValue.value as Array<AcceptableValue> | undefined)?.length
     : modelValue.value
 ))
+
 function resetModelValue() {
   modelValue.value = props.multiple ? [] : null
   selectedOptions.value = undefined
@@ -87,9 +88,13 @@ watch(() => open.value, () => {
   search.value = ""
 })
 
-// set `filterState.search` as `search` ref on re-mount
-function handleSearchMount(commandInput: any) {
+async function handleSearchMount(commandInput: any) {
+  // set `filterState.search` as `search` ref on re-mount
   commandInput.component.setupState.filterState.search = search.value
+  // reset selection and move cursor to end
+  await nextTick()
+  const searchInput = commandInput.el.querySelector("input")
+  searchInput.setSelectionRange(search.value.length, search.value.length)
 }
 </script>
 
@@ -125,12 +130,32 @@ function handleSearchMount(commandInput: any) {
       </PopoverTrigger>
     </div>
 
-    <PopoverContent class="p-0">
-      <Command v-if="!loading">
+    <!-- Loading Popover -->
+    <PopoverContent
+      v-if="loading"
+      class="p-0">
+      <Command>
+        <CommandInput
+          :value="search"
+          disabled
+          :placeholder
+          class="h-9" />
+      </Command>
+      <slot name="loading-popover">
+        <div class="px-2 py-6">
+          <BaseLinearProgress v-if="loading" />
+        </div>
+      </slot>
+    </PopoverContent>
+
+    <PopoverContent
+      v-else
+      class="p-0">
+      <Command>
         <CommandInput
           v-model="search"
-          class="h-9"
           :placeholder
+          class="h-9"
           @vue:mounted="handleSearchMount" />
         <CommandList>
           <CommandEmpty>

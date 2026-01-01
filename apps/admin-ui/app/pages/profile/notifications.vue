@@ -27,7 +27,7 @@ const {
       selectedNotifications.length && 'pb-11 md:pb-13',
     )" />
 
-  <!-- empty state -->
+  <!-- Empty state -->
   <div
     v-else-if="!isLoadingNotifications"
     class="flex flex-col justify-center items-center gap-y-1 flex-1">

@@ -55,7 +55,7 @@ defineExpose({
           </template>
         </FormFieldInput>
 
-        <!-- error message -->
+        <!-- Error message -->
         <span
           v-if="formError"
           class="text-destructive text-xs">
