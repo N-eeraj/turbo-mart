@@ -8,16 +8,23 @@ import type {
 interface Options {
   key: string
   endpoint: string
+  persistQuery?: boolean
   query?: Ref<Record<string, unknown>> | ComputedRef<Record<string, unknown>>
   onError: Function
 }
 
 const LIMIT = 10
 
-export default function useResourceListData<T = unknown>({ key, endpoint, onError, query }: Options) {
-  const page = useRouteQuery<number | string>("page", 1)
-  const search = useRouteQuery("search", "")
-  const order = useRouteQuery<Order>("order", "asc")
+export default function useResourceListData<T = unknown>({
+  key,
+  endpoint,
+  onError,
+  query,
+  persistQuery = true,
+}: Options) {
+  const page = useRefQuery<number | string>("page", persistQuery, 1)
+  const search = useRefQuery<string>("search", persistQuery, "")
+  const order = useRefQuery<Order>("order", persistQuery, "asc")
   const hasNextPage = ref(true)
 
   const {

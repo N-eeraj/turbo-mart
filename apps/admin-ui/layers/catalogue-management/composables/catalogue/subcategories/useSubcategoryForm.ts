@@ -49,7 +49,9 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
     page,
     hasNextPage: hasNextCategoriesPage,
     search: categorySearch,
-  } = useCategoryListData()
+  } = useCategoryListData({
+    persistQuery: false
+  })
 
   const categories = ref<Array<SelectItemProps>>(
     initialCategory.value

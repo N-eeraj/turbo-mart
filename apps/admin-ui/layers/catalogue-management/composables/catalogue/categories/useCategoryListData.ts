@@ -31,11 +31,12 @@ const COLUMNS = [
   },
 ]
 
-export default function useCategoryListData() {
+export default function useCategoryListData({ persistQuery = true } = {}) {
   const resourceList = useResourceListData<Category>({
     key: "categories-list",
     endpoint: "/admin/catalogue/categories",
     onError: () => navigateTo("/"),
+    persistQuery,
   })
 
   const {

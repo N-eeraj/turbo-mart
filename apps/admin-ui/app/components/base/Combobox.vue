@@ -210,7 +210,7 @@ watch(() => open.value, () => {
           class="h-9"
           @vue:mounted="handleSearchMount" />
         <CommandList ref="options-list">
-          <CommandEmpty>
+          <CommandEmpty v-if="!loading && !options.length">
             <slot name="empty">
               No items found.
             </slot>
