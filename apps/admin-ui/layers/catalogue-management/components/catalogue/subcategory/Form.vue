@@ -10,6 +10,8 @@ const {
   categorySearch,
   isLoadingCategories,
   isSubmitting,
+  hasNextCategoriesPage,
+  loadMoreCategories,
   isInvalid,
   onSubmit,
 } = useSubcategoryForm(props)
@@ -31,7 +33,10 @@ const {
       v-model:search="categorySearch"
       placeholder="Select Category"
       :options="categories"
-      :loading="isLoadingCategories" />
+      :loading="isLoadingCategories"
+      is-infinite
+      :has-more-items="hasNextCategoriesPage"
+      @scroll-end="loadMoreCategories" />
 
     <BaseButton
       :disabled="isInvalid"

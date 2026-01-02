@@ -47,7 +47,7 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
     data: categoriesData,
     isLoading: isLoadingCategories,
     page,
-    hasNextPage,
+    hasNextPage: hasNextCategoriesPage,
     search: categorySearch,
   } = useCategoryListData()
 
@@ -62,14 +62,25 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
       : []
   )
 
+  watch(() => categorySearch.value, () => {
+    categories.value = []
+  })
+
   watch(() => categoriesData.value, () => {
     if (!categoriesData.value) return
-    categories.value = categoriesData.value
-      .map(({ id, name }) => ({
-        value: id,
-        textValue: name,
-      }))
+    categories.value = [
+      ...categories.value,
+      ...categoriesData.value
+        .map(({ id, name }) => ({
+          value: id,
+          textValue: name,
+        }))
+    ]
   })
+
+  const loadMoreCategories = () => {
+    page.value = `${+page.value + 1}`
+  }
 
   const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("slug")) || !isFieldValid("category")
 
@@ -99,6 +110,8 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
     categories,
     isLoadingCategories,
     categorySearch,
+    hasNextCategoriesPage,
+    loadMoreCategories,
     isInvalid,
     isSubmitting,
     onSubmit,

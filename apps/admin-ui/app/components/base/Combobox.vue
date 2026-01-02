@@ -21,12 +21,16 @@ import {
   cn,
 } from "@/lib/utils"
 
-interface Props extends SelectRootProps {
+interface InfinityProps {
+  isInfinite?: true
+  hasMoreItems?: boolean
+}
+
+interface Props extends SelectRootProps, InfinityProps {
   options: Array<SelectItemProps>
   placeholder?: string
   loading?: boolean
   clearable?: boolean
-  hasMoreItems?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   hasMoreItems: true,
@@ -180,7 +184,7 @@ watch(() => open.value, () => {
 
     <!-- Loading Popover -->
     <PopoverContent
-      v-if="loading"
+      v-if="loading && !isInfinite"
       class="p-0">
       <Command>
         <CommandInput
@@ -235,6 +239,11 @@ watch(() => open.value, () => {
             </CommandItem>
           </CommandGroup>
         </CommandList>
+        <slot
+          v-if="isInfinite && loading"
+          name="loading-infinite">
+          <BaseLinearProgress />
+        </slot>
       </Command>
     </PopoverContent>
   </Popover>

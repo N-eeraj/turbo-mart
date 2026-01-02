@@ -15,7 +15,7 @@ interface Options {
 const LIMIT = 10
 
 export default function useResourceListData<T = unknown>({ key, endpoint, onError, query }: Options) {
-  const page = useRouteQuery("page", 1)
+  const page = useRouteQuery<number | string>("page", 1)
   const search = useRouteQuery("search", "")
   const order = useRouteQuery<Order>("order", "asc")
   const hasNextPage = ref(true)
@@ -29,7 +29,7 @@ export default function useResourceListData<T = unknown>({ key, endpoint, onErro
     key,
     () => useApi(endpoint, {
       query: {
-        skip: (page.value - 1) * LIMIT,
+        skip: (+page.value - 1) * LIMIT,
         limit: LIMIT + 1, // fetch one extra item to determine if a next page exists
         order: order.value,
         search: search.value,

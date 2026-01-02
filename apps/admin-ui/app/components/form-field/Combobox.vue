@@ -21,6 +21,7 @@ interface Props extends SelectRootProps {
   loading?: boolean
   clearable?: boolean
   readonly?: boolean
+  isInfinite?: true
   hasMoreItems?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -69,6 +70,7 @@ const emit = defineEmits([
             :placeholder
             :clearable
             :disabled="disabled || readonly || loading"
+            :is-infinite
             :has-more-items
             @scroll-end="emit('scroll-end')">
             <template #trigger="data">
@@ -94,6 +96,11 @@ const emit = defineEmits([
             <template #loading-popover="data">
               <slot
                 name="loading-popover"
+                v-bind="data" />
+            </template>
+            <template #loading-infinite="data">
+              <slot
+                name="loading-infinite"
                 v-bind="data" />
             </template>
           </BaseCombobox>
