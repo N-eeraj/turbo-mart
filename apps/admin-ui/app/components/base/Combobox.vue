@@ -26,12 +26,18 @@ interface Props extends SelectRootProps {
   placeholder?: string
   loading?: boolean
   clearable?: boolean
+  hasMoreItems?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  hasMoreItems: true,
+})
 const modelValue = defineModel<AcceptableValue | Array<AcceptableValue> | undefined>()
 const search = defineModel<string>("search", {
   default: "",
 })
+const emit = defineEmits([
+  "scroll-end",
+])
 
 const open = ref(false)
 
@@ -68,10 +74,6 @@ const showClearAction = computed(() => props.clearable && (
 function resetModelValue() {
   modelValue.value = props.multiple ? [] : null
 }
-
-watch(() => open.value, () => {
-  search.value = ""
-})
 
 const optionsMap = ref(new Map())
 watch(
@@ -114,6 +116,24 @@ async function handleSearchMount(commandInput: any) {
   const searchInput = commandInput.el.querySelector("input")
   searchInput.setSelectionRange(search.value.length, search.value.length)
 }
+
+const optionsListEl = useTemplateRef<HTMLUListElement>("options-list")
+
+const { reset } = useInfiniteScroll(
+  () => optionsListEl.value,
+  () => {
+    emit("scroll-end")
+  },
+  {
+    distance: 10,
+    canLoadMore: () => !props.loading && props.hasMoreItems,
+  }
+)
+
+watch(() => open.value, () => {
+  search.value = ""
+  reset()
+})
 </script>
 
 <template>
@@ -140,17 +160,17 @@ async function handleSearchMount(commandInput: any) {
             <template v-else>
               {{ placeholder }}
             </template>
-          <Icon
-            name="lucide:chevrons-up-down"
-            class="ml-auto opacity-50" />
-          <BaseButton
-            v-if="showClearAction"
-            variant="ghost"
-            class="p-0"
-            @click.stop="resetModelValue">
-            <Icon name="lucide:x" />
-          </BaseButton>
-        </slot>
+            <Icon
+              name="lucide:chevrons-up-down"
+              class="ml-auto opacity-50" />
+            <BaseButton
+              v-if="showClearAction"
+              variant="ghost"
+              class="p-0"
+              @click.stop="resetModelValue">
+              <Icon name="lucide:x" />
+            </BaseButton>
+          </slot>
         </BaseButton>
         <BaseLinearProgress
           v-if="loading && !open"
@@ -185,16 +205,17 @@ async function handleSearchMount(commandInput: any) {
           :placeholder
           class="h-9"
           @vue:mounted="handleSearchMount" />
-        <CommandList>
+        <CommandList ref="options-list">
           <CommandEmpty>
             <slot name="empty">
               No items found.
             </slot>
           </CommandEmpty>
-          <CommandGroup>
+          <CommandGroup as="ul">
             <CommandItem
               v-for="option in options"
               :key="String(option.value)"
+              as="li"
               :value="option.value"
               class="cursor-pointer"
               @select="(ev) => {

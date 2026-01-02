@@ -21,11 +21,17 @@ interface Props extends SelectRootProps {
   loading?: boolean
   clearable?: boolean
   readonly?: boolean
+  hasMoreItems?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  hasMoreItems: true,
+})
 const search = defineModel<string>("search", {
   default: "",
 })
+const emit = defineEmits([
+  "scroll-end",
+])
 </script>
 
 <template>
@@ -62,7 +68,9 @@ const search = defineModel<string>("search", {
             :loading
             :placeholder
             :clearable
-            :disabled="disabled || readonly || loading">
+            :disabled="disabled || readonly || loading"
+            :has-more-items
+            @scroll-end="emit('scroll-end')">
             <template #trigger="data">
               <slot
                 name="trigger"
