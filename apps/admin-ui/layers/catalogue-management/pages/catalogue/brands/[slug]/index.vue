@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   VIEW_BRAND,
-} from "~/constants/breadcrumbs"
+} from "~/constants/brands/breadcrumbs"
 
 const {
   data: brandData,

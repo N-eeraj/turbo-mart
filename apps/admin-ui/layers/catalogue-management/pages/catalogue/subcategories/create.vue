@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   CREATE_SUBCATEGORY,
-} from "~/constants/breadcrumbs"
+} from "~/constants/subcategories/breadcrumbs"
 
 async function submitHandler(body: any) {
   const response = await useApi("/admin/catalogue/subcategories", {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   ALL_BRANDS,
-} from "~/constants/breadcrumbs"
+} from "~/constants/brands/breadcrumbs"
 
 const {
   data,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   CREATE_BRAND,
-} from "~/constants/breadcrumbs"
+} from "~/constants/brands/breadcrumbs"
 
 async function submitHandler(body: any) {
   const response = await useApi("/admin/catalogue/brands", {

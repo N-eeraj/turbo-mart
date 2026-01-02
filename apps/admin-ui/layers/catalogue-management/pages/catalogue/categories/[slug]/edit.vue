@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   EDIT_CATEGORY,
-} from "~/constants/breadcrumbs"
+} from "~/constants/categories/breadcrumbs"
 
 const {
   data,

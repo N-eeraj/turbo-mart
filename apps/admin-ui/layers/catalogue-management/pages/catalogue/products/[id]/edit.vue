@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   EDIT_PRODUCT,
-} from "~/constants/breadcrumbs"
+} from "~/constants/products/breadcrumbs"
 </script>
 
 <template>

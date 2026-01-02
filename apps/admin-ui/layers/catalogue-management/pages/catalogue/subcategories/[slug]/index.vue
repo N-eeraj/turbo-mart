@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   VIEW_SUBCATEGORY,
-} from "~/constants/breadcrumbs"
+} from "~/constants/subcategories/breadcrumbs"
 
 const {
   data: subcategoryData,

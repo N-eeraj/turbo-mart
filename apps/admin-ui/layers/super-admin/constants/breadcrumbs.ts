@@ -1,3 +1,7 @@
+import type {
+  Breadcrumb
+} from "~/types/breadcrumb"
+
 export const ALL_ADMINS = [
   {
     text: "All Admins",

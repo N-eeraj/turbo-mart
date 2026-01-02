@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   ALL_PRODUCTS,
-} from "~/constants/breadcrumbs"
+} from "~/constants/products/breadcrumbs"
 </script>
 
 <template>

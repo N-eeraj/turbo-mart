@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   VIEW_PRODUCT,
-} from "~/constants/breadcrumbs"
+} from "~/constants/products/breadcrumbs"
 </script>
 
 <template>

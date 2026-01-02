@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   ALL_CATEGORIES,
-} from "~/constants/breadcrumbs"
+} from "~/constants/categories/breadcrumbs"
 
 const {
   data,
