@@ -123,6 +123,32 @@ export default class BrandService extends BaseService {
   }
 
   /**
+   * Fetches the details of brand by slug.
+   * 
+   * @param brandSlug - Slug of the brand.
+   * 
+   * @returns brand.
+   * 
+   * @throws 404 error if brand not found.
+   * @throws If database lookup fails.
+   */
+  static async getBySlug(brandSlug: BrandObject["slug"]): Promise<BrandObject> {
+    const brand = await Brand.findOne({
+      slug: brandSlug,
+    })
+
+    // throw error if brand is not found
+    if (!brand) {
+      throw {
+        status: 404,
+        message: "Brand not found",
+      }
+    }
+
+    return transformBrand(brand)
+  }
+
+  /**
    * Update the brand.
    * 
    * @param brandId - id of the brand to update.

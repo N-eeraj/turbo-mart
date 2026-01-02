@@ -70,6 +70,21 @@ export default class BrandController extends BaseController {
       data,
     })
   }
+  
+  /**
+   * @route GET /api/admin/catalogue/brands/slug/:slug
+   * 
+   * Get one brand by slug.
+   */
+  static async getBySlug({ params }: Request, res: Response) {
+    const brandSlug = params.slug
+    const data = await BrandService.getBySlug(brandSlug)
+
+    super.sendSuccess(res, {
+      message: "Fetched Brand",
+      data,
+    })
+  }
 
   /**
    * @route PATCH /api/admin/catalogue/brands/:brandId

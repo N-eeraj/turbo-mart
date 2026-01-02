@@ -19,4 +19,6 @@ brandRouter.route("/:brandId")
   .patch(catalogueManagementMiddlewares, BrandController.update)
   .delete(catalogueManagementMiddlewares, BrandController.delete)
 
+brandRouter.get("/slug/:slug", catalogueManagementMiddlewares, BrandController.getBySlug)
+
 export default brandRouter

@@ -528,5 +528,82 @@
         }
       }
     }
+  },
+  "/api/admin/catalogue/brands/slug/{slug}": {
+    "get": {
+      "tags": ["Brand Management"],
+      "summary": "Fetch Single Brand",
+      "description": "Fetch single brand by slug.",
+      "parameters": [
+        {
+          "name": "slug",
+          "in": "path",
+          "required": true,
+          "description": "Slug of the brand.",
+            "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetched brand.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/BrandSchema"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched Brand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/components/responses/InvalidBrandId"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Brand not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Brand not found",
+                    "description": "Error message: Couldn't find the brand."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
   }
 }
