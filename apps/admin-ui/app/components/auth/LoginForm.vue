@@ -7,9 +7,10 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 
-const emit = defineEmits([
-  "forgotPassword",
-])
+interface Emits {
+  forgotPassword: []
+}
+const emit = defineEmits<Emits>()
 
 const {
   controlledValues,

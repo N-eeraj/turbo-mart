@@ -6,9 +6,10 @@ interface Props {
 }
 defineProps<Props>()
 
-const emit = defineEmits([
-  "close"
-])
+interface Emits {
+  "close": []
+}
+const emit = defineEmits<Emits>()
 </script>
 
 <template>

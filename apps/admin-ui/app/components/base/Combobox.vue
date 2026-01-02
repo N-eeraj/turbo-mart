@@ -39,9 +39,11 @@ const modelValue = defineModel<AcceptableValue | Array<AcceptableValue> | undefi
 const search = defineModel<string>("search", {
   default: "",
 })
-const emit = defineEmits([
-  "scroll-end",
-])
+
+interface Emits {
+  scrollEnd: []
+}
+const emit = defineEmits<Emits>()
 
 const open = ref(false)
 
@@ -126,7 +128,7 @@ const optionsListEl = useTemplateRef<HTMLUListElement>("options-list")
 const { reset } = useInfiniteScroll(
   () => optionsListEl.value,
   () => {
-    emit("scroll-end")
+    emit("scrollEnd")
   },
   {
     distance: 10,

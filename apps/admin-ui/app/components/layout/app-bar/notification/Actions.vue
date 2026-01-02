@@ -5,9 +5,10 @@ interface Props {
 }
 defineProps<Props>()
 
-const emit = defineEmits([
-  "markAllAsRead"
-])
+interface Emits {
+  markAllAsRead: []
+}
+const emit = defineEmits<Emits>()
 </script>
 
 <template>

@@ -10,9 +10,10 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const emit = defineEmits([
-  "click",
-])
+interface Emits {
+  click: []
+}
+const emit = defineEmits<Emits>()
 
 const classes = computed(() => {
   switch(props.color) {

@@ -30,9 +30,11 @@ const props = withDefaults(defineProps<Props>(), {
 const search = defineModel<string>("search", {
   default: "",
 })
-const emit = defineEmits([
-  "scroll-end",
-])
+
+interface Emits {
+  scrollEnd: []
+}
+const emit = defineEmits<Emits>()
 </script>
 
 <template>
@@ -72,7 +74,7 @@ const emit = defineEmits([
             :disabled="disabled || readonly || loading"
             :is-infinite
             :has-more-items
-            @scroll-end="emit('scroll-end')">
+            @scroll-end="emit('scrollEnd')">
             <template #trigger="data">
               <slot
                 name="trigger"

@@ -18,10 +18,11 @@ interface Props {
 }
 defineProps<Props>()
 
-const emit = defineEmits([
-  "confirm",
-  "cancel",
-])
+interface Emits {
+  confirm: []
+  cancel: []
+}
+const emit = defineEmits<Emits>()
 </script>
 
 <template>

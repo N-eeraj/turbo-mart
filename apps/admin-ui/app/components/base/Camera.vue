@@ -11,10 +11,11 @@ const {
   resolution,
 } = defineProps<Props>()
 
-const emit = defineEmits([
-  "capture",
-  "close",
-])
+interface Emits {
+  capture: [File]
+  close: []
+}
+const emit = defineEmits<Emits>()
 
 const camera = useTemplateRef<typeof Camera>("camera")
 

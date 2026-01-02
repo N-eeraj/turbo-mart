@@ -14,9 +14,10 @@ const {
   token
 } = defineProps<Props>()
 
-const emit = defineEmits([
-  "invalidToken",
-])
+interface Emits {
+  invalidToken: []
+}
+const emit = defineEmits<Emits>()
 
 const {
   isSubmitting,

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const emit = defineEmits([
-  "retry",
-])
+interface Emit {
+  retry: []
+}
+const emit = defineEmits<Emit>()
 </script>
 
 <template>

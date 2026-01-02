@@ -7,15 +7,16 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const emit = defineEmits([
-  "view",
-  "edit",
-  "delete",
-])
+interface Emits {
+  view: []
+  edit: []
+  delete: []
+}
+const emit = defineEmits<Emits>()
 
 const actions = computed(() => ([
   {
-    name: "view" as const,
+    name: "view",
     isVisible: !props.hideView,
     tooltip: {
       tooltip: "View",
@@ -26,9 +27,10 @@ const actions = computed(() => ([
       disabled: props.isDeleting,
     },
     icon: "lucide:eye",
+    onClick: () => emit("view"),
   },
   {
-    name: "edit" as const,
+    name: "edit",
     isVisible: !props.hideEdit,
     tooltip: {
       tooltip: "Edit",
@@ -39,9 +41,10 @@ const actions = computed(() => ([
       disabled: props.isDeleting,
     },
     icon: "lucide:pen",
+    onClick: () => emit("edit"),
   },
   {
-    name: "delete" as const,
+    name: "delete",
     isVisible: !props.hideDelete,
     tooltip: {
       tooltip: "Delete",
@@ -53,6 +56,7 @@ const actions = computed(() => ([
       class: "hover:bg-destructive/20 text-destructive hover:text-destructive duration-300",
     },
     icon: "lucide:trash-2",
+    onClick: () => emit("delete"),
   },
 ]))
 </script>
@@ -60,7 +64,7 @@ const actions = computed(() => ([
 <template>
   <div class="flex items-center gap-x-2">
     <slot
-      v-for="({ name, isVisible, tooltip, button, icon }) in actions"
+      v-for="({ name, isVisible, tooltip, button, icon, onClick }) in actions"
       :name
       :is-visible>
       <BaseTooltip
@@ -69,7 +73,7 @@ const actions = computed(() => ([
         <BaseButton
           v-bind="button"
           size="icon"
-          @click="emit(name)">
+          @click="onClick">
           <Icon :name="icon" />
         </BaseButton>
       </BaseTooltip>
