@@ -21,7 +21,7 @@ const {
   cancelDelete,
 } = useAdminListData()
 
-const formatDate = (createdAt: Date) => useDateFormat(createdAt, "DD/MM/YYYY")
+const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
 </script>
 
 <template>
