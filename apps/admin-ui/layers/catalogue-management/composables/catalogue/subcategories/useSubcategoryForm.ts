@@ -2,9 +2,6 @@ import {
   toast,
 } from "vue-sonner"
 import type z from "zod"
-import {
-  type SelectItemProps,
-} from "reka-ui"
 
 import {
   subcategoryCreationSchema,
@@ -44,45 +41,12 @@ export default function useSubcategoryForm({ submitHandler, initialValues = {} }
   })
 
   const {
-    data: categoriesData,
+    categories,
     isLoading: isLoadingCategories,
-    page,
     hasNextPage: hasNextCategoriesPage,
+    loadMore: loadMoreCategories,
     search: categorySearch,
-  } = useCategoryListData({
-    persistQuery: false
-  })
-
-  const categories = ref<Array<SelectItemProps>>(
-    initialCategory.value
-      ? [
-        {
-          value: initialCategory.value.id,
-          textValue: initialCategory.value.name,
-        }
-      ]
-      : []
-  )
-
-  watch(() => categorySearch.value, () => {
-    categories.value = []
-  })
-
-  watch(() => categoriesData.value, () => {
-    if (!categoriesData.value) return
-    categories.value = [
-      ...categories.value,
-      ...categoriesData.value
-        .map(({ id, name }) => ({
-          value: id,
-          textValue: name,
-        }))
-    ]
-  })
-
-  const loadMoreCategories = () => {
-    page.value = `${+page.value + 1}`
-  }
+  } = useInfiniteCategorySelect(initialCategory)
 
   const isInvalid = computed(() => !isFieldValid("name") || !isFieldValid("slug")) || !isFieldValid("category")
 

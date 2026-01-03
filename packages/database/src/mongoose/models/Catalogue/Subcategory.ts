@@ -18,7 +18,7 @@ export type Subcategory = Omit<mongoose.HydratedDocument<InferredSubcategorySche
 export type ObjectKeys = Exclude<keyof InferredSubcategorySchemaType, "attributes" | "category">
 export type SubcategoryObject = Pick<Subcategory, ObjectKeys> & {
   id: Subcategory["_id"]
-  category: Pick<CategoryObject, "id" | "name" | "slug">
+  category?: Pick<CategoryObject, "id" | "name" | "slug">
   attributes?: Array<AttributeObject<AttributeType>>
 }
 type TransformParams = Omit<Subcategory, "category"> & { category: Pick<Category, "_id" | "name" | "slug"> }
@@ -77,11 +77,13 @@ export function transformSubcategory({
 }: TransformParams): SubcategoryObject {
   const subcategory: SubcategoryObject = {
     id: _id,
-    category: {
-      id: category._id,
-      name: category.name,
-      slug: category.slug,
-    },
+    ...(category ? {
+      category: {
+        id: category._id,
+        name: category.name,
+        slug: category.slug,
+      }
+    } : {}),
     name,
     slug,
     attributes: attributes?.map(transformAttribute),

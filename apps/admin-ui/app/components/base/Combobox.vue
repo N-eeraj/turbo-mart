@@ -85,6 +85,7 @@ const optionsMap = ref(new Map())
 watch(
   () => props.options,
   (options) => {
+    if (!options) return
     options.forEach(({ value, textValue }) => {
       optionsMap.value.set(value, textValue)
     })

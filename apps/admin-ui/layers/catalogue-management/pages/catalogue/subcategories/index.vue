@@ -48,6 +48,7 @@ const {
     is-infinite
     :has-next="hasNextPage"
     :loading="isLoading"
+    filter-by-category
     :deleting-ids
     :show-delete-confirmation
     @delete="handleDelete"

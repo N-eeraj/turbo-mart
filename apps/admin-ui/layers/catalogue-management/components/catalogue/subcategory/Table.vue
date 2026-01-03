@@ -14,7 +14,7 @@ interface Props {
   totalPages?: PropsBase["totalPages"]
   isInfinite?: PropsBase["isInfinite"]
   hasNext?: PropsBase["hasNext"]
-  filterContainerClass?: PropsBase["filterContainerClass"]
+  filterByCategory?: boolean
   deletingIds: Array<string>
   showDeleteConfirmation: boolean
 }
@@ -37,6 +37,17 @@ interface Emits {
 }
 const emit = defineEmits<Emits>()
 
+
+const {
+  categories,
+  isLoading: isLoadingCategories,
+  hasNextPage: hasNextCategoriesPage,
+  loadMore: loadMoreCategories,
+  search: categorySearch,
+} = useInfiniteCategorySelect()
+
+const categoriesFilter = ref([])
+
 const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
 </script>
   
@@ -52,6 +63,36 @@ const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
     :loading
     filter-container-class="items-end!"
     class="basis-0 grow">
+    <template
+      #filter-addon-left
+      v-if="filterByCategory">
+      <div class="space-y-1">
+        <small class="inline-block text-xs text-foreground/50">
+          Filter by Category
+        </small>
+        <BaseCombobox
+          name="category"
+          v-model="categoriesFilter"
+          v-model:search="categorySearch"
+          placeholder="Select Category"
+          :options="categories"
+          :loading="isLoadingCategories"
+          multiple
+          is-infinite
+          :has-more-items="hasNextCategoriesPage"
+          @scroll-end="loadMoreCategories">
+          <template #trigger="{ modelValue }">
+            <template v-if="!modelValue?.length">
+              Select Categories
+            </template>
+            <template v-else-if="modelValue.length > 2">
+              {{ modelValue.length }} Selected
+            </template>
+          </template>
+        </BaseCombobox>
+      </div>
+    </template>
+
     <template #table-cell-category="{ row }">
       <NuxtLink
         :to="`/catalogue/categories/${row.original.category.slug}`"
