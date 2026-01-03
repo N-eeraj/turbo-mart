@@ -109,7 +109,7 @@ const selectedOptions = computed(() => {
 
   // handle multi select
   const valueArray = value as Array<AcceptableValue>
-  
+
   return valueArray
     .map((value) => optionsMap.value.get(value))  
     .join(", ")

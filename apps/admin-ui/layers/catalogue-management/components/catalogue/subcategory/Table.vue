@@ -29,6 +29,9 @@ const order = defineModel<Order>("order")
 const page = defineModel<number>("page", {
   default: 1,
 })
+const categoriesFilter = defineModel<Array<string>>("categories-filter", {
+  default: () => ([]),
+})
 
 interface Emits {
   "delete": [string]
@@ -36,7 +39,6 @@ interface Emits {
   "cancelDelete": []
 }
 const emit = defineEmits<Emits>()
-
 
 const {
   categories,
@@ -46,11 +48,9 @@ const {
   search: categorySearch,
 } = useInfiniteCategorySelect()
 
-const categoriesFilter = ref([])
-
 const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
 </script>
-  
+
 <template>
   <DataTable
     v-model:search="search"

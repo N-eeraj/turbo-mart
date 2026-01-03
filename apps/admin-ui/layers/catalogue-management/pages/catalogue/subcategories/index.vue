@@ -11,6 +11,7 @@ const {
   search,
   order,
   columns,
+  categoriesFilter,
   handleDelete,
   showDeleteConfirmation,
   deletingIds,
@@ -43,6 +44,7 @@ const {
     v-model:search="search"
     v-model:order="order"
     v-model:page="page"
+    v-model:categories-filter="categoriesFilter"
     :data
     :columns
     is-infinite

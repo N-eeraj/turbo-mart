@@ -32,14 +32,12 @@ export default function useAdminListData() {
     onError: () => navigateTo("/"),
   })
 
-  const resetAndRefresh = () => {
-    resourceList.page.value = 1
-    resourceList.refresh()
-  }
-
   watchDebounced(
     () => permissionsFilter.value,
-    resetAndRefresh,
+    () => {
+      resourceList.page.value = 1
+      resourceList.refresh()
+    },
     {
       debounce: 500,
     }
