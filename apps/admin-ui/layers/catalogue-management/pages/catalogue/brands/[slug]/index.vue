@@ -30,7 +30,7 @@ async function handleDelete() {
 
 <template>
   <BaseHeader
-    title="View Brand"
+    :title="brandData?.name"
     :breadcrumbs="VIEW_BRAND">
     <template
       #right

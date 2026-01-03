@@ -36,7 +36,7 @@ async function handleDelete() {
 
 <template>
   <BaseHeader
-    title="View Category"
+    :title="categoryData?.name"
     :breadcrumbs="VIEW_CATEGORY">
     <template
       #right

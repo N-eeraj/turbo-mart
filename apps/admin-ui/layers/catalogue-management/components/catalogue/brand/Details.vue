@@ -4,7 +4,6 @@ import {
 } from "@app/schemas/catalogue/brand"
 
 interface Props {
-  name: BrandCreationData["name"]
   slug: BrandCreationData["slug"]
   createdAt: BrandCreationData["createdAt"]
   updatedAt: BrandCreationData["updatedAt"]
@@ -15,12 +14,6 @@ const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
 
 <template>
   <section class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-2">
-    <span class="text-foreground/75">
-      Name:
-    </span>
-    <strong>
-      {{ name }}
-    </strong>
     <span class="text-foreground/75">
       Slug:
     </span>
