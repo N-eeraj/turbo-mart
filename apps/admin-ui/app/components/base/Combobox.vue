@@ -158,7 +158,7 @@ watch(() => open.value, () => {
             :model-value
             :selected-options>
             <slot
-              v-if="modelValue"
+              v-if="multiple ? (modelValue as Array<string>).length : modelValue"
               name="trigger-value"
               :model-value
               :selected-options>

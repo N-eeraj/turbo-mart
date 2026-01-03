@@ -75,18 +75,19 @@ const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
           v-model="categoriesFilter"
           v-model:search="categorySearch"
           placeholder="Select Category"
-          :options="categories"
+          :options="categories ?? []"
           :loading="isLoadingCategories"
           multiple
           is-infinite
           :has-more-items="hasNextCategoriesPage"
+          clearable
           @scroll-end="loadMoreCategories">
-          <template #trigger="{ modelValue }">
-            <template v-if="!modelValue?.length">
-              Select Categories
+          <template #trigger-value="{ selectedOptions, modelValue }">
+            <template v-if="(modelValue as Array<string>)?.length > 2">
+              {{ (modelValue as Array<string>).length }} Selected
             </template>
-            <template v-else-if="modelValue.length > 2">
-              {{ modelValue.length }} Selected
+            <template v-else>
+              {{ selectedOptions }}
             </template>
           </template>
         </BaseCombobox>
