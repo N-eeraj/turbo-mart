@@ -3,12 +3,13 @@ import {
 } from "@app/schemas/admin/catalogue/category"
 import {
   type SelectItemProps,
+  type AcceptableValue,
 } from "reka-ui"
 
 interface SubcategoryCategory extends CategoryCreationData {
   id: string
 }
-export default function useInfiniteCategorySelect(initialCategory: ComputedRef<SubcategoryCategory | undefined>) {
+export default function useInfiniteCategorySelect(initialCategory?: ComputedRef<SubcategoryCategory | undefined>) {
   const {
     data,
     isLoading,
@@ -49,9 +50,9 @@ export default function useInfiniteCategorySelect(initialCategory: ComputedRef<S
     const uniqueCategories: Array<SelectItemProps> = []
     
     for (let i = categoriesList.length - 1; i >= 0; i--) {
-      const item = categoriesList[i]
-      if (!seen.has(item.value)) {
-        seen.add(item.value)
+      const item = categoriesList[i] as SelectItemProps<AcceptableValue>
+      if (!seen.has(item?.value)) {
+        seen.add(item?.value)
         uniqueCategories.push(item)
       }
     }

@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import {
   VIEW_CATEGORY,
 } from "~/constants/categories/breadcrumbs"
 
@@ -71,7 +77,21 @@ async function handleDelete() {
     <CatalogueCategoryDetails
       v-bind="categoryData"
       class="mt-4" />
-    <CatalogueCategorySubcategories :category-id="categoryData.id" />
+
+    <Accordion
+      type="single"
+      collapsible
+      :unmount-on-hide="false"
+      class="mt-4">
+      <AccordionItem value="item-1">
+        <AccordionTrigger class="px-3 md:px-4 py-2 bg-secondary text-lg md:text-xl hover:no-underline cursor-pointer">
+          Subcategories
+        </AccordionTrigger>
+        <AccordionContent class="mt-3">
+          <CatalogueCategorySubcategories :category-id="categoryData.id" />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   </template>
 
   <BaseConfirmation

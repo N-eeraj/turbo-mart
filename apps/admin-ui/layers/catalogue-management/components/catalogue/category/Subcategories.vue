@@ -32,7 +32,7 @@ const {
     :loading="isLoading"
     :deleting-ids
     :show-delete-confirmation
-    class="basis-0 grow mt-2"
+    class="basis-0 grow"
     @delete="handleDelete"
     @confirm-delete="confirmDelete"
     @cancel-delete="cancelDelete" />

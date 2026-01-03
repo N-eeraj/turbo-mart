@@ -18,7 +18,7 @@ interface Props {
   deletingIds: Array<string>
   showDeleteConfirmation: boolean
 }
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   totalPages: 1,
   isInfinite: false,
   hasNext: false,
@@ -46,7 +46,7 @@ const {
   hasNextPage: hasNextCategoriesPage,
   loadMore: loadMoreCategories,
   search: categorySearch,
-} = useInfiniteCategorySelect()
+} = props.filterByCategory ? useInfiniteCategorySelect() : {}
 
 const formatDate = (date: Date) => useDateFormat(date, "DD/MM/YYYY")
 </script>
