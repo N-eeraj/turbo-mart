@@ -17,6 +17,8 @@ interface Props {
   description?: any
 }
 const props = defineProps<Props>()
+
+const attrs = useAttrs()
 </script>
 
 <template>
@@ -28,7 +30,9 @@ const props = defineProps<Props>()
       ...formField
     }"
     type="checkbox">
-    <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md py-4">
+    <FormItem
+      class="flex flex-row items-start gap-x-3 space-y-0 rounded-md py-4"
+      :class="attrs.class">
       <slot v-bind="{
         ...formField,
         value,

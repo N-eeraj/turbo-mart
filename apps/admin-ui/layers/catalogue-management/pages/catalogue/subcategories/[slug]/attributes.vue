@@ -1,64 +1,15 @@
 <script setup lang="ts">
-import {
-  toast,
-} from "vue-sonner"
-import type z from "zod"
-
-import {
-  subcategoryAttributeUpdateSchema,
-} from "@app/schemas/admin/catalogue/subcategory"
-
 const {
-  handleSubmit,
+  attributeTypes,
+  isLoadingAttributeTypes,
   isSubmitting,
-  isFieldValid,
-  setErrors,
-} = useForm({
-  validationSchema: toTypedSchema(
-    subcategoryAttributeUpdateSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
-  ),
-  initialValues: {
-    create: [],
-    update: [],
-    delete: [],
-  },
-})
-
-const {
-  data: attributeTypes,
-  status: loadingAttributeTypes,
-} = useLazyAsyncData(
-  "attribute-types",
-  () => useApi(`/admin/catalogue/subcategories/attribute-types`),
-  {
-    transform: ({ data }) => data
-    .map(({ value, name }) => ({
-      value,
-      textValue: name,
-    })),
-  }
-)
-const isLoadingAttributeTypes = computed(() => loadingAttributeTypes.value === "pending")
-
-const onSubmit = handleSubmit(async (body) => {
-  try {
-    console.log(body)
-  } catch (error: unknown) {
-    const {
-      status,
-      message,
-      errors,
-    } = error as ApiError
-    if (status === 422 || status === 409) {
-      setErrors(errors as Record<string, Array<string>>)
-    } else if (message) {
-      toast.error(message, {
-        richColors: true,
-      })
-    }
-  }
-})
-const { fields, push, remove } = useFieldArray("create")
+  createFields,
+  createPush,
+  createRemove,
+  onSubmit,
+  values,
+  errors,
+} = useAttributesMapping()
 </script>
 
 <template>
@@ -70,24 +21,42 @@ const { fields, push, remove } = useFieldArray("create")
     <form
       class="flex flex-col gap-y-3"
       @submit="onSubmit">
-      <ul class="space-y-4">
+      <ul class="grid md:grid-cols-2 gap-4">
         <li
-          v-for="(field, index) in fields"
+          v-for="(field, index) in createFields"
           :key="field.key"
-          class="flex items-center gap-x-2">
+          class="grid md:grid-cols-3 items-center gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
+          <FormFieldInput
+            :name="`create[${index}].name`"
+            placeholder="Attribute Name" />
           <FormFieldSelect
             :name="`create[${index}].type`"
             :options="attributeTypes"
             placeholder="Attribute Type"
             :loading="isLoadingAttributeTypes" />
+          <FormFieldCheckbox
+            :name="`create[${index}].required`"
+            label="Is a required attribute"
+            class="py-2 md:order-2" />
+          <FormFieldCheckbox
+            :name="`create[${index}].variant`"
+            label="Is a variant attribute"
+            class="py-2 md:order-2" />
           <BaseButton
             variant="destructive"
             size="icon-sm"
             type="button"
-            class="ml-auto"
-            @click="remove(index)">
+            class="ml-auto order-3 md:order-1"
+            @click="createRemove(index)">
             <Icon name="lucide:trash-2" />
           </BaseButton>
+
+          <!-- Metadata -->
+          <div class="order-2 md:order-3 md:col-span-3 pt-2 border-t border-t-foreground/10">
+            <span class="text-xs text-foreground/75">
+              Metadata
+            </span>
+          </div>
         </li>
       </ul>
 
@@ -95,7 +64,7 @@ const { fields, push, remove } = useFieldArray("create")
         variant="outline"
         type="button"
         class="ml-auto px-3 text-primary/75 hover:text-primary"
-        @click="push({ type: null })">
+        @click="createPush({ type: null })">
         <span class="text-xs">
           Add Attribute
         </span>
@@ -103,6 +72,12 @@ const { fields, push, remove } = useFieldArray("create")
           name="lucide:plus"
           :size="14" />
       </BaseButton>
+
+      <span
+        v-if="errors.root"
+        class="text-xs text-destructive">
+        {{ errors.root }}
+      </span>
 
       <BaseButton class="mt-3 md:mt-4 ml-auto">
         Submit

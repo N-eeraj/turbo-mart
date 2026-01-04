@@ -1,0 +1,81 @@
+import {
+  toast,
+} from "vue-sonner"
+import type z from "zod"
+
+import {
+  subcategoryAttributeUpdateSchema,
+} from "@app/schemas/admin/catalogue/subcategory"
+
+export default function useAttributesMapping() {
+  const {
+    data: attributeTypes,
+    status: loadingAttributeTypes,
+  } = useLazyAsyncData(
+    "attribute-types",
+    () => useApi(`/admin/catalogue/subcategories/attribute-types`),
+    {
+      transform: ({ data }) => data
+      .map(({ value, name }) => ({
+        value,
+        textValue: name,
+      })),
+    }
+  )
+  const isLoadingAttributeTypes = computed(() => loadingAttributeTypes.value === "pending")
+
+  const {
+    handleSubmit,
+    isSubmitting,
+    isFieldValid,
+    setErrors,
+    values,
+    errors,
+  } = useForm({
+    validationSchema: toTypedSchema(
+      subcategoryAttributeUpdateSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
+    ),
+    initialValues: {
+      create: [],
+      update: [],
+      delete: [],
+    },
+  })
+
+  const {
+    fields: createFields,
+    push: createPush,
+    remove: createRemove,
+  } = useFieldArray("create")
+
+  const onSubmit = handleSubmit(async (body) => {
+    try {
+      console.log(body)
+    } catch (error: unknown) {
+      const {
+        status,
+        message,
+        errors,
+      } = error as ApiError
+      if (status === 422 || status === 409) {
+        setErrors(errors as Record<string, Array<string>>)
+      } else if (message) {
+        toast.error(message, {
+          richColors: true,
+        })
+      }
+    }
+  })
+
+  return {
+    attributeTypes,
+    isLoadingAttributeTypes,
+    isSubmitting,
+    createFields,
+    createPush,
+    createRemove,
+    onSubmit,
+    values,
+    errors,
+  }
+}
