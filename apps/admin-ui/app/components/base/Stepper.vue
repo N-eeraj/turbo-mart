@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/stepper"
 
 interface Step {
-  step?: number
   indicator: string
   title: string
   description: string
+  disabled?: boolean
 }
 interface Props {
   steps: Array<Step>
@@ -28,11 +28,13 @@ const modelValue = defineModel<number>()
     v-model="modelValue"
     as="ul">
     <StepperItem
-      v-for="({ title, indicator, description }, step) in steps"
+      v-for="({ title, indicator, description, disabled }, step) in steps"
       :step
       as="li"
       class="relative">
-      <StepperTrigger class="cursor-pointer">
+      <StepperTrigger
+        class="cursor-pointer"
+        :disabled>
         <StepperIndicator>
           <slot
             name="indicator"
