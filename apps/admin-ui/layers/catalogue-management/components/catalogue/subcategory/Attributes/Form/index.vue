@@ -9,6 +9,7 @@ const {
   updateAttributeFields,
   removeAttribute,
   onSubmit,
+  subcategoryLink,
   values,
   errors,
 } = useAttributesMapping()
@@ -77,8 +78,24 @@ const {
       {{ errors.root }}
     </span>
 
-    <BaseButton class="mt-3 md:mt-4 ml-auto">
-      Submit
-    </BaseButton>
+    <div class="flex items-center gap-x-2 md:gap-x-4 mt-3 md:mt-4 ml-auto">
+      <NuxtLink
+        :to="subcategoryLink"
+        :class="{
+          'pointer-events-none': isSubmitting,
+        }">
+        <BaseButton
+          variant="secondary"
+          type="button"
+          :disabled="isSubmitting"
+          class="w-full">
+          Cancel
+        </BaseButton>
+      </NuxtLink>
+      <BaseButton
+        :loading="isSubmitting">
+        Submit
+      </BaseButton>
+    </div>
   </form>
 </template>

@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import {
+  type SubcategoryAttributeUpdateData,
+} from "@app/schemas/admin/catalogue/subcategory"
+
 interface Props {
   slug: string
+  attributes: SubcategoryAttributeUpdateData["update"]
 }
 const props = defineProps<Props>()
 </script>
@@ -19,5 +24,21 @@ const props = defineProps<Props>()
         </BaseButton>
       </NuxtLink>
     </div>
+
+    <ul v-if="attributes?.length">
+      <li
+        v-for="({ id, name, type, required, variant, metadata }) in attributes"
+        :key="id">
+        {{ name }}
+        {{ type }}
+        {{ required }}
+        {{ variant }}
+      </li>
+    </ul>
+    <p
+      v-else
+      class="md:mt-1 text-xs md:text-sm text-foreground/60">
+      No Attributes
+    </p>
   </section>
 </template>

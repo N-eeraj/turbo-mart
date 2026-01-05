@@ -72,9 +72,7 @@ async function handleDelete() {
     v-else
     class="mt-4 space-y-3 md:space-y-4">
     <CatalogueSubcategoryDetails v-bind="subcategoryData" />
-    <CatalogueSubcategoryAttributes
-      v-if="subcategoryData.attributes"
-      v-bind="subcategoryData" />
+    <CatalogueSubcategoryAttributes v-bind="subcategoryData" />
   </section>
 
   <BaseConfirmation

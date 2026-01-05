@@ -8,6 +8,14 @@ import {
 } from "@app/schemas/admin/catalogue/subcategory"
 
 export default function useAttributesMapping() {
+  const route = useRoute()
+  const subcategorySlug = computed(() => route.params.slug)
+
+  const subcategoryLink = computed(() => `/catalogue/subcategories/${subcategorySlug.value}`)
+  const {
+    data: subcategoryData,
+  } = inject(`subcategory-${subcategorySlug.value}`)
+
   const {
     data: attributeTypes,
     status: loadingAttributeTypes,
@@ -37,7 +45,7 @@ export default function useAttributesMapping() {
     ),
     initialValues: {
       create: [],
-      update: [],
+      update: subcategoryData.value.attributes,
       delete: [],
     },
   })
@@ -64,7 +72,14 @@ export default function useAttributesMapping() {
 
   const onSubmit = handleSubmit(async (body) => {
     try {
-      console.log(body)
+      const {
+        message,
+      } = await useApi(`/admin/catalogue/subcategories/${subcategoryData.value.id}/attributes`,{
+        method: "PATCH",
+        body,
+      })
+      toast.success(message)
+      navigateTo(subcategoryLink.value)
     } catch (error: unknown) {
       const {
         status,
@@ -91,6 +106,7 @@ export default function useAttributesMapping() {
     updateAttributeFields,
     removeAttribute,
     onSubmit,
+    subcategoryLink,
     values,
     errors,
   }
