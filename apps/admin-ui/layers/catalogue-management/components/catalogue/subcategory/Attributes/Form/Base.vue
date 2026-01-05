@@ -4,6 +4,7 @@ import {
 } from "reka-ui"
 
 interface Props {
+  field: "create" | "update"
   index: number
   attributeTypes: Array<SelectItemProps>
   isLoadingAttributeTypes: boolean
@@ -18,19 +19,19 @@ const emit = defineEmits<Emits>()
 
 <template>
   <FormFieldInput
-    :name="`create[${index}].name`"
+    :name="`${field}[${index}].name`"
     placeholder="Attribute Name" />
   <FormFieldSelect
-    :name="`create[${index}].type`"
+    :name="`${field}[${index}].type`"
     :options="attributeTypes"
     placeholder="Attribute Type"
     :loading="isLoadingAttributeTypes" />
   <FormFieldCheckbox
-    :name="`create[${index}].required`"
+    :name="`${field}[${index}].required`"
     label="Is a required attribute"
     class="py-2 md:order-2" />
   <FormFieldCheckbox
-    :name="`create[${index}].variant`"
+    :name="`${field}[${index}].variant`"
     label="Is a variant attribute"
     class="py-2 md:order-2" />
   <BaseButton
