@@ -4,6 +4,7 @@ import {
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface Props {
+  field: "create" | "update"
   index: number
   type?: AttributeType
 }

@@ -32,6 +32,8 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const attrs = useAttrs()
+
 const inputType = ref<InputTypeHTMLAttribute>(props.type ?? "text")
 function toggleInputType() {
   inputType.value = inputType.value === "password" ? "text" : "password"
@@ -47,7 +49,9 @@ function toggleInputType() {
       errorMessage,
       ...formField
     }">
-    <FormItem class="flex flex-col">
+    <FormItem
+      class="flex flex-col"
+      :class="attrs.class">
       <slot
         v-bind="{
           ...formField,

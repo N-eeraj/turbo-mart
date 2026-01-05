@@ -43,10 +43,24 @@ export default function useAttributesMapping() {
   })
 
   const {
-    fields: createFields,
-    push: createPush,
-    remove: createRemove,
+    fields: createAttributeFields,
+    push: createAttributePush,
+    remove: createAttributeRemove,
   } = useFieldArray("create")
+
+  const {
+    fields: updateAttributeFields,
+    remove: updateAttributeRemove,
+  } = useFieldArray("update")
+
+  const {
+    push: deleteAttributePush,
+  } = useFieldArray("delete")
+
+  const removeAttribute = (index: number) => {
+    updateAttributeRemove(index)
+    deleteAttributePush("")
+  }
 
   const onSubmit = handleSubmit(async (body) => {
     try {
@@ -71,9 +85,11 @@ export default function useAttributesMapping() {
     attributeTypes,
     isLoadingAttributeTypes,
     isSubmitting,
-    createFields,
-    createPush,
-    createRemove,
+    createAttributeFields,
+    createAttributePush,
+    createAttributeRemove,
+    updateAttributeFields,
+    removeAttribute,
     onSubmit,
     values,
     errors,
