@@ -12,9 +12,7 @@ export default function useAttributesMapping() {
   const subcategorySlug = computed(() => route.params.slug)
 
   const subcategoryLink = computed(() => `/catalogue/subcategories/${subcategorySlug.value}`)
-  const {
-    data: subcategoryData,
-  } = inject(`subcategory-${subcategorySlug.value}`)
+  const subcategoryData = inject(`subcategory-${subcategorySlug.value}`)
 
   const {
     data: attributeTypes,
@@ -66,8 +64,8 @@ export default function useAttributesMapping() {
   } = useFieldArray("delete")
 
   const removeAttribute = (index: number) => {
+    deleteAttributePush(subcategoryData.value.attributes[index].id)
     updateAttributeRemove(index)
-    deleteAttributePush("")
   }
 
   const onSubmit = handleSubmit(async (body) => {
