@@ -1,3 +1,0 @@
-<template>
-  Multi-Select
-</template>

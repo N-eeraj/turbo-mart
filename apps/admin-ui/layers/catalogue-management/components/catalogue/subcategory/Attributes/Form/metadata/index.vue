@@ -5,7 +5,6 @@ import {
 import TextMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Text.vue"
 import NumberMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Number.vue"
 import SelectMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Select.vue"
-import MultiSelectMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/MultiSelect.vue"
 import DateMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Date.vue"
 
 interface Props {
@@ -19,7 +18,7 @@ const MetadataComponentMap: Partial<Record<AttributeType, DefineComponent>> = {
   [AttributeType.TEXT]: TextMetadata,
   [AttributeType.NUMBER]: NumberMetadata,
   [AttributeType.SELECT]: SelectMetadata,
-  [AttributeType.MULTI_SELECT]: MultiSelectMetadata,
+  [AttributeType.MULTI_SELECT]: SelectMetadata,
   [AttributeType.DATE]: DateMetadata,
 }
 
@@ -33,6 +32,10 @@ const MetadataComponent = computed<DefineComponent | undefined>(() => MetadataCo
     <span class="text-xs text-foreground/75">
       Metadata
     </span>
-    <MetadataComponent />
+    <MetadataComponent
+      v-if="MetadataComponent"
+      :field
+      :index
+      class="my-2 md:mb-0" />
   </div>
 </template>
