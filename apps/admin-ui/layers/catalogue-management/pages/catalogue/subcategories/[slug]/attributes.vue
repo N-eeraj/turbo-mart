@@ -1,10 +1,11 @@
 <script setup lang="ts">
 const {
   subcategorySlug,
-  ...subcategoryData
+  data,
+  isLoading,
 } = useSubcategoryData()
 
-provide(`subcategory-${subcategorySlug.value}`, subcategoryData)
+provide(`subcategory-${subcategorySlug.value}`, data)
 </script>
 
 <template>
@@ -13,6 +14,7 @@ provide(`subcategory-${subcategorySlug.value}`, subcategoryData)
       Attributes
     </h1>
 
-    <CatalogueSubcategoryAttributesForm />
+    <BaseLinearProgress v-if="isLoading" />
+    <CatalogueSubcategoryAttributesForm v-else-if="data" />
   </section>
 </template>
