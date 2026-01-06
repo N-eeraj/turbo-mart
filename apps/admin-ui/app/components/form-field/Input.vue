@@ -78,6 +78,7 @@ function toggleInputType() {
               :placeholder
               :disabled="disabled || readonly"
               :class="cn(
+                'no-spinner',
                 readonly && 'opacity-100!',
               )" />
             <InputGroupAddon

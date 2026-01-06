@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import {
-  type SubcategoryAttributeUpdateData,
-} from "@app/schemas/admin/catalogue/subcategory"
+  AttributeObject,
+} from "@app/database/mongoose/models/Catalogue/Attributes"
+import type {
+  AttributeType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
 
 interface Props {
   slug: string
-  attributes: SubcategoryAttributeUpdateData["update"]
+  attributes: Array<AttributeObject<AttributeType>>
 }
 const props = defineProps<Props>()
 </script>
@@ -27,12 +30,9 @@ const props = defineProps<Props>()
 
     <ul v-if="attributes?.length">
       <li
-        v-for="({ id, name, type, required, variant, metadata }) in attributes"
-        :key="id">
-        {{ name }}
-        {{ type }}
-        {{ required }}
-        {{ variant }}
+        v-for="attribute in attributes"
+        :key="attribute.id.toString()">
+        <CatalogueSubcategoryAttributesDetails v-bind="attribute" />
       </li>
     </ul>
     <p
