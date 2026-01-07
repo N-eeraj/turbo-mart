@@ -118,6 +118,7 @@ export const ATTRIBUTE = {
     text: {
       maxLength: {
         valid: "Please enter a valid max length",
+        positive: "Please enter a positive number",
       },
     },
     number: {
