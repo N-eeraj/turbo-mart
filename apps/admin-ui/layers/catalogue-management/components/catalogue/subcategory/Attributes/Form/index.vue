@@ -21,23 +21,6 @@ const {
     @submit="onSubmit">
     <ul class="grid md:grid-cols-[repeat(auto-fill,minmax(440px,1fr))] gap-4">
       <li
-        v-for="(field, index) in createAttributeFields"
-        :key="field.key"
-        class="grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
-        <CatalogueSubcategoryAttributesFormBase
-          field="create"
-          :index
-          :attribute-types
-          :is-loading-attribute-types
-          @remove="createAttributeRemove(index)" />
-
-        <CatalogueSubcategoryAttributesFormMetadata
-          field="create"
-          :index
-          :type="field.value?.type" />
-      </li>
-
-      <li
         v-for="(field, index) in updateAttributeFields"
         :key="field.key"
         class="grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
@@ -54,6 +37,23 @@ const {
 
         <CatalogueSubcategoryAttributesFormMetadata
           field="update"
+          :index
+          :type="field.value?.type" />
+      </li>
+
+      <li
+        v-for="(field, index) in createAttributeFields"
+        :key="field.key"
+        class="grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
+        <CatalogueSubcategoryAttributesFormBase
+          field="create"
+          :index
+          :attribute-types
+          :is-loading-attribute-types
+          @remove="createAttributeRemove(index)" />
+
+        <CatalogueSubcategoryAttributesFormMetadata
+          field="create"
           :index
           :type="field.value?.type" />
       </li>
