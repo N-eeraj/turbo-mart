@@ -16,8 +16,13 @@ import {
 import {
   cn,
 } from "@/lib/utils"
+import type {
+  ClassValue,
+} from "class-variance-authority/types"
 
 const modelValue = defineModel<DateValue>()
+
+const attrs = useAttrs()
 
 const defaultPlaceholder = today(getLocalTimeZone())
 const df = new DateFormatter("en-US", {
@@ -31,8 +36,9 @@ const df = new DateFormatter("en-US", {
       <BaseButton
         variant="outline"
         :class="cn(
-          'w-[280px] justify-start text-left font-normal',
+          'justify-start text-left font-normal',
           !modelValue && 'text-muted-foreground',
+          (attrs.class ?? '') as ClassValue,
         )">
         <Icon
           name="lucide:calendar"
