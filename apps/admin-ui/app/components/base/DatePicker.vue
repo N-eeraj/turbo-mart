@@ -30,17 +30,13 @@ const df = new DateFormatter("en-US", {
   dateStyle: "long",
 })
 
-const formattedDate = computed(() => {
-  if (typeof modelValue.value === "string") {
-    return df.format(new Date(modelValue.value))
-  } else if (modelValue.value) {
-    return df.format(modelValue.value)
-  }
-})
+// convert modelValue to Date object if it's an ISO string to handle logic
+const modelValueDate = computed(() => typeof modelValue.value === "string" ? new Date(modelValue.value) : modelValue.value)
 
-const date = ref(fromDate(new Date(), getLocalTimeZone())) as Ref<DateValue>
+const date = ref<DateValue>(fromDate(modelValueDate.value ?? new Date(), getLocalTimeZone())) as Ref<DateValue>
 
 watch(() => date.value, (value: DateValue | undefined) => {
+  // always set modelValue to ISO string
   modelValue.value = value?.toDate(getLocalTimeZone()).toISOString()
 })
 </script>
@@ -58,7 +54,7 @@ watch(() => date.value, (value: DateValue | undefined) => {
         <Icon
           name="lucide:calendar"
           class="mr-2" />
-        {{ modelValue ? formattedDate : "Pick a date" }}
+        {{ modelValueDate ? df.format(modelValueDate) : "Pick a date" }}
       </BaseButton>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
