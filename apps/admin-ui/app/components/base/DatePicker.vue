@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   DateFormatter,
+  fromDate,
   getLocalTimeZone,
   today,
   type DateValue,
@@ -20,13 +21,27 @@ import type {
   ClassValue,
 } from "class-variance-authority/types"
 
-const modelValue = defineModel<DateValue>()
+const modelValue = defineModel<Date | string | null>()
 
 const attrs = useAttrs()
 
 const defaultPlaceholder = today(getLocalTimeZone())
 const df = new DateFormatter("en-US", {
   dateStyle: "long",
+})
+
+const formattedDate = computed(() => {
+  if (typeof modelValue.value === "string") {
+    return df.format(new Date(modelValue.value))
+  } else if (modelValue.value) {
+    return df.format(modelValue.value)
+  }
+})
+
+const date = ref(fromDate(new Date(), getLocalTimeZone())) as Ref<DateValue>
+
+watch(() => date.value, (value: DateValue | undefined) => {
+  modelValue.value = value?.toDate(getLocalTimeZone()).toISOString()
 })
 </script>
 
@@ -43,12 +58,12 @@ const df = new DateFormatter("en-US", {
         <Icon
           name="lucide:calendar"
           class="mr-2" />
-        {{ modelValue ? df.format(modelValue.toDate(getLocalTimeZone())) : "Pick a date" }}
+        {{ modelValue ? formattedDate : "Pick a date" }}
       </BaseButton>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
       <Calendar
-        v-model="modelValue"
+        v-model="date"
         :initial-focus="true"
         :default-placeholder
         layout="month-and-year" />
