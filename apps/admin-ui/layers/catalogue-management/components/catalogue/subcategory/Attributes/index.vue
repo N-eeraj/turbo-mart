@@ -28,7 +28,9 @@ const props = defineProps<Props>()
       </NuxtLink>
     </div>
 
-    <ul v-if="attributes?.length">
+    <ul
+      v-if="attributes?.length"
+      class="grid md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-3 mt-1">
       <li
         v-for="attribute in attributes"
         :key="attribute.id.toString()">

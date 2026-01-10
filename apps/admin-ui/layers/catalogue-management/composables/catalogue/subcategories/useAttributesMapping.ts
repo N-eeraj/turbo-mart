@@ -33,9 +33,7 @@ export default function useAttributesMapping() {
   const {
     handleSubmit,
     isSubmitting,
-    isFieldValid,
     setErrors,
-    values,
     errors,
   } = useForm({
     validationSchema: toTypedSchema(
@@ -105,7 +103,6 @@ export default function useAttributesMapping() {
     removeAttribute,
     onSubmit,
     subcategoryLink,
-    values,
     errors,
   }
 }

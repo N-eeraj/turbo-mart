@@ -33,7 +33,6 @@ const MetadataComponent = computed<DefineComponent | undefined>(() => MetadataCo
       Metadata
     </span>
     <MetadataComponent
-      v-if="MetadataComponent"
       :field
       :index
       class="my-2 md:mb-0" />

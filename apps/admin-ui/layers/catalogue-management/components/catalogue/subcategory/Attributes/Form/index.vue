@@ -10,7 +10,6 @@ const {
   removeAttribute,
   onSubmit,
   subcategoryLink,
-  values,
   errors,
 } = useAttributesMapping()
 </script>
