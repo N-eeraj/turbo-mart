@@ -10,9 +10,12 @@ interface Props {
   metadata?: AttributeObject<AttributeType.DATE>["metadata"]
 }
 const props = defineProps<Props>()
+
+const minDate = computed(() => props.metadata?.min && new Date(props.metadata.min).toDateString())
+const maxDate = computed(() => props.metadata?.max && new Date(props.metadata.max).toDateString())
 </script>
 
 <template>
-  {{ metadata?.min }}
-  {{ metadata?.max }}
+  {{ minDate }}
+  {{ maxDate }}
 </template>
