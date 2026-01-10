@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip"  
 
 interface Props {
-  tooltip: string
+  tooltip?: string
   color?: "primary" | "secondary" | "destructive" | "neutral"
 }
 const props = defineProps<Props>()

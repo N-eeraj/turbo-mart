@@ -68,10 +68,12 @@ async function handleDelete() {
 
   <BaseLinearProgress v-if="subcategoryLoading" />
 
-  <CatalogueSubcategoryDetails
+  <section
     v-else
-    v-bind="subcategoryData"
-    class="mt-4" />
+    class="mt-4 space-y-3 md:space-y-4">
+    <CatalogueSubcategoryDetails v-bind="subcategoryData" />
+    <CatalogueSubcategoryAttributes v-bind="subcategoryData" />
+  </section>
 
   <BaseConfirmation
     :open="showConfirmation"

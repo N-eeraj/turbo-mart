@@ -43,6 +43,8 @@ const textAttributeTypeMetadata = {
   type: z.literal(AttributeType.TEXT),
   metadata: z.object({
     maxLength: z.number({ error: ATTRIBUTE.metadata.text.maxLength.valid })
+      .positive({ error: ATTRIBUTE.metadata.text.maxLength.positive })
+      .optional()
       .meta({
         description: "Maximum length of the attribute value.",
         example: 50,
@@ -68,7 +70,7 @@ const numberAttributeTypeMetadata = {
     unit: z.string({ error: ATTRIBUTE.metadata.number.unit.valid })
       .optional()
       .meta({
-        description: "Unit the attribute is measured in.",
+        description: "Base unit the attribute is measured in.",
         example: "Inches",
       }),
     template: z.string({ error: ATTRIBUTE.metadata.number.template.valid })
