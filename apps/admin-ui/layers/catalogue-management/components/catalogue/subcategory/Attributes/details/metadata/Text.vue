@@ -13,5 +13,19 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  {{ metadata?.maxLength }}
+  <div class="text-sm">
+    <span class="text-foreground/75">
+      Max Length:
+    </span>
+    <strong
+      v-if="metadata?.maxLength"
+      class="font-medium">
+      {{ metadata.maxLength }}
+    </strong>
+    <span
+      v-else
+      class="text-foreground/75">
+      -
+    </span>
+  </div>
 </template>

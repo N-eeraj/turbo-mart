@@ -56,12 +56,12 @@ const MetadataComponent = computed<DefineComponent | undefined>(() => MetadataCo
     <div
       v-if="MetadataComponent"
       class="flex flex-col gap-y-1 mt-2 pt-1.5 border-t border-t-foreground/10">
-      <span class="text-xs text-foreground/75">
+      <span class="text-xssm text-foreground/75 font-semibold">
         Metadata
       </span>
       <MetadataComponent
         :metadata
-        class="my-2 md:mb-0" />
+        class="my-1 md:mb-0" />
     </div>
   </div>
 </template>
