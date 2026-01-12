@@ -26,30 +26,28 @@ const props = defineProps<Props>()
 <template>
   <RadioGroup
     :default-value
-    :disabled
-    as="ul">
-    <li
-      v-for="({ label, value }) in options"
-      :key="value"
-      class="flex items-center space-x-2">
-      <slot
-        name="item"
-        :value
-        :label>
-        <Label :class="cn(
-          !disabled && 'cursor-pointer'
-        )">
-          <RadioGroupItem :value />
-          <slot
-            name="item-label"
-            :value
-            :label>
-            <span>
-              {{ label }}
-            </span>
-          </slot>
-        </Label>
-      </slot>
-    </li>
+    :disabled>
+    <slot :options>
+      <template v-for="({ label, value }) in options">
+        <slot
+          name="item"
+          :value
+          :label>
+          <Label :class="cn(
+            !disabled && 'cursor-pointer'
+          )">
+            <RadioGroupItem :value />
+            <slot
+              name="item-label"
+              :value
+              :label>
+              <span>
+                {{ label }}
+              </span>
+            </slot>
+          </Label>
+        </slot>
+      </template>
+    </slot>
   </RadioGroup>
 </template>

@@ -7,16 +7,9 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form"
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group"
-import {
-  Label,
-} from "@/components/ui/label"
-import {
-  cn,
-} from "@/lib/utils"
+import type {
+  ClassNameValue,
+} from "tailwind-merge"
 
 interface Option {
   value: string | number
@@ -30,6 +23,7 @@ interface Props {
   disabled?: boolean
   options: Array<Option> | ReadonlyArray<Option>
   defaultValue?: any
+  radioGroupClass?: ClassNameValue
 }
 const props = defineProps<Props>()
 
@@ -65,9 +59,16 @@ const attrs = useAttrs()
 
         <FormControl>
           <BaseRadio
+            v-bind="componentField"
             :disabled
             :options
-            :default-value>
+            :default-value
+            :class="radioGroupClass">
+            <template #default="data">
+              <slot
+                name="radio-group"
+                v-bind="data" />
+            </template>
             <template #item="data">
               <slot
                 name="item"
