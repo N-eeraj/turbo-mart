@@ -38,7 +38,12 @@ function addOption() {
   optionPush(
     optionsType.value === String(AttributeType.TEXT)
       ? ""
-      : {}
+      : {
+        value: "",
+        unit: "",
+        template: "{{value}}",
+        base: 1,
+      }
   )
 }
 
@@ -86,11 +91,31 @@ watch(() => optionsType.value, () => {
           v-for="(option, optionIndex) in optionFields"
           :key="option.key"
           class="flex justify-between items-center gap-x-3 md:gap-x-4">
-          <div class="flex-1">
+          <FormFieldInput
+            v-if="optionsType === String(AttributeType.TEXT)"
+            :name="`${field}[${index}].metadata.options[${optionIndex}]`"
+            :placeholder="`Option ${optionIndex + 1}`"
+            class="flex-1" />
+          <div
+            v-else
+            class="grid grid-cols-2 gap-2 flex-1">
+            <small class="col-span-2 text-foreground/75">
+              Option {{ optionIndex + 1 }}:
+            </small>
             <FormFieldInput
-              v-if="optionsType === String(AttributeType.TEXT)"
-              :name="`${field}[${index}].metadata.options[${optionIndex}]`"
-              :placeholder="`Option ${optionIndex + 1}`" />
+              :name="`${field}[${index}].metadata.options[${optionIndex}].value`"
+              type="number"
+              placeholder="Option Value" />
+            <FormFieldInput
+              :name="`${field}[${index}].metadata.options[${optionIndex}].unit`"
+              placeholder="Unit of Measurement" />
+            <FormFieldInput
+              :name="`${field}[${index}].metadata.options[${optionIndex}].template`"
+              placeholder="Display Template" />
+            <FormFieldInput
+              :name="`${field}[${index}].metadata.options[${optionIndex}].base`"
+              type="number"
+              placeholder="Base Value" />
           </div>
           <BaseButton
             variant="outline"
