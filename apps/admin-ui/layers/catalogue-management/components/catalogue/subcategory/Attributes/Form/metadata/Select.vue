@@ -18,15 +18,18 @@ const props = defineProps<Props>()
 const OPTIONS = [
   {
     label: "Text",
-    value: String(AttributeType.TEXT),
+    value: AttributeType.TEXT,
   },
   {
     label: "Number",
-    value: String(AttributeType.NUMBER),
+    value: AttributeType.NUMBER,
   },
 ] as const
 
-const optionsType = ref<typeof OPTIONS[number]["value"]>(OPTIONS[0].value)
+const {
+  value: optionsType,
+  errorMessage: optionsTypeErrorMessage,
+} = useField<typeof OPTIONS[number]["value"]>(() => `${props.field}[${props.index}].metadata.type`)
 
 const {
   fields: optionFields,
@@ -36,7 +39,7 @@ const {
 
 function addOption() {
   optionPush(
-    optionsType.value === String(AttributeType.TEXT)
+    optionsType.value === AttributeType.TEXT
       ? ""
       : {
         value: "",
@@ -54,13 +57,11 @@ watch(() => optionsType.value, () => {
 
 <template>
   <div class="grid md:grid-cols-2 gap-3">
-    <FormFieldRadio
-      :name="`${field}[${index}].metadata.type`"
+    <BaseRadio
       v-model="optionsType"
       :options="OPTIONS"
       label="Option Type"
-      radio-group-class="flex gap-x-0"
-      class="md:col-span-2">
+      class="flex gap-x-0 md:col-span-2">
       <template #item="{ value, label }">
         <Label class="p-3 has-aria-checked:bg-primary/10 border has-aria-checked:border-primary/75 cursor-pointer">
           <RadioGroupItem :value />
@@ -69,7 +70,12 @@ watch(() => optionsType.value, () => {
           </span>
         </Label>
       </template>
-    </FormFieldRadio>
+    </BaseRadio>
+    <small
+      v-if="optionsTypeErrorMessage"
+      class="text-destructive">
+      {{ optionsTypeErrorMessage }}
+    </small>
 
     <div class="grid grid-cols-[1fr_auto] items-center gap-2 md:col-span-2">
       <small>
@@ -92,7 +98,7 @@ watch(() => optionsType.value, () => {
           :key="option.key"
           class="flex justify-between items-center gap-x-3 md:gap-x-4">
           <FormFieldInput
-            v-if="optionsType === String(AttributeType.TEXT)"
+            v-if="optionsType === AttributeType.TEXT"
             :name="`${field}[${index}].metadata.options[${optionIndex}]`"
             :placeholder="`Option ${optionIndex + 1}`"
             class="flex-1" />
