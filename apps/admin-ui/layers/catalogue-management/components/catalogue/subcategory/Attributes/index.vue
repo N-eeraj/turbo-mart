@@ -28,15 +28,16 @@ const props = defineProps<Props>()
       </NuxtLink>
     </div>
 
-    <ul
+    <MasonryWall
       v-if="attributes?.length"
-      class="grid md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-3 mt-1">
-      <li
-        v-for="attribute in attributes"
-        :key="attribute.id.toString()">
-        <CatalogueSubcategoryAttributesDetails v-bind="attribute" />
-      </li>
-    </ul>
+      :items="attributes"
+      :column-width="280"
+      :gap="12"
+      class="mt-1">
+      <template #default="{ item }">
+        <CatalogueSubcategoryAttributesDetails v-bind="item" />
+      </template>
+    </MasonryWall>
     <p
       v-else
       class="md:mt-1 text-xs md:text-sm text-foreground/60">
