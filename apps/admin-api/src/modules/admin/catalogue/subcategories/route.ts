@@ -23,6 +23,8 @@ subcategoryRouter.route("/:subcategoryId")
 
 subcategoryRouter.get("/slug/:slug", catalogueManagementMiddlewares, SubcategoryController.getBySlug)
 
-subcategoryRouter.patch("/:subcategoryId/attributes", catalogueManagementMiddlewares, SubcategoryController.setAttributes)
+subcategoryRouter.route("/:subcategoryId/attributes")
+  .get(catalogueManagementMiddlewares, SubcategoryController.getAttributes)
+  .patch(catalogueManagementMiddlewares, SubcategoryController.setAttributes)
 
 export default subcategoryRouter

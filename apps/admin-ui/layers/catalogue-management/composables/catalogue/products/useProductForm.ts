@@ -80,7 +80,7 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
     if (!subcategoryId) return
     const {
       data,
-    } = await useApi(`/admin/catalogue/subcategories/${subcategoryId}`)
+    } = await useApi(`/admin/catalogue/subcategories/${subcategoryId}/attributes`)
     attributes.value = (data as Attributes)
   }
 

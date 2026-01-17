@@ -11,6 +11,7 @@ import {
 } from "@app/database/mongoose/models/Catalogue/Category"
 import {
   AttributeType,
+  transformAttribute,
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
@@ -379,6 +380,31 @@ export default class SubcategoryService extends BaseService {
     const attributeSet = new Set(attributes?.map(({ _id }) => _id.toString()))
 
     return attributeIds.filter((id) => !attributeSet.has(id.toString()))
+  }
+
+  /**
+   * Fetches the subcategory attributes.
+   * 
+   * @param subcategoryId - Id of the subcategory.
+   * 
+   * @throws 404 error if subcategory not found.
+   * @throws If database lookup fails.
+   */
+  static async getAttributes(subcategoryId: SubcategoryObject["id"]): Promise<SubcategoryObject["attributes"]> {
+    const subcategory = await Subcategory.findById(subcategoryId)
+      .select({
+        attributes: 1,
+      })
+
+    // throw error if subcategory is not found
+    if (!subcategory) {
+      throw {
+        status: 404,
+        message: "Subcategory not found",
+      }
+    }
+
+    return subcategory.attributes?.map(transformAttribute)
   }
 
   /**

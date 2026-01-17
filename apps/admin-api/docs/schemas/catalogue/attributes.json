@@ -1,0 +1,185 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "name",
+      "type",
+      "required",
+      "variant"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique attribute ID.",
+        "example": "01a0a0123a01a012a0a012a0"
+      },
+      "name": {
+        "type": "string",
+        "description": "The display name of the attribute.",
+        "example": "Display Name"
+      },
+      "type": {
+        "$ref": "#/components/schemas/SubcategoryAttributeTypesEnum"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Indicates if the attribute value is mandatory."
+      },
+      "variant": {
+        "type": "boolean",
+        "description": "Indicates if this attribute is used to define product variants."
+      }
+    },
+    "oneOf": [
+      {
+        "properties": {
+          "type": {
+            "const": 0,
+            "description": "Text"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "maxLength": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 1,
+            "description": "Number"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "template": {
+                "type": "string"
+              },
+              "base": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 2,
+            "description": "Boolean Test"
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 3,
+            "description": "Text Select"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": 0
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 4,
+            "description": "Number Multi-Select"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": 1
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "template": {
+                      "type": "string"
+                    },
+                    "base": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 5,
+            "description": "Color Test"
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 6,
+            "description": "Date"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "max": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
+      {
+        "properties": {
+          "type": {
+            "const": 7,
+            "description": "JSON Test"
+          }
+        }
+      }
+    ]
+  }
+}

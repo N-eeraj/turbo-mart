@@ -113,20 +113,20 @@ export default class SubcategoryController extends BaseController {
     })
   }
   
-    /**
-     * @route GET /api/admin/catalogue/subcategories/slug/:slug
-     * 
-     * Get one subcategory by slug.
-     */
-    static async getBySlug({ params }: Request, res: Response) {
-      const subcategorySlug = params.slug
-      const data = await SubcategoryService.getBySlug(subcategorySlug)
-  
-      super.sendSuccess(res, {
-        message: "Fetched Subcategory",
-        data,
-      })
-    }
+  /**
+   * @route GET /api/admin/catalogue/subcategories/slug/:slug
+   * 
+   * Get one subcategory by slug.
+   */
+  static async getBySlug({ params }: Request, res: Response) {
+    const subcategorySlug = params.slug
+    const data = await SubcategoryService.getBySlug(subcategorySlug)
+
+    super.sendSuccess(res, {
+      message: "Fetched Subcategory",
+      data,
+    })
+  }
 
   /**
    * @route PATCH /api/admin/catalogue/subcategories/:subcategoryId
@@ -173,6 +173,29 @@ export default class SubcategoryController extends BaseController {
       data,
     })
   }
+
+  /**
+   * @route GET /api/admin/catalogue/subcategories/:subcategoryId/attributes
+   * 
+   * Get subcategory attributes.
+   */
+  static async getAttributes({ params }: Request, res: Response) {
+    const subcategoryId = super.parseObjectId(params.subcategoryId)
+    if (!subcategoryId) {
+      throw {
+        status: 400,
+        message: "Invalid subcategory id",
+      }
+    }
+
+    const data = await SubcategoryService.getAttributes(subcategoryId)
+
+    super.sendSuccess(res, {
+      message: "Fetched Subcategory Attributes",
+      data,
+    })
+  }
+
 
   /**
    * @route PATCH /api/admin/catalogue/subcategories/:subcategoryId/attributes

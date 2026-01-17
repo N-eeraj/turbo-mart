@@ -12,6 +12,7 @@ import ProfileSchema from "#jsonDocs/schemas/profile" with { type: "json" }
 import NotificationSchema from "#jsonDocs/schemas/notification" with { type: "json" }
 import CategorySchema from "#jsonDocs/schemas/catalogue/category" with { type: "json" }
 import SubcategorySchema from "#jsonDocs/schemas/catalogue/subcategory" with { type: "json" }
+import AttributesSchema from "#jsonDocs/schemas/catalogue/attributes" with { type: "json" }
 import BrandSchema from "#jsonDocs/schemas/catalogue/brand" with { type: "json" }
 
 import {
@@ -131,12 +132,24 @@ const SubcategoryAttributeTypesEnum = {
   ] satisfies Array<AttributeType>,
 }
 
+const SubcategoryWithAttributesSchema = {
+  type: SubcategorySchema.type,
+  properties: {
+    ...SubcategorySchema.properties,
+    "attributes": {
+      "$ref": "#/components/schemas/AttributesSchema"
+    },
+  }
+}
+
 const ResponseSchemas = {
   ProfileSchema,
   DetailedProfileSchema,
   NotificationSchema,
   CategorySchema,
   SubcategorySchema,
+  SubcategoryWithAttributesSchema,
+  AttributesSchema,
   BrandSchema,
   ProductSchema: productJSONSchema,
 }
