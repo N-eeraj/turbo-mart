@@ -2,12 +2,14 @@ import {
   toast,
 } from "vue-sonner"
 import type z from "zod"
+import type { AcceptableValue } from "reka-ui"
 
 import {
   productCreationSchema,
 } from "@app/schemas/admin/catalogue/product"
 import {
   type SubcategoryCreationData,
+  type SubcategoryAttributeUpdateData,
 } from "@app/schemas/admin/catalogue/subcategory"
 import {
   type BrandCreationData,
@@ -25,6 +27,8 @@ interface Parameters {
   initialValues: Record<string, unknown>
   submitHandler: (_body: any) => Promise<ApiSuccess>
 }
+
+type Attributes = SubcategoryAttributeUpdateData["update"]
 
 export default function useProductForm({ submitHandler, initialValues = {} }: Parameters) {
   const initialSubcategory = computed<ProductSubcategory | undefined>(() => {
@@ -53,6 +57,7 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
     },
   })
 
+
   const {
     subcategories,
     isLoading: isLoadingSubcategories,
@@ -68,6 +73,16 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
     loadMore: loadMoreBrands,
     search: brandSearch,
   } = useInfiniteBrandSelect(initialBrand)
+
+  const attributes = ref<Attributes>()
+
+  const handleSubcategoryChange = async (subcategoryId?: AcceptableValue) => {
+    if (!subcategoryId) return
+    const {
+      data,
+    } = await useApi(`/admin/catalogue/subcategories/${subcategoryId}`)
+    attributes.value = (data as Attributes)
+  }
 
   const isInvalid = computed(() => !isFieldValid("name")
     || !isFieldValid("subcategory")
@@ -108,6 +123,8 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
     isLoadingBrands,
     hasNextBrandsPage,
     loadMoreBrands,
+    attributes,
+    handleSubcategoryChange,
     isInvalid,
     onSubmit,
   }

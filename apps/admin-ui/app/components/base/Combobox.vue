@@ -12,10 +12,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  type SelectItemProps,
-  type SelectRootProps,
-  type AcceptableValue,
+import type {
+  SelectItemProps,
+  SelectRootProps,
+  AcceptableValue,
 } from "reka-ui"
 import {
   cn,
@@ -42,6 +42,7 @@ const search = defineModel<string>("search", {
 
 interface Emits {
   scrollEnd: []
+  change: [AcceptableValue | Array<AcceptableValue> | undefined]
 }
 const emit = defineEmits<Emits>()
 
@@ -65,6 +66,9 @@ function selectOptions(selectedValue: AcceptableValue) {
     }
   }
 }
+watch(() => modelValue.value, (value) => {
+  emit("change", value)
+})
 
 function isSelected(option: AcceptableValue): boolean {
   if (!props.multiple) return (modelValue.value === option)

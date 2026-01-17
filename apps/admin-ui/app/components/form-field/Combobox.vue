@@ -2,6 +2,7 @@
 import type {
   SelectItemProps,
   SelectRootProps,
+  AcceptableValue,
 } from "reka-ui"
 import {
   FormField,
@@ -33,6 +34,7 @@ const search = defineModel<string>("search", {
 
 interface Emits {
   scrollEnd: []
+  change: [AcceptableValue | Array<AcceptableValue> | undefined]
 }
 const emit = defineEmits<Emits>()
 </script>
@@ -74,7 +76,8 @@ const emit = defineEmits<Emits>()
             :disabled="disabled || readonly || loading"
             :is-infinite
             :has-more-items
-            @scroll-end="emit('scrollEnd')">
+            @scroll-end="emit('scrollEnd')"
+            @change="v => emit('change', v)">
             <template #trigger="data">
               <slot
                 name="trigger"

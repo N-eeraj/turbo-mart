@@ -17,6 +17,8 @@ const {
   isLoadingBrands,
   hasNextBrandsPage,
   loadMoreBrands,
+  attributes,
+  handleSubcategoryChange,
   isInvalid,
   onSubmit,
 } = useProductForm(props)
@@ -24,7 +26,7 @@ const {
 
 <template>
   <form
-    class="grid sm:grid-cols-2 gap-4 w-full max-w-3xl"
+    class="grid sm:grid-cols-2 gap-4 w-full"
     @submit="onSubmit">
     <FormFieldCombobox
       name="subcategory"
@@ -34,7 +36,8 @@ const {
       :loading="isLoadingSubcategories"
       is-infinite
       :has-more-items="hasNextSubcategoriesPage"
-      @scroll-end="loadMoreSubcategories" />
+      @scroll-end="loadMoreSubcategories"
+      @change="handleSubcategoryChange" />
 
     <FormFieldCombobox
       name="brand"
@@ -49,7 +52,23 @@ const {
     <FormFieldInput
       name="name"
       label="Name"
-      placeholder="Enter the product name" />
+      placeholder="Enter the product name"
+      class="col-span-2" />
+
+    <div
+      v-if="attributes"
+      class="col-span-2 space-y-1.5">
+      <span class="inline-block text-foreground/75 font-medium">
+        Product Attributes
+      </span>
+      <ul class="grid sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-3">
+        <li
+          v-for="attribute in attributes"
+          :key="attribute.id">
+          {{ attribute }}
+        </li>
+      </ul>
+    </div>
 
     <BaseButton
       :disabled="isInvalid"
