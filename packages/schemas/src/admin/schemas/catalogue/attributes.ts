@@ -204,12 +204,12 @@ function numberMetadataSuperRefine<TId extends boolean>(
   if (metadata && metadata.min !== undefined && metadata.max !== undefined) {
     if (metadata.min > metadata.max) {
       ctx.addIssue({
-        path: ["min"],
+        path: ["metadata.min"],
         message: ATTRIBUTE.metadata.number.min.maxValue,
         code: "custom",
       })
       ctx.addIssue({
-        path: ["max"],
+        path: ["metadata.max"],
         message: ATTRIBUTE.metadata.number.max.minValue,
         code: "custom",
       })
@@ -233,12 +233,12 @@ function dateMetadataSuperRefine<TId extends boolean>(
   if (metadata && metadata.min !== undefined && metadata.max !== undefined) {
     if (metadata.min > metadata.max) {
       ctx.addIssue({
-        path: ["min"],
+        path: ["metadata.min"],
         message: ATTRIBUTE.metadata.date.min.maxDate,
         code: "custom",
       })
       ctx.addIssue({
-        path: ["max"],
+        path: ["metadata.max"],
         message: ATTRIBUTE.metadata.date.max.minDate,
         code: "custom",
       })
