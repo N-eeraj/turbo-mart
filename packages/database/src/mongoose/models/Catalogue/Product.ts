@@ -93,10 +93,20 @@ const ProductSchema = new mongoose.Schema({
   timestamps: true,
 })
 
-ProductSchema.index({
-  name: 1,
-  "skuList.code": 1,
-})
+ProductSchema.index(
+  {
+    name: 1,
+    "skuList.code": 1,
+  },
+  {
+    unique: true,
+    partialFilterExpression: {
+      "skuList.code": {
+        $exists: true,
+      },
+    },
+  }
+)
 
 /**
  * Transforms an Product object by mapping internal `_id` to external `id`.
