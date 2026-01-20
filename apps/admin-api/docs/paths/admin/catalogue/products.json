@@ -27,7 +27,7 @@
                     "description": "Boolean indicating whether the request was successful."
                   },
                   "data": {
-                    "$ref": "#/components/schemas/ProductSchema"
+                    "$ref": "#/components/schemas/ProductCreationSchema"
                   },
                   "message": {
                     "type": "string",
@@ -116,139 +116,19 @@
           "description": "Validation error (if request body is missing required fields, or has invalid field values).",
           "content": {
             "application/json": {
-              "examples": {
-                "ValidationError": {
-                  "summary": "Validation Error",
-                  "value": {
-                    "success": false,
-                    "message": "Validation Error",
-                    "errors": {
-                      "subcategory": [
-                        "Please select a subcategory"
-                      ],
-                      "brand": [
-                        "Please select a brand"
-                      ],
-                      "name": [
-                        "Please enter a product name"
-                      ],
-                      "attributes": {
-                        "01abcd091ab01a0123ab012a": [
-                          "Please enter a value or variants"
-                        ],
-                        "01abcd091ab01a0123ab012b": {
-                          "value": [
-                            "Please enter a value"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012c": {
-                          "variants": [
-                            "Please add at least 1 variant"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012d": [
-                          "Please enter either a value or a variant, not both"
-                        ],
-                        "01abcd091ab01a0123ab012e": {
-                          "variants": {
-                            "0": {
-                              "value": [
-                                "Please enter a variant value"
-                              ],
-                              "slug": [
-                                "Please enter a variant slug"
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "AttributeValidationError": {
-                  "summary": "Attribute Validation Error",
-                  "value": {
-                    "success": false,
-                    "message": "Product attributes don’t match the subcategory requirements",
-                    "errors": {
-                      "attributes": {
-                        "01abcd091ab01a0123ab012a": [
-                          "The selected subcategory requires this attribute"
-                        ],
-                        "01abcd091ab01a0123ab012b": {
-                          "value": [
-                            "The selected subcategory requires a value"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012c": {
-                          "variants": [
-                            "The selected subcategory requires variants"
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "AttributeMetadataValidationError": {
-                  "summary": "Attribute Meta Validation Error",
-                  "value": {
-                    "success": false,
-                    "message": "Product attributes don’t match the subcategory requirements",
-                    "errors": {
-                      "attributes": {
-                        "01abcd091ab01a0123ab012a": {
-                          "value": [
-                            "Please enter a shorter attribute value in 25 characters"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012b": {
-                          "value": [
-                            "Please enter a number within 7, as the the attribute value"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012c": {
-                          "value": [
-                            "Invalid attribute value, attribute requires boolean value"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012d": {
-                          "value": [
-                            "Invalid attribute value, option index should be at most 2"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012e": {
-                          "variants": {
-                            "0": {
-                              "name": [
-                                "Invalid attribute value, attribute requires color name"
-                              ],
-                              "hexCode": [
-                                "Invalid attribute value, attribute requires a valid hex code"
-                              ]
-                            }
-                          }
-                        },
-                        "01abcd091ab01a0123ab012f": {
-                          "value": [
-                            "Invalid attribute value, attribute requires record value"
-                          ]
-                        },
-                        "01abcd091ab01a0123ab012g": {
-                          "value": {
-                            "0": [
-                              "Invalid attribute value, attribute requires the option index"
-                            ],
-                            "1": [
-                              "Invalid attribute value, option index should be at least 0"
-                            ],
-                            "2": [
-                              "Invalid attribute value, option index should be at most 2"
-                            ]
-                          }
-                        }
-                      }
-                    }
-                  }
+              "example": {
+                "success": false,
+                "message": "Validation Error",
+                "errors": {
+                  "subcategory": [
+                    "Please select a subcategory"
+                  ],
+                  "brand": [
+                    "Please select a brand"
+                  ],
+                  "name": [
+                    "Please enter a product name"
+                  ]
                 }
               }
             }
