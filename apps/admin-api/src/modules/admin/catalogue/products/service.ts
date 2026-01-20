@@ -11,6 +11,7 @@ import Subcategory, {
 } from "@app/database/mongoose/models/Catalogue/Subcategory"
 import Brand from "@app/database/mongoose/models/Catalogue/Brand"
 import type {
+  Product as ProductType,
   ProductCreationData,
 } from "@app/schemas/admin/catalogue/product"
 import {
@@ -34,7 +35,7 @@ export type ParsedProductCreationData = Omit<ProductCreationData, "brand" | "sub
   brand: ProductObject["brand"]
 }
 
-type AttributeRecord = NonNullable<ParsedProductCreationData["attributes"]>
+type AttributeRecord = NonNullable<ProductType["attributes"]>
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
   limit: 10,
@@ -262,7 +263,7 @@ export default class ProductService extends BaseService {
    */
   private static validateProductAttributes(
     attributes: SubcategoryObject["attributes"],
-    productAttributes: ParsedProductCreationData["attributes"],
+    productAttributes: AttributeRecord,
   ): void {
     /**
      * The list of attribute validations errors.
@@ -391,8 +392,6 @@ export default class ProductService extends BaseService {
     await this.ensureBrand(product.brand)
     const { attributes } = await this.ensureSubcategory(product.subcategory)
 
-    this.validateProductAttributes(attributes, product.attributes)
-
     // ensure the product name is unique to the brand in the subcategory
     const existingProduct = await Product.findOne({
       subcategory: product.subcategory,
@@ -407,21 +406,7 @@ export default class ProductService extends BaseService {
       }
     }
 
-    // transform attribute record to array
-    const createProduct = {
-      ...product,
-      ...(
-        product.attributes && {
-          attributes: Object.entries(product.attributes)
-          .map(([ attribute, data ]) => ({
-            attribute,
-            ...data,
-          }))
-        }
-      ),
-    }
-
-    const newProduct = await Product.create(createProduct)
+    const newProduct = await Product.create(product)
     return transformProduct(newProduct)
   }
 }

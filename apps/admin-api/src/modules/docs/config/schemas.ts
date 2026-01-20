@@ -152,6 +152,7 @@ const ResponseSchemas = {
   AttributesSchema,
   BrandSchema,
   ProductSchema: productJSONSchema,
+  ProductCreationSchema: productCreationJSONSchema,
 }
 
 const UtilitySchemas = {
@@ -182,7 +183,6 @@ const schemas = {
   SubcategoryAttributeUpdateSchema: subcategoryAttributeUpdateJSONSchema,
   BrandCreationSchema: brandCreationJSONSchema,
   BrandUpdateSchema: brandUpdateJSONSchema,
-  ProductCreationSchema: productCreationJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

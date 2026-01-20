@@ -4,7 +4,7 @@ import {
   PRODUCT,
 } from "#admin/constants/validationMessages"
 
-export const productSchema = z.object({
+export const productCreationSchema = z.object({
   subcategory: z.string({ error: PRODUCT.subcategory.required })
     .nonempty(PRODUCT.subcategory.required)
     .trim()
@@ -26,6 +26,9 @@ export const productSchema = z.object({
       description: "Name of the product.",
       example: "iPhone 17",
     }),
+})
+
+export const productAttributeSchema = z.object({
   attributes: z.record(
     z.string({ error: PRODUCT.attributes.attribute.required })
       .nonempty(PRODUCT.attributes.attribute.required)
@@ -107,6 +110,9 @@ export const productSchema = z.object({
         },
       },
     }),
+})
+
+export const productSkuListSchema = z.object({
   skuLists: z.array(
     z.object({
       media: z.array(
@@ -146,11 +152,16 @@ export const productSchema = z.object({
     .min(1, { error: PRODUCT.skuList.minLength })
 })
 
-export const productCreationSchema = productSchema.omit({
-  skuLists: true,
-})
+export const productSchema = productCreationSchema
+  .extend(productAttributeSchema.shape)
+  .extend(productSkuListSchema.shape)
 
-export const productJSONSchema = z.toJSONSchema(productSchema)
 export const productCreationJSONSchema = z.toJSONSchema(productCreationSchema)
+export const productAttributeJSONSchema = z.toJSONSchema(productAttributeSchema)
+export const productSkuListJSONSchema = z.toJSONSchema(productSkuListSchema)
+export const productJSONSchema = z.toJSONSchema(productSchema)
 
 export type ProductCreationData = z.infer<typeof productCreationSchema>
+export type ProductAttributeData = z.infer<typeof productAttributeSchema>
+export type ProductSkuListData = z.infer<typeof productSkuListSchema>
+export type Product = z.infer<typeof productSchema>
