@@ -8,7 +8,6 @@ async function submitHandler(body: any) {
     method: "POST",
     body,
   })
-  navigateTo(`/catalogue/products/${response.data.id}`)
   return response
 }
 </script>
@@ -19,6 +18,5 @@ async function submitHandler(body: any) {
     :breadcrumbs="CREATE_PRODUCT" />
 
   <CatalogueProductForm
-    :submit-handler
-    class="mt-4" />
+    :submit-handler />
 </template>

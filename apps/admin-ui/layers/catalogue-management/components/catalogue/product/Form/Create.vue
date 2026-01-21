@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  initialValues: Record<string, unknown>
+  initialValues?: Record<string, unknown>
   submitHandler: (_body: any) => Promise<ApiSuccess>
 }
 const props = defineProps<Props>()
@@ -17,8 +17,6 @@ const {
   isLoadingBrands,
   hasNextBrandsPage,
   loadMoreBrands,
-  attributes,
-  handleSubcategoryChange,
   isInvalid,
   onSubmit,
 } = useProductForm(props)
@@ -36,8 +34,7 @@ const {
       :loading="isLoadingSubcategories"
       is-infinite
       :has-more-items="hasNextSubcategoriesPage"
-      @scroll-end="loadMoreSubcategories"
-      @change="handleSubcategoryChange" />
+      @scroll-end="loadMoreSubcategories"" />
 
     <FormFieldCombobox
       name="brand"
@@ -54,21 +51,6 @@ const {
       label="Name"
       placeholder="Enter the product name"
       class="col-span-2" />
-
-    <div
-      v-if="attributes"
-      class="col-span-2 space-y-1.5">
-      <span class="inline-block text-foreground/75 font-medium">
-        Product Attributes
-      </span>
-      <ul class="grid sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-3">
-        <li
-          v-for="attribute in attributes"
-          :key="attribute.id">
-          {{ attribute }}
-        </li>
-      </ul>
-    </div>
 
     <BaseButton
       :disabled="isInvalid"
