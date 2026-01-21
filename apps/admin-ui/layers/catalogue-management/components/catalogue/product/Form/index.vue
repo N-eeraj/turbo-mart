@@ -11,9 +11,6 @@ async function submitHandler(body: any) {
   return response
 }
 
-const step = useRouteQuery<number>("step", 0, {
-  transform: Number,
-})
 const steps = computed(() => ([
   {
     indicator: 1,
@@ -33,6 +30,17 @@ const steps = computed(() => ([
     disabled: true,
   },
 ]))
+
+// sync stepper step with route query
+const step = useRouteQuery<number>("step", 1, {
+  transform: (value) => {
+    if (value < 1 || value > steps.value.length) {
+      step.value = 1
+      return 0
+    }
+    return value - 1
+  },
+})
 </script>
 
 <template>
