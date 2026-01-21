@@ -10,15 +10,18 @@ import {
 } from "@/components/ui/stepper"
 
 interface Step {
-  indicator: string
+  indicator: number | string
   title: string
   description: string
   disabled?: boolean
 }
 interface Props {
   steps: Array<Step>
+  linear?: boolean
 }
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  linear: true,
+})
 
 const modelValue = defineModel<number>()
 </script>
@@ -26,7 +29,8 @@ const modelValue = defineModel<number>()
 <template>
   <Stepper
     v-model="modelValue"
-    as="ul">
+    as="ul"
+    :linear>
     <StepperItem
       v-for="({ title, indicator, description, disabled }, step) in steps"
       :step
