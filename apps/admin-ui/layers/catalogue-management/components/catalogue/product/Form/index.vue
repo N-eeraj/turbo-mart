@@ -1,13 +1,30 @@
 <script setup lang="ts">
 interface Props {
-  initialValues: Record<string, unknown>
-  submitHandler: (_body: any) => Promise<ApiSuccess>
+  onSubmitProduct: (_body: any) => Promise<ApiSuccess>
 }
 const props = defineProps<Props>()
 
-async function submitHandler(body: any) {
-  const response = props.submitHandler(body)
-  step.value++
+const route = useRoute()
+const router = useRouter()
+
+const productId = computed(() => route.params?.id)
+
+const {} = useLazyAsyncData(
+  "product" + productId.value ? `-${productId}` : "",
+  () => useApi(`/admin/catalogue/products/${productId.value}`),
+  {
+    immediate: !!productId.value,
+  }
+)
+
+async function onSubmitProduct(body: any) {
+  const response = await props.onSubmitProduct(body)
+  router.replace({
+    path: `/catalogue/products/${response.data.id}/edit`,
+    query: {
+      step: 2,
+    },
+  })
   return response
 }
 
@@ -33,7 +50,7 @@ const steps = computed(() => ([
 
 // sync stepper step with route query
 const step = useRouteQuery<number>("step", 1, {
-  transform: (value) => {
+  transform: (value: number) => {
     if (value < 1 || value > steps.value.length) {
       step.value = 1
       return 0
@@ -50,7 +67,7 @@ const step = useRouteQuery<number>("step", 1, {
     :linear="false">
     <template #step-1>
       <CatalogueProductFormCreate
-        :submit-handler
+        :submit-handler="onSubmitProduct"
         class="mt-4" />
     </template>
     <template #step-2>

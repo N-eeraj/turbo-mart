@@ -3,7 +3,7 @@ import {
   CREATE_PRODUCT,
 } from "~/constants/products/breadcrumbs"
 
-async function submitHandler(body: any) {
+async function onSubmitProduct(body: any) {
   const response = await useApi("/admin/catalogue/products", {
     method: "POST",
     body,
@@ -18,5 +18,5 @@ async function submitHandler(body: any) {
     :breadcrumbs="CREATE_PRODUCT" />
 
   <CatalogueProductForm
-    :submit-handler />
+    :on-submit-product="onSubmitProduct" />
 </template>
