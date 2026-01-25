@@ -30,16 +30,18 @@ const {
       name="subcategory"
       v-model:search="subcategorySearch"
       placeholder="Select Subcategory"
+      label="Subcategory"
       :options="subcategories"
       :loading="isLoadingSubcategories"
       is-infinite
       :has-more-items="hasNextSubcategoriesPage"
-      @scroll-end="loadMoreSubcategories"" />
+      @scroll-end="loadMoreSubcategories" />
 
     <FormFieldCombobox
       name="brand"
       v-model:search="brandSearch"
       placeholder="Select Brand"
+      label="Brand"
       :options="brands"
       :loading="isLoadingBrands"
       is-infinite
