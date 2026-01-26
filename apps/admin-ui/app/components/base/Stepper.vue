@@ -23,7 +23,16 @@ withDefaults(defineProps<Props>(), {
   linear: true,
 })
 
+interface Emits {
+  change: [number | undefined]
+}
+const emit = defineEmits<Emits>()
+
 const modelValue = defineModel<number>()
+
+watch(() => modelValue.value, (value: number | undefined) => {
+  emit("change", value)
+})
 </script>
 
 <template>

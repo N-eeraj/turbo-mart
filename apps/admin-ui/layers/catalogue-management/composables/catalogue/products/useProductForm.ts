@@ -87,7 +87,7 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
         message,
         errors,
       } = error as ApiError
-      if (status === 422 || status === 409) {
+      if ((status === 422 || status === 409) && errors) {
         setErrors(errors as Record<string, Array<string>>)
       } else if (message) {
         toast.error(message, {
