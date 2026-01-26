@@ -1,6 +1,8 @@
 <script setup lang="ts">
 interface Props {
   onSubmitProduct: (_body: any) => Promise<ApiSuccess>
+  onSubmitAttributes: (_body: any) => Promise<ApiSuccess>
+  onSubmitVariants: (_body: any) => Promise<ApiSuccess>
 }
 const props = defineProps<Props>()
 
@@ -9,42 +11,23 @@ const router = useRouter()
 
 const productId = computed(() => route.params?.id)
 
-const {} = useLazyAsyncData(
-  "product" + productId.value ? `-${productId}` : "",
-  () => useApi(`/admin/catalogue/products/${productId.value}`),
-  {
-    immediate: !!productId.value,
-  }
-)
-
-async function onSubmitProduct(body: any) {
-  const response = await props.onSubmitProduct(body)
-  router.replace({
-    path: `/catalogue/products/${response.data.id}/edit`,
-    query: {
-      step: 2,
-    },
-  })
-  return response
-}
-
 const steps = computed(() => ([
   {
     indicator: 1,
-    title: "Create",
-    description: "Create the product",
+    title: productId.value ? "Update" : "Create",
+    description: `${productId.value ? "Update" : "Create"} the product`,
   },
   {
     indicator: 2,
-    title: "Create Attributes",
-    description: "Create the attributes of the product",
-    disabled: true,
+    title: "Attributes",
+    description: "Update product attributes",
+    disabled: !productId.value,
   },
   {
     indicator: 3,
-    title: "Create Variants",
-    description: "Create the variants of the product",
-    disabled: true,
+    title: "Variants",
+    description: "Update product variants",
+    disabled: !productId.value,
   },
 ]))
 
@@ -58,13 +41,69 @@ const step = useRouteQuery<number>("step", 1, {
     return value - 1
   },
 })
+
+function handleStepChange(stepValue: number | undefined) {
+  if (stepValue === undefined) {
+    step.value = 1
+  } else {
+    step.value = stepValue + 1
+  }
+}
+
+const {
+  data: productData,
+  status: productDataStatus,
+  refresh: refreshProductData,
+} = useLazyAsyncData(
+  "product" + productId.value ? `-${productId.value}` : "",
+  () => useApi(`/admin/catalogue/products/${productId.value}`),
+  {
+    immediate: !!productId.value,
+  }
+)
+
+const {
+  data: productAttributeData,
+  status: productAttributeDataStatus,
+  refresh: refreshProductAttributes,
+} = useLazyAsyncData(
+  `product-${productId.value}-attributes`,
+  () => useApi(`/admin/catalogue/products/${productId.value}/attributes`),
+  {
+    immediate: step.value === 1,
+  }
+)
+
+const {
+  data: productVariantData,
+  status: productVariantDataStatus,
+  refresh: refreshProductVariants,
+} = useLazyAsyncData(
+  `product-${productId.value}-variants`,
+  () => useApi(`/admin/catalogue/products/${productId.value}/variants`),
+  {
+    immediate:  step.value === 2,
+  }
+)
+
+async function onSubmitProduct(body: any) {
+  const response = await props.onSubmitProduct(body)
+  router.replace({
+    path: `/catalogue/products/${response.data.id}/edit`,
+    query: {
+      step: 2,
+    },
+  })
+  return response
+}
 </script>
 
 <template>
   <BaseStepper
-    v-model="step"
+    :model-value="step"
     :steps
-    :linear="false">
+    :linear="false"
+    @change="handleStepChange">
     <template #step-1>
       <CatalogueProductFormCreate
         :submit-handler="onSubmitProduct"
