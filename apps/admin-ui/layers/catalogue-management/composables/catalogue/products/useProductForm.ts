@@ -21,38 +21,43 @@ interface ProductBrand extends BrandCreationData {
   id: string
 }
 
-interface Parameters {
-  initialValues?: Record<string, unknown>
-  submitHandler: (_body: any) => Promise<ApiSuccess>
+interface EmitsParameter {
+  submit: [unknown]
 }
 
-export default function useProductForm({ submitHandler, initialValues = {} }: Parameters) {
-  const initialSubcategory = computed<ProductSubcategory | undefined>(() => {
-    if (!initialValues.subcategory) return undefined
-    return initialValues.subcategory as ProductSubcategory
-  })
 
-  const initialBrand = computed<ProductBrand | undefined>(() => {
-    if (!initialValues.brand) return undefined
-    return initialValues.brand as ProductBrand
-  })
+export default function useProductForm(emit: EmitsParameter) {
+  const route = useRoute()
+  const productId = computed(() => route.params?.id)
 
   const {
     handleSubmit,
     isSubmitting,
     isFieldValid,
+    setValues,
     setErrors,
   } = useForm({
     validationSchema: toTypedSchema(
       productCreationSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
     ),
-    initialValues: {
-      ...initialValues,
-      subcategory: initialSubcategory.value?.id,
-      brand: initialBrand.value?.id,
-    },
   })
 
+  const {
+    data: productData,
+    status: productDataStatus,
+  } = useLazyAsyncData(
+    `fetch-product-${productId.value}`,
+    () => useApi(`/admin/catalogue/products/${productId.value}`),
+    {
+      immediate: !!productId.value,
+      transform: ({ data }) => data,
+    }
+  )
+  const isLoadingProductData = computed(() => productDataStatus.value === "pending")
+
+  watch(() => productData.value, (data) => {
+    setValues(data ?? {})
+  })
 
   const {
     subcategories,
@@ -60,7 +65,7 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
     hasNextPage: hasNextSubcategoriesPage,
     loadMore: loadMoreSubcategories,
     search: subcategorySearch,
-  } = useInfiniteSubcategorySelect(initialSubcategory)
+  } = useInfiniteSubcategorySelect()
 
   const {
     brands,
@@ -68,7 +73,7 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
     hasNextPage: hasNextBrandsPage,
     loadMore: loadMoreBrands,
     search: brandSearch,
-  } = useInfiniteBrandSelect(initialBrand)
+  } = useInfiniteBrandSelect()
 
   const isInvalid = computed(() => !isFieldValid("name")
     || !isFieldValid("subcategory")
@@ -76,10 +81,18 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
   )
 
   const onSubmit = handleSubmit(async (body) => {
+    const endpoint = productId.value ? `/admin/catalogue/products/${productId.value}` : "/admin/catalogue/products"
+    const method = productId.value ? "PATCH" : "POST"
+
     try {
       const {
+        data,
         message,
-      } = await submitHandler(body)
+      } = await useApi(endpoint, {
+        method,
+        body,
+      })
+      emit("submit", data)
       toast.success(message)
     } catch (error: unknown) {
       const {
@@ -98,6 +111,7 @@ export default function useProductForm({ submitHandler, initialValues = {} }: Pa
   })
 
   return {
+    isLoadingProductData,
     isSubmitting,
     subcategories,
     subcategorySearch,
