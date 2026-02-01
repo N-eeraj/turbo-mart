@@ -28,6 +28,7 @@ const InvalidAdminId = getInvalidResourceId("admin")
 const InvalidCategoryId = getInvalidResourceId("category")
 const InvalidSubcategoryId = getInvalidResourceId("subcategory")
 const InvalidBrandId = getInvalidResourceId("brand")
+const InvalidProductId = getInvalidResourceId("product")
 
 const InvalidIds = {
   InvalidAdminId,
@@ -35,6 +36,7 @@ const InvalidIds = {
   InvalidCategoryId,
   InvalidSubcategoryId,
   InvalidBrandId,
+  InvalidProductId,
 }
 
 // extended response for password update from UnauthenticatedUser

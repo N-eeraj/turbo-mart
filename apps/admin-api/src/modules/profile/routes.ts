@@ -5,7 +5,7 @@ import {
 } from "#middlewares/authentication"
 import upload from "#middlewares/multer"
 import ProfileController from "#src/modules/profile/controller.ts"
-import notificationRouter from "#src/modules/profile/notifications/route.ts"
+import notificationRouter from "#src/modules/profile/notifications/routes.ts"
 
 /**
  * Profile APIs router.

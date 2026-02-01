@@ -1,6 +1,6 @@
 import express from "express"
 
-import catalogueRouter from "#catalogue/route.ts"
+import catalogueRouter from "#catalogue/routes.ts"
 
 /**
  * Admin APIs router.

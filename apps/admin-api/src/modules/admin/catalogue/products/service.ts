@@ -35,6 +35,12 @@ export type ParsedProductCreationData = Omit<ProductCreationData, "brand" | "sub
   brand: ProductObject["brand"]
 }
 
+export enum ProductDataFieldQuery {
+  BASIC = "basic",
+  ATTRIBUTES = "attributes",
+  VARIANTS = "variants",
+}
+
 type AttributeRecord = NonNullable<ProductType["attributes"]>
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
@@ -390,7 +396,7 @@ export default class ProductService extends BaseService {
    */
   static async create(product: ParsedProductCreationData): Promise<ProductObject> {
     await this.ensureBrand(product.brand)
-    const { attributes } = await this.ensureSubcategory(product.subcategory)
+    await this.ensureSubcategory(product.subcategory)
 
     // ensure the product name is unique to the brand in the subcategory
     const existingProduct = await Product.findOne({
@@ -402,11 +408,29 @@ export default class ProductService extends BaseService {
     if (existingProduct) {
       throw {
         status: 409,
-        message: "Product with same name exists in this subcategory for this brand"
+        message: "Product with same name exists in this subcategory for this brand",
       }
     }
 
     const newProduct = await Product.create(product)
     return transformProduct(newProduct)
+  }
+
+  /**
+   * Fetches product details.
+   * 
+   * @param productId - Id of the product.
+   * @param fields - Array of fields to fetch.
+   * 
+   * @returns product.
+   * 
+   * @throws 404 error if product not found.
+   * @throws If database lookup fails.
+   */
+  static async getById(
+    productId: ProductObject["id"],
+    fields: Array<ProductDataFieldQuery>
+  ): Promise<Partial<ProductObject>> {
+    return
   }
 }

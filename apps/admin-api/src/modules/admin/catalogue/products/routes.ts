@@ -6,11 +6,14 @@ import ProductController from "#catalogue/products/controller.ts"
 /**
  * Products APIs router.
  * 
- * Used in the api router (`src/modules/admin/catalogue/route.ts`) via `catalogueRouter.use("/products", productRouter)`.
+ * Used in the api router (`src/modules/admin/catalogue/routes.ts`) via `catalogueRouter.use("/products", productRouter)`.
  */
 const productRouter = express.Router()
 
 productRouter.route("/")
   .post(catalogueManagementMiddlewares, ProductController.create)
+
+productRouter.route("/:productId")
+  .get(catalogueManagementMiddlewares, ProductController.getById)
 
 export default productRouter

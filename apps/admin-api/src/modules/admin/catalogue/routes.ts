@@ -1,14 +1,14 @@
 import express from "express"
 
-import categoryRouter from "#catalogue/categories/route.ts"
-import subcategoryRouter from "#catalogue/subcategories/route.ts"
+import categoryRouter from "#catalogue/categories/routes.ts"
+import subcategoryRouter from "#catalogue/subcategories/routes.ts"
 import brandRouter from "#catalogue/brands/routes.ts"
 import productRouter from "#catalogue/products/routes.ts"
 
 /**
  * Catalogue APIs router.
  * 
- * Used in the api router (`src/modules/admin/route.ts`) via `adminRouter.use("/catalogue", catalogueRouter)`.
+ * Used in the api router (`src/modules/admin/routes.ts`) via `adminRouter.use("/catalogue", catalogueRouter)`.
  */
 const catalogueRouter = express.Router()
 
