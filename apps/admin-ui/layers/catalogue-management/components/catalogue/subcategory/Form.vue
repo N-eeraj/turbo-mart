@@ -23,7 +23,8 @@ const {
     @submit="onSubmit">
     <FormFieldInput
       name="name"
-      label="Name" />
+      label="Name"
+      autofocus />
     <FormFieldInput
       name="slug"
       label="Slug"

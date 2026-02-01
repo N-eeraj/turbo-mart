@@ -43,42 +43,6 @@ function handleStepChange(stepValue: number | undefined) {
   }
 }
 
-const {
-  data: productData,
-  status: productDataStatus,
-  refresh: refreshProductData,
-} = useLazyAsyncData(
-  "product" + productId.value ? `-${productId.value}` : "",
-  () => useApi(`/admin/catalogue/products/${productId.value}`),
-  {
-    immediate: !!productId.value,
-  }
-)
-
-const {
-  data: productAttributeData,
-  status: productAttributeDataStatus,
-  refresh: refreshProductAttributes,
-} = useLazyAsyncData(
-  `product-${productId.value}-attributes`,
-  () => useApi(`/admin/catalogue/products/${productId.value}/attributes`),
-  {
-    immediate: step.value === 1,
-  }
-)
-
-const {
-  data: productVariantData,
-  status: productVariantDataStatus,
-  refresh: refreshProductVariants,
-} = useLazyAsyncData(
-  `product-${productId.value}-variants`,
-  () => useApi(`/admin/catalogue/products/${productId.value}/variants`),
-  {
-    immediate:  step.value === 2,
-  }
-)
-
 async function onSubmitProduct(data: any) {
   router.replace({
     path: `/catalogue/products/${data.id}/edit`,
