@@ -4,6 +4,7 @@ import * as z from "zod"
 import Product, {
   transformProduct,
   type ProductObject,
+  type InferredProductSchemaType,
 } from "@app/database/mongoose/models/Catalogue/Product"
 import Subcategory, {
   SubcategoryObject,
@@ -422,7 +423,7 @@ export default class ProductService extends BaseService {
    * @param productId - Id of the product.
    * @param fields - Array of fields to fetch.
    * 
-   * @returns product.
+   * @returns product with properties based on the fields parameter.
    * 
    * @throws 404 error if product not found.
    * @throws If database lookup fails.
@@ -431,6 +432,29 @@ export default class ProductService extends BaseService {
     productId: ProductObject["id"],
     fields: Array<ProductDataFieldQuery>
   ): Promise<Partial<ProductObject>> {
-    return
+    const selectFields: mongoose.ProjectionFields<InferredProductSchemaType> = {}
+    if (fields.includes(ProductDataFieldQuery.BASIC)) {
+      selectFields.subcategory = 1
+      selectFields.brand = 1
+      selectFields.name = 1
+    }
+    if (fields.includes(ProductDataFieldQuery.ATTRIBUTES)) {
+      selectFields.attributes = 1
+    }
+    if (fields.includes(ProductDataFieldQuery.VARIANTS)) {
+      selectFields.skuList = 1
+    }
+
+    const product = await Product.findById(productId, selectFields)
+
+    // throw error if brand is not found
+    if (!product) {
+      throw {
+        status: 404,
+        message: "Product not found",
+      }
+    }
+
+    return transformProduct(product)
   }
 }
