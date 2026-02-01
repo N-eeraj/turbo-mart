@@ -353,7 +353,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the subcategory.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -428,7 +428,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the subcategory.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -595,7 +595,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the subcategory.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -746,7 +746,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the subcategory.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -821,7 +821,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the subcategory.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }

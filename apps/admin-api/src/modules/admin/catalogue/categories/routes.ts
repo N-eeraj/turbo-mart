@@ -6,7 +6,7 @@ import CategoryController from "#catalogue/categories/controller.ts"
 /**
  * Categories APIs router.
  * 
- * Used in the api router (`src/modules/admin/catalogue/route.ts`) via `catalogueRouter.use("/categories", categoryRouter)`.
+ * Used in the api router (`src/modules/admin/catalogue/routes.ts`) via `catalogueRouter.use("/categories", categoryRouter)`.
  */
 const categoryRouter = express.Router()
 

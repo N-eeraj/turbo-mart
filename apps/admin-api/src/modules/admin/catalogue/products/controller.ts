@@ -4,7 +4,9 @@ import {
 } from "express"
 
 import BaseController from "#controllers/BaseController"
-import ProductService from "#catalogue/products/service.ts"
+import ProductService, {
+  ProductDataFieldQuery,
+} from "#catalogue/products/service.ts"
 import {
   productCreationSchema,
 } from "@app/schemas/admin/catalogue/product"
@@ -43,6 +45,36 @@ export default class ProductController extends BaseController {
       message: "Created Product",
       data,
       status: 201,
+    })
+  }
+
+  /**
+   * @route GET /api/admin/catalogue/products/:productId
+   * 
+   * Get one product by Id.
+   */
+  static async getById({ params, query }: Request, res: Response) {
+    const productId = super.parseObjectId(params.productId)
+    if (!productId) {
+      throw {
+        status: 400,
+        message: "Invalid product id",
+      }
+    }
+
+    const fields = Array.isArray(query.fields) ? query.fields : [query.fields ?? ProductDataFieldQuery.BASIC]
+    const parsedFields = fields
+      .filter((field) => {
+        return Object.values(ProductDataFieldQuery)
+          .includes(field as ProductDataFieldQuery)
+      }) as Array<ProductDataFieldQuery>
+
+    const data = await ProductService.getById(productId, parsedFields)
+
+    super.sendSuccess(res, {
+      message: "Fetched Product Details",
+      data,
+      status: 200,
     })
   }
 }

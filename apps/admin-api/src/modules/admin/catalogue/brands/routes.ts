@@ -6,7 +6,7 @@ import BrandController from "#catalogue/brands/controller.ts"
 /**
  * Brands APIs router.
  * 
- * Used in the api router (`src/modules/admin/catalogue/route.ts`) via `catalogueRouter.use("/brands", brandRouter)`.
+ * Used in the api router (`src/modules/admin/catalogue/routes.ts`) via `catalogueRouter.use("/brands", brandRouter)`.
  */
 const brandRouter = express.Router()
 

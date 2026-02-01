@@ -211,7 +211,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the category.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -286,7 +286,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the category.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -445,7 +445,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the category.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -540,7 +540,7 @@
           "in": "path",
           "required": true,
           "description": "Slug of the category.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -617,7 +617,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the category.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         },

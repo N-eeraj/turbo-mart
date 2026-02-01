@@ -303,7 +303,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the admin user.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -378,7 +378,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the admin user.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }
@@ -545,7 +545,7 @@
           "in": "path",
           "required": true,
           "description": "ID of the admin user.",
-            "schema": {
+          "schema": {
             "type": "string"
           }
         }

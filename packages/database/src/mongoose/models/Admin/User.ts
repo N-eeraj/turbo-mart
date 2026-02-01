@@ -137,7 +137,7 @@ export function transformUser({
  * Static model method to authenticate a user login.
  * 
  * @param credentials - User credentials
- * k
+ * 
  * @returns The admin user if credentials are valid, else null
  */
 AdminSchema.statics.authenticate = async function({ email, password }: LoginCredentials) {
