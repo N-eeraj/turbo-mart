@@ -8,6 +8,7 @@ export type InferredProductSchemaType = mongoose.InferSchemaType<typeof ProductS
 export type Product = mongoose.HydratedDocument<InferredProductSchemaType>
 export type ObjectKeys = keyof InferredProductSchemaType
 export type ProductObject = Pick<Product, ObjectKeys> & { id: Product["_id"] }
+export type BasicProductDetails = Pick<ProductObject, "id" | "subcategory" | "brand" | "name">
 
 const SKUSchema = new mongoose.Schema({
   code: {
@@ -144,6 +145,28 @@ export function transformProduct({
   }
 
   return product
+}
+
+/**
+ * Transforms an Product object by mapping internal `_id` to external `id` and returning only the basic details.
+ * 
+ * @param product - The product object to transform.
+ * 
+ * @returns The transformed basic product details.
+ */
+export function getBasicDetails(product: Product): BasicProductDetails {
+  const {
+    id,
+    subcategory,
+    brand,
+    name,
+  } = transformProduct(product)
+  return {
+    id,
+    subcategory,
+    brand,
+    name,
+  }
 }
 
 const Product = mongoose.models.Product

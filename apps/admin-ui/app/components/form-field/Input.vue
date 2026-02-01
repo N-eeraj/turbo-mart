@@ -29,10 +29,18 @@ interface Props {
   disabled?: boolean
   readonly?: boolean
   clearable?: boolean
+  loading?: boolean
 }
 const props = defineProps<Props>()
 
 const attrs = useAttrs()
+const nonClassAttrs = computed(() => {
+  const {
+    class: _class,
+    ...rest
+  } = attrs
+  return rest
+})
 
 const inputType = ref<InputTypeHTMLAttribute>(props.type ?? "text")
 function toggleInputType() {
@@ -67,47 +75,55 @@ function toggleInputType() {
           </FormLabel>
         </slot>
 
-        <FormControl>
-          <InputGroup :class="cn(
-            readonly && 'border-input/50',
-          )">
-            <slot name="addon" />
-            <InputGroupInput
-              v-bind="componentField"
-              :type="inputType"
-              :placeholder
-              :disabled="disabled || readonly"
-              :class="cn(
-                'no-spinner',
-                readonly && 'opacity-100!',
-              )" />
-            <InputGroupAddon
-              v-if="clearable"
-              align="inline-end"
-              :class="cn(
-                !componentField.modelValue && 'invisible',
-              )">
-              <BaseButton
-                variant="ghost"
-                type="button"
-                class="size-6 p-1 rounded-full cursor-pointer"
-                @click="formField.setValue('')">
-                <Icon name="lucide:x" />
-              </BaseButton>
-            </InputGroupAddon>
-            <InputGroupAddon
-              v-if="type === 'password'"
-              align="inline-end">
-              <BaseButton
-                variant="ghost"
-                type="button"
-                class="size-6 p-1 rounded-full cursor-pointer"
-                @click="toggleInputType">
-                <Icon name="mdi:eye" />
-              </BaseButton>
-            </InputGroupAddon>
-          </InputGroup>
-        </FormControl>
+        <div class="flex flex-col">
+          <FormControl>
+            <InputGroup :class="cn(
+              readonly && 'border-input/50',
+            )">
+              <slot name="addon" />
+              <InputGroupInput
+                v-bind="{
+                  ...componentField,
+                  ...nonClassAttrs,
+                }"
+                :type="inputType"
+                :placeholder
+                :disabled="disabled || readonly"
+                :class="cn(
+                  'no-spinner',
+                  readonly && 'opacity-100!',
+                )" />
+              <InputGroupAddon
+                v-if="clearable"
+                align="inline-end"
+                :class="cn(
+                  !componentField.modelValue && 'invisible',
+                )">
+                <BaseButton
+                  variant="ghost"
+                  type="button"
+                  class="size-6 p-1 rounded-full cursor-pointer"
+                  @click="formField.setValue('')">
+                  <Icon name="lucide:x" />
+                </BaseButton>
+              </InputGroupAddon>
+              <InputGroupAddon
+                v-if="type === 'password'"
+                align="inline-end">
+                <BaseButton
+                  variant="ghost"
+                  type="button"
+                  class="size-6 p-1 rounded-full cursor-pointer"
+                  @click="toggleInputType">
+                  <Icon name="mdi:eye" />
+                </BaseButton>
+              </InputGroupAddon>
+            </InputGroup>
+          </FormControl>
+          <BaseLinearProgress
+            v-if="loading"
+            class="h-0.5!" />
+        </div>
 
         <slot
           name="description"

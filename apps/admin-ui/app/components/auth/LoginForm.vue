@@ -39,7 +39,8 @@ defineExpose({
         <FormFieldInput
           name="email"
           label="Email"
-          placeholder="Enter your email" />
+          placeholder="Enter your email"
+          autofocus />
         <FormFieldInput
           name="password"
           type="password"

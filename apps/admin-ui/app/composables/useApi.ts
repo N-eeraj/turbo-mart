@@ -39,7 +39,7 @@ export default async function useApi(
     if (token.value) {
       options.headers = {
         ...options.headers,
-        Authorization: token.value
+        Authorization: `Bearer ${token.value}`
       }
     }
     const response = await $fetch(apiUrl + endpoint, options)

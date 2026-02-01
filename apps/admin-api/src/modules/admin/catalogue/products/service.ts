@@ -3,8 +3,10 @@ import * as z from "zod"
 
 import Product, {
   transformProduct,
+  getBasicDetails,
   type ProductObject,
   type InferredProductSchemaType,
+  type BasicProductDetails,
 } from "@app/database/mongoose/models/Catalogue/Product"
 import Subcategory, {
   SubcategoryObject,
@@ -395,7 +397,7 @@ export default class ProductService extends BaseService {
    * @throws 409 error if duplicate product name in same brand and subcategory.
    * @throws If product creation fails.
    */
-  static async create(product: ParsedProductCreationData): Promise<ProductObject> {
+  static async create(product: ParsedProductCreationData): Promise<BasicProductDetails> {
     await this.ensureBrand(product.brand)
     await this.ensureSubcategory(product.subcategory)
 
@@ -414,7 +416,7 @@ export default class ProductService extends BaseService {
     }
 
     const newProduct = await Product.create(product)
-    return transformProduct(newProduct)
+    return getBasicDetails(newProduct)
   }
 
   /**

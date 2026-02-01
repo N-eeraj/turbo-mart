@@ -48,7 +48,8 @@ watch(() => errors.value.token, () => {
           name="password"
           type="password"
           label="New Password"
-          placeholder="Enter your new password" />
+          placeholder="Enter your new password"
+          autofocus />
         <FormFieldInput
           name="confirmPassword"
           type="password"
