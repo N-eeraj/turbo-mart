@@ -6,7 +6,7 @@ import Product, {
   getBasicDetails,
   type ProductObject,
   type InferredProductSchemaType,
-  type BasicProductDetails,
+  type ProductBasicDetails,
 } from "@app/database/mongoose/models/Catalogue/Product"
 import Subcategory, {
   SubcategoryObject,
@@ -397,7 +397,7 @@ export default class ProductService extends BaseService {
    * @throws 409 error if duplicate product name in same brand and subcategory.
    * @throws If product creation fails.
    */
-  static async create(product: ParsedProductCreationData): Promise<BasicProductDetails> {
+  static async create(product: ParsedProductCreationData): Promise<ProductBasicDetails> {
     await this.ensureBrand(product.brand)
     await this.ensureSubcategory(product.subcategory)
 

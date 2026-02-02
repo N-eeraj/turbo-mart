@@ -15,5 +15,6 @@ productRouter.route("/")
 
 productRouter.route("/:productId")
   .get(catalogueManagementMiddlewares, ProductController.getById)
+  .patch(catalogueManagementMiddlewares, ProductController.update)
 
 export default productRouter
