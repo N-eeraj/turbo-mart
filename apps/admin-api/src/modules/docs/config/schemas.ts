@@ -46,6 +46,7 @@ import {
 import {
   productJSONSchema,
   productCreationJSONSchema,
+  productUpdateJSONSchema,
 } from "@app/schemas/admin/catalogue/product"
 
 const DetailedProfileSchema = {
@@ -141,7 +142,6 @@ const SubcategoryWithAttributesSchema = {
     },
   }
 }
-
 const ResponseSchemas = {
   ProfileSchema,
   DetailedProfileSchema,
@@ -152,7 +152,17 @@ const ResponseSchemas = {
   AttributesSchema,
   BrandSchema,
   ProductSchema: productJSONSchema,
-  ProductCreationSchema: productCreationJSONSchema,
+  ProductBasicDetailsSchema: {
+    type: productCreationJSONSchema.type,
+    properties: {
+      ...productCreationJSONSchema.properties,
+      id: {
+        type: "string",
+        description: "Unique product ID.",
+        example: "01a0a0123a01a012a0a012a0"
+      },
+    }
+  },
 }
 
 const UtilitySchemas = {
@@ -183,6 +193,8 @@ const schemas = {
   SubcategoryAttributeUpdateSchema: subcategoryAttributeUpdateJSONSchema,
   BrandCreationSchema: brandCreationJSONSchema,
   BrandUpdateSchema: brandUpdateJSONSchema,
+  ProductCreationSchema: productCreationJSONSchema,
+  ProductUpdateSchema: productUpdateJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

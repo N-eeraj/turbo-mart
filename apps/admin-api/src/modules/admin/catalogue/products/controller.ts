@@ -9,6 +9,7 @@ import ProductService, {
 } from "#catalogue/products/service.ts"
 import {
   productCreationSchema,
+  productUpdateSchema,
 } from "@app/schemas/admin/catalogue/product"
 
 /**
@@ -30,8 +31,8 @@ export default class ProductController extends BaseController {
       throw {
         status: 400,
         message: "Invalid ids",
-        ...(!subcategory && { brand: product.brand }),
-        ...(!brand && { subcategory: product.subcategory }),
+        ...(!subcategory && { subcategory: product.subcategory }),
+        ...(!brand && { brand: product.brand }),
       }
     }
 
@@ -70,6 +71,41 @@ export default class ProductController extends BaseController {
       }) as Array<ProductDataFieldQuery>
 
     const data = await ProductService.getById(productId, parsedFields)
+
+    super.sendSuccess(res, {
+      message: "Fetched Product Details",
+      data,
+      status: 200,
+    })
+  }
+
+  /**
+   * @route PATCH /api/admin/catalogue/products/:productId
+   * 
+   * Update product.
+   */
+  static async update({ params, body }: Request, res: Response) {
+    const product = super.validateRequest(productUpdateSchema, body)
+
+    const productId = super.parseObjectId(params.productId)
+    const subcategory = product.subcategory ? super.parseObjectId(product.subcategory) : undefined
+    const brand = product.brand ? super.parseObjectId(product.brand) : undefined
+
+    if (!productId || (product.subcategory && !subcategory) || (product.brand && !brand)) {
+      throw {
+        status: 400,
+        message: "Invalid ids",
+        ...(!productId && { id: params.productId }),
+        ...((product.subcategory && !subcategory) && { subcategory: product.subcategory }),
+        ...((product.brand && !brand) && { brand: product.brand }),
+      }
+    }
+
+    const data = await ProductService.update(productId, {
+      ...product,
+      subcategory,
+      brand
+    })
 
     super.sendSuccess(res, {
       message: "Fetched Product Details",

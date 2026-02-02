@@ -156,12 +156,16 @@ export const productSchema = productCreationSchema
   .extend(productAttributeSchema.shape)
   .extend(productSkuListSchema.shape)
 
+export const productUpdateSchema = productCreationSchema.partial()
+
 export const productCreationJSONSchema = z.toJSONSchema(productCreationSchema)
+export const productUpdateJSONSchema = z.toJSONSchema(productUpdateSchema)
 export const productAttributeJSONSchema = z.toJSONSchema(productAttributeSchema)
 export const productSkuListJSONSchema = z.toJSONSchema(productSkuListSchema)
 export const productJSONSchema = z.toJSONSchema(productSchema)
 
 export type ProductCreationData = z.infer<typeof productCreationSchema>
+export type ProductUpdateData = z.infer<typeof productUpdateSchema>
 export type ProductAttributeData = z.infer<typeof productAttributeSchema>
 export type ProductSkuListData = z.infer<typeof productSkuListSchema>
 export type Product = z.infer<typeof productSchema>
