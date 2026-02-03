@@ -108,7 +108,7 @@ export default class ProductController extends BaseController {
     })
 
     super.sendSuccess(res, {
-      message: "Fetched Product Details",
+      message: "Updated Product Details",
       data,
       status: 200,
     })

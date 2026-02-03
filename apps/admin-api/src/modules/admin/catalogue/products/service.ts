@@ -16,6 +16,7 @@ import Brand from "@app/database/mongoose/models/Catalogue/Brand"
 import type {
   Product as ProductType,
   ProductCreationData,
+  ProductUpdateData,
 } from "@app/schemas/admin/catalogue/product"
 import {
   AttributeObject,
@@ -33,9 +34,9 @@ export interface ListOptions {
   order?: mongoose.SortOrder
 }
 
-export type ParsedProductCreationData = Omit<ProductCreationData, "brand" | "subcategory"> & {
-  subcategory: ProductObject["subcategory"]
-  brand: ProductObject["brand"]
+export type ParsedProductUpsertData<Data extends ProductCreationData | ProductUpdateData> = Omit<Data, "brand" | "subcategory"> & {
+  subcategory: Data extends ProductCreationData ? ProductObject["subcategory"] : ProductObject["subcategory"] | undefined | null
+  brand: Data extends ProductCreationData ? ProductObject["brand"] : ProductObject["brand"] | undefined | null
 }
 
 export enum ProductDataFieldQuery {
@@ -391,13 +392,17 @@ export default class ProductService extends BaseService {
    * Creates a new product.
    * 
    * @param productData - The data for new the product.
+   * - `subcategory` - Product Subcategory.
+   * - `brand` - Product Brand.
+   * - `name` - Product Name.
    * 
    * @returns the newly created product.
    * 
+   * @throws 404 error if subcategory or brand not found.
    * @throws 409 error if duplicate product name in same brand and subcategory.
    * @throws If product creation fails.
    */
-  static async create(product: ParsedProductCreationData): Promise<ProductBasicDetails> {
+  static async create(product: ParsedProductUpsertData<ProductCreationData>): Promise<ProductBasicDetails> {
     await this.ensureBrand(product.brand)
     await this.ensureSubcategory(product.subcategory)
 
@@ -458,5 +463,68 @@ export default class ProductService extends BaseService {
     }
 
     return transformProduct(product)
+  }
+
+  /**
+   * Update the product.
+   * 
+   * @param productId - Id of the product.
+   * @param productData - Data to update the brand with.
+   * - `subcategory` - Product Subcategory.
+   * - `brand` - Product Brand.
+   * - `name` - Product Name.
+   * 
+   * @returns the updated product.
+   * 
+   * @throws 404 error if product, subcategory or brand not found.
+   * @throws 409 error if duplicate product name in same brand and subcategory.
+   * @throws If product update fails.
+   */
+  static async update(
+    productId: ProductObject["id"],
+    product: ParsedProductUpsertData<ProductUpdateData>
+  ): Promise<ProductBasicDetails> {
+    // ensure given brand and subcategory exist when given
+    if (product.brand) {
+      await this.ensureBrand(product.brand)
+    }
+    if (product.subcategory) {
+      await this.ensureSubcategory(product.subcategory)
+    }
+
+    // ensure the product name is unique to the brand in the subcategory
+    const existingProduct = await Product.findOne({
+      subcategory: product.subcategory,
+      brand: product.brand,
+      name: product.name,
+      _id: {
+        $ne: productId
+      }
+    })
+      .select({ _id: 1 })
+    if (existingProduct) {
+      throw {
+        status: 409,
+        message: "Product with same name exists in this subcategory for this brand",
+      }
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      product,
+      {
+        new: true,
+      }
+    )
+
+    // throw error if product is not found
+    if (!updatedProduct) {
+      throw {
+        status: 404,
+        message: "Product not found",
+      }
+    }
+
+    return getBasicDetails(updatedProduct)
   }
 }

@@ -270,7 +270,7 @@
                   },
                   "message": {
                     "type": "string",
-                    "example": "Created Product"
+                    "example": "Updated Product Details"
                   }
                 }
               }
