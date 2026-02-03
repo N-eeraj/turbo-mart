@@ -95,6 +95,34 @@ export default class ProductService extends BaseService {
   }
 
   /**
+   * Ensures that a brand with the given id exists.
+   * 
+   * @param product - The data for new the product.
+   * - `subcategory` - Product Subcategory.
+   * - `brand` - Product Brand.
+   * - `name` - Product Name.
+   * 
+   * @throws 409 error if product name is not unique to the brand in the subcategory.
+   */
+  private static async ensureUniqueProduct(product: Omit<ProductBasicDetails, "id">, productId?: ProductBasicDetails["id"]) {
+    const existingProduct = await Product.findOne({
+      subcategory: product.subcategory,
+      brand: product.brand,
+      name: product.name,
+      _id: {
+        $ne: productId,
+      }
+    })
+      .select({ _id: 1 })
+    if (existingProduct) {
+      throw {
+        status: 409,
+        message: "Product with same name exists in this subcategory for this brand",
+      }
+    }
+  }
+
+  /**
    * Validates the product attribute to the corresponding metadata in the subcategory.
    * 
    * @param type - Type of attribute.
@@ -406,19 +434,7 @@ export default class ProductService extends BaseService {
     await this.ensureBrand(product.brand)
     await this.ensureSubcategory(product.subcategory)
 
-    // ensure the product name is unique to the brand in the subcategory
-    const existingProduct = await Product.findOne({
-      subcategory: product.subcategory,
-      brand: product.brand,
-      name: product.name,
-    })
-      .select({ _id: 1 })
-    if (existingProduct) {
-      throw {
-        status: 409,
-        message: "Product with same name exists in this subcategory for this brand",
-      }
-    }
+    await this.ensureUniqueProduct(product)
 
     const newProduct = await Product.create(product)
     return getBasicDetails(newProduct)
@@ -484,6 +500,16 @@ export default class ProductService extends BaseService {
     productId: ProductObject["id"],
     product: ParsedProductUpsertData<ProductUpdateData>
   ): Promise<ProductBasicDetails> {
+    const productById = await Product.findById(productId)
+    // throw error if product is not found
+    if (!productById) {
+      throw {
+        status: 404,
+        message: "Product not found",
+      }
+    }
+    const productDetails = getBasicDetails(productById)
+
     // ensure given brand and subcategory exist when given
     if (product.brand) {
       await this.ensureBrand(product.brand)
@@ -492,22 +518,11 @@ export default class ProductService extends BaseService {
       await this.ensureSubcategory(product.subcategory)
     }
 
-    // ensure the product name is unique to the brand in the subcategory
-    const existingProduct = await Product.findOne({
-      subcategory: product.subcategory,
-      brand: product.brand,
-      name: product.name,
-      _id: {
-        $ne: productId
-      }
-    })
-      .select({ _id: 1 })
-    if (existingProduct) {
-      throw {
-        status: 409,
-        message: "Product with same name exists in this subcategory for this brand",
-      }
-    }
+    await this.ensureUniqueProduct({
+      subcategory: product.subcategory ?? productDetails.subcategory,
+      brand: product.brand ?? productDetails.brand,
+      name: product.name ?? productDetails.name,
+    }, productId)
 
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
@@ -516,14 +531,6 @@ export default class ProductService extends BaseService {
         new: true,
       }
     )
-
-    // throw error if product is not found
-    if (!updatedProduct) {
-      throw {
-        status: 404,
-        message: "Product not found",
-      }
-    }
 
     return getBasicDetails(updatedProduct)
   }
