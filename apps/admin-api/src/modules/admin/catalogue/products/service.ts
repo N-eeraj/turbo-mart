@@ -463,6 +463,7 @@ export default class ProductService extends BaseService {
     }
     if (fields.includes(ProductDataFieldQuery.ATTRIBUTES)) {
       selectFields.attributes = 1
+      selectFields.subcategory = 1
     }
     if (fields.includes(ProductDataFieldQuery.VARIANTS)) {
       selectFields.skuList = 1
