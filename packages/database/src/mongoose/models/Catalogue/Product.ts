@@ -9,7 +9,7 @@ export type Product = mongoose.HydratedDocument<InferredProductSchemaType>
 export type ObjectKeys = keyof InferredProductSchemaType
 export type ProductObject = Pick<Product, ObjectKeys> & { id: Product["_id"] }
 export type ProductBasicDetails = Pick<ProductObject, "id" | "subcategory" | "brand" | "name">
-export type ProductAttributes = Pick<ProductObject, "id" | "attributes">
+export type ProductAttributes = Pick<ProductObject, "id" | "attributes" | "subcategory">
 export type ProductVariants = Pick<ProductObject, "id" | "skuList">
 
 const SKUSchema = new mongoose.Schema({
