@@ -23,7 +23,7 @@ export const VIEW_PRODUCT = [
   ...ALL_PRODUCTS,
   {
     text: "View Product",
-    url: "/catalogue/products/{slug}",
+    url: "/catalogue/products/{id}",
     icon: "lucide:box",
   },
 ] satisfies Breadcrumb
@@ -32,7 +32,7 @@ export const EDIT_PRODUCT = [
   ...VIEW_PRODUCT,
   {
     text: "Edit Product",
-    url: "/catalogue/products/{slug}/edit",
+    url: "/catalogue/products/{id}/edit",
     icon: "lucide:pencil",
   },
 ] satisfies Breadcrumb

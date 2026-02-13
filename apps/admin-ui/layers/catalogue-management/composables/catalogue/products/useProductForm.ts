@@ -6,25 +6,10 @@ import type z from "zod"
 import {
   productCreationSchema,
 } from "@app/schemas/admin/catalogue/product"
-import {
-  type SubcategoryCreationData,
-} from "@app/schemas/admin/catalogue/subcategory"
-import {
-  type BrandCreationData,
-} from "@app/schemas/admin/catalogue/brand"
-
-interface ProductSubcategory extends SubcategoryCreationData {
-  id: string
-}
-
-interface ProductBrand extends BrandCreationData {
-  id: string
-}
 
 interface EmitsParameter {
   submit: [unknown]
 }
-
 
 export default function useProductForm(emit: EmitsParameter) {
   const route = useRoute()

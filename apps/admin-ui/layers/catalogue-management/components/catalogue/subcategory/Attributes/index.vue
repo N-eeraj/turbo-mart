@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  AttributeObject,
+  type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 import type {
   AttributeType,

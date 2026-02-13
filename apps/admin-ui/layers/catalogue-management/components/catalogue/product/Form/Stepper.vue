@@ -19,7 +19,9 @@ const {
         @submit="onSubmitProduct" />
     </template>
     <template #step-2>
-      Attributes Form
+      <CatalogueProductFormAttributes
+        class="mt-4"
+        @submit="onSubmitProduct" />
     </template>
     <template #step-3>
       SKU Creation Form
