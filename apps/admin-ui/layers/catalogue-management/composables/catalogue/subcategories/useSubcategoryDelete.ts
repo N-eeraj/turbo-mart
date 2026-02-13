@@ -5,7 +5,7 @@ export default function useSubcategoryDelete() {
   } = useResourceDelete()
 
   const handleDelete = (id: string, options: DeleteResourceOptions) =>
-      onDelete(`/admin/catalogue/subcategories/${id}`, options)
+    onDelete(`/admin/catalogue/subcategories/${id}`, options)
 
   return {
     ...deleteResource,

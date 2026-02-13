@@ -3,7 +3,7 @@ import {
   AttributeType,
 } from "@app/database/mongoose/enums/catalogue/attribute"
 import {
-  AttributeObject,
+  type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface Props {
