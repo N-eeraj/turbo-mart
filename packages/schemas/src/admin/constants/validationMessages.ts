@@ -130,15 +130,15 @@ export const ATTRIBUTE = {
         valid: "Please enter a valid number",
         minValue: "Please enter a value larger than the minimum value",
       },
-      unit: {
-        valid: "Please enter a valid unit",
+      measurementType: {
+        valid: "Please select a valid measurement type",
       },
-      template: {
-        valid: "Please enter a valid template",
+      allowDecimal: {
+        valid: "Please select a boolean value",
       },
-      base: {
-        valid: "Please enter a valid number",
-        positive: "Please enter a positive number",
+      allowNegative: {
+        valid: "Please select a boolean value",
+        unable: "Cannot allow negative values when minimum is ≥ 0.",
       },
     },
     list: {

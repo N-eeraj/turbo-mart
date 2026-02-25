@@ -2,6 +2,7 @@ import * as z from "zod"
 
 import {
   AttributeType,
+  MeasurementType,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
 import {
@@ -67,24 +68,17 @@ const numberAttributeTypeMetadata = {
         description: "Maximum value of the attribute.",
         example: 16,
       }),
-    unit: z.string({ error: ATTRIBUTE.metadata.number.unit.valid })
+    measurementType: z.enum(MeasurementType, { error: ATTRIBUTE.metadata.number.measurementType.valid })
+      .optional(),
+    allowDecimal: z.boolean({ error: ATTRIBUTE.metadata.number.allowDecimal.valid })
       .optional()
       .meta({
-        description: "Base unit the attribute is measured in.",
-        example: "Inches",
+        description: "Indicates whether the attribute allows decimal (fractional) values.",
       }),
-    template: z.string({ error: ATTRIBUTE.metadata.number.template.valid })
+    allowNegative: z.boolean({ error: ATTRIBUTE.metadata.number.allowNegative.valid })
       .optional()
       .meta({
-        description: "The display template for the value.",
-        example: "{{value}} {{unit}}",
-      }),
-    base: z.number({ error: ATTRIBUTE.metadata.number.base.valid })
-      .positive({ error: ATTRIBUTE.metadata.number.base.positive })
-      .optional()
-      .meta({
-        description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",
-        example: 10,
+        description: "Indicates whether the attribute allows negative values.",
       }),
   })
     .optional(),
@@ -201,7 +195,8 @@ function numberMetadataSuperRefine<TId extends boolean>(
   { metadata }: z.infer<NumberAttributeSchema<TId>>,
   ctx: z.RefinementCtx
 ) {
-  if (metadata && metadata.min !== undefined && metadata.max !== undefined) {
+  if (!metadata) return
+  if (metadata.min !== undefined && metadata.max !== undefined) {
     if (metadata.min > metadata.max) {
       ctx.addIssue({
         path: ["metadata.min"],
@@ -214,6 +209,14 @@ function numberMetadataSuperRefine<TId extends boolean>(
         code: "custom",
       })
     }
+  }
+  if (metadata.allowNegative === undefined || metadata.min === undefined) return
+  if (metadata.min < 0 && metadata.allowNegative === false) {
+    ctx.addIssue({
+      path: ["metadata.allowNegative"],
+      message: ATTRIBUTE.metadata.number.allowNegative.unable,
+      code: "custom",
+    })
   }
 }
 

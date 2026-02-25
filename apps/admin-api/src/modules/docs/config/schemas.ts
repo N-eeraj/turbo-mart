@@ -6,6 +6,7 @@ import {
 } from "@app/database/mongoose/models/Admin/User"
 import {
   AttributeType,
+  MeasurementType,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
 import ProfileSchema from "#jsonDocs/schemas/profile" with { type: "json" }
@@ -133,6 +134,66 @@ const SubcategoryAttributeTypesEnum = {
   ] satisfies Array<AttributeType>,
 }
 
+const NumberAttributeMeasurementTypesEnum = {
+  type: "number",
+  description:
+    "Types of measurable values for attributes.\n" +
+    "- `0` - `NUMBER`: Unitless numeric value (count, quantity).\n" +
+    "- `1` - `LENGTH`: Distance or linear measurement.\n" +
+    "- `2` - `AREA`: Surface measurement.\n" +
+    "- `3` - `VOLUME`: Space or capacity measurement.\n" +
+    "- `4` - `WEIGHT`: Mass measurement.\n" +
+    "- `5` - `TIME`: Duration measurement.\n" +
+    "- `6` - `TEMPERATURE`: Heat measurement.\n" +
+    "- `7` - `SPEED`: Distance over time.\n" +
+    "- `8` - `ACCELERATION`: Change in speed over time.\n" +
+    "- `9` - `STORAGE`: Digital data size.\n" +
+    "- `10` - `DATA_RATE`: Data transfer per time unit.\n" +
+    "- `11` - `ENERGY`: Work or energy measurement.\n" +
+    "- `12` - `POWER`: Energy per time unit.\n" +
+    "- `13` - `PRESSURE`: Force per area.\n" +
+    "- `14` - `FORCE`: Push or pull force.\n" +
+    "- `15` - `FREQUENCY`: Repetition rate.\n" +
+    "- `16` - `ANGLE`: Rotational measurement.\n" +
+    "- `17` - `DENSITY`: Mass per volume.\n" +
+    "- `18` - `FLOW_RATE`: Volume per time unit.\n" +
+    "- `19` - `VOLTAGE`: Electrical potential difference.\n" +
+    "- `20` - `CURRENT`: Electrical current flow.\n" +
+    "- `21` - `RESISTANCE`: Electrical resistance.\n" +
+    "- `22` - `SOUND_LEVEL`: Sound intensity level.\n" +
+    "- `23` - `PERCENTAGE`: Proportional numeric value.\n" +
+    "- `24` - `TORQUE`: Rotational force.\n" +
+    "- `25` - `FUEL_ECONOMY`: Distance per fuel unit.",
+  enum: [
+    MeasurementType.NUMBER,
+    MeasurementType.LENGTH,
+    MeasurementType.AREA,
+    MeasurementType.VOLUME,
+    MeasurementType.WEIGHT,
+    MeasurementType.TIME,
+    MeasurementType.TEMPERATURE,
+    MeasurementType.SPEED,
+    MeasurementType.ACCELERATION,
+    MeasurementType.STORAGE,
+    MeasurementType.DATA_RATE,
+    MeasurementType.ENERGY,
+    MeasurementType.POWER,
+    MeasurementType.PRESSURE,
+    MeasurementType.FORCE,
+    MeasurementType.FREQUENCY,
+    MeasurementType.ANGLE,
+    MeasurementType.DENSITY,
+    MeasurementType.FLOW_RATE,
+    MeasurementType.VOLTAGE,
+    MeasurementType.CURRENT,
+    MeasurementType.RESISTANCE,
+    MeasurementType.SOUND_LEVEL,
+    MeasurementType.PERCENTAGE,
+    MeasurementType.TORQUE,
+    MeasurementType.FUEL_ECONOMY,
+  ] satisfies Array<MeasurementType>,
+}
+
 const SubcategoryWithAttributesSchema = {
   type: SubcategorySchema.type,
   properties: {
@@ -172,6 +233,7 @@ const UtilitySchemas = {
   RolesEnum,
   PermissionsEnum,
   SubcategoryAttributeTypesEnum,
+  NumberAttributeMeasurementTypesEnum,
 }
 
 const schemas = {

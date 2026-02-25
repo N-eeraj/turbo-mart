@@ -109,17 +109,18 @@ const NumberAttributeMetadataSchema = new mongoose.Schema({
         type: Number,
         default: undefined,
       },
-      unit: {
-        type: String,
-        default: undefined,
-      },
-      template: {
-        type: String,
-        default: "{{value}}",
-      },
-      base: {
+      measurementType: {
         type: Number,
-        default: 1
+        enum: Object.values(MeasurementType).map(Number),
+        default: MeasurementType.NUMBER,
+      },
+      allowDecimal: {
+        type: Boolean,
+        default: false,
+      },
+      allowNegative: {
+        type: Boolean,
+        default: false,
       },
     },
     default: undefined,
