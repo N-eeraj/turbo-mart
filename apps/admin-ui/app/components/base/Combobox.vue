@@ -102,9 +102,8 @@ const selectedOptions = computed(() => {
   const value = modelValue.value
 
   // handle empty state
-  if (!value || !(value as Array<AcceptableValue>).length) {
-    return undefined
-  }
+  const isEmpty = props.multiple ? !(value as Array<AcceptableValue>).length : !value
+  if (isEmpty) return undefined
 
   // handle single select
   if (!props.multiple) {

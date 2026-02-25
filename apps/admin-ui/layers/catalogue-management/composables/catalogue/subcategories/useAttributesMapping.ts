@@ -22,10 +22,10 @@ export default function useAttributesMapping() {
     () => useApi(`/admin/catalogue/subcategories/attribute/types`),
     {
       transform: ({ data }) => data
-      .map(({ value, name }) => ({
-        value,
-        textValue: name,
-      })),
+        .map(({ value, name }) => ({
+          value,
+          textValue: name,
+        })),
     }
   )
   const isLoadingAttributeTypes = computed(() => loadingAttributeTypes.value === "pending")

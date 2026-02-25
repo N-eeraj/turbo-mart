@@ -195,7 +195,10 @@ function numberMetadataSuperRefine<TId extends boolean>(
   { metadata }: z.infer<NumberAttributeSchema<TId>>,
   ctx: z.RefinementCtx
 ) {
+  // skip validations if no metadata
   if (!metadata) return
+
+  // validate min and max compatibility
   if (metadata.min !== undefined && metadata.max !== undefined) {
     if (metadata.min > metadata.max) {
       ctx.addIssue({
@@ -210,13 +213,16 @@ function numberMetadataSuperRefine<TId extends boolean>(
       })
     }
   }
-  if (metadata.allowNegative === undefined || metadata.min === undefined) return
-  if (metadata.min < 0 && metadata.allowNegative === false) {
-    ctx.addIssue({
-      path: ["metadata.allowNegative"],
-      message: ATTRIBUTE.metadata.number.allowNegative.unable,
-      code: "custom",
-    })
+
+  // validate min and allowNegative compatibility
+  if (metadata.allowNegative !== undefined && metadata.min !== undefined) {
+    if (metadata.min >= 0 && metadata.allowNegative) {
+      ctx.addIssue({
+        path: ["metadata.allowNegative"],
+        message: ATTRIBUTE.metadata.number.allowNegative.unable,
+        code: "custom",
+      })
+    }
   }
 }
 

@@ -23,6 +23,8 @@ interface Props extends SelectRootProps {
   readonly?: boolean
 }
 const props = defineProps<Props>()
+
+const attrs = useAttrs()
 </script>
 
 <template>
@@ -34,7 +36,9 @@ const props = defineProps<Props>()
       errorMessage,
       ...formField
     }">
-    <FormItem class="flex flex-col">
+    <FormItem
+      class="flex flex-col"
+      :class="attrs.class">
       <slot
         v-bind="{
           ...formField,
