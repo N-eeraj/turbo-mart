@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 
 import {
   AttributeType,
+  MeasurementType,
 } from "#mongoose/enums/catalogue/attribute"
 
 export type SelectAttributeMetadataType = AttributeType.TEXT | AttributeType.NUMBER
@@ -299,4 +300,5 @@ export function transformAttribute<
 export default AttributeSchema
 export {
   AttributeType,
+  MeasurementType,
 }

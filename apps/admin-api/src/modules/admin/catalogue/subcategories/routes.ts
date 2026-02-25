@@ -14,7 +14,8 @@ subcategoryRouter.route("/")
   .get(catalogueManagementMiddlewares, SubcategoryController.list)
   .post(catalogueManagementMiddlewares, SubcategoryController.create)
 
-subcategoryRouter.get("/attribute-types", catalogueManagementMiddlewares, SubcategoryController.listAttributeTypes)
+subcategoryRouter.get("/attribute/types", catalogueManagementMiddlewares, SubcategoryController.listAttributeTypes)
+subcategoryRouter.get("/attribute/measurement/types", catalogueManagementMiddlewares, SubcategoryController.listAttributeMeasurementTypes)
 
 subcategoryRouter.route("/:subcategoryId")
   .get(catalogueManagementMiddlewares, SubcategoryController.getById)

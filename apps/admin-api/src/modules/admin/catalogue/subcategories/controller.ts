@@ -78,7 +78,7 @@ export default class SubcategoryController extends BaseController {
   }
 
   /**
-   * @route GET /api/admin/catalogue/subcategories/attribute-types
+   * @route GET /api/admin/catalogue/subcategories/attribute/types
    * 
    * Fetch attribute type list.
    */
@@ -88,6 +88,20 @@ export default class SubcategoryController extends BaseController {
     super.sendSuccess(res, {
       data,
       message: "Fetched Attribute Types",
+    })
+  }
+
+  /**
+   * @route GET /api/admin/catalogue/subcategories/attribute/measurement/types
+   * 
+   * Fetch attribute type list.
+   */
+  static async listAttributeMeasurementTypes(_req: Request, res: Response) {
+    const data = await SubcategoryService.listAttributeMeasurementTypes()
+
+    super.sendSuccess(res, {
+      data,
+      message: "Fetched Measurement Types",
     })
   }
 

@@ -19,7 +19,7 @@ export default function useAttributesMapping() {
     status: loadingAttributeTypes,
   } = useLazyAsyncData(
     "attribute-types",
-    () => useApi(`/admin/catalogue/subcategories/attribute-types`),
+    () => useApi(`/admin/catalogue/subcategories/attribute/types`),
     {
       transform: ({ data }) => data
       .map(({ value, name }) => ({
