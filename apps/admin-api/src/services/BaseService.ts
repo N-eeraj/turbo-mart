@@ -239,15 +239,15 @@ export default class BaseService {
    */
   static enumMapToList<
     TEnum extends string | number,
-    TMap extends Record<TEnum, string> = Record<TEnum, string>,
+    TMap extends Record<TEnum, object> = Record<TEnum, object>,
     TNumberCasting extends boolean = true
   >(map: TMap, castToNumber = true) {
     return (Object.entries(map) as Array<[string, TMap[TEnum]]>)
       .sort(([a], [b]) => Number(a) - Number(b))
-      .map(([value, name]) => {
+      .map(([value, data]) => {
         const castedValue = (castToNumber ? Number(value) : value) as TNumberCasting extends true ? number : string
         return {
-          name,
+          ...data,
           value: castedValue,
         }
     })
