@@ -31,7 +31,7 @@ const attrs = useAttrs()
     }"
     type="checkbox">
     <FormItem
-      class="flex flex-row items-start gap-x-3 space-y-0 rounded-md py-4"
+      class="flex flex-row flex-wrap items-start gap-x-3 space-y-0 rounded-md py-4"
       :class="attrs.class">
       <slot v-bind="{
         ...formField,
@@ -63,8 +63,8 @@ const attrs = useAttrs()
               {{ description }}
             </FormDescription>
           </slot>
-          <FormMessage />
         </div>
+        <FormMessage class="flex-1" />
       </slot>
     </FormItem>
   </FormField>
