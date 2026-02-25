@@ -224,4 +224,32 @@ export default class BaseService {
     const html = await ejs.renderFile(templatePath, data)
     return html as string
   }
+
+  /**
+   * Convert an enum-to-label map into a sorted list of { name, value } objects.
+   *
+   * @template TEnum - Enum key type (string or number).
+   * @template TMap - Map from enum values to display labels.
+   * @template TNumberCasting - Whether to cast enum values to number (true) or keep as string (false). Defaults to true.
+   * 
+   * @param map - Enum map object where keys are enum values and values are labels.
+   * @param castToNumber - Whether to cast enum keys to number (default: true).
+   * 
+   * @returns Array of objects with `name` (label) and `value` (enum key) properly typed based on `TNumberCasting`.
+   */
+  static enumMapToList<
+    TEnum extends string | number,
+    TMap extends Record<TEnum, string> = Record<TEnum, string>,
+    TNumberCasting extends boolean = true
+  >(map: TMap, castToNumber = true) {
+    return (Object.entries(map) as Array<[string, TMap[TEnum]]>)
+      .sort(([a], [b]) => Number(a) - Number(b))
+      .map(([value, name]) => {
+        const castedValue = (castToNumber ? Number(value) : value) as TNumberCasting extends true ? number : string
+        return {
+          name,
+          value: castedValue,
+        }
+    })
+  }
 }

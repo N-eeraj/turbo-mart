@@ -11,6 +11,7 @@ import {
 } from "@app/database/mongoose/models/Catalogue/Category"
 import {
   AttributeType,
+  MeasurementType,
   transformAttribute,
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
@@ -48,9 +49,16 @@ export type ParsedSubcategoryAttributeUpdateData = {
   >
 }
 
+export type AttributeMap = typeof SubcategoryService.ATTRIBUTE_TYPES_MAP
 export interface AttributeTypeMap {
-  name: typeof SubcategoryService.ATTRIBUTE_TYPES_MAP[AttributeType]
+  name: AttributeMap[AttributeType]
   value: AttributeType
+}
+
+export type MeasurementMap = typeof SubcategoryService.MEASUREMENT_TYPES_MAP
+export interface MeasurementTypeMap {
+  name: MeasurementMap[MeasurementType]
+  value: MeasurementType
 }
 
 const DEFAULT_LIST_OPTIONS: Required<ListOptions> = {
@@ -72,15 +80,34 @@ export default class SubcategoryService extends BaseService {
     [AttributeType.DATE]: "Date",
     [AttributeType.JSON]: "Key Value",
   } as const
-
-  static ATTRIBUTE_TYPES_MAP_LIST: Array<AttributeTypeMap> = Object.entries(this.ATTRIBUTE_TYPES_MAP)
-    .sort(([a], [b]) => Number(a) - Number(b))
-    .map(([ value, name ]) => {
-      return {
-        name,
-        value: Number(value),
-      }
-    })
+  static MEASUREMENT_TYPES_MAP = {
+    [MeasurementType.NUMBER]: "Number",
+    [MeasurementType.LENGTH]: "Length",
+    [MeasurementType.AREA]: "Area",
+    [MeasurementType.VOLUME]: "Volume",
+    [MeasurementType.WEIGHT]: "Weight",
+    [MeasurementType.TIME]: "Time",
+    [MeasurementType.TEMPERATURE]: "Temperature",
+    [MeasurementType.SPEED]: "Speed",
+    [MeasurementType.ACCELERATION]: "Acceleration",
+    [MeasurementType.STORAGE]: "Storage",
+    [MeasurementType.DATA_RATE]: "Data Rate",
+    [MeasurementType.ENERGY]: "Energy",
+    [MeasurementType.POWER]: "Power",
+    [MeasurementType.PRESSURE]: "Pressure",
+    [MeasurementType.FORCE]: "Force",
+    [MeasurementType.FREQUENCY]: "Frequency",
+    [MeasurementType.ANGLE]: "Angle",
+    [MeasurementType.DENSITY]: "Density",
+    [MeasurementType.FLOW_RATE]: "Flow Rate",
+    [MeasurementType.VOLTAGE]: "Voltage",
+    [MeasurementType.CURRENT]: "Current",
+    [MeasurementType.RESISTANCE]: "Resistance",
+    [MeasurementType.SOUND_LEVEL]: "Sound Level",
+    [MeasurementType.PERCENTAGE]: "Percentage",
+    [MeasurementType.TORQUE]: "Torque",
+    [MeasurementType.FUEL_ECONOMY]: "Fuel Economy",
+  } as const
 
   /**
    * Fetch the subcategories.
@@ -189,12 +216,21 @@ export default class SubcategoryService extends BaseService {
   }
 
   /**
-   * Fetch the list of admin permissions.
+   * Fetch the list of attribute types.
    * 
-   * @returns the list of admin permissions.
+   * @returns the list of attribute types.
    */
   static async listAttributeTypes(): Promise<Array<AttributeTypeMap>> {
-    return this.ATTRIBUTE_TYPES_MAP_LIST
+    return super.enumMapToList<AttributeType, AttributeMap>(this.ATTRIBUTE_TYPES_MAP)
+  }
+
+  /**
+   * Fetch the list of measurement types.
+   * 
+   * @returns the list of measurement types.
+   */
+  static async listAttributeMeasurementTypes(): Promise<Array<MeasurementTypeMap>> {
+    return super.enumMapToList<MeasurementType, MeasurementMap>(this.MEASUREMENT_TYPES_MAP)
   }
 
   /**

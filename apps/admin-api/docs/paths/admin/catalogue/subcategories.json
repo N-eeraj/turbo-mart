@@ -254,7 +254,7 @@
       }
     }
   },
-  "/api/admin/catalogue/subcategories/attribute-types": {
+  "/api/admin/catalogue/subcategories/attribute/types": {
     "get": {
       "tags": ["Subcategory Management"],
       "summary": "Fetch Attribute Type List",
@@ -278,14 +278,14 @@
                       "properties": {
                         "name": {
                           "type": "string",
-                          "description": "Name of the permission."
+                          "description": "Name of the attribute."
                         },
                         "value": {
                           "$ref": "#/components/schemas/SubcategoryAttributeTypesEnum"
                         }
                       }
                     },
-                    "description": "List of admin permissions.",
+                    "description": "List of attribute types.",
                     "example": [
                       {
                         "name": "Text",
@@ -324,6 +324,166 @@
                   "message": {
                     "type": "string",
                     "example": "Fetched Attribute Types"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  },
+  "/api/admin/catalogue/subcategories/attribute/measurement/types": {
+    "get": {
+      "tags": ["Subcategory Management"],
+      "summary": "Fetch Measurement Type List",
+      "description": "Fetch measurement type list.",
+      "responses": {
+        "200": {
+          "description": "Fetch measurement type list.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the request was successful."
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the measurement."
+                        },
+                        "value": {
+                          "$ref": "#/components/schemas/SubcategoryAttributeTypesEnum"
+                        }
+                      }
+                    },
+                    "description": "List of attribute measurement types.",
+                    "example": [
+                      {
+                        "name": "Number",
+                        "value": 0
+                      },
+                      {
+                        "name": "Length",
+                        "value": 1
+                      },
+                      {
+                        "name": "Area",
+                        "value": 2
+                      },
+                      {
+                        "name": "Volume",
+                        "value": 3
+                      },
+                      {
+                        "name": "Weight",
+                        "value": 4
+                      },
+                      {
+                        "name": "Time",
+                        "value": 5
+                      },
+                      {
+                        "name": "Temperature",
+                        "value": 6
+                      },
+                      {
+                        "name": "Speed",
+                        "value": 7
+                      },
+                      {
+                        "name": "Acceleration",
+                        "value": 8
+                      },
+                      {
+                        "name": "Storage",
+                        "value": 9
+                      },
+                      {
+                        "name": "Data Rate",
+                        "value": 10
+                      },
+                      {
+                        "name": "Energy",
+                        "value": 11
+                      },
+                      {
+                        "name": "Power",
+                        "value": 12
+                      },
+                      {
+                        "name": "Pressure",
+                        "value": 13
+                      },
+                      {
+                        "name": "Force",
+                        "value": 14
+                      },
+                      {
+                        "name": "Frequency",
+                        "value": 15
+                      },
+                      {
+                        "name": "Angle",
+                        "value": 16
+                      },
+                      {
+                        "name": "Density",
+                        "value": 17
+                      },
+                      {
+                        "name": "Flow Rate",
+                        "value": 18
+                      },
+                      {
+                        "name": "Voltage",
+                        "value": 19
+                      },
+                      {
+                        "name": "Current",
+                        "value": 20
+                      },
+                      {
+                        "name": "Resistance",
+                        "value": 21
+                      },
+                      {
+                        "name": "Sound Level",
+                        "value": 22
+                      },
+                      {
+                        "name": "Percentage",
+                        "value": 23
+                      },
+                      {
+                        "name": "Torque",
+                        "value": 24
+                      },
+                      {
+                        "name": "Fuel Economy",
+                        "value": 25
+                      }
+                    ]
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Fetched Measurement Types"
                   }
                 }
               }
