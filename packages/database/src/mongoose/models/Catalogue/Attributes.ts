@@ -101,14 +101,6 @@ const TextAttributeMetadataSchema = new mongoose.Schema({
 const NumberAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
     type: {
-      min: {
-        type: Number,
-        default: undefined,
-      },
-      max: {
-        type: Number,
-        default: undefined,
-      },
       measurementType: {
         type: Number,
         enum: Object.values(MeasurementType).map(Number),
@@ -121,6 +113,18 @@ const NumberAttributeMetadataSchema = new mongoose.Schema({
       allowNegative: {
         type: Boolean,
         default: false,
+      },
+      step: {
+        type: Number,
+        default: 1,
+      },
+      min: {
+        type: Number,
+        default: undefined,
+      },
+      max: {
+        type: Number,
+        default: undefined,
       },
     },
     default: undefined,

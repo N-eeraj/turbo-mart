@@ -14,7 +14,7 @@ export const NEW_PASSWORD = {
   uppercaseRequired: "Please include at least 1 uppercase",
   numberRequired: "Please include at least 1 number",
   format: "Invalid password format",
-  passwordReuse: "The new password cannot be the same as the old password.",
+  passwordReuse: "The new password cannot be the same as the old password",
 }
 
 export const CONFIRM_PASSWORD = {
@@ -91,7 +91,7 @@ export const SUB_CATEGORY = {
     required: "Please enter a subcategory slug",
   },
   attributes: {
-    missingFields: "At least one of \"create\", \"update\", or \"delete\" field must be provided.",
+    missingFields: "At least one of \"create\", \"update\", or \"delete\" field must be provided",
     duplicateName: "Please enter unique attribute names",
     duplicateId: "Unique attributes required",
   },
@@ -122,14 +122,6 @@ export const ATTRIBUTE = {
       },
     },
     number: {
-      min: {
-        valid: "Please enter a valid number",
-        maxValue: "Please enter a value smaller than the maximum value",
-      },
-      max: {
-        valid: "Please enter a valid number",
-        minValue: "Please enter a value larger than the minimum value",
-      },
       measurementType: {
         valid: "Please select a valid measurement type",
       },
@@ -138,7 +130,25 @@ export const ATTRIBUTE = {
       },
       allowNegative: {
         valid: "Please select a boolean value",
-        unable: "Cannot allow negative values when minimum is ≥ 0.",
+      },
+      step: {
+        valid: "Please enter a valid number",
+        min: "Step value must be at least 0.001",
+        max: "Step value must be less than 10,000",
+        integer: "Step value must be an integer if decimals are not allowed",
+      },
+      min: {
+        valid: "Please enter a valid number",
+        maxValue: "Please enter a value smaller than the maximum value",
+        allowNegative: "Minimum value must be below 0 when negatives are allowed",
+        integer: "Minimum value must be an integer if decimals are not allowed",
+        step: "Minimum value must be a multiple of step value",
+      },
+      max: {
+        valid: "Please enter a valid number",
+        minValue: "Please enter a value larger than the minimum value",
+        integer: "Maximum value must be an integer if decimals are not allowed",
+        step: "Maximum value must be a multiple of step value",
       },
     },
     list: {
