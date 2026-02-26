@@ -22,7 +22,7 @@ const {
       <li
         v-for="(field, index) in updateAttributeFields"
         :key="field.key"
-        class="grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
+        class="@container/attribute-card grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
         <FormFieldInput
           :name="`update[${index}].id`"
           class="hidden" />
@@ -43,7 +43,7 @@ const {
       <li
         v-for="(field, index) in createAttributeFields"
         :key="field.key"
-        class="grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
+        class="@container/attribute-card grid md:grid-cols-[1fr_1fr_32px] md:grid-rows-[auto_auto_1fr] gap-x-4 gap-y-2 py-5 px-3 bg-secondary/20 border rounded">
         <CatalogueSubcategoryAttributesFormBase
           field="create"
           :index
