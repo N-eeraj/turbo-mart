@@ -56,18 +56,6 @@ const textAttributeTypeMetadata = {
 const numberAttributeTypeMetadata = {
   type: z.literal(AttributeType.NUMBER),
   metadata: z.object({
-    min: z.number({ error: ATTRIBUTE.metadata.number.min.valid })
-      .optional()
-      .meta({
-        description: "Minimum value of the attribute.",
-        example: 2,
-      }),
-    max: z.number({ error: ATTRIBUTE.metadata.number.max.valid })
-      .optional()
-      .meta({
-        description: "Maximum value of the attribute.",
-        example: 16,
-      }),
     measurementType: z.enum(MeasurementType, { error: ATTRIBUTE.metadata.number.measurementType.valid })
       .optional(),
     allowDecimal: z.boolean({ error: ATTRIBUTE.metadata.number.allowDecimal.valid })
@@ -79,6 +67,26 @@ const numberAttributeTypeMetadata = {
       .optional()
       .meta({
         description: "Indicates whether the attribute allows negative values.",
+      }),
+    step: z.number({ error: ATTRIBUTE.metadata.number.step.valid })
+      .min(0.001, { error: ATTRIBUTE.metadata.number.step.min })
+      .max(10_000, { error: ATTRIBUTE.metadata.number.step.max })
+      .optional()
+      .meta({
+        description: "Attribute value steps.",
+        example: 0.01,
+      }),
+    min: z.number({ error: ATTRIBUTE.metadata.number.min.valid })
+      .optional()
+      .meta({
+        description: "Minimum value of the attribute.",
+        example: 2,
+      }),
+    max: z.number({ error: ATTRIBUTE.metadata.number.max.valid })
+      .optional()
+      .meta({
+        description: "Maximum value of the attribute.",
+        example: 16,
       }),
   })
     .optional(),
@@ -197,10 +205,28 @@ function numberMetadataSuperRefine<TId extends boolean>(
 ) {
   // skip validations if no metadata
   if (!metadata) return
+  const {
+    allowDecimal,
+    allowNegative,
+    step,
+    min,
+    max,
+  } = metadata
+
+  // validate min and allowNegative compatibility
+  if (!allowNegative && min !== undefined) {
+    if (min >= 0 && allowNegative) {
+      ctx.addIssue({
+        path: ["metadata.min"],
+        message: ATTRIBUTE.metadata.number.min.allowNegative,
+        code: "custom",
+      })
+    }
+  }
 
   // validate min and max compatibility
-  if (metadata.min !== undefined && metadata.max !== undefined) {
-    if (metadata.min > metadata.max) {
+  if (min !== undefined && max !== undefined) {
+    if (min > max) {
       ctx.addIssue({
         path: ["metadata.min"],
         message: ATTRIBUTE.metadata.number.min.maxValue,
@@ -214,12 +240,44 @@ function numberMetadataSuperRefine<TId extends boolean>(
     }
   }
 
-  // validate min and allowNegative compatibility
-  if (metadata.allowNegative !== undefined && metadata.min !== undefined) {
-    if (metadata.min >= 0 && metadata.allowNegative) {
+  // validate decimal compatibility
+  if (!allowDecimal) {
+    if (step !== undefined && step % 1) {
       ctx.addIssue({
-        path: ["metadata.allowNegative"],
-        message: ATTRIBUTE.metadata.number.allowNegative.unable,
+        path: ["metadata.step"],
+        message: ATTRIBUTE.metadata.number.step.integer,
+        code: "custom",
+      })
+    }
+    if (min !== undefined && min % 1) {
+      ctx.addIssue({
+        path: ["metadata.min"],
+        message: ATTRIBUTE.metadata.number.min.integer,
+        code: "custom",
+      })
+    }
+    if (max !== undefined && max % 1) {
+      ctx.addIssue({
+        path: ["metadata.max"],
+        message: ATTRIBUTE.metadata.number.max.integer,
+        code: "custom",
+      })
+    }
+  }
+
+  // validate step compatibility
+  if (step !== undefined) {
+    if (min !== undefined && min % step) {
+      ctx.addIssue({
+        path: ["metadata.min"],
+        message: ATTRIBUTE.metadata.number.min.step,
+        code: "custom",
+      })
+    }
+    if (max !== undefined && max % step) {
+      ctx.addIssue({
+        path: ["metadata.max"],
+        message: ATTRIBUTE.metadata.number.max.step,
         code: "custom",
       })
     }
