@@ -31,41 +31,43 @@ const attrs = useAttrs()
     }"
     type="checkbox">
     <FormItem
-      class="flex flex-row flex-wrap items-start gap-x-3 space-y-0 rounded-md py-4"
+      class="flex flex-col gap-y-1"
       :class="attrs.class">
       <slot v-bind="{
         ...formField,
         value,
         handleChange,
       }">
-        <FormControl>
-          <Checkbox
-            :model-value="value"
-            @update:model-value="handleChange" />
-        </FormControl>
-        <div class="space-y-1 leading-none">
-          <slot
-            name="label"
-            :label>
-            <FormLabel
-              v-if="label"
-              class="cursor-pointer">
-              {{ label }}
-            </FormLabel>
-          </slot>
+        <div class="flex flex-row items-start gap-x-3 space-y-0">
+          <FormControl>
+            <Checkbox
+              :model-value="value"
+              @update:model-value="handleChange" />
+          </FormControl>
+          <div class="space-y-1 leading-none">
+            <slot
+              name="label"
+              :label>
+              <FormLabel
+                v-if="label"
+                class="cursor-pointer">
+                {{ label }}
+              </FormLabel>
+            </slot>
 
-          <slot
-            name="description"
-            :description>
-            <FormDescription
-              v-if="description"
-              class="text-xs">
-              {{ description }}
-            </FormDescription>
-          </slot>
+            <slot
+              name="description"
+              :description>
+              <FormDescription
+                v-if="description"
+                class="text-xs">
+                {{ description }}
+              </FormDescription>
+            </slot>
+          </div>
         </div>
-        <FormMessage class="flex-1" />
       </slot>
+      <FormMessage />
     </FormItem>
   </FormField>
 </template>
