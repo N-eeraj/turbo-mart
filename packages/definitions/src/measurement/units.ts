@@ -116,6 +116,8 @@ export enum WeightUnits {
  * @property HOUR = 3 - Hour (h).
  * @property DAY = 4 - Day (d).
  * @property WEEK = 5 - Week.
+ * @property MONTH = 6 - Month (30 days).
+ * @property YEAR = 7 - Year (365 days).
  */
 export enum TimeUnits {
   MILLISECOND,
@@ -124,6 +126,8 @@ export enum TimeUnits {
   HOUR,
   DAY,
   WEEK,
+  MONTH,
+  YEAR,
 }
 
 /**
