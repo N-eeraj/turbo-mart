@@ -1,0 +1,12 @@
+{
+  "name": "@app/definitions",
+  "version": "1.0.0",
+  "description": "Core shared definitions; enums, constants, interfaces and types",
+  "type": "module",
+  "imports": {
+    "#measurement/*": "./src/measurement/*.ts"
+  },
+  "exports": {
+    "./*": "./src/*.ts"
+  }
+}

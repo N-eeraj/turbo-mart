@@ -30,7 +30,7 @@ export enum AttributeType {
  * @readonly
  * @enum
  * 
- * @property NUMBER = 0 - Unitless numeric value (count, quantity).
+ * @property NUMBER = 0 - Unit-less numeric value (count, quantity).
  * @property LENGTH = 1 - Distance or linear measurement.
  * @property AREA = 2 - Surface measurement.
  * @property VOLUME = 3 - Space or capacity measurement.
