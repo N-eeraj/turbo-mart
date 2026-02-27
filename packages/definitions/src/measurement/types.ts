@@ -55,6 +55,18 @@ type MeasurementUnitEnumMap = {
   [MeasurementType.FUEL_ECONOMY]: FuelEconomyUnits
 }
 
+export type ConversionFn<TMeasurementType extends keyof UnitsMap> = (
+  _from: keyof UnitsMap[TMeasurementType],
+  _to: keyof UnitsMap[TMeasurementType],
+  _value: number
+) => number
+
+export interface MeasurementUnitData<TMeasurementUnit> {
+  name: string
+  symbol: string
+  convertTo: (_unit: TMeasurementUnit, _value: number) => number
+}
+
 export type UnitsMap = {
   [K in keyof MeasurementUnitEnumMap]: Record<
     MeasurementUnitEnumMap[K],
@@ -65,15 +77,3 @@ export type UnitsMap = {
 export type ConversionFnMap = {
   [K in keyof MeasurementUnitEnumMap]: ConversionFn<K>
 }
-export interface MeasurementUnitData<TMeasurementUnit> {
-  name: string
-  symbol: string
-  convertTo: (unit: TMeasurementUnit, value: number) => number
-}
-
-
-export type ConversionFn<TMeasurementType extends keyof UnitsMap> = (
-  _from: keyof UnitsMap[TMeasurementType],
-  _to: keyof UnitsMap[TMeasurementType],
-  _value: number
-) => number
