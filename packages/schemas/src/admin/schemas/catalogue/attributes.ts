@@ -106,40 +106,57 @@ const textTypeOptionsList = z.object({
       }),
     { error: ATTRIBUTE.metadata.list.options.minLength }
   )
-    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
+    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength })
+    .superRefine((options, ctx) => {
+      options.forEach((option, index) => {
+        if (options.filter((optionItem) => option === optionItem).length > 1) {
+          ctx.addIssue({
+            path: [index],
+            message: ATTRIBUTE.metadata.list.text.duplicate,
+            code: "custom",
+          })
+        }
+      })
+    }),
 })
 const numberTypeOptionsList = z.object({
   type: z.literal(AttributeType.NUMBER),
   options: z.array(
     z.object({
-      value: z.number({ error: ATTRIBUTE.metadata.list.number.value.valid })
+      label: z.string({ error: ATTRIBUTE.metadata.list.number.label.valid })
+        .nonempty({ error: ATTRIBUTE.metadata.list.number.label.valid })
         .meta({
-          description: "Number value option for the list attribute types.",
-          example: 4,
+          description: "The label for the option value.",
+          example: "1 TB",
         }),
-      unit: z.string({ error: ATTRIBUTE.metadata.list.number.unit.valid })
-        .optional()
+      baseValue: z.number({ error: ATTRIBUTE.metadata.list.number.baseValue.valid })
+        .min(1, { error: ATTRIBUTE.metadata.list.number.baseValue.minValue })
         .meta({
-          description: "Unit the attribute is measured in.",
-          example: "Inches",
-        }),
-      template: z.string({ error: ATTRIBUTE.metadata.list.number.template.valid })
-        .optional()
-        .meta({
-          description: "The display template for the value.",
-          example: "{{value}} {{unit}}",
-        }),
-      base: z.number({ error: ATTRIBUTE.metadata.list.number.base.valid })
-        .min(1, { error: ATTRIBUTE.metadata.list.number.base.minValue })
-        .optional()
-        .meta({
-          description: "Base relative value of the unit, the actual value of the attribute will be the product of attribute value and the base value.",
-          example: 10,
+          description: "The base value for the option in the number list attribute types.",
+          example: 1024,
         }),
     }, { error: ATTRIBUTE.metadata.list.number.required }),
     { error: ATTRIBUTE.metadata.list.options.minLength }
   )
-    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength }),
+    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength })
+    .superRefine((options, ctx) => {
+      options.forEach(({ baseValue, label }, index) => {
+        if (options.filter((option) => label === option.label).length > 1) {
+          ctx.addIssue({
+            path: [`${index}.label`],
+            message: ATTRIBUTE.metadata.list.number.label.duplicate,
+            code: "custom",
+          })
+        }
+        if (options.filter((option) => baseValue === option.baseValue).length > 1) {
+          ctx.addIssue({
+            path: [`${index}.baseValue`],
+            message: ATTRIBUTE.metadata.list.number.baseValue.duplicate,
+            code: "custom",
+          })
+        }
+      })
+    }),
 })
 
 // combination of textTypeOptionsList and numberTypeOptionsList based on the type literal
