@@ -20,27 +20,33 @@ const formattedOptions = computed(() => {
     return props.metadata.options
   }
   return props.metadata.options
-    .sort((a, b) => a.base - b.base)
-    .map(({ template, value, unit }) => {
-    return template
-      .replaceAll("{{value}}", value.toString())
-      .replaceAll("{{unit}}", unit?.toString() ?? "")
-  })
+    .sort((a, b) => a.baseValue - b.baseValue)
+    .map(({ label }) => label)
 })
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-1">
-    <span class="text-xs text-foreground/75 font-semibold">
-      Options
-    </span>
+  <div class="flex flex-col">
+    <div class="text-xs">
+      <span class="text-foreground/75 font-semibold">
+        Type:
+      </span>
+      <strong class="font-light">
+        {{ metadata.type === AttributeType.TEXT ? "Text" : "Number" }}
+      </strong>
+    </div>
 
-    <ul class="text-sm list-disc pl-4 font-light">
-      <li
-        v-for="(option, index) in formattedOptions"
-        :key="index">
-        {{ option }}
-      </li>
-    </ul>
+    <div>
+      <span class="text-xs text-foreground/75 font-semibold">
+        Options
+      </span>
+      <ul class="text-xs list-disc pl-4 font-light">
+        <li
+          v-for="(option, index) in formattedOptions"
+          :key="index">
+          {{ option }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
