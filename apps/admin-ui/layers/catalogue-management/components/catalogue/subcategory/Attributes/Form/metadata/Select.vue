@@ -42,10 +42,8 @@ function addOption() {
     optionsType.value === AttributeType.TEXT
       ? ""
       : {
-        value: "",
-        unit: "",
-        template: "{{value}}",
-        base: 1,
+        label: "",
+        baseValue: 1,
       }
   )
 }
@@ -92,11 +90,11 @@ watch(() => optionsType.value, () => {
           :size="12"
           class="text-primary" />
       </BaseButton>
-      <ul class="col-span-2 space-y-2">
+      <ul class="col-span-2 space-y-2 mt-2">
         <li
           v-for="(option, optionIndex) in optionFields"
           :key="option.key"
-          class="flex justify-between items-center gap-x-3 md:gap-x-4">
+          class="flex justify-between items-start gap-x-3 md:gap-x-4">
           <FormFieldInput
             v-if="optionsType === AttributeType.TEXT"
             :name="`${field}[${index}].metadata.options[${optionIndex}]`"
@@ -104,22 +102,12 @@ watch(() => optionsType.value, () => {
             class="flex-1" />
           <div
             v-else
-            class="grid grid-cols-2 gap-2 flex-1">
-            <small class="col-span-2 text-foreground/75">
-              Option {{ optionIndex + 1 }}:
-            </small>
+            class="grid grid-cols-[3fr_2fr] gap-2 flex-1">
             <FormFieldInput
-              :name="`${field}[${index}].metadata.options[${optionIndex}].value`"
-              type="number"
-              placeholder="Option Value" />
+              :name="`${field}[${index}].metadata.options[${optionIndex}].label`"
+              placeholder="Label" />
             <FormFieldInput
-              :name="`${field}[${index}].metadata.options[${optionIndex}].unit`"
-              placeholder="Unit of Measurement" />
-            <FormFieldInput
-              :name="`${field}[${index}].metadata.options[${optionIndex}].template`"
-              placeholder="Display Template" />
-            <FormFieldInput
-              :name="`${field}[${index}].metadata.options[${optionIndex}].base`"
+              :name="`${field}[${index}].metadata.options[${optionIndex}].baseValue`"
               type="number"
               placeholder="Base Value" />
           </div>
