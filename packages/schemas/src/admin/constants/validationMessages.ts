@@ -159,21 +159,18 @@ export const ATTRIBUTE = {
       },
       text: {
         valid: "Please enter a valid option",
+        duplicate: "Please enter unique options",
       },
       number: {
         required: "Please enter the required metadata",
-        value: {
-          valid: "Please enter a valid number",
+        label: {
+          valid: "Please enter a valid text",
+          duplicate: "Please enter unique labels"
         },
-        unit: {
-          valid: "Please enter a valid unit",
-        },
-        template: {
-          valid: "Please enter a valid template",
-        },
-        base: {
+        baseValue: {
           valid: "Please enter a valid number",
           minValue: "Please enter a value of at least 1",
+          duplicate: "Please enter unique values"
         },
       },
       options: {

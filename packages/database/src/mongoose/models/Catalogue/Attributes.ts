@@ -174,21 +174,13 @@ const ListNumberOptionSchema = new mongoose.Schema({
   options: {
     type: [
       {
-        value: {
-          type: Number,
-          required: true,
-        },
-        unit: {
+        label: {
           type: String,
           default: undefined,
         },
-        template: {
-          type: String,
-          default: "{{value}}",
-        },
-        base: {
+        baseValue: {
           type: Number,
-          default: 1,
+          required: true,
         },
       }
     ],
