@@ -5,10 +5,12 @@ import {
 import {
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
-import TextMetadata from "~/components/catalogue/subcategory/attributes/details/metadata/Text.vue"
-import NumberMetadata from "~/components/catalogue/subcategory/attributes/details/metadata/Number.vue"
-import SelectMetadata from "~/components/catalogue/subcategory/attributes/details/metadata/Select.vue"
-import DateMetadata from "~/components/catalogue/subcategory/attributes/details/metadata/Date.vue"
+import {
+  CatalogueSubcategoryAttributesDetailsMetadataText as TextMetadata,
+  CatalogueSubcategoryAttributesDetailsMetadataNumber as NumberMetadata,
+  CatalogueSubcategoryAttributesDetailsMetadataSelect as SelectMetadata,
+  CatalogueSubcategoryAttributesDetailsMetadataDate as DateMetadata,
+} from "#components"
 
 interface Props<T extends AttributeType> {
   name: AttributeObject<T>["name"]

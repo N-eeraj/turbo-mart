@@ -2,10 +2,12 @@
 import {
   AttributeType,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
-import TextMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Text.vue"
-import NumberMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Number.vue"
-import SelectMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Select.vue"
-import DateMetadata from "~/components/catalogue/subcategory/attributes/form/metadata/Date.vue"
+import {
+  CatalogueSubcategoryAttributesFormMetadataText as TextMetadata,
+  CatalogueSubcategoryAttributesFormMetadataNumber as NumberMetadata,
+  CatalogueSubcategoryAttributesFormMetadataSelect as SelectMetadata,
+  CatalogueSubcategoryAttributesFormMetadataDate as DateMetadata,
+} from "#components"
 
 interface Props {
   field: "create" | "update"
