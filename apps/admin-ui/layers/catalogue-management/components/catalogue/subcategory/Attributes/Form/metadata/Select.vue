@@ -43,7 +43,7 @@ function addOption() {
       ? ""
       : {
         label: "",
-        baseValue: 1,
+        baseValue: "",
       }
   )
 }
@@ -90,7 +90,23 @@ watch(() => optionsType.value, () => {
           :size="12"
           class="text-primary" />
       </BaseButton>
-      <ul class="col-span-2 space-y-2 mt-2">
+
+      <div
+        v-if="optionsType === AttributeType.NUMBER"
+        class="flex">
+        <div class="flex-3">
+          <strong class="text-foreground/75 text-xs font-semibold">
+            Label
+          </strong>
+        </div>
+        <div class="flex-2">
+          <strong class="text-foreground/75 text-xs font-semibold">
+            Base Value
+          </strong>
+        </div>
+      </div>
+
+      <ul class="col-span-2 max-h-48 space-y-2 overflow-y-auto">
         <li
           v-for="(option, optionIndex) in optionFields"
           :key="option.key"
