@@ -134,6 +134,27 @@ const NumberAttributeMetadataSchema = new mongoose.Schema({
 })
 
 /**
+ * Mongoose schema for metadata of boolean attribute.
+ */
+const BooleanAttributeMetadataSchema = new mongoose.Schema({
+  metadata: {
+    type: {
+      trueValue: {
+        type: String,
+        required: true,
+      },
+      falseValue: {
+        type: String,
+        required: true,
+      },
+    },
+    required: true,
+  },
+}, {
+  _id: false,
+})
+
+/**
  * Base mongoose schema for list attribute metadata.
  */
 const ListAttributeMetadataBaseSchema = new mongoose.Schema({
@@ -256,6 +277,7 @@ const AttributeSchema = new mongoose.Schema({
 // handle the metadata schema based on the `type` discriminatorKey
 AttributeSchema.discriminator(AttributeType.TEXT, TextAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.BOOLEAN, BooleanAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetadataSchema)
