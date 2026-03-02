@@ -151,6 +151,14 @@ export const ATTRIBUTE = {
         step: "Maximum value must be a multiple of step value",
       },
     },
+    boolean: {
+      trueValue: {
+        valid: "Please enter text for true value",
+      },
+      falseValue: {
+        valid: "Please enter text for false value",
+      },
+    },
     list: {
       required: "Please enter the required metadata",
       type: {

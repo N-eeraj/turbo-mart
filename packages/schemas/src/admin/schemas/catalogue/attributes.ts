@@ -93,6 +93,20 @@ const numberAttributeTypeMetadata = {
 }
 const booleanAttributeTypeMetadata = {
   type: z.literal(AttributeType.BOOLEAN),
+  metadata: z.object({
+    trueValue: z.string({ error: ATTRIBUTE.metadata.boolean.trueValue.valid })
+      .nonempty(ATTRIBUTE.metadata.boolean.trueValue.valid)
+      .meta({
+        description: "Text to be displayed when value is true.",
+        example: "Yes",
+      }),
+    falseValue: z.string({ error: ATTRIBUTE.metadata.boolean.falseValue.valid })
+      .nonempty(ATTRIBUTE.metadata.boolean.falseValue.valid)
+      .meta({
+        description: "Text to be displayed when value is false.",
+        example: "No",
+      }),
+  })
 }
 
 const textTypeOptionsList = z.object({
