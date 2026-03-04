@@ -5,6 +5,7 @@ import {
 import {
   CatalogueSubcategoryAttributesFormMetadataText as TextMetadata,
   CatalogueSubcategoryAttributesFormMetadataNumber as NumberMetadata,
+  CatalogueSubcategoryAttributesFormMetadataBoolean as BooleanMetadata,
   CatalogueSubcategoryAttributesFormMetadataSelect as SelectMetadata,
   CatalogueSubcategoryAttributesFormMetadataDate as DateMetadata,
 } from "#components"
@@ -19,6 +20,7 @@ const props = defineProps<Props>()
 const MetadataComponentMap: Partial<Record<AttributeType, DefineComponent>> = {
   [AttributeType.TEXT]: TextMetadata,
   [AttributeType.NUMBER]: NumberMetadata,
+  [AttributeType.BOOLEAN]: BooleanMetadata,
   [AttributeType.SELECT]: SelectMetadata,
   [AttributeType.MULTI_SELECT]: SelectMetadata,
   [AttributeType.DATE]: DateMetadata,
