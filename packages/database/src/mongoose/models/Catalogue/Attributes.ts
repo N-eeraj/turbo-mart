@@ -178,14 +178,14 @@ const ListTextOptionSchema = new mongoose.Schema({
   options: {
     type: [
       {
-        type: String,
-        required: true,
+        value: {
+          type: String,
+          default: undefined,
+        },
       }
     ],
     default: [],
   },
-}, {
-  _id: false,
 })
 
 /**
@@ -207,9 +207,7 @@ const ListNumberOptionSchema = new mongoose.Schema({
     ],
     default: [],
   },
-}, {
-  _id: false,
-})
+},)
 
 // handle the options schema based on the `type` discriminatorKey
 ListAttributeMetadataBaseSchema.discriminator(AttributeType.TEXT, ListTextOptionSchema)

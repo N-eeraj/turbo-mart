@@ -112,12 +112,14 @@ const booleanAttributeTypeMetadata = {
 const textTypeOptionsList = z.object({
   type: z.literal(AttributeType.TEXT),
   options: z.array(
-    z.string({ error: ATTRIBUTE.metadata.list.text.valid })
-      .nonempty({ error: ATTRIBUTE.metadata.list.text.valid })
-      .meta({
-        description: "Text value option for the list attribute types.",
-        example: "Android",
-      }),
+    z.object({
+      value: z.string({ error: ATTRIBUTE.metadata.list.text.valid })
+        .nonempty({ error: ATTRIBUTE.metadata.list.text.valid })
+        .meta({
+          description: "Text value option for the list attribute types.",
+          example: "Android",
+        })
+    }),
     { error: ATTRIBUTE.metadata.list.options.minLength }
   )
     .min(1, { error: ATTRIBUTE.metadata.list.options.minLength })
