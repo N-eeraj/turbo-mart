@@ -35,6 +35,7 @@ type DefaultSelectAttributeMetadataType<T extends AttributeType> = T extends Sel
  * |-----------------------|--------------------------------------|
  * | TEXT                  | TextAttributeMetadataSchema          |
  * | NUMBER                | NumberAttributeMetadataSchema        |
+ * | BOOLEAN               | BooleanAttributeMetadataSchema       |
  * | SELECT                | ListAttributeMetadataSchema          |
  * | MULTI_SELECT          | ListAttributeMetadataSchema          |
  * | DATE                  | DateAttributeMetadataSchema          |
@@ -45,6 +46,7 @@ export type AttributeMetadataSchemaType<
 > = 
   T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof TextAttributeMetadataSchema> :
   T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetadataSchema> :
+  T extends AttributeType.BOOLEAN ? mongoose.InferSchemaType<typeof BooleanAttributeMetadataSchema> :
   T extends SelectAttributeType ? ListAttributeMetadataSchemaType<LT> :
   T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetadataSchema> :
   never
