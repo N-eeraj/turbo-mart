@@ -113,7 +113,7 @@ watch(() => optionsType.value, () => {
           class="flex justify-between items-start gap-x-3 md:gap-x-4">
           <FormFieldInput
             v-if="optionsType === AttributeType.TEXT"
-            :name="`${field}[${index}].metadata.options[${optionIndex}]`"
+            :name="`${field}[${index}].metadata.options[${optionIndex}].value`"
             :placeholder="`Option ${optionIndex + 1}`"
             class="flex-1" />
           <div

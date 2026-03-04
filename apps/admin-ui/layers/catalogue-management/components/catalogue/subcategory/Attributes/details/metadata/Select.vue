@@ -17,7 +17,7 @@ const props = defineProps<Props>()
 
 const formattedOptions = computed(() => {
   if (props.metadata.type === AttributeType.TEXT) {
-    return props.metadata.options
+    return props.metadata.options.map(({ value }) => value)
   }
   return props.metadata.options
     .sort((a, b) => a.baseValue - b.baseValue)
