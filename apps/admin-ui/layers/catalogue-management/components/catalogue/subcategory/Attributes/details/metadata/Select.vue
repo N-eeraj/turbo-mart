@@ -3,17 +3,23 @@ import {
   AttributeType,
 } from "@app/database/mongoose/enums/catalogue/attribute"
 import {
+  type SelectAttributeType,
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
-type Metadata<T extends AttributeType.TEXT | AttributeType.NUMBER> = AttributeObject<AttributeType.SELECT | AttributeType.MULTI_SELECT, T>["metadata"]
-type TextMetadata = Metadata<AttributeType.TEXT>
-type NumberMetadata = Metadata<AttributeType.NUMBER>
+type Metadata<T extends SelectAttributeType, LT extends AttributeType.TEXT | AttributeType.NUMBER> = AttributeObject<T, LT>["metadata"]
+type TextMetadata<T extends SelectAttributeType> = Metadata<T, AttributeType.TEXT>
+type NumberMetadata<T extends SelectAttributeType> = Metadata<T, AttributeType.NUMBER>
 
-interface Props {
-  metadata: TextMetadata | NumberMetadata
+interface SelectProps {
+  type: AttributeType.SELECT
+  metadata: TextMetadata<AttributeType.SELECT> | NumberMetadata<AttributeType.SELECT>
 }
-const props = defineProps<Props>()
+interface MultiSelectProps {
+  type: AttributeType.MULTI_SELECT
+  metadata: TextMetadata<AttributeType.MULTI_SELECT> | NumberMetadata<AttributeType.MULTI_SELECT>
+}
+const props = defineProps<SelectProps | MultiSelectProps>()
 
 const formattedOptions = computed(() => {
   if (props.metadata.type === AttributeType.TEXT) {
@@ -47,6 +53,17 @@ const formattedOptions = computed(() => {
           {{ option }}
         </li>
       </ul>
+    </div>
+
+    <div
+      v-if="type === AttributeType.MULTI_SELECT"
+      class="text-xs">
+      <span class="text-foreground/75 font-semibold">
+        Separator:
+      </span>
+      <strong class="font-light">
+        {{ metadata.separator }}
+      </strong>
     </div>
   </div>
 </template>

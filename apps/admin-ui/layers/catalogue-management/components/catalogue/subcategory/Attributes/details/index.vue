@@ -66,6 +66,7 @@ const MetadataComponent = computed<DefineComponent | undefined>(() => MetadataCo
       </span>
       <MetadataComponent
         :metadata
+        :type
         class="shrink-0" />
     </div>
   </div>

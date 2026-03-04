@@ -159,7 +159,7 @@ export const ATTRIBUTE = {
         valid: "Please enter text for false value",
       },
     },
-    list: {
+    select: {
       required: "Please enter the required metadata",
       type: {
         required: "Please select a type",
@@ -183,6 +183,11 @@ export const ATTRIBUTE = {
       },
       options: {
         minLength: "Please add at least 1 option",
+      },
+    },
+    multiSelect: {
+      separator: {
+        required: "Please enter a separator",
       },
     },
     date: {

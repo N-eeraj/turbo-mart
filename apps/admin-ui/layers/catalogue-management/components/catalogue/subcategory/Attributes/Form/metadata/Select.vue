@@ -8,10 +8,14 @@ import {
 import {
   Label,
 } from "@/components/ui/label"
+import { 
+  type SelectAttributeMetadataType,
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface Props {
   field: "create" | "update"
   index: number
+  type: SelectAttributeMetadataType
 }
 const props = defineProps<Props>()
 
@@ -141,5 +145,11 @@ watch(() => optionsType.value, () => {
         </li>
       </ul>
     </div>
+
+    <FormFieldInput
+      :name="`${field}[${index}].metadata.separator`"
+      label="Separator"
+      placeholder="Text to join the values"
+      class="col-span-2" />
   </div>
 </template>
