@@ -9,17 +9,24 @@ export type SelectAttributeMetadataType = AttributeType.TEXT | AttributeType.NUM
 export type SelectAttributeType = AttributeType.SELECT | AttributeType.MULTI_SELECT
 type ItemsArray<T> = T extends mongoose.Types.DocumentArray<infer U> ? Array<U> : T
 
-type ListAttributeOptionSchema<T extends SelectAttributeMetadataType> = 
-  T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof ListTextOptionSchema> :
-  T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof ListNumberOptionSchema> :
+type SelectAttributeOptionSchema<T extends SelectAttributeMetadataType> = 
+  T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof SelectTextOptionSchema> :
+  T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof SelectNumberOptionSchema> :
   never
 
-export type ListAttributeMetadataSchemaType<T extends SelectAttributeMetadataType> = {
+export type SelectAttributeMetadataSchemaType<T extends SelectAttributeMetadataType> = {
   metadata: {
     type: T
-    options: ItemsArray<ListAttributeOptionSchema<T>["options"]>
+    options: ItemsArray<SelectAttributeOptionSchema<T>["options"]>
   }
 }
+
+export type MultiSelectAttributeMetadataSchemaType<T extends SelectAttributeMetadataType> =
+  SelectAttributeMetadataSchemaType<T> & {
+    metadata: {
+      separator: string
+    }
+  }
 
 type DefaultSelectAttributeMetadataType<T extends AttributeType> = T extends SelectAttributeType ? SelectAttributeMetadataType : never
 
@@ -36,8 +43,8 @@ type DefaultSelectAttributeMetadataType<T extends AttributeType> = T extends Sel
  * | TEXT                  | TextAttributeMetadataSchema          |
  * | NUMBER                | NumberAttributeMetadataSchema        |
  * | BOOLEAN               | BooleanAttributeMetadataSchema       |
- * | SELECT                | ListAttributeMetadataSchema          |
- * | MULTI_SELECT          | ListAttributeMetadataSchema          |
+ * | SELECT                | SelectAttributeMetadataSchema        |
+ * | MULTI_SELECT          | MultiSelectAttributeMetadataSchema   |
  * | DATE                  | DateAttributeMetadataSchema          |
  */
 export type AttributeMetadataSchemaType<
@@ -47,7 +54,8 @@ export type AttributeMetadataSchemaType<
   T extends AttributeType.TEXT ? mongoose.InferSchemaType<typeof TextAttributeMetadataSchema> :
   T extends AttributeType.NUMBER ? mongoose.InferSchemaType<typeof NumberAttributeMetadataSchema> :
   T extends AttributeType.BOOLEAN ? mongoose.InferSchemaType<typeof BooleanAttributeMetadataSchema> :
-  T extends SelectAttributeType ? ListAttributeMetadataSchemaType<LT> :
+  T extends AttributeType.SELECT ? SelectAttributeMetadataSchemaType<LT> :
+  T extends AttributeType.MULTI_SELECT ? MultiSelectAttributeMetadataSchemaType<LT> :
   T extends AttributeType.DATE ? mongoose.InferSchemaType<typeof DateAttributeMetadataSchema> :
   never
 
@@ -157,9 +165,9 @@ const BooleanAttributeMetadataSchema = new mongoose.Schema({
 })
 
 /**
- * Base mongoose schema for list attribute metadata.
+ * Base mongoose schema for select attribute metadata.
  */
-const ListAttributeMetadataBaseSchema = new mongoose.Schema({
+const SelectAttributeMetadataBaseSchema = new mongoose.Schema({
   type: {
     type: Number,
     enum: [
@@ -174,9 +182,9 @@ const ListAttributeMetadataBaseSchema = new mongoose.Schema({
 })
 
 /**
- * Mongoose schema for text options of list attribute.
+ * Mongoose schema for text options of select attribute.
  */
-const ListTextOptionSchema = new mongoose.Schema({
+const SelectTextOptionSchema = new mongoose.Schema({
   options: {
     type: [
       {
@@ -191,9 +199,9 @@ const ListTextOptionSchema = new mongoose.Schema({
 })
 
 /**
- * Mongoose schema for number options of list attribute.
+ * Mongoose schema for number options of select attribute.
  */
-const ListNumberOptionSchema = new mongoose.Schema({
+const SelectNumberOptionSchema = new mongoose.Schema({
   options: {
     type: [
       {
@@ -212,15 +220,34 @@ const ListNumberOptionSchema = new mongoose.Schema({
 },)
 
 // handle the options schema based on the `type` discriminatorKey
-ListAttributeMetadataBaseSchema.discriminator(AttributeType.TEXT, ListTextOptionSchema)
-ListAttributeMetadataBaseSchema.discriminator(AttributeType.NUMBER, ListNumberOptionSchema)
+SelectAttributeMetadataBaseSchema.discriminator(AttributeType.TEXT, SelectTextOptionSchema)
+SelectAttributeMetadataBaseSchema.discriminator(AttributeType.NUMBER, SelectNumberOptionSchema)
 
 /**
- * Mongoose schema for metadata of list attribute.
+ * Mongoose schema for metadata of select attribute.
  */
-const ListAttributeMetadataSchema = new mongoose.Schema({
+const SelectAttributeMetadataSchema = new mongoose.Schema({
   metadata: {
-    type: ListAttributeMetadataBaseSchema,
+    type: SelectAttributeMetadataBaseSchema,
+    required: true,
+  },
+}, {
+  _id: false,
+})
+
+const MultiSelectAttributeMetadataBaseSchema = SelectAttributeMetadataBaseSchema.clone()
+MultiSelectAttributeMetadataBaseSchema.add({
+  separator: {
+    type: String,
+    default: "",
+  },
+})
+/**
+ * Mongoose schema for metadata of multi-select attribute.
+ */
+const MultiSelectAttributeMetadataSchema = new mongoose.Schema({
+  metadata: {
+    type: MultiSelectAttributeMetadataBaseSchema,
     required: true,
   },
 }, {
@@ -278,8 +305,8 @@ const AttributeSchema = new mongoose.Schema({
 AttributeSchema.discriminator(AttributeType.TEXT, TextAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.NUMBER, NumberAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.BOOLEAN, BooleanAttributeMetadataSchema)
-AttributeSchema.discriminator(AttributeType.SELECT, ListAttributeMetadataSchema)
-AttributeSchema.discriminator(AttributeType.MULTI_SELECT, ListAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.SELECT, SelectAttributeMetadataSchema)
+AttributeSchema.discriminator(AttributeType.MULTI_SELECT, MultiSelectAttributeMetadataSchema)
 AttributeSchema.discriminator(AttributeType.DATE, DateAttributeMetadataSchema)
 
 /**

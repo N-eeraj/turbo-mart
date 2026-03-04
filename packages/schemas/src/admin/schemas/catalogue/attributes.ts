@@ -109,93 +109,113 @@ const booleanAttributeTypeMetadata = {
   })
 }
 
-const textTypeOptionsList = z.object({
+const textTypeSelectSchema = z.object({
   type: z.literal(AttributeType.TEXT),
   options: z.array(
     z.object({
-      value: z.string({ error: ATTRIBUTE.metadata.list.text.valid })
-        .nonempty({ error: ATTRIBUTE.metadata.list.text.valid })
+      value: z.string({ error: ATTRIBUTE.metadata.select.text.valid })
+        .nonempty({ error: ATTRIBUTE.metadata.select.text.valid })
         .meta({
-          description: "Text value option for the list attribute types.",
+          description: "Text value option for the select attribute types.",
           example: "Android",
         })
     }),
-    { error: ATTRIBUTE.metadata.list.options.minLength }
+    { error: ATTRIBUTE.metadata.select.options.minLength }
   )
-    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength })
+    .min(1, { error: ATTRIBUTE.metadata.select.options.minLength })
     .superRefine((options, ctx) => {
       options.forEach((option, index) => {
         if (options.filter((optionItem) => option === optionItem).length > 1) {
           ctx.addIssue({
             path: [index],
-            message: ATTRIBUTE.metadata.list.text.duplicate,
+            message: ATTRIBUTE.metadata.select.text.duplicate,
             code: "custom",
           })
         }
       })
     }),
 })
-const numberTypeOptionsList = z.object({
+const textTypeMultiSelectSchema = textTypeSelectSchema.extend({
+  separator: z.string({ error: ATTRIBUTE.metadata.multiSelect.separator.required })
+    .meta({
+      description: "The text used to separate the selected values",
+      example: ", ",
+    })
+})
+const numberTypeSelectSchema = z.object({
   type: z.literal(AttributeType.NUMBER),
   options: z.array(
     z.object({
-      label: z.string({ error: ATTRIBUTE.metadata.list.number.label.valid })
-        .nonempty({ error: ATTRIBUTE.metadata.list.number.label.valid })
+      label: z.string({ error: ATTRIBUTE.metadata.select.number.label.valid })
+        .nonempty({ error: ATTRIBUTE.metadata.select.number.label.valid })
         .meta({
           description: "The label for the option value.",
           example: "1 TB",
         }),
-      baseValue: z.number({ error: ATTRIBUTE.metadata.list.number.baseValue.valid })
-        .min(1, { error: ATTRIBUTE.metadata.list.number.baseValue.minValue })
+      baseValue: z.number({ error: ATTRIBUTE.metadata.select.number.baseValue.valid })
+        .min(1, { error: ATTRIBUTE.metadata.select.number.baseValue.minValue })
         .meta({
-          description: "The base value for the option in the number list attribute types.",
+          description: "The base value for the option in the number select attribute types.",
           example: 1024,
         }),
-    }, { error: ATTRIBUTE.metadata.list.number.required }),
-    { error: ATTRIBUTE.metadata.list.options.minLength }
+    }, { error: ATTRIBUTE.metadata.select.number.required }),
+    { error: ATTRIBUTE.metadata.select.options.minLength }
   )
-    .min(1, { error: ATTRIBUTE.metadata.list.options.minLength })
+    .min(1, { error: ATTRIBUTE.metadata.select.options.minLength })
     .superRefine((options, ctx) => {
       options.forEach(({ baseValue, label }, index) => {
         if (options.filter((option) => label === option.label).length > 1) {
           ctx.addIssue({
             path: [`${index}.label`],
-            message: ATTRIBUTE.metadata.list.number.label.duplicate,
+            message: ATTRIBUTE.metadata.select.number.label.duplicate,
             code: "custom",
           })
         }
         if (options.filter((option) => baseValue === option.baseValue).length > 1) {
           ctx.addIssue({
             path: [`${index}.baseValue`],
-            message: ATTRIBUTE.metadata.list.number.baseValue.duplicate,
+            message: ATTRIBUTE.metadata.select.number.baseValue.duplicate,
             code: "custom",
           })
         }
       })
     }),
 })
+const numberTypeMultiSelectSchema = numberTypeSelectSchema.extend({
+  separator: z.string({ error: ATTRIBUTE.metadata.multiSelect.separator.required })
+    .meta({
+      description: "The text used to separate the selected values",
+      example: ", ",
+    })
+})
 
-// combination of textTypeOptionsList and numberTypeOptionsList based on the type literal
-const listMetadata = z.discriminatedUnion("type", [
-  textTypeOptionsList,
-  numberTypeOptionsList,
-], { error: (issue) => {
-  if (!issue.input) return ATTRIBUTE.metadata.list.required
+function selectMetadataErrorHandler(issue: any) {
+  if (!issue.input) return ATTRIBUTE.metadata.select.required
   const validTypes = [
     AttributeType.TEXT,
     AttributeType.NUMBER,
   ]
-  const type = (issue.input as Record<"type", typeof validTypes[number]>).type
-  if (!type) return ATTRIBUTE.metadata.list.type.required
-  if (!validTypes.includes(type)) return ATTRIBUTE.metadata.list.type.valid
-}})
+  const type = (issue.input).type
+  if (!type) return ATTRIBUTE.metadata.select.type.required
+  if (!validTypes.includes(type)) return ATTRIBUTE.metadata.select.type.valid
+}
+// combination of textTypeSelectSchema and numberTypeSelectSchema based on the type literal
+const selectMetadata = z.discriminatedUnion("type", [
+  textTypeSelectSchema,
+  numberTypeSelectSchema,
+], { error: selectMetadataErrorHandler})
+const multiSelectMetadata = z.discriminatedUnion("type", [
+  textTypeMultiSelectSchema,
+  numberTypeMultiSelectSchema,
+], { error: selectMetadataErrorHandler})
+
 const selectAttributeTypeMetadata = {
   type: z.literal(AttributeType.SELECT),
-  metadata: listMetadata,
+  metadata: selectMetadata,
 }
 const multiSelectAttributeTypeMetadata = {
   type: z.literal(AttributeType.MULTI_SELECT),
-  metadata: listMetadata,
+  metadata: multiSelectMetadata,
 }
 
 const colorAttributeTypeMetadata = {
