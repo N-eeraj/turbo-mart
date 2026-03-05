@@ -44,7 +44,9 @@ const {
 function addOption() {
   optionPush(
     optionsType.value === AttributeType.TEXT
-      ? ""
+      ? {
+        value: "",
+      }
       : {
         label: "",
         baseValue: "",
@@ -115,6 +117,11 @@ watch(() => optionsType.value, () => {
           v-for="(option, optionIndex) in optionFields"
           :key="option.key"
           class="flex justify-between items-start gap-x-3 md:gap-x-4">
+          <FormFieldInput
+            v-if="option.value.id"
+            :name="`${field}[${index}].metadata.options[${optionIndex}].id`"
+            disabled
+            class="hidden" />
           <FormFieldInput
             v-if="optionsType === AttributeType.TEXT"
             :name="`${field}[${index}].metadata.options[${optionIndex}].value`"

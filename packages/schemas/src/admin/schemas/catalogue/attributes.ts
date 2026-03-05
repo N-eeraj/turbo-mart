@@ -113,6 +113,12 @@ const textTypeSelectSchema = z.object({
   type: z.literal(AttributeType.TEXT),
   options: z.array(
     z.object({
+      id: z.string()
+        .optional()
+        .meta({
+          description: "Option id.",
+          example: "01abcd091ab01a0123ab012a",
+        }),
       value: z.string({ error: ATTRIBUTE.metadata.select.text.valid })
         .nonempty({ error: ATTRIBUTE.metadata.select.text.valid })
         .meta({
@@ -146,6 +152,12 @@ const numberTypeSelectSchema = z.object({
   type: z.literal(AttributeType.NUMBER),
   options: z.array(
     z.object({
+      id: z.string()
+        .optional()
+        .meta({
+          description: "Option id.",
+          example: "01abcd091ab01a0123ab012a",
+        }),
       label: z.string({ error: ATTRIBUTE.metadata.select.number.label.valid })
         .nonempty({ error: ATTRIBUTE.metadata.select.number.label.valid })
         .meta({
