@@ -327,8 +327,18 @@ export function transformAttribute<
   variant,
   metadata,
 }: Attribute<T, LT>): AttributeObject<T, LT> {
-  if (metadata && "_doc" in metadata && metadata._doc && typeof metadata._doc === "object" && "_id" in metadata._doc) {
-    delete metadata._doc._id
+  let meta
+  if (metadata && typeof metadata === "object") {
+    meta = (metadata as any).toObject()
+    delete meta._id
+
+    if ("options" in meta) {
+      meta.options = meta.options
+        .map(({ _id, ...data }: object & { _id: string }) => ({
+          ...data,
+          id: _id,
+        }))
+    }
   }
 
   const attribute = {
@@ -337,7 +347,7 @@ export function transformAttribute<
     type,
     required,
     variant,
-    metadata,
+    metadata: meta,
   }
 
   return attribute as AttributeObject<T, LT>

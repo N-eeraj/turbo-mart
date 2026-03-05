@@ -485,7 +485,19 @@ export default class SubcategoryService extends BaseService {
         })
       
         for (let key in attribute) {
-          reduced.setObj[`attributes.$[${indexedKey}].${key}`] = attribute[key as keyof typeof attribute]
+          const attributeKey = key as keyof typeof attribute
+          if (
+            key === "metadata"
+            && (attribute.type === AttributeType.SELECT || attribute.type === AttributeType.MULTI_SELECT)
+            && typeof attribute[attributeKey] === "object"
+          ) {
+            (attribute[attributeKey] as any).options = (attribute[attributeKey] as any).options
+              .map(({ id, ...data }: object & { id: string }) => ({
+                ...data,
+                _id: id,
+              }))
+          }
+          reduced.setObj[`attributes.$[${indexedKey}].${key}`] = attribute[attributeKey]
         }
       
         return reduced
