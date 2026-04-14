@@ -40,6 +40,20 @@ const SKUSchema = new mongoose.Schema({
   strict: false,
 })
 
+const property = {
+  label: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+  },
+  value: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+  },
+  meta: {
+    type: mongoose.Schema.Types.Mixed,
+  },
+}
+
 /**
  * Mongoose schema for catalogue product.
  */
@@ -59,38 +73,43 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   attributes: {
-    type: [
-      {
-        attribute: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Attribute",
-          required: true,
+    type: {
+      properties: [
+        {
+          attribute: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Attribute",
+            required: true,
+          },
+          ...property,
         },
-        value: {
-          type: mongoose.Schema.Types.Mixed,
+      ],
+      variants: [
+        {
+          attribute: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Attribute",
+            required: true,
+          },
+          values: {
+            type: [
+              {
+                ...property,
+                slug: {
+                  type: String,
+                  required: true,
+                  lowercase: true,
+                },
+              }
+            ],
+          },
         },
-        variants: {
-          type: [
-            {
-              value: {
-                type: mongoose.Schema.Types.Mixed,
-                required: true,
-              },
-              slug: {
-                type: String,
-                required: true,
-                lowercase: true,
-              },
-            }
-          ],
-          default: undefined,
-        },
-      }
-    ],
+      ],
+    },
     default: undefined,
   },
   skuList: [
-    SKUSchema
+    SKUSchema,
   ],
 }, {
   timestamps: true,
@@ -128,19 +147,12 @@ export function transformProduct({
   createdAt,
   updatedAt,
 }: Product): ProductObject {
-  const _attributes = !attributes ? undefined : Object.fromEntries(
-    attributes.map(({ attribute, value, variants }) => ([
-      attribute,
-      value ? { value } : { variants },
-    ]))
-  )
-
   const product: ProductObject = {
     id: _id,
     subcategory,
     brand,
     name,
-    attributes: _attributes,
+    attributes,
     skuList,
     createdAt,
     updatedAt,
