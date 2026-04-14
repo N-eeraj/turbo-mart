@@ -39,6 +39,7 @@ const MetadataComponent = computed<DefineComponent | undefined>(() => MetadataCo
     <MetadataComponent
       :field
       :index
+      :type
       class="my-2 md:mb-0" />
   </div>
 </template>

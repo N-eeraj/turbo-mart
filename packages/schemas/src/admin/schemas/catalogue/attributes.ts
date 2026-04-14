@@ -143,6 +143,7 @@ const textTypeSelectSchema = z.object({
 })
 const textTypeMultiSelectSchema = textTypeSelectSchema.extend({
   separator: z.string({ error: ATTRIBUTE.metadata.multiSelect.separator.required })
+    .nonempty({ error: ATTRIBUTE.metadata.multiSelect.separator.required })
     .meta({
       description: "The text used to separate the selected values",
       example: ", ",
@@ -195,6 +196,7 @@ const numberTypeSelectSchema = z.object({
 })
 const numberTypeMultiSelectSchema = numberTypeSelectSchema.extend({
   separator: z.string({ error: ATTRIBUTE.metadata.multiSelect.separator.required })
+    .nonempty({ error: ATTRIBUTE.metadata.multiSelect.separator.required })
     .meta({
       description: "The text used to separate the selected values",
       example: ", ",
