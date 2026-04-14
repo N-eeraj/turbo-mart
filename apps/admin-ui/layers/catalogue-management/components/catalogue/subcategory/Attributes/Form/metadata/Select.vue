@@ -8,14 +8,11 @@ import {
 import {
   Label,
 } from "@/components/ui/label"
-import { 
-  type SelectAttributeMetadataType,
-} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface Props {
   field: "create" | "update"
   index: number
-  type: SelectAttributeMetadataType
+  type: AttributeType.SELECT | AttributeType.MULTI_SELECT
 }
 const props = defineProps<Props>()
 
@@ -154,6 +151,7 @@ watch(() => optionsType.value, () => {
     </div>
 
     <FormFieldInput
+      v-if="type === AttributeType.MULTI_SELECT"
       :name="`${field}[${index}].metadata.separator`"
       label="Separator"
       placeholder="Text to join the values"
