@@ -2,12 +2,16 @@
 import {
   type SelectItemProps,
 } from "reka-ui"
+import {
+  AttributeType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
 
 interface Props {
   field: "create" | "update"
   index: number
   attributeTypes: Array<SelectItemProps>
   isLoadingAttributeTypes: boolean
+  type: AttributeType
 }
 defineProps<Props>()
 
@@ -27,10 +31,12 @@ const emit = defineEmits<Emits>()
     placeholder="Attribute Type"
     :loading="isLoadingAttributeTypes" />
   <FormFieldCheckbox
+    v-if="type !== AttributeType.JSON"
     :name="`${field}[${index}].required`"
     label="Is a required attribute"
     class="py-2 md:order-2" />
   <FormFieldCheckbox
+    v-if="type !== AttributeType.JSON"
     :name="`${field}[${index}].variant`"
     label="Is a variant attribute"
     class="py-2 md:order-2" />
