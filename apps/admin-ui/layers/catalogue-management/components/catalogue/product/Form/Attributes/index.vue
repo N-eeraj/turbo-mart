@@ -16,7 +16,7 @@ const {
   <form
     v-else
     class="space-y-3">
-    <CatalogueProductFormAttributesBaseAttributes :attributes="subcategoryAttributesMap.base" />
-    <CatalogueProductFormAttributesVariantAttributes :attributes="subcategoryAttributesMap.variant" />
+    <CatalogueProductFormAttributesProperties :attributes="subcategoryAttributesMap.properties" />
+    <CatalogueProductFormAttributesVariants :attributes="subcategoryAttributesMap.variants" />
   </form>
 </template>

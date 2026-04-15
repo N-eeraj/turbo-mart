@@ -46,16 +46,16 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   const subcategoryAttributesMap = computed(() => {
     const attributesList: Array<AttributeObject<AttributeType>> = subcategoryAttributes.value ?? []
     const mappedAttributes = attributesList.reduce((
-      attributeMap: Record<"base" | "variant", Array<Omit<typeof attributesList[number], "variant">>>,
+      attributeMap: Record<"properties" | "variants", Array<Omit<typeof attributesList[number], "variant">>>,
       { variant, ...attribute }
     ) => {
-      const key: keyof typeof attributeMap = variant ? "variant" : "base"
+      const key: keyof typeof attributeMap = variant ? "variants" : "properties"
       attributeMap[key]
         .push(attribute)
       return attributeMap
     }, {
-      base: [],
-      variant: [],
+      properties: [],
+      variants: [],
     })
     return mappedAttributes
   })

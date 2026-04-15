@@ -19,7 +19,7 @@ defineProps<Props>()
   <section class="space-y-1.5">
     <div class="space-x-0.5">
       <strong class="text-sm">
-        Base Attributes
+        Properties
       </strong>
       <BaseTooltip>
         <Icon
@@ -36,9 +36,17 @@ defineProps<Props>()
 
     <ul class="grid md:grid-cols-2 gap-x-6 gap-y-4">
       <li
-        v-for="({ id, ...attribute }) in attributes"
+        v-for="({ id, name, type, required, metadata }) in attributes"
         :key="id as unknown as string">
-        {{ attribute }}
+        <FormFieldInput
+          :name="id as unknown as string"
+          :placeholder="`Enter ${name}`">
+          <template #label>
+            <FormLabel class="text-xs">
+              {{ name }}
+            </FormLabel>
+          </template>
+        </FormFieldInput>
       </li>
     </ul>
   </section>
