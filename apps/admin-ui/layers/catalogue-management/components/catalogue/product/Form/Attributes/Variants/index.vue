@@ -9,7 +9,7 @@ import {
 interface Props {
   attributes: Array<Omit<AttributeObject<AttributeType>, "variant">>
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 </script>
 
 <template>
@@ -33,9 +33,18 @@ defineProps<Props>()
 
     <ul class="space-y-2">
       <li
-        v-for="attribute in attributes"
+        v-for="(attribute, index) in attributes"
         :key="attribute.id as unknown as string">
-        {{ attribute }}
+        <span class="block mb-1.5 text-sm font-semibold">
+          {{ attribute.name }}
+        </span>
+        <FormFieldInput
+          :name="`variants[${index}].attribute`"
+          :value="attribute.id"
+          class="hidden" />
+        <CatalogueProductFormAttributesVariantsValues
+          :index
+          :attribute />
       </li>
     </ul>
   </section>

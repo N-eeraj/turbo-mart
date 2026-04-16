@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import {
-  FormLabel,
-} from "@/components/ui/form"
-import {
   AttributeType,
 } from "@app/database/mongoose/enums/catalogue/attribute"
 import {
@@ -36,17 +33,18 @@ defineProps<Props>()
 
     <ul class="grid md:grid-cols-2 gap-x-6 gap-y-4">
       <li
-        v-for="({ id, name, type, required, metadata }) in attributes"
-        :key="id as unknown as string">
+        v-for="(attribute, index) in attributes"
+        :key="attribute.id as unknown as string">
+        <span class="block mb-1.5 text-sm font-semibold">
+          {{ attribute.name }}
+        </span>
         <FormFieldInput
-          :name="id as unknown as string"
-          :placeholder="`Enter ${name}`">
-          <template #label>
-            <FormLabel class="text-xs">
-              {{ name }}
-            </FormLabel>
-          </template>
-        </FormFieldInput>
+          :name="`properties[${index}].attribute`"
+          :value="attribute.id"
+          class="hidden" />
+        <CatalogueProductFormAttributesValue
+          :field-base="`properties[${index}]`"
+          :attribute />
       </li>
     </ul>
   </section>

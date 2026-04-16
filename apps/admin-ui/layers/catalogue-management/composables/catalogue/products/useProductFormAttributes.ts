@@ -24,7 +24,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
       }
     }),
     {
-      transform: ({ data }) => data,
+      transform: ({ data }) => data as { subcategory: string },
     }
   )
   const isLoadingProductAttributes = computed(() => productAttributesStatus.value === "pending")
@@ -38,7 +38,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     () => useApi(`/admin/catalogue/subcategories/${productAttributes.value?.subcategory}/attributes`),
     {
       immediate: false,
-      transform: ({ data }) => data,
+      transform: ({ data }) => data as Array<AttributeObject<AttributeType>>,
     }
   )
   const isLoadingSubcategoryAttributes = computed(() => subcategoryAttributesStatus.value === "pending")
@@ -61,13 +61,29 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   })
 
   watch(() => productAttributes.value, (data) => {
-    console.log(data)
     fetchSubcategoryAttributes()
   })
+
+
+    const {
+      isSubmitting,
+      handleSubmit,
+    } = useForm({
+      initialValues: productAttributes.value,
+    })
+
+    const onSubmit = handleSubmit(async (data) => {
+      console.log(data)
+      try {
+        
+      } catch (error: unknown) {
+      }
+    })
 
   return {
     isLoadingProductAttributes,
     isLoadingSubcategoryAttributes,
     subcategoryAttributesMap,
+    onSubmit,
   }
 }
