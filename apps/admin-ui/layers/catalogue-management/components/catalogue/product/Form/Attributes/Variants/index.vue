@@ -43,7 +43,6 @@ const props = defineProps<Props>()
         </span>
         <FormFieldInput
           :name="`variants[${index}].attribute`"
-          :value="attribute.id"
           class="hidden" />
         <CatalogueProductFormAttributesVariantsValues
           :index

@@ -40,13 +40,18 @@ defineProps<Props>()
             *
           </span>
         </span>
-        <FormFieldInput
-          :name="`properties[${index}].attribute`"
-          :value="attribute.id"
-          class="hidden" />
-        <CatalogueProductFormAttributesValue
-          :field-base="`properties[${index}]`"
-          :attribute />
+
+        <div class="space-y-2">
+          <FormFieldInput
+            :name="`properties[${index}].attribute`"
+            class="hidden" />
+            <CatalogueProductFormAttributesValue
+            :field-name="`properties[${index}]`"
+            :attribute />
+            <CatalogueProductFormAttributesLabel
+            :label-name="`properties[${index}].label`"
+            :attribute />
+        </div>
       </li>
     </ul>
   </section>

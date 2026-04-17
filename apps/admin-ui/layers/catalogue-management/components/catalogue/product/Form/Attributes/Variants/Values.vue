@@ -19,7 +19,15 @@ const {
 } = useFieldArray(`variants[${props.index}].values`)
 
 function addVariant() {
-  variantPush({})
+  const hasLabel = ATTRIBUTES_WITH_LABEL_INPUT.includes(props.attribute.type)
+  const metaData = ATTRIBUTE_VALUE_META[props.attribute.type]
+
+  variantPush({
+    slug: "",
+    value: null,
+    ...(hasLabel ? { label: "" } : {}),
+    ...(metaData ? { meta: metaData } : {}),
+  })
 }
 </script>
 
@@ -53,8 +61,12 @@ function addVariant() {
           name="lucide:trash-2"
           class="text-destructive group-hover:text-destructive-foreground" />
       </BaseButton>
+
       <CatalogueProductFormAttributesValue
-        :field-base="`variants[${props.index}].values[${variantIndex}]`"
+        :field-name="`variants[${props.index}].values[${variantIndex}]`"
+        :attribute />
+      <CatalogueProductFormAttributesLabel
+        :label-name="`variants[${props.index}].values[${variantIndex}].label`"
         :attribute />
       <FormFieldInput
         :name="`variants[${props.index}].values[${variantIndex}].slug`"

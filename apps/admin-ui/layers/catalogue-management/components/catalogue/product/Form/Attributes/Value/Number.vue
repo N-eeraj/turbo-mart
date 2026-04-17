@@ -4,7 +4,7 @@ import type {
 } from "@/types/catalogueAttribute";
 
 interface Props {
-  name: string
+  fieldName: string
   attribute: AttributeObjectWithoutVariant
 }
 const props = defineProps<Props>()
@@ -17,7 +17,7 @@ const emit = defineEmits<Emits>()
 
 <template>
   <FormFieldInput
-    :name
+    :name="`${fieldName}.value`"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>
       <FormLabel class="text-xs font-medium text-muted-foreground">

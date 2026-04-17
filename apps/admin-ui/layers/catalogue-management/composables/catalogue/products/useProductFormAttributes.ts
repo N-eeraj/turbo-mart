@@ -9,6 +9,48 @@ interface EmitsParameter {
   submit: [unknown]
 }
 
+interface ProductInfo {
+  id: string
+  subcategory: string
+  attributes?: {
+    properties?: {
+      attribute: string
+      label?: string
+      value: unknown
+      meta: Record<string, unknown>
+    }
+    variants?: {
+      attribute: string
+      values: Array<{
+        label?: string
+        value: unknown
+        slug: string
+        meta: Record<string, unknown>
+      }>
+    }
+  }
+}
+
+
+export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
+  AttributeType.DATE
+]
+export const ATTRIBUTES_WITH_LABEL_INPUT: Array<AttributeType> = [
+  AttributeType.NUMBER,
+  AttributeType.COLOR,
+  ...ATTRIBUTES_WITH_READONLY_LABEL,
+] as const
+
+type AttributesWithMeta = AttributeType.NUMBER | AttributeType.DATE
+export const ATTRIBUTE_VALUE_META: Record<AttributesWithMeta, Record<string, any>> = {
+  [AttributeType.NUMBER]: {
+    unit: "",
+  },
+  [AttributeType.DATE]: {
+    format: "",
+  },
+} as const
+
 export default function useProductFormAttributes(emit: EmitsParameter) {
   const route = useRoute()
   const productId = computed(() => route.params?.id)
@@ -24,7 +66,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
       }
     }),
     {
-      transform: ({ data }) => data as { subcategory: string },
+      transform: ({ data }) => data as ProductInfo,
     }
   )
   const isLoadingProductAttributes = computed(() => productAttributesStatus.value === "pending")
@@ -73,23 +115,45 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
 
   watch(() => productAttributes.value, (data) => {
     fetchSubcategoryAttributes()
+    if (data?.attributes) {
+      setValues(data.attributes)
+    }
   })
 
+  watch(() => subcategoryAttributesMap.value, (data) => {
+    if (productAttributes.value?.attributes) return
+    setFieldValue("properties", data.properties.map(({ id, type }) => {
+      const hasLabel = ATTRIBUTES_WITH_LABEL_INPUT.includes(type)
+      const metaData = ATTRIBUTE_VALUE_META[type]
 
-    const {
-      isSubmitting,
-      handleSubmit,
-    } = useForm({
-      initialValues: productAttributes.value,
-    })
-
-    const onSubmit = handleSubmit(async (data) => {
-      console.log(data)
-      try {
-        
-      } catch (error: unknown) {
+      return {
+        attribute: id,
+        value: null,
+        ...(hasLabel ? { label: "" } : {}),
+        ...(metaData ? { meta: metaData } : {}),
       }
-    })
+    }))
+    setFieldValue("variants", data.variants.map(({ id }) => ({
+      attribute: id,
+      values: [],
+    })))
+  })
+
+  const {
+    isSubmitting,
+    handleSubmit,
+    setValues,
+    setFieldValue,
+  } = useForm({
+  })
+
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data)
+    try {
+      
+    } catch (error: unknown) {
+    }
+  })
 
   return {
     isLoadingProductAttributes,
