@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import {
-  AttributeType,
-} from "@app/database/mongoose/enums/catalogue/attribute"
-import {
-  type AttributeObject,
-} from "@app/database/mongoose/models/Catalogue/Attributes"
-import {
   FormLabel,
 } from "@/components/ui/form"
+import type {
+  AttributeObjectWithoutVariant,
+} from "@/types/catalogueAttribute"
 
 interface Props {
   index: number
-  attribute: Omit<AttributeObject<AttributeType>, "variant">
+  attribute: AttributeObjectWithoutVariant
 }
 const props = defineProps<Props>()
 
@@ -44,10 +41,12 @@ function addVariant() {
     class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 w-full">
     <li
       v-for="(variant, variantIndex) in variantFields"
+      :key="variantIndex"
       class="flex flex-col gap-y-3.5 px-3.5 pb-5 rounded-md outline outline-primary/25">
       <BaseButton
         variant="destructive"
         size="icon-sm"
+        type="button"
         class="group ml-auto bg-destructive/10 border border-destructive/25 translate-x-1.5 translate-y-2"
         @click="variantRemove(variantIndex)">
         <Icon

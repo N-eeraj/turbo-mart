@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import {
-  AttributeType,
-} from "@app/database/mongoose/enums/catalogue/attribute"
-import {
-  type AttributeObject,
-} from "@app/database/mongoose/models/Catalogue/Attributes"
+import type {
+  AttributeObjectWithoutVariant,
+} from "@/types/catalogueAttribute";
 
 interface Props {
-  attributes: Array<Omit<AttributeObject<AttributeType>, "variant">>
+  attributes: Array<AttributeObjectWithoutVariant>
 }
 const props = defineProps<Props>()
 </script>

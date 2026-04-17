@@ -45,13 +45,24 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
 
   const subcategoryAttributesMap = computed(() => {
     const attributesList: Array<AttributeObject<AttributeType>> = subcategoryAttributes.value ?? []
+    const lastRequiredAttributeIndices = {
+      properties: 0,
+      variants: 0,
+    }
     const mappedAttributes = attributesList.reduce((
       attributeMap: Record<"properties" | "variants", Array<Omit<typeof attributesList[number], "variant">>>,
       { variant, ...attribute }
     ) => {
       const key: keyof typeof attributeMap = variant ? "variants" : "properties"
-      attributeMap[key]
-        .push(attribute)
+
+      // move required attributes to top
+      if (attribute.required) {
+        attributeMap[key].splice(lastRequiredAttributeIndices[key], 0, attribute)
+        lastRequiredAttributeIndices[key] += 1
+      } else {
+        attributeMap[key].push(attribute)
+      }
+
       return attributeMap
     }, {
       properties: [],
