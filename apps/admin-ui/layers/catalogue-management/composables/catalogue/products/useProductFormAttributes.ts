@@ -121,10 +121,18 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   })
 
   watch(() => subcategoryAttributesMap.value, (data) => {
-    if (productAttributes.value?.attributes) return
-    setFieldValue("properties", data.properties.map(({ id, type }) => {
+    const {
+      properties: existingProperties,
+      variants: existingVariants,
+    } = productAttributes.value?.attributes ?? {}
+
+    const properties = data.properties.map(({ id, type }) => {
       const hasLabel = ATTRIBUTES_WITH_LABEL_INPUT.includes(type)
       const metaData = ATTRIBUTE_VALUE_META[type]
+
+      const existingPropertyValue = existingProperties
+        ?.find((property) => property.attribute === id)
+      if (existingPropertyValue) return existingPropertyValue
 
       return {
         attribute: id,
@@ -132,18 +140,29 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
         ...(hasLabel ? { label: "" } : {}),
         ...(metaData ? { meta: metaData } : {}),
       }
-    }))
-    setFieldValue("variants", data.variants.map(({ id }) => ({
-      attribute: id,
-      values: [],
-    })))
+    })
+
+    const variants = data.variants.map(({ id }) => {
+      const existingPropertyValue = existingVariants
+        ?.find((variant) => variant.attribute === id)
+      if (existingPropertyValue) return existingPropertyValue
+
+      return {
+        attribute: id,
+        values: [],
+      }
+    })
+
+    setValues({
+      properties,
+      variants,
+    })
   })
 
   const {
     isSubmitting,
     handleSubmit,
     setValues,
-    setFieldValue,
   } = useForm({
   })
 
