@@ -34,6 +34,7 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "@nuxt/icon",
     "pinia-plugin-persistedstate",
+    "@formkit/auto-animate/nuxt",
   ],
   css: [
     "~/assets/css/tailwind.css",

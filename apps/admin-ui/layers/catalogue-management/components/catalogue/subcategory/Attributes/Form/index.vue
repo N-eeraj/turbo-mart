@@ -18,7 +18,9 @@ const {
   <form
     class="flex flex-col gap-y-3"
     @submit="onSubmit">
-    <ul class="grid md:grid-cols-[repeat(auto-fill,minmax(440px,1fr))] gap-4">
+    <ul
+      v-auto-animate
+      class="grid md:grid-cols-[repeat(auto-fill,minmax(440px,1fr))] gap-4">
       <CatalogueSubcategoryAttributesFormContainer
         v-for="(field, index) in updateAttributeFields"
         :key="field.key"

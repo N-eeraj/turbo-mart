@@ -39,10 +39,21 @@ function addVariant() {
       class="text-primary" />
   </BaseButton>
 
-  <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 w-full">
-    <div
+  <ul
+    v-auto-animate
+    class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 w-full">
+    <li
       v-for="(variant, variantIndex) in variantFields"
-      class="flex flex-col gap-y-3.5 p-3.5 pb-5 rounded-md outline outline-primary/25">
+      class="flex flex-col gap-y-3.5 px-3.5 pb-5 rounded-md outline outline-primary/25">
+      <BaseButton
+        variant="destructive"
+        size="icon-sm"
+        class="group ml-auto bg-destructive/10 border border-destructive/25 translate-x-1.5 translate-y-2"
+        @click="variantRemove(variantIndex)">
+        <Icon
+          name="lucide:trash-2"
+          class="text-destructive group-hover:text-destructive-foreground" />
+      </BaseButton>
       <CatalogueProductFormAttributesValue
         :field-base="`variants[${props.index}].values[${variantIndex}]`"
         :attribute />
@@ -56,6 +67,6 @@ function addVariant() {
           </FormLabel>
         </template>
       </FormFieldInput>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
