@@ -19,8 +19,11 @@ const {
     v-else
     class="flex flex-col gap-y-3"
     @submit="onSubmit">
+    <hr />
     <CatalogueProductFormAttributesProperties :attributes="subcategoryAttributesMap.properties" />
+    <hr class="my-3" />
     <CatalogueProductFormAttributesVariants :attributes="subcategoryAttributesMap.variants" />
+    <hr />
     <BaseButton class="ml-auto">
       Submit
     </BaseButton>

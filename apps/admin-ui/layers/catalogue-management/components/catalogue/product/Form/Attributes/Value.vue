@@ -20,11 +20,6 @@ const showLabelField = computed(() => ATTRIBUTES_WITH_LABEL_INPUT.includes(props
 </script>
 
 <template>
-  <FormFieldInput
-    v-if="showLabelField"
-    :name="`${fieldBase}.label`"
-    placeholder="Label" />
-
   <!-- type based value fields -->
 
   <!-- type based meta fields -->
@@ -35,4 +30,16 @@ const showLabelField = computed(() => ATTRIBUTES_WITH_LABEL_INPUT.includes(props
   <template v-if="attribute.type === AttributeType.DATE">
     <!-- meta.format select field -->
   </template>
+
+  <FormFieldInput
+    v-if="showLabelField"
+    :name="`${fieldBase}.label`"
+    placeholder="Enter the label for this attribute"
+    class="gap-y-1.25 [&_input]:text-xs">
+    <template #label>
+      <FormLabel class="text-xs font-medium text-muted-foreground">
+        Label
+      </FormLabel>
+    </template>
+  </FormFieldInput>
 </template>

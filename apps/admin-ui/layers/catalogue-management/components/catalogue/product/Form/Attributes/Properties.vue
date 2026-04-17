@@ -15,7 +15,7 @@ defineProps<Props>()
 <template>
   <section class="space-y-1.5">
     <div class="space-x-0.5">
-      <strong class="text-sm">
+      <strong class="text-lg font-medium">
         Properties
       </strong>
       <BaseTooltip>
@@ -35,8 +35,13 @@ defineProps<Props>()
       <li
         v-for="(attribute, index) in attributes"
         :key="attribute.id as unknown as string">
-        <span class="block mb-1.5 text-sm font-semibold">
+        <span class="inline-block mb-1.5 text-sm font-semibold">
           {{ attribute.name }}
+          <span
+            v-if="attribute.required"
+            class="ml-1 text-red-500">
+            *
+          </span>
         </span>
         <FormFieldInput
           :name="`properties[${index}].attribute`"

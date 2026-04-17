@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 <template>
   <section class="space-y-1">
     <div class="space-x-0.5">
-      <strong class="text-sm">
+      <strong class="text-lg font-medium">
         Variant Attributes
       </strong>
       <BaseTooltip>
@@ -34,9 +34,15 @@ const props = defineProps<Props>()
     <ul class="space-y-2">
       <li
         v-for="(attribute, index) in attributes"
-        :key="attribute.id as unknown as string">
-        <span class="block mb-1.5 text-sm font-semibold">
+        :key="attribute.id as unknown as string"
+        class="flex items-baseline flex-wrap gap-x-2 gap-y-4">
+        <span class="flex-1 inline-block mb-1.5 text-sm font-semibold">
           {{ attribute.name }}
+          <span
+            v-if="attribute.required"
+            class="ml-1 text-red-500">
+            *
+          </span>
         </span>
         <FormFieldInput
           :name="`variants[${index}].attribute`"
