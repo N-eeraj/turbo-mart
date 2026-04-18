@@ -29,13 +29,6 @@ function addVariant() {
     ...(metaData ? { meta: metaData } : {}),
   })
 }
-
-const {
-  setFieldValue,
-} = useForm()
-function handleDerivedLabelUpdate(fieldName: string, value: string) {
-  setFieldValue(fieldName, value)
-}
 </script>
 
 <template>
@@ -69,12 +62,8 @@ function handleDerivedLabelUpdate(fieldName: string, value: string) {
           class="text-destructive group-hover:text-destructive-foreground" />
       </BaseButton>
 
-      <CatalogueProductFormAttributesValue
+      <CatalogueProductFormAttributesForm
         :field-name="`variants[${props.index}].values[${variantIndex}]`"
-        :attribute
-        @label-change="(label: string) => handleDerivedLabelUpdate(`variants[${props.index}].values[${variantIndex}].label`, label)" />
-      <CatalogueProductFormAttributesLabel
-        :label-name="`variants[${props.index}].values[${variantIndex}].label`"
         :attribute />
 
       <FormFieldInput

@@ -163,7 +163,12 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     isSubmitting,
     handleSubmit,
     setValues,
+    setFieldValue,
   } = useForm({
+  })
+
+  provide("product-form-attributes", {
+    setFieldValue,
   })
 
   const onSubmit = handleSubmit(async (data) => {

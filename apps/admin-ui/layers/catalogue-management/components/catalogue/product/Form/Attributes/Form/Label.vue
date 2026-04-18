@@ -4,7 +4,7 @@ import type {
 } from "@/types/catalogueAttribute";
 
 interface Props {
-  labelName: string
+  fieldName: string
   attribute: AttributeObjectWithoutVariant
 }
 const props = defineProps<Props>()
@@ -24,10 +24,11 @@ const labelFieldProps = computed(() => ({
     : undefined,
 }))
 </script>
+
 <template>
   <FormFieldInput
     v-if="showLabelField"
-    :name="labelName"
+    :name="`${fieldName}.label`"
     v-bind="labelFieldProps"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>
