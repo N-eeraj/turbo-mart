@@ -17,11 +17,10 @@ const {
 
   <form
     v-else
-    class="flex flex-col gap-y-3"
+    class="flex flex-col gap-y-6"
     @submit="onSubmit">
-    <hr />
     <CatalogueProductFormAttributesProperties :attributes="subcategoryAttributesMap.properties" />
-    <hr class="my-3" />
+    <hr />
     <CatalogueProductFormAttributesVariants :attributes="subcategoryAttributesMap.variants" />
     <hr />
     <BaseButton class="ml-auto">

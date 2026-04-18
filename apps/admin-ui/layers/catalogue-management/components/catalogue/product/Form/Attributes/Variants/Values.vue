@@ -29,6 +29,13 @@ function addVariant() {
     ...(metaData ? { meta: metaData } : {}),
   })
 }
+
+const {
+  setFieldValue,
+} = useForm()
+function handleDerivedLabelUpdate(fieldName: string, value: string) {
+  setFieldValue(fieldName, value)
+}
 </script>
 
 <template>
@@ -46,7 +53,7 @@ function addVariant() {
 
   <ul
     v-auto-animate
-    class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 w-full">
+    class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-6 w-full">
     <li
       v-for="(variant, variantIndex) in variantFields"
       :key="variantIndex"
@@ -55,7 +62,7 @@ function addVariant() {
         variant="destructive"
         size="icon-sm"
         type="button"
-        class="group ml-auto bg-destructive/10 border border-destructive/25 translate-x-1.5 translate-y-2"
+        class="group ml-auto bg-destructive/10 border border-destructive/25 translate-y-3.5"
         @click="variantRemove(variantIndex)">
         <Icon
           name="lucide:trash-2"
@@ -64,10 +71,12 @@ function addVariant() {
 
       <CatalogueProductFormAttributesValue
         :field-name="`variants[${props.index}].values[${variantIndex}]`"
-        :attribute />
+        :attribute
+        @label-change="(label: string) => handleDerivedLabelUpdate(`variants[${props.index}].values[${variantIndex}].label`, label)" />
       <CatalogueProductFormAttributesLabel
         :label-name="`variants[${props.index}].values[${variantIndex}].label`"
         :attribute />
+
       <FormFieldInput
         :name="`variants[${props.index}].values[${variantIndex}].slug`"
         placeholder="Enter a unique slug for this attribute"

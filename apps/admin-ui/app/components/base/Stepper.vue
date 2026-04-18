@@ -30,6 +30,8 @@ const emit = defineEmits<Emits>()
 
 const modelValue = defineModel<number>()
 
+const attributes = useAttrs()
+
 watch(() => modelValue.value, (value: number | undefined) => {
   emit("change", value)
 })
@@ -39,12 +41,13 @@ watch(() => modelValue.value, (value: number | undefined) => {
   <Stepper
     v-model="modelValue"
     as="ul"
-    :linear>
+    :linear
+    :class="attributes.class">
     <StepperItem
       v-for="({ title, indicator, description, disabled }, step) in steps"
       :step
       as="li"
-      class="relative">
+      class="relative flex-1 justify-center">
       <StepperTrigger
         class="cursor-pointer"
         :disabled>

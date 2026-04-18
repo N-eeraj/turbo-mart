@@ -7,6 +7,13 @@ interface Props {
   attributes: Array<AttributeObjectWithoutVariant>
 }
 defineProps<Props>()
+
+const {
+  setFieldValue,
+} = useForm()
+function handleDerivedLabelUpdate(fieldName: string, value: string) {
+  setFieldValue(fieldName, value)
+}
 </script>
 
 <template>
@@ -45,10 +52,11 @@ defineProps<Props>()
           <FormFieldInput
             :name="`properties[${index}].attribute`"
             class="hidden" />
-            <CatalogueProductFormAttributesValue
+          <CatalogueProductFormAttributesValue
             :field-name="`properties[${index}]`"
-            :attribute />
-            <CatalogueProductFormAttributesLabel
+            :attribute
+            @label-change="(label: string) => handleDerivedLabelUpdate(`properties[${index}].label`, label)" />
+          <CatalogueProductFormAttributesLabel
             :label-name="`properties[${index}].label`"
             :attribute />
         </div>

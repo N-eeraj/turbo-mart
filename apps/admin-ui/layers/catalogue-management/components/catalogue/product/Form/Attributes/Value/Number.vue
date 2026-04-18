@@ -13,6 +13,10 @@ interface Emits {
   labelChange: [string]
 }
 const emit = defineEmits<Emits>()
+
+function updateDerivedLabel() {
+  emit("labelChange", "Derived Label")
+}
 </script>
 
 <template>
@@ -26,5 +30,13 @@ const emit = defineEmits<Emits>()
     </template>
   </FormFieldInput>
 
-  <!-- meta.unit select field -->
+  <FormFieldInput
+    :name="`${fieldName}.meta.unit`"
+    class="gap-y-1.25 [&_input]:text-xs">
+    <template #label>
+      <FormLabel class="text-xs font-medium text-muted-foreground">
+        Unit
+      </FormLabel>
+    </template>
+  </FormFieldInput>
 </template>
