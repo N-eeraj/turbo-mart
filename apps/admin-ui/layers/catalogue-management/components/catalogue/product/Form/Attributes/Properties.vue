@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {
-  AttributeObjectWithoutVariant,
+  AttributeObjectWithoutVariant
 } from "@/types/catalogueAttribute";
 
 interface Props {

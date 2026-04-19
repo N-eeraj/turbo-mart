@@ -6,13 +6,18 @@ import type {
 interface Props {
   fieldName: string
   attribute: AttributeObjectWithoutVariant
+  isVariant?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  isVariant: false,
+})
 
 interface Emits {
   labelChange: [string]
 }
 const emit = defineEmits<Emits>()
+
+const attributeType = computed(() => props.isVariant ? "variant" : "property")
 
 function updateDerivedLabel() {
   emit("labelChange", "Derived Label")
@@ -22,16 +27,18 @@ function updateDerivedLabel() {
 <template>
   <FormFieldInput
     :name="`${fieldName}.value`"
+    :placeholder="`Enter the value for this ${attributeType}`"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>
-      <FormLabel class="text-xs font-medium text-muted-foreground">
-        Attribute Value
+      <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
+        {{ attributeType }} Value
       </FormLabel>
     </template>
   </FormFieldInput>
 
   <FormFieldInput
     :name="`${fieldName}.meta.format`"
+    :placeholder="`Select format for this ${attributeType}`"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>
       <FormLabel class="text-xs font-medium text-muted-foreground">

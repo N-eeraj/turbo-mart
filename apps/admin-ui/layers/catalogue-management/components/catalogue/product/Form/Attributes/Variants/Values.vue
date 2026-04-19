@@ -3,7 +3,7 @@ import {
   FormLabel,
 } from "@/components/ui/form"
 import type {
-  AttributeObjectWithoutVariant,
+  AttributeObjectWithoutVariant
 } from "@/types/catalogueAttribute"
 
 interface Props {
@@ -64,7 +64,8 @@ function addVariant() {
 
       <CatalogueProductFormAttributesForm
         :field-name="`variants[${props.index}].values[${variantIndex}]`"
-        :attribute />
+        :attribute
+        is-variant />
 
       <FormFieldInput
         :name="`variants[${props.index}].values[${variantIndex}].slug`"
@@ -72,7 +73,7 @@ function addVariant() {
         class="gap-y-1.25 [&_input]:text-xs">
         <template #label>
           <FormLabel class="text-xs font-medium text-muted-foreground">
-            Slug
+            Variant Slug
           </FormLabel>
         </template>
       </FormFieldInput>

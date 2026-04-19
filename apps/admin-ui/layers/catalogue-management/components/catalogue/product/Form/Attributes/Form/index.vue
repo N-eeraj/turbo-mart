@@ -19,8 +19,11 @@ import {
 interface Props {
   fieldName: string
   attribute: AttributeObjectWithoutVariant
+  isVariant?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  isVariant: false,
+})
 
 const VALUE_META_COMPONENT_MAP = {
   [AttributeType.TEXT]: CatalogueProductFormAttributesFormValueText,
@@ -47,9 +50,11 @@ function handleDerivedLabelUpdate(value: string) {
     :is="ValueMetaComponent"
     :field-name
     :attribute
+    :is-variant
     @label-change="handleDerivedLabelUpdate" />
 
   <CatalogueProductFormAttributesFormLabel
     :field-name
-    :attribute />
+    :attribute
+    :is-variant />
 </template>

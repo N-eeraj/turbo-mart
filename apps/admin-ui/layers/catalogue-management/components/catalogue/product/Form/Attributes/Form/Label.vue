@@ -6,16 +6,21 @@ import type {
 interface Props {
   fieldName: string
   attribute: AttributeObjectWithoutVariant
+  isVariant?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  isVariant: false,
+})
 
 const showLabelField = computed(() => ATTRIBUTES_WITH_LABEL_INPUT.includes(props.attribute.type))
 const isReadonlyLabelField = computed(() => ATTRIBUTES_WITH_READONLY_LABEL.includes(props.attribute.type))
 
+const attributeType = computed(() => props.isVariant ? "variant" : "property")
+
 const labelFieldProps = computed(() => ({
   placeholder: isReadonlyLabelField.value
-    ? "Label for this attribute"
-    : "Enter the label for this attribute",
+    ? `Label for this ${attributeType.value}`
+    : `Enter the label for this ${attributeType.value}`,
 
   readonly: isReadonlyLabelField.value,
 
@@ -32,8 +37,8 @@ const labelFieldProps = computed(() => ({
     v-bind="labelFieldProps"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>
-      <FormLabel class="text-xs font-medium text-muted-foreground">
-        Label
+      <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
+        {{ attributeType }} Label
       </FormLabel>
     </template>
   </FormFieldInput>
