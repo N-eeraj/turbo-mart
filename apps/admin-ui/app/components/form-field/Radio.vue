@@ -12,7 +12,7 @@ import type {
 } from "tailwind-merge"
 
 interface Option {
-  value: string | number
+  value: string
   label: string
 }
 

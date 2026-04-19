@@ -31,7 +31,6 @@ interface ProductInfo {
   }
 }
 
-
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
   AttributeType.DATE
 ]
@@ -40,8 +39,11 @@ export const ATTRIBUTES_WITH_LABEL_INPUT: Array<AttributeType> = [
   AttributeType.COLOR,
   ...ATTRIBUTES_WITH_READONLY_LABEL,
 ] as const
-
-type AttributesWithMeta = AttributeType.NUMBER | AttributeType.DATE
+export const ATTRIBUTE_WITH_META = [
+  AttributeType.NUMBER,
+  AttributeType.DATE,
+] as const
+export type AttributesWithMeta = typeof ATTRIBUTE_WITH_META[number]
 export const ATTRIBUTE_VALUE_META: Record<AttributesWithMeta, Record<string, any>> = {
   [AttributeType.NUMBER]: {
     unit: "",
@@ -160,6 +162,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   })
 
   const {
+    values,
     isSubmitting,
     handleSubmit,
     setValues,
@@ -168,6 +171,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   })
 
   provide("product-form-attributes", {
+    values,
     setFieldValue,
   })
 

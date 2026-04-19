@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import {
+  AttributeType,
+} from "@app/database/mongoose/enums/catalogue/attribute";
+import {
   FormLabel,
 } from "@/components/ui/form"
 import type {
@@ -13,6 +16,22 @@ interface Props {
 const props = defineProps<Props>()
 
 const {
+  values,
+} = inject("product-form-attributes")
+const variantValues = computed(() => values?.variants?.[props.index]?.values ?? [])
+const showAddVariant = computed(() => {
+  switch (props.attribute.type) {
+    case AttributeType.BOOLEAN:
+      return variantValues.value.length < 2
+    case AttributeType.SELECT:
+      if (!("options" in (props.attribute.metadata ?? {}))) return false
+      return variantValues.value.length < props.attribute.metadata.options.length
+    default:
+      return true
+  }
+})
+
+const {
   fields: variantFields,
   push: variantPush,
   remove: variantRemove,
@@ -20,7 +39,7 @@ const {
 
 function addVariant() {
   const hasLabel = ATTRIBUTES_WITH_LABEL_INPUT.includes(props.attribute.type)
-  const metaData = ATTRIBUTE_VALUE_META[props.attribute.type]
+  const metaData = ATTRIBUTE_WITH_META.includes(props.attribute.type) ? ATTRIBUTE_VALUE_META[props.attribute.type as AttributesWithMeta] : undefined
 
   variantPush({
     slug: "",
@@ -33,6 +52,7 @@ function addVariant() {
 
 <template>
   <BaseButton
+    v-if="showAddVariant"
     variant="outline"
     type="button"
     size="icon-sm"
@@ -69,7 +89,7 @@ function addVariant() {
 
       <FormFieldInput
         :name="`variants[${props.index}].values[${variantIndex}].slug`"
-        placeholder="Enter a unique slug for this attribute"
+        placeholder="Enter a unique slug for this variant"
         class="gap-y-1.25 [&_input]:text-xs">
         <template #label>
           <FormLabel class="text-xs font-medium text-muted-foreground">

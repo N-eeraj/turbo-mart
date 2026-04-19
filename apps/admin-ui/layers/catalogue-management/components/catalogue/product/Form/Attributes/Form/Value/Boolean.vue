@@ -13,17 +13,28 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const attributeType = computed(() => props.isVariant ? "variant" : "property")
+
+const options = [
+  {
+    label: "True",
+    value: "true",
+  },
+  {
+    label: "False",
+    value: "false",
+  },
+]
 </script>
 
 <template>
-  <FormFieldInput
+  <FormFieldRadio
     :name="`${fieldName}.value`"
-    :placeholder="`Enter the value for this ${attributeType}`"
-    class="gap-y-1.25 [&_input]:text-xs">
+    :options
+    radio-group-class="flex">
     <template #label>
       <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
         {{ attributeType }} Value
       </FormLabel>
     </template>
-  </FormFieldInput>
+  </FormFieldRadio>
 </template>
