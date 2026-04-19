@@ -33,13 +33,15 @@ const props = defineProps<Props>()
         v-for="(attribute, index) in attributes"
         :key="attribute.id as unknown as string"
         class="flex items-baseline flex-wrap gap-x-2 gap-y-4">
-        <span class="flex-1 inline-block mb-1.5 text-sm font-semibold">
+        <span class="inline-block mb-1.5 text-sm font-semibold">
           {{ attribute.name }}
-          <span
-            v-if="attribute.required"
-            class="ml-1 text-red-500">
-            *
-          </span>
+          <BaseTooltip tooltip="At least 1 variant is required">
+            <span
+              v-if="attribute.required"
+              class="ml-1 text-red-500">
+              *
+            </span>
+          </BaseTooltip>
         </span>
         <FormFieldInput
           :name="`variants[${index}].attribute`"

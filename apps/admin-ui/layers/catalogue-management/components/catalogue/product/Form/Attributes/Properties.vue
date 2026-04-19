@@ -34,11 +34,13 @@ defineProps<Props>()
         :key="attribute.id as unknown as string">
         <span class="inline-block mb-1.5 text-sm font-semibold">
           {{ attribute.name }}
-          <span
-            v-if="attribute.required"
-            class="ml-1 text-red-500">
-            *
-          </span>
+          <BaseTooltip tooltip="This property is required">
+            <span
+              v-if="attribute.required"
+              class="ml-1 text-red-500">
+              *
+            </span>
+          </BaseTooltip>
         </span>
 
         <div class="space-y-2">
