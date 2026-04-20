@@ -13,17 +13,30 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const attributeType = computed(() => props.isVariant ? "variant" : "property")
+
+const options = computed(() => (
+  props.attribute.metadata.options
+    .map(({ value, id }) => ({
+      textValue: value,
+      value: id,
+    }))
+))
 </script>
 
 <template>
-  <FormFieldInput
+  <FormFieldCombobox
     :name="`${fieldName}.value`"
-    :placeholder="`Enter the value for this ${attributeType}`"
-    class="gap-y-1.25 [&_input]:text-xs">
-    <template #label>
-      <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
-        {{ attributeType }} Value
-      </FormLabel>
+    :options
+    class="gap-y-1.25">
+    <template #trigger-value="{ selectedOptions, modelValue }">
+      <span class="text-xs">
+        {{ selectedOptions }}
+      </span>
     </template>
-  </FormFieldInput>
+    <template #placeholder>
+      <span class="text-xs text-muted-foreground">
+        Select the value for this {{ attributeType }}
+      </span>
+    </template>
+  </FormFieldCombobox>
 </template>
