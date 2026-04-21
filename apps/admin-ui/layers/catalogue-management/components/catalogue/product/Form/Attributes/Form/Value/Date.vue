@@ -31,16 +31,18 @@ function updateDerivedLabel() {
 </script>
 
 <template>
-  <FormFieldInput
-    :name="`${fieldName}.value`"
-    :placeholder="`Enter the value for this ${attributeType}`"
-    class="gap-y-1.25 [&_input]:text-xs">
+  <FormFieldDatePicker :name="`${fieldName}.value`">
     <template #label>
       <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
         {{ attributeType }} Value
       </FormLabel>
     </template>
-  </FormFieldInput>
+    <template #placeholder>
+      <span class="text-xs font-medium text-muted-foreground">
+        Enter the value for this {{ attributeType }}
+      </span>
+    </template>
+  </FormFieldDatePicker>
 
   <FormFieldInput
     :name="`${fieldName}.meta.format`"

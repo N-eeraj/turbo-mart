@@ -21,6 +21,15 @@ import type {
   ClassValue,
 } from "class-variance-authority/types"
 
+interface Props {
+  placeholder?: string
+  disabled?: boolean
+}
+withDefaults(defineProps<Props>(), {
+  placeholder: "Pick a date",
+  disabled: false,
+})
+
 const modelValue = defineModel<Date | string | null>()
 
 const attrs = useAttrs()
@@ -46,6 +55,7 @@ watch(() => date.value, (value: DateValue | undefined) => {
     <PopoverTrigger as-child>
       <BaseButton
         variant="outline"
+        :disabled
         :class="cn(
           'justify-start text-left font-normal',
           !modelValue && 'text-muted-foreground',
@@ -54,7 +64,18 @@ watch(() => date.value, (value: DateValue | undefined) => {
         <Icon
           name="lucide:calendar"
           class="mr-2" />
-        {{ modelValueDate ? df.format(modelValueDate) : "Pick a date" }}
+        <slot
+          v-if="modelValueDate"
+          name="value"
+          :model-value-date="modelValueDate"
+          :formatted-date="df.format(modelValueDate)">
+          {{ df.format(modelValueDate) }}
+        </slot>
+        <slot
+          v-else
+          name="placeholder">
+          {{ placeholder }}
+        </slot>
       </BaseButton>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">

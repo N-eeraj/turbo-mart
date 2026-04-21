@@ -55,7 +55,18 @@ const attrs = useAttrs()
               v-bind="componentField"
               :placeholder
               :disabled="disabled || readonly"
-              class="flex-1" />
+              class="flex-1">
+            <template #value="data">
+              <slot
+                name="value"
+                v-bind="data" />
+            </template>
+            <template #placeholder="data">
+              <slot
+                name="placeholder"
+                v-bind="data" />
+            </template>
+            </BaseDatePicker>
             <BaseButton
               variant="ghost"
               type="button"
