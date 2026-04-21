@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {
   AttributeType,
-} from "@app/database/mongoose/enums/catalogue/attribute";
+} from "@app/database/mongoose/enums/catalogue/attribute"
 import type {
   AttributeObjectWithoutVariant,
-} from "@/types/catalogueAttribute";
+} from "@/types/catalogueAttribute"
 import {
   CatalogueProductFormAttributesFormValueText,
   CatalogueProductFormAttributesFormValueNumber,

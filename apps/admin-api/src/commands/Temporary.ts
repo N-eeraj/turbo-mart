@@ -1,6 +1,8 @@
 import connectMongoDB from "@app/database/mongoose/connect"
 import Product from "@app/database/mongoose/models/Catalogue/Product"
-import { StorageUnits } from "@app/definitions/measurement/units"
+import {
+  StorageUnits,
+} from "@app/definitions/measurement/units"
 
 export default class Temporary {
   static async execute(..._args: Array<unknown>) {

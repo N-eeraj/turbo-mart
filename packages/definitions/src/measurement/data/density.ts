@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { DensityUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  DensityUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -22,7 +26,7 @@ export const convertDensity: ConversionFn<MeasurementType.DENSITY> = (from, to, 
   return (value * fromFactor) / toFactor
 }
 
-const DENSITY_UNITS: Record<DensityUnits, MeasurementUnitData<DensityUnits>> = {
+const DENSITY_UNITS: UnitsEnumMapValue<DensityUnits> = {
   [DensityUnits.KILOGRAM_PER_CUBIC_METER]: {
     name: "Kilogram per cubic meter",
     symbol: "kg/m³",

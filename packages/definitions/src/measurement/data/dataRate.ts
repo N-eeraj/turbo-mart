@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { DataRateUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  DataRateUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -24,7 +28,7 @@ export const convertDataRate: ConversionFn<MeasurementType.DATA_RATE> = (from, t
   return (value * fromFactor) / toFactor
 }
 
-const DATA_RATE_UNITS: Record<DataRateUnits, MeasurementUnitData<DataRateUnits>> = {
+const DATA_RATE_UNITS: UnitsEnumMapValue<DataRateUnits> = {
   [DataRateUnits.BITS_PER_SECOND]: {
     name: "Bits per second",
     symbol: "bps",

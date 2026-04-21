@@ -8,7 +8,7 @@ import {
 import {
   cn,
 } from "@/lib/utils"
-import Spinner from "~/components/ui/spinner/Spinner.vue";
+import Spinner from "~/components/ui/spinner/Spinner.vue"
 
 interface Props{
   metadata?: AttributeObject<AttributeType.NUMBER>["metadata"]

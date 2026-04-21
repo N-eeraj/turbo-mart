@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   AttributeType,
-} from "@app/database/mongoose/enums/catalogue/attribute";
+} from "@app/database/mongoose/enums/catalogue/attribute"
 import {
   FormLabel,
 } from "@/components/ui/form"

@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { VoltageUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  VoltageUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -22,7 +26,7 @@ export const convertVoltage: ConversionFn<MeasurementType.VOLTAGE> = (from, to, 
   return (value * fromFactor) / toFactor
 }
 
-const VOLTAGE_UNITS: Record<VoltageUnits, MeasurementUnitData<VoltageUnits>> = {
+const VOLTAGE_UNITS: UnitsEnumMapValue<VoltageUnits> = {
   [VoltageUnits.MILLIVOLT]: {
     name: "Millivolt",
     symbol: "mV",

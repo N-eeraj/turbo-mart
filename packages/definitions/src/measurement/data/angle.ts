@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { AngleUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  AngleUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -23,7 +27,7 @@ export const convertAngle: ConversionFn<MeasurementType.ANGLE> = (from, to, valu
   return (value * fromFactor) / toFactor
 }
 
-const ANGLE_UNITS: Record<AngleUnits, MeasurementUnitData<AngleUnits>> = {
+const ANGLE_UNITS: UnitsEnumMapValue<AngleUnits> = {
   [AngleUnits.DEGREE]: {
     name: "Degree",
     symbol: "°",

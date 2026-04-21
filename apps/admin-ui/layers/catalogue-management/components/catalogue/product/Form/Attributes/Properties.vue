@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type {
   AttributeObjectWithoutVariant
-} from "@/types/catalogueAttribute";
+} from "@/types/catalogueAttribute"
 
 interface Props {
   attributes: Array<AttributeObjectWithoutVariant>

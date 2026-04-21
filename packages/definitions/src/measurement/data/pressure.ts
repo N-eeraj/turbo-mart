@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { PressureUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  PressureUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -24,7 +28,7 @@ export const convertPressure: ConversionFn<MeasurementType.PRESSURE> = (from, to
   return (value * fromFactor) / toFactor
 }
 
-const PRESSURE_UNITS: Record<PressureUnits, MeasurementUnitData<PressureUnits>> = {
+const PRESSURE_UNITS: UnitsEnumMapValue<PressureUnits> = {
   [PressureUnits.PASCAL]: {
     name: "Pascal",
     symbol: "Pa",

@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { ResistanceUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  ResistanceUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -22,7 +26,7 @@ export const convertResistance: ConversionFn<MeasurementType.RESISTANCE> = (from
   return (value * fromFactor) / toFactor
 }
 
-const RESISTANCE_UNITS: Record<ResistanceUnits, MeasurementUnitData<ResistanceUnits>> = {
+const RESISTANCE_UNITS: UnitsEnumMapValue<ResistanceUnits> = {
   [ResistanceUnits.OHM]: {
     name: "Ohm",
     symbol: "Ω",

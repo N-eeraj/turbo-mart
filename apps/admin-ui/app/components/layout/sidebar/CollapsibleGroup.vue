@@ -10,7 +10,9 @@ import {
   SidebarGroupContent,
   SidebarMenu,
 } from "@/components/ui/sidebar"
-import type { NavigationGroup } from "@/types/sidebar"
+import type {
+  NavigationGroup,
+} from "@/types/sidebar"
 
 defineProps<NavigationGroup>()
 </script>

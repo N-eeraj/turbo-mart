@@ -1,5 +1,7 @@
 <script setup lang="ts" generic="TData, TValue">
-import type { ColumnDef } from "@tanstack/vue-table"
+import type {
+  ColumnDef,
+} from "@tanstack/vue-table"
 import {
   getCoreRowModel,
   useVueTable,

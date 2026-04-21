@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { PercentageUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  PercentageUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -21,7 +25,7 @@ export const convertPercentage: ConversionFn<MeasurementType.PERCENTAGE> = (from
   return (value * fromFactor) / toFactor
 }
 
-const PERCENTAGE_UNITS: Record<PercentageUnits, MeasurementUnitData<PercentageUnits>> = {
+const PERCENTAGE_UNITS: UnitsEnumMapValue<PercentageUnits> = {
   [PercentageUnits.PERCENT]: {
     name: "Percent",
     symbol: "%",

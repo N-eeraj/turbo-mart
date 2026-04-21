@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { AreaUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  AreaUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -28,7 +32,7 @@ export const convertArea: ConversionFn<MeasurementType.AREA> = (from, to, value)
   return (value * fromFactor) / toFactor
 }
 
-const AREA_UNITS: Record<AreaUnits, MeasurementUnitData<AreaUnits>> = {
+const AREA_UNITS: UnitsEnumMapValue<AreaUnits> = {
   [AreaUnits.SQUARE_MILLIMETER]: {
     name: "Square Millimeter",
     symbol: "mm²",

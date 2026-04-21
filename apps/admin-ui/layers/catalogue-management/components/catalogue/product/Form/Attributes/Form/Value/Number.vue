@@ -8,10 +8,12 @@ import {
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 import {
   MEASUREMENT_UNITS,
-} from "@app/definitions/measurement/index";
+} from "@app/definitions/measurement/index"
 import type {
+  MeasurementUnitEnumMap,
+  UnitsEnumMapValue,
   UnitsMap,
-} from "@app/definitions/measurement/types";
+} from "@app/definitions/measurement/types"
 
 interface Props {
   fieldName: string
@@ -27,23 +29,59 @@ interface Emits {
 }
 const emit = defineEmits<Emits>()
 
+type MeasurementUnitEnum = MeasurementUnitEnumMap[keyof MeasurementUnitEnumMap]
+
 const attributeType = computed(() => props.isVariant ? "variant" : "property")
-const unitOptions = computed(() => {
+const unitsMap = computed(() => {
   if (!props.attribute.metadata) return null
   const unitMeasurementType: MeasurementType = props.attribute.metadata.measurementType
   if (unitMeasurementType === MeasurementType.NUMBER) return null
   const unitsMap = MEASUREMENT_UNITS[unitMeasurementType as keyof UnitsMap]
-
-  return Object.entries(unitsMap)
+  return unitsMap
+})
+const unitOptions = computed(() => {
+  if (!unitsMap.value) return null
+  return Object.entries(unitsMap.value)
     .map(([value, { name, symbol }]) => ({
       value,
       textValue: `${name} (${symbol})`,
     }))
 })
 
-function updateDerivedLabel() {
-  emit("labelChange", "Derived Label")
-}
+const {
+  value,
+} = useField(`${props.fieldName}.value`)
+const {
+  value: metaUnit,
+} = useField(`${props.fieldName}.meta.unit`)
+
+watch(() => [
+  value.value,
+  metaUnit.value,
+], ([
+  value,
+  metaUnit,
+]) => {
+  // guard falsy value and metaUnit
+  if (
+    !unitsMap.value
+    ||
+    (value === '' || value == null)
+    ||
+    (metaUnit === '' || metaUnit == null)
+  ) return
+
+  const unitTypeValue = metaUnit as MeasurementUnitEnum
+  const unitMapValue = unitsMap.value as UnitsEnumMapValue<MeasurementUnitEnum>
+
+  const {
+    symbol,
+  } = unitMapValue[unitTypeValue]
+  emit("labelChange", `${value} ${symbol}`)
+}, {
+  deep: true,
+  immediate: true,
+})
 </script>
 
 <template>
