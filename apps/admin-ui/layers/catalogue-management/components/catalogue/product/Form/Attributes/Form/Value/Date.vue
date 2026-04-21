@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import type {
-  AttributeObjectWithoutVariant,
-} from "@/types/catalogueAttribute";
+import {
+  AttributeType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+import {
+  type AttributeObject,
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface Props {
   fieldName: string
-  attribute: AttributeObjectWithoutVariant
+  attribute: AttributeObject<AttributeType.DATE>
   isVariant?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {

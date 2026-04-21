@@ -1,39 +1,25 @@
 <script setup lang="ts">
-import type {
-  AttributeObjectWithoutVariant,
-} from "@/types/catalogueAttribute";
+import {
+  AttributeType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+import {
+  type AttributeObject,
+} from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface Props {
   fieldName: string
-  attribute: AttributeObjectWithoutVariant
+  attribute: AttributeObject<AttributeType.MULTI_SELECT>
   isVariant?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   isVariant: false,
 })
-
-const attributeType = computed(() => props.isVariant ? "variant" : "property")
-
-const options = computed(() => (
-  props.attribute.metadata.options
-    .map(({ label, id }) => ({
-      textValue: label,
-      value: id,
-    }))
-))
 </script>
 
 <template>
-  <FormFieldCombobox
-    :name="`${fieldName}.value`"
-    :options
-    multiple
-    class="gap-y-1.25">
-    <template #label>
-      <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
-        {{ attributeType }} Value
-      </FormLabel>
-    </template>
+  <CatalogueProductFormAttributesFormValueSelectBase
+    v-bind="props"
+    multiple>
     <template #trigger-value="{ selectedOptions, modelValue }">
       <span class="text-xs">
         <template v-if="(modelValue as Array<string>)?.length > 2">
@@ -44,10 +30,5 @@ const options = computed(() => (
         </template>
       </span>
     </template>
-    <template #placeholder>
-      <span class="text-xs text-muted-foreground">
-        Select the value for this {{ attributeType }}
-      </span>
-    </template>
-  </FormFieldCombobox>
+  </CatalogueProductFormAttributesFormValueSelectBase>
 </template>
