@@ -14,6 +14,7 @@ const envVariables = {
   ADMIN_PORT: "",
   ADMIN_API_URL: "",
   ADMIN_UI_URL: "",
+  ADMIN_REQUEST_PER_MINUTE: "",
   ENVIRONMENT: ENVIRONMENT.DEV,
   MYSQL_DB_URI: "",
   MONGODB_URI: "",

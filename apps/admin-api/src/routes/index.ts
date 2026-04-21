@@ -9,7 +9,7 @@ import docRoutes from "#docs/routes.ts"
 import StaticController from "#controllers/StaticController"
 import {
   ENVIRONMENT as ENVIRONMENT_VARIABLE,
-} from "#src/config/server.ts"
+} from "#config/server.ts"
 
 /**
  * Root application router.
