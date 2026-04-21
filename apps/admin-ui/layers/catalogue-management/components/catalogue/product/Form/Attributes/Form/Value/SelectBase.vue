@@ -5,6 +5,9 @@ import {
 import {
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
+import {
+  FormLabel,
+} from "@/components/ui/form"
 
 type SelectTypes = AttributeType.SELECT | AttributeType.MULTI_SELECT
 

@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "pinia-plugin-persistedstate",
     "@formkit/auto-animate/nuxt",
+    "nuxt-color-picker",
   ],
   css: [
     "~/assets/css/tailwind.css",

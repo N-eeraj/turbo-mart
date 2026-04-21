@@ -2,6 +2,9 @@
 import type {
   AttributeObjectWithoutVariant,
 } from "@/types/catalogueAttribute"
+import {
+  FormLabel,
+} from "@/components/ui/form"
 
 interface Props {
   fieldName: string
