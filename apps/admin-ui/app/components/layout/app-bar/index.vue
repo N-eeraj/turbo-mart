@@ -9,6 +9,7 @@ import {
     <SidebarTrigger class="md:invisible cursor-pointer" />
 
     <div class="flex items-center gap-x-2 md:gap-x-4">
+      <LayoutAppBarThemeToggle />
       <LayoutAppBarNotification />
       <LayoutAppBarProfile />
     </div>
