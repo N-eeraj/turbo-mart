@@ -35,19 +35,20 @@ function addKeyValuePair() {
       <span class="flex-1 inline-block">
         Value
       </span>
-      <BaseTooltip tooltip="Add new key value fields">
-        <BaseButton
-          variant="ghost"
-          type="button"
-          size="icon-sm"
-          class="size-9 ml-2 bg-primary/10! hover:bg-primary/20! border border-primary/30 duration-300"
-          @click="addKeyValuePair">
-          <Icon
-            name="material-symbols:add-rounded"
-            :size="18"
-            class="text-primary" />
-        </BaseButton>
-      </BaseTooltip>
+      <BaseButton
+        variant="ghost"
+        type="button"
+        size="icon-sm"
+        :tooltip="{
+          content: 'Add new key value fields',
+        }"
+        class="size-9 ml-2 bg-primary/10! hover:bg-primary/20! border border-primary/30 duration-300"
+        @click="addKeyValuePair">
+        <Icon
+          name="material-symbols:add-rounded"
+          :size="18"
+          class="text-primary" />
+      </BaseButton>
     </li>
 
     <li
@@ -62,20 +63,20 @@ function addKeyValuePair() {
         :name="`${fieldName}.value[${keyValueIndex}].value`"
         placeholder="Enter value"
         class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none" />
-      <BaseTooltip
-        tooltip="Remove this key value fields"
-        color="destructive">
-        <BaseButton
-          variant="destructive"
-          type="button"
-          size="icon-sm"
-          class="size-7 ml-2 bg-destructive/10! hover:bg-destructive/20! border border-destructive/30 duration-400"
-          @click="keyValueRemove(keyValueIndex)">
-          <Icon
-            name="ic:round-minus"
-            class="text-destructive" />
-        </BaseButton>
-      </BaseTooltip>
+      <BaseButton
+        variant="destructive"
+        type="button"
+        size="icon-sm"
+        :tooltip="{
+          content: 'Remove this key value fields',
+          color: 'destructive',
+        }"
+        class="size-7 ml-2 bg-destructive/10! hover:bg-destructive/20! border border-destructive/30 duration-400"
+        @click="keyValueRemove(keyValueIndex)">
+        <Icon
+          name="ic:round-minus"
+          class="text-destructive" />
+      </BaseButton>
     </li>
   </ul>
 </template>

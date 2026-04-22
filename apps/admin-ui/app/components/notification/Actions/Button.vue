@@ -43,22 +43,22 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <BaseTooltip
-    :tooltip
-    :color>
-    <BaseButton
-      variant="ghost"
+  <BaseButton
+    variant="ghost"
+    :tooltip="{
+      content: tooltip,
+      color,
+    }"
+    :class="cn(
+      'group size-7 md:size-9 p-0 rounded-full duration-200',
+      classes.trigger,
+    )"
+    @click="emit('click')">
+    <Icon
+      :name="icon"
       :class="cn(
-        'group size-7 md:size-9 p-0 rounded-full duration-200',
-        classes.trigger,
-      )"
-      @click="emit('click')">
-      <Icon
-        :name="icon"
-        :class="cn(
-          'text-lg md:text-xl',
-          classes.icon,
-        )" />
-    </BaseButton>
-  </BaseTooltip>
+        'text-lg md:text-xl',
+        classes.icon,
+      )" />
+  </BaseButton>
 </template>

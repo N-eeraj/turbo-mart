@@ -67,16 +67,17 @@ const actions = computed(() => ([
       v-for="({ name, isVisible, tooltip, button, icon, onClick }) in actions"
       :name
       :is-visible>
-      <BaseTooltip
+      <BaseButton
         v-if="isVisible"
-        v-bind="tooltip">
-        <BaseButton
-          v-bind="button"
-          size="icon"
-          @click="onClick">
-          <Icon :name="icon" />
-        </BaseButton>
-      </BaseTooltip>
+        v-bind="button"
+        size="icon"
+        :tooltip="{
+          content: tooltip.tooltip,
+          color: tooltip.color,
+        }"
+        @click="onClick">
+        <Icon :name="icon" />
+      </BaseButton>
     </slot>
   </div>
 </template>

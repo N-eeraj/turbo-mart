@@ -7,11 +7,14 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
+import type {
+  EmptyMediaVariant,
+} from "@/types/base"
 
 interface Props {
   title?: string
   description?: string
-  mediaVariant?: "default" | "icon" | null | undefined
+  mediaVariant?: EmptyMediaVariant
 }
 defineProps<Props>()
 </script>
