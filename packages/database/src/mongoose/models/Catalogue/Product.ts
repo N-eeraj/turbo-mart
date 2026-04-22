@@ -41,13 +41,12 @@ const SKUSchema = new mongoose.Schema({
 })
 
 const property = {
-  label: {
-    type: mongoose.Schema.Types.String,
-    required: true,
-  },
   value: {
     type: mongoose.Schema.Types.Mixed,
     required: true,
+  },
+  label: {
+    type: mongoose.Schema.Types.String,
   },
   meta: {
     type: mongoose.Schema.Types.Mixed,

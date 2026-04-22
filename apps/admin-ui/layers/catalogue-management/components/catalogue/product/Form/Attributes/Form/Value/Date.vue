@@ -88,6 +88,7 @@ watch(() => formattedDate.value, (formattedDate) => {
   </FormFieldDatePicker>
 
   <FormFieldSelect
+    :key="value"
     :name="`${fieldName}.meta.format`"
     :placeholder="`Select format for this ${attributeType}`"
     :options="formatOptions"
