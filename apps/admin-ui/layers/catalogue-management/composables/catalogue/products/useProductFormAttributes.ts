@@ -65,7 +65,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     () => useApi(`/admin/catalogue/products/${productId.value}`, {
       query: {
         fields: "attributes",
-      }
+      },
     }),
     {
       transform: ({ data }) => data as ProductInfo,

@@ -5,31 +5,77 @@ import {
 import {
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
-import {
-  FormLabel,
-} from "@/components/ui/form"
 
 interface Props {
   fieldName: string
   attribute: AttributeObject<AttributeType.JSON>
-  isVariant?: boolean
 }
-const props = withDefaults(defineProps<Props>(), {
-  isVariant: false,
-})
+const props = defineProps<Props>()
 
-const attributeType = computed(() => props.isVariant ? "variant" : "property")
+const {
+  fields: keyValueFields,
+  push: keyValuePush,
+  remove: keyValueRemove,
+} = useFieldArray<{ key: string, value: string }>(`${props.fieldName}.value`)
+
+function addKeyValuePair() {
+  keyValuePush({
+    key: "",
+    value: "",
+  })
+}
 </script>
 
 <template>
-  <FormFieldInput
-    :name="`${fieldName}.value`"
-    :placeholder="`Enter the value for this ${attributeType}`"
-    class="gap-y-1.25 [&_input]:text-xs">
-    <template #label>
-      <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
-        {{ attributeType }} Value
-      </FormLabel>
-    </template>
-  </FormFieldInput>
+  <ul>
+    <li class="flex items-baseline mb-2 text-[13px] font-medium text-muted-foreground">
+      <span class="flex-1 inline-block">
+        Key Name
+      </span>
+      <span class="flex-1 inline-block">
+        Value
+      </span>
+      <BaseTooltip tooltip="Add new key value fields">
+        <BaseButton
+          variant="ghost"
+          type="button"
+          size="icon-sm"
+          class="size-9 ml-2 bg-primary/10! hover:bg-primary/20! border border-primary/30 duration-300"
+          @click="addKeyValuePair">
+          <Icon
+            name="material-symbols:add-rounded"
+            :size="18"
+            class="text-primary" />
+        </BaseButton>
+      </BaseTooltip>
+    </li>
+
+    <li
+      v-for="(keyValue, keyValueIndex) in keyValueFields"
+      :key="keyValue.key"
+      class="flex justify-between items-center">
+      <FormFieldInput
+        :name="`${fieldName}.value[${keyValueIndex}].key`"
+        placeholder="Enter key name"
+        class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none" />
+      <FormFieldInput
+        :name="`${fieldName}.value[${keyValueIndex}].value`"
+        placeholder="Enter value"
+        class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none" />
+      <BaseTooltip
+        tooltip="Remove this key value fields"
+        color="destructive">
+        <BaseButton
+          variant="destructive"
+          type="button"
+          size="icon-sm"
+          class="size-7 ml-2 bg-destructive/10! hover:bg-destructive/20! border border-destructive/30 duration-400"
+          @click="keyValueRemove(keyValueIndex)">
+          <Icon
+            name="ic:round-minus"
+            class="text-destructive" />
+        </BaseButton>
+      </BaseTooltip>
+    </li>
+  </ul>
 </template>
