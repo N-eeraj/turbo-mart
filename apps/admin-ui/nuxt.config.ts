@@ -34,6 +34,7 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "@nuxt/icon",
     "pinia-plugin-persistedstate",
+    "@nuxtjs/color-mode",
   ],
   css: [
     "~/assets/css/tailwind.css",
