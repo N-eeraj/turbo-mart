@@ -82,7 +82,7 @@ function addVariant() {
           variant="destructive"
           size="icon-sm"
           type="button"
-          class="group ml-auto bg-destructive/10 border border-destructive/25 translate-y-3.5"
+          class="group ml-auto bg-destructive/10! hover:bg-destructive! border border-destructive/25 translate-y-3.5"
           @click="variantRemove(variantIndex)">
           <Icon
             name="lucide:trash-2"

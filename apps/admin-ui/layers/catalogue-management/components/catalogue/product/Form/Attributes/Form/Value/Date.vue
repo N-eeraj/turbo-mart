@@ -6,6 +6,11 @@ import {
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 import {
+  DATE_FORMATS,
+  type DateFormatMap,
+  type DateFormats,
+} from "@app/definitions/date"
+import {
   FormLabel,
 } from "@/components/ui/form"
 
@@ -25,9 +30,47 @@ const emit = defineEmits<Emits>()
 
 const attributeType = computed(() => props.isVariant ? "variant" : "property")
 
-function updateDerivedLabel() {
-  emit("labelChange", "Derived Label")
+const formatOptions = computed(() => {
+  return Object.entries(DATE_FORMATS)
+    .map(([value, format]) => ({
+      value,
+      textValue: format,
+    }))
+})
+
+const {
+  value,
+} = useField<string>(`${props.fieldName}.value`)
+const {
+  value: metaFormat,
+} = useField(`${props.fieldName}.meta.format`)
+
+function getFormattedDate(
+  format: DateFormatMap[DateFormats],
+  date = new Date(),
+): string {
+  return useDateFormat(date, format).value
 }
+
+const formattedDate = computed(() => {
+  if (
+    (value.value === '' || value.value == null)
+    ||
+    (metaFormat.value === '' || metaFormat.value == null)
+  ) return
+
+  const format = DATE_FORMATS[metaFormat.value as DateFormats]
+  const formattedDate = getFormattedDate(format, new Date(value.value))
+  return formattedDate
+})
+
+watch(() => formattedDate.value, (formattedDate) => {
+  if (formattedDate) {
+    emit("labelChange", formattedDate)
+  }
+}, {
+  immediate: true,
+})
 </script>
 
 <template>
@@ -44,14 +87,31 @@ function updateDerivedLabel() {
     </template>
   </FormFieldDatePicker>
 
-  <FormFieldInput
+  <FormFieldSelect
     :name="`${fieldName}.meta.format`"
     :placeholder="`Select format for this ${attributeType}`"
-    class="gap-y-1.25 [&_input]:text-xs">
+    :options="formatOptions"
+    class="gap-y-1.25 [&_button]:text-xs">
     <template #label>
-      <FormLabel class="text-xs font-medium text-muted-foreground">
-        Format
+      <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
+        {{ attributeType }} Date format
       </FormLabel>
     </template>
-  </FormFieldInput>
+
+    <template #option="{ value: optionValue }">
+      <span class="text-xs font-medium">
+        {{ DATE_FORMATS[optionValue as DateFormats] }}
+      </span>
+      <small
+        v-if="value"
+        class="text-muted-foreground">
+        ({{ getFormattedDate(DATE_FORMATS[optionValue as DateFormats], value) }})
+      </small>
+      <small
+        v-else
+        class="text-muted-foreground/80">
+        ({{ getFormattedDate(DATE_FORMATS[optionValue as DateFormats]) }})
+      </small>
+    </template>
+  </FormFieldSelect>
 </template>

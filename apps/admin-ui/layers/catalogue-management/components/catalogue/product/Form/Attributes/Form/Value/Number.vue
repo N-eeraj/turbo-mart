@@ -35,6 +35,7 @@ const emit = defineEmits<Emits>()
 type MeasurementUnitEnum = MeasurementUnitEnumMap[keyof MeasurementUnitEnumMap]
 
 const attributeType = computed(() => props.isVariant ? "variant" : "property")
+
 const unitsMap = computed(() => {
   if (!props.attribute.metadata) return null
   const unitMeasurementType: MeasurementType = props.attribute.metadata.measurementType
@@ -104,7 +105,7 @@ watch(() => [
     :name="`${fieldName}.meta.unit`"
     :placeholder="`Select unit for this ${attributeType}`"
     :options="unitOptions"
-    class="gap-y-1.25 [&_input]:text-xs">
+    class="gap-y-1.25 [&_button]:text-xs">
     <template #label>
       <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
         {{ attributeType }} Unit
