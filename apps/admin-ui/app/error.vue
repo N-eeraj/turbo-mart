@@ -3,6 +3,11 @@ import type {
   NuxtError,
 } from "#app"
 
+interface Props {
+  error: NuxtError
+}
+defineProps<Props>()
+
 useHead({
   title: "TurboMart | Admin",
   link: [
@@ -12,10 +17,6 @@ useHead({
     },
   ],
 })
-
-defineProps<{
-  error: NuxtError
-}>()
 </script>
 
 <template>

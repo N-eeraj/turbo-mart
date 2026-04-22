@@ -5,6 +5,10 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
+
+const {
+  appLogo,
+} = useTheme()
 </script>
 
 <template>
@@ -18,7 +22,7 @@ import {
             size="lg"
             class="cursor-pointer">
             <img
-              src="/images/admin-logo-white.svg"
+              :src="appLogo"
               alt="Turbo Mart Admin Logo"
               class="size-full max-w-12 md:max-w-10" />
             <div class="grid flex-1 text-left text-sm leading-tight">

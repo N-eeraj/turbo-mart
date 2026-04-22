@@ -4,12 +4,6 @@ import {
 } from "@/components/ui/sonner"
 import "vue-sonner/style.css"
 
-const {
-  error,
-  pending,
-  refresh,
-} = useInitialLoad()
-
 useHead({
   title: "TurboMart | Admin",
   link: [
@@ -19,6 +13,12 @@ useHead({
     },
   ],
 })
+
+const {
+  error,
+  pending,
+  refresh,
+} = useInitialLoad()
 </script>
 
 <template>
