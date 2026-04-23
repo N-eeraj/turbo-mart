@@ -15,6 +15,7 @@ import {
   transformAttribute,
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
+import Product from "@app/database/mongoose/models/Catalogue/Product"
 
 import BaseService from "#services/BaseService"
 import {
@@ -327,6 +328,20 @@ export default class SubcategoryService extends BaseService {
    * @throws If deleting the subcategory failed.
    */
   static async delete(subcategoryId: SubcategoryObject["id"]): Promise<void> {
+    const hasLinkedProduct = await Product.findOne({
+      subcategory: subcategoryId,
+    })
+      .lean()
+      .select({ _id: 1 })
+
+    // throw not conflict error if a linked product exists
+    if (hasLinkedProduct) {
+      throw {
+        status: 409,
+        message: "Cannot delete: Product with this subcategory exists",
+      }
+    }
+
     const subcategory = await Subcategory.findByIdAndDelete(subcategoryId)
 
     // throw not found error if subcategory is not found

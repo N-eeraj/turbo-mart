@@ -511,6 +511,15 @@ export default class ProductService extends BaseService {
     }
     const productDetails = getBasicDetails(productById)
 
+    const isAttributesConfigured = !!productById.attributes
+    const isAttributeChanged = String(productDetails.subcategory) !== String(product.subcategory)
+    if (isAttributeChanged && isAttributesConfigured) {
+      throw {
+        status: 400,
+        message: "Cannot change the subcategory, the attributes are already configured",
+      }
+    }
+
     // ensure given brand and subcategory exist when given
     if (product.brand) {
       await this.ensureBrand(product.brand)
