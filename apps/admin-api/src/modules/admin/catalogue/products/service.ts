@@ -501,7 +501,32 @@ export default class ProductService extends BaseService {
     productId: ProductObject["id"],
     product: ParsedProductUpsertData<ProductUpdateData>
   ): Promise<ProductBasicDetails> {
-    const productById = await Product.findById(productId)
+    const [productById = {}] = await Product.aggregate([
+      {
+        $match: {
+          _id: productId,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          subcategory: 1,
+          brand: 1,
+          name: 1,
+          isAttributesConfigured: {
+            $gt: [
+              {
+                $size: {
+                  $objectToArray: "$attributes",
+                }
+              },
+              0
+            ],
+          },
+        },
+      },
+    ])
+
     // throw error if product is not found
     if (!productById) {
       throw {
@@ -511,9 +536,8 @@ export default class ProductService extends BaseService {
     }
     const productDetails = getBasicDetails(productById)
 
-    const isAttributesConfigured = !!productById.attributes
     const isAttributeChanged = String(productDetails.subcategory) !== String(product.subcategory)
-    if (isAttributeChanged && isAttributesConfigured) {
+    if (isAttributeChanged && productById.isAttributesConfigured) {
       throw {
         status: 400,
         message: "Cannot change the subcategory, the attributes are already configured",
