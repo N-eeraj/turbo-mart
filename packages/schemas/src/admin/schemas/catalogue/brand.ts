@@ -15,6 +15,9 @@ export const brandCreationSchema = z.object({
   slug: z.string({ error: BRAND.slug.required })
     .nonempty(BRAND.slug.required)
     .trim()
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: BRAND.slug.valid,
+    })
     .meta({
       description: "Unique and short name (slug) of the brand.",
       example: "apl",

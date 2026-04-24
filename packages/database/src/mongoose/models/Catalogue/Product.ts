@@ -8,7 +8,7 @@ export type InferredProductSchemaType = mongoose.InferSchemaType<typeof ProductS
 export type Product = mongoose.HydratedDocument<InferredProductSchemaType>
 export type ObjectKeys = keyof InferredProductSchemaType
 export type ProductObject = Pick<Product, ObjectKeys> & { id: Product["_id"] }
-export type ProductBasicDetails = Pick<ProductObject, "id" | "subcategory" | "brand" | "name">
+export type ProductBasicDetails = Pick<ProductObject, "id" | "subcategory" | "brand" | "name" | "slug">
 export type ProductAttributes = Pick<ProductObject, "id" | "attributes" | "subcategory">
 export type ProductVariants = Pick<ProductObject, "id" | "skuList">
 
@@ -71,6 +71,10 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    required: true,
+  },
   attributes: {
     type: {
       properties: [
@@ -116,7 +120,6 @@ const ProductSchema = new mongoose.Schema({
 
 ProductSchema.index(
   {
-    name: 1,
     "skuList.code": 1,
   },
   {
@@ -141,6 +144,7 @@ export function transformProduct({
   subcategory,
   brand,
   name,
+  slug,
   attributes,
   skuList,
   createdAt,
@@ -151,6 +155,7 @@ export function transformProduct({
     subcategory,
     brand,
     name,
+    slug,
     attributes,
     skuList,
     createdAt,
@@ -173,12 +178,14 @@ export function getBasicDetails(product: Product): ProductBasicDetails {
     subcategory,
     brand,
     name,
+    slug,
   } = transformProduct(product)
   return {
     id,
     subcategory,
     brand,
     name,
+    slug,
   }
 }
 

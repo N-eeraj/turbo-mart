@@ -52,8 +52,13 @@ const {
       name="name"
       label="Name"
       placeholder="Enter the product name"
-      :loading="isLoadingProductData"
-      class="col-span-2" />
+      :loading="isLoadingProductData" />
+
+    <FormFieldInput
+      name="slug"
+      label="Slug"
+      placeholder="Enter the product slug"
+      :loading="isLoadingProductData" />
 
     <BaseButton
       :disabled="isLoadingProductData || isInvalid"

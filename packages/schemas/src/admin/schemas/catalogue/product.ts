@@ -26,6 +26,16 @@ export const productCreationSchema = z.object({
       description: "Name of the product.",
       example: "iPhone 17",
     }),
+  slug: z.string({ error: PRODUCT.slug.required })
+    .nonempty(PRODUCT.slug.required)
+    .trim()
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: PRODUCT.slug.valid,
+    })
+    .meta({
+      description: "Slug of the product.",
+      example: "iphone17",
+    }),
 })
 
 export const productAttributeSchema = z.object({

@@ -34,9 +34,15 @@ export interface ListOptions {
   order?: mongoose.SortOrder
 }
 
-export type ParsedProductUpsertData<Data extends ProductCreationData | ProductUpdateData> = Omit<Data, "brand" | "subcategory"> & {
-  subcategory: Data extends ProductCreationData ? ProductObject["subcategory"] : ProductObject["subcategory"] | undefined | null
-  brand: Data extends ProductCreationData ? ProductObject["brand"] : ProductObject["brand"] | undefined | null
+export type ParsedProductUpsertData<
+  Data extends ProductCreationData | ProductUpdateData
+> = Omit<Data, "brand" | "subcategory"> & {
+  subcategory: Data extends ProductCreationData
+    ? ProductObject["subcategory"]
+    : ProductObject["subcategory"] | undefined | null
+  brand: Data extends ProductCreationData
+    ? ProductObject["brand"]
+    : ProductObject["brand"] | undefined | null
 }
 
 export enum ProductDataFieldQuery {
@@ -104,8 +110,11 @@ export default class ProductService extends BaseService {
    * 
    * @throws 409 error if product name is not unique to the brand in the subcategory.
    */
-  private static async ensureUniqueProduct(product: Omit<ProductBasicDetails, "id">, productId?: ProductBasicDetails["id"]) {
-    const existingProduct = await Product.findOne({
+  private static async ensureUniqueProduct(
+    product: Omit<ProductBasicDetails, "id">,
+    productId?: ProductBasicDetails["id"],
+  ) {
+    const existingProductName = await Product.findOne({
       subcategory: product.subcategory,
       brand: product.brand,
       name: product.name,
@@ -114,10 +123,28 @@ export default class ProductService extends BaseService {
       }
     })
       .select({ _id: 1 })
-    if (existingProduct) {
+
+    if (existingProductName) {
       throw {
         status: 409,
         message: "Product with same name exists in this subcategory for this brand",
+      }
+    }
+
+    const existingProductSlug = await Product.findOne({
+      subcategory: product.subcategory,
+      brand: product.brand,
+      slug: product.slug,
+      _id: {
+        $ne: productId,
+      }
+    })
+      .select({ _id: 1 })
+
+    if (existingProductSlug) {
+      throw {
+        status: 409,
+        message: "Product with same slug exists in this subcategory for this brand",
       }
     }
   }
@@ -460,6 +487,7 @@ export default class ProductService extends BaseService {
       selectFields.subcategory = 1
       selectFields.brand = 1
       selectFields.name = 1
+      selectFields.slug = 1
     }
     if (fields.includes(ProductDataFieldQuery.ATTRIBUTES)) {
       selectFields.attributes = 1
@@ -517,7 +545,9 @@ export default class ProductService extends BaseService {
             $gt: [
               {
                 $size: {
-                  $objectToArray: "$attributes",
+                  $objectToArray: {
+                    $ifNull: ["$attributes", {}]
+                  },
                 }
               },
               0
@@ -556,6 +586,7 @@ export default class ProductService extends BaseService {
       subcategory: product.subcategory ?? productDetails.subcategory,
       brand: product.brand ?? productDetails.brand,
       name: product.name ?? productDetails.name,
+      slug: product.slug ?? productDetails.slug,
     }, productId)
 
     const updatedProduct = await Product.findByIdAndUpdate(

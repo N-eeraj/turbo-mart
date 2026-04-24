@@ -27,6 +27,9 @@ export const subcategoryCreationSchema = z.object({
   slug: z.string({ error: SUB_CATEGORY.slug.required })
     .nonempty(SUB_CATEGORY.slug.required)
     .trim()
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: SUB_CATEGORY.slug.valid,
+    })
     .meta({
       description: "Unique and short name (slug) of the subcategory.",
       example: "smtphn",

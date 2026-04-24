@@ -77,6 +77,7 @@ export const CATEGORY = {
   },
   slug: {
     required: "Please enter a category slug",
+    valid: "Slug must contain only alphanumeric characters",
   },
 }
 
@@ -89,6 +90,7 @@ export const SUB_CATEGORY = {
   },
   slug: {
     required: "Please enter a subcategory slug",
+    valid: "Slug must contain only alphanumeric characters",
   },
   attributes: {
     missingFields: "At least one of \"create\", \"update\", or \"delete\" field must be provided",
@@ -208,6 +210,7 @@ export const BRAND = {
     required: "Please enter a brand name",
   },
   slug: {
+    valid: "Slug must contain only alphanumeric characters",
     required: "Please enter a brand slug",
   },
 }
@@ -221,6 +224,10 @@ export const PRODUCT = {
   },
   name: {
     required: "Please enter a product name",
+  },
+  slug: {
+    required: "Please enter a product slug",
+    valid: "Slug must contain only alphanumeric characters",
   },
   attributes: {
     attribute: {
@@ -243,6 +250,7 @@ export const PRODUCT = {
       },
       slug: {
         required: "Please enter a variant slug",
+        valid: "Slug must contain only alphanumeric characters",
       },
     },
   },
@@ -263,6 +271,7 @@ export const PRODUCT = {
     variant: {
       slug: {
         required: "Please select the slug for this variant",
+        valid: "Slug must contain only alphanumeric characters",
       },
     },
   },
