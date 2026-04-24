@@ -114,37 +114,32 @@ export default class ProductService extends BaseService {
     product: Omit<ProductBasicDetails, "id">,
     productId?: ProductBasicDetails["id"],
   ) {
-    const existingProductName = await Product.findOne({
+    const conflict = await Product.findOne({
       subcategory: product.subcategory,
       brand: product.brand,
-      name: product.name,
       _id: {
         $ne: productId,
-      }
+      },
+      $or: [
+        {
+          name: product.name,
+        },
+        {
+          slug: product.slug,
+        },
+      ],
+    }).select({
+      name: 1,
+      slug: 1,
     })
-      .select({ _id: 1 })
-
-    if (existingProductName) {
+    
+    if (conflict) {
       throw {
         status: 409,
-        message: "Product with same name exists in this subcategory for this brand",
-      }
-    }
-
-    const existingProductSlug = await Product.findOne({
-      subcategory: product.subcategory,
-      brand: product.brand,
-      slug: product.slug,
-      _id: {
-        $ne: productId,
-      }
-    })
-      .select({ _id: 1 })
-
-    if (existingProductSlug) {
-      throw {
-        status: 409,
-        message: "Product with same slug exists in this subcategory for this brand",
+        message: "Product is not unique",
+        name: "Product with same unique field(s) exists in this subcategory-brand",
+        name: conflict.name === product.name ? "Product name exists in this subcategory-brand" : undefined,
+        slug: conflict.slug === product.slug ? "Product slug exists in this subcategory-brand" : undefined,
       }
     }
   }
