@@ -130,7 +130,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
 
     const properties = data.properties.map(({ id, type }) => {
       const hasLabel = ATTRIBUTES_WITH_LABEL_INPUT.includes(type)
-      const metaData = ATTRIBUTE_VALUE_META[type]
+      const metaData = ATTRIBUTE_VALUE_META[type] ? { ...ATTRIBUTE_VALUE_META[type] } : undefined
 
       const existingPropertyValue = existingProperties
         ?.find((property) => property.attribute === id)

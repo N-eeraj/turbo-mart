@@ -27,8 +27,8 @@ function addKeyValuePair() {
 </script>
 
 <template>
-  <ul>
-    <li class="flex items-baseline mb-2 text-[13px] font-medium text-muted-foreground">
+  <ul class="max-h-52 overflow-y-auto">
+    <li class="sticky top-0 flex items-baseline pb-2 bg-background text-[13px] font-medium text-muted-foreground z-1">
       <span class="flex-1 inline-block">
         Key Name
       </span>
