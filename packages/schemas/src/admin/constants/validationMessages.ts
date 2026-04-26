@@ -234,23 +234,30 @@ export const PRODUCT = {
       required: "Please select an attribute",
       subcategoryRequired: "The selected subcategory requires this attribute",
     },
-    valueOrVariant: {
-      required: "Please enter a value or variants",
-      either: "Please enter either a value or a variant, not both",
-    },
     value: {
       required: "Please enter a value",
-      attributeRequired: "The selected attribute requires a value",
+      list: {
+        minLength: "Please select at least 1 value",
+        item: {
+          required: "Please select a value",
+        },
+      },
+      json: {
+        key: {
+          required: "Please enter a key name",
+        },
+        value: {
+          required: "Please enter a value",
+        },
+      },
+    },
+    label: {
+      required: "Please enter a label",
     },
     variants: {
-      attributeRequired: "The selected attribute requires variants",
-      minLength: "Please add at least 1 variant",
-      value: {
-        required: "Please enter a variant value",
-      },
       slug: {
-        required: "Please enter a variant slug",
-        valid: "Slug must contain only alphanumeric characters",
+        required: "Please enter a value",
+        alphanumeric: "Only alphanumeric characters are allowed",
       },
     },
   },
