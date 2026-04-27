@@ -40,13 +40,19 @@ const df = new DateFormatter("en-US", {
 })
 
 // convert modelValue to Date object if it's an ISO string to handle logic
-const modelValueDate = computed(() => typeof modelValue.value === "string" ? new Date(modelValue.value) : modelValue.value)
+const modelValueDate = computed(() => {
+  if (typeof modelValue.value === "string") {
+    if (modelValue.value === "") return null
+    return new Date(modelValue.value)
+  }
+  return modelValue.value
+})
 
 const date = ref<DateValue>(fromDate(modelValueDate.value ?? new Date(), getLocalTimeZone())) as Ref<DateValue>
 
 watch(() => date.value, (value: DateValue | undefined) => {
   // always set modelValue to ISO string
-  modelValue.value = value?.toDate(getLocalTimeZone()).toISOString()
+  modelValue.value = value?.toDate(getLocalTimeZone()).toISOString() ?? null
 })
 </script>
 

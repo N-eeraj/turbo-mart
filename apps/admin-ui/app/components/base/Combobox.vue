@@ -150,13 +150,11 @@ watch(() => open.value, () => {
 watch(() => props.multiple, (isMultiple) => {
   if (isMultiple) {
     if (!(modelValue.value as Array<AcceptableValue> ?? []).length) {
-      modelValue.value = "null"
+      modelValue.value = ""
     }
     modelValue.value = []
-  } else {
-    if (!modelValue.value) {
-      modelValue.value = null
-    }
+  } else if (!modelValue.value) {
+    modelValue.value = null
   }
 }, {
   immediate: true,

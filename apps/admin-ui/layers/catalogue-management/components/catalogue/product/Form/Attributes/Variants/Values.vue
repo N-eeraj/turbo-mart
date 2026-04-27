@@ -41,9 +41,15 @@ function addVariant() {
   const hasLabel = ATTRIBUTES_WITH_LABEL_INPUT.includes(props.attribute.type)
   const metaData = ATTRIBUTE_WITH_META.includes(props.attribute.type) ? ATTRIBUTE_VALUE_META[props.attribute.type as AttributesWithMeta] : undefined
 
+  const type = props.attribute.type
+  let value: string | Array<string> = ""
+  if (type === AttributeType.MULTI_SELECT || type === AttributeType.JSON) {
+    value = []
+  }
+
   variantPush({
     slug: "",
-    value: null,
+    value,
     ...(hasLabel ? { label: "" } : {}),
     ...(metaData ? { meta: metaData } : {}),
   })

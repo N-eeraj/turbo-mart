@@ -256,7 +256,7 @@ export const PRODUCT = {
     },
     variants: {
       slug: {
-        required: "Please enter a value",
+        required: "Please enter a slug",
         alphanumeric: "Only alphanumeric characters are allowed",
       },
     },

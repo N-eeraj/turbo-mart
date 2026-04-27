@@ -1,3 +1,8 @@
+import type z from "zod"
+
+import {
+  productAttributeSchema,
+} from "@app/schemas/admin/catalogue/product"
 import {
   AttributeType,
 } from "@app/database/mongoose/enums/catalogue/attribute"
@@ -136,9 +141,14 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
         ?.find((property) => property.attribute === id)
       if (existingPropertyValue) return existingPropertyValue
 
+      let value: string | Array<string> = ""
+      if (type === AttributeType.MULTI_SELECT || type === AttributeType.JSON) {
+        value = []
+      }
+
       return {
         attribute: id,
-        value: null,
+        value,
         ...(hasLabel ? { label: "" } : {}),
         ...(metaData ? { meta: metaData } : {}),
       }
@@ -168,6 +178,9 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     setValues,
     setFieldValue,
   } = useForm({
+    validationSchema: toTypedSchema(
+      productAttributeSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
+    ),
   })
 
   provide("product-form-attributes", {
@@ -176,9 +189,8 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   })
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
     try {
-      
+      console.log(data)
     } catch (error: unknown) {
     }
   })

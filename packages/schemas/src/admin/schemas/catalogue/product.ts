@@ -41,28 +41,31 @@ export const productCreationSchema = z.object({
 const attributeId = z.string({ error: PRODUCT.attributes.attribute.required })
   .nonempty(PRODUCT.attributes.attribute.required)
   .trim()
-const attributeValue = z.union([
-  z.string({ error: PRODUCT.attributes.value.required })
-    .nonempty({ error: PRODUCT.attributes.value.required })
-    .trim(),
-  z.array(
-    z.string({ error: PRODUCT.attributes.value.list.item.required })
-      .nonempty({ error: PRODUCT.attributes.value.list.item.required })
+const attributeValue = z.preprocess(
+  (val) => (val === null || val === undefined ? "" : val),
+  z.union([
+    z.string({ error: PRODUCT.attributes.value.required })
+      .nonempty({ error: PRODUCT.attributes.value.required })
       .trim(),
-  )
-    .min(1, { error: PRODUCT.attributes.value.list.minLength }),
-  z.array(
-    z.object({
-      key: z.string({ error: PRODUCT.attributes.value.json.key.required })
-        .trim()
-        .min(1, { error: PRODUCT.attributes.value.json.key.required }),
-      value: z.string({ error: PRODUCT.attributes.value.json.value.required })
-        .trim()
-        .min(1, { error: PRODUCT.attributes.value.json.value.required }),
-    })
-  )
-    .optional(),
-])
+    z.array(
+      z.string({ error: PRODUCT.attributes.value.list.item.required })
+        .nonempty({ error: PRODUCT.attributes.value.list.item.required })
+        .trim(),
+    ),
+    z.array(
+      z.object({
+        key: z.string({ error: PRODUCT.attributes.value.json.key.required })
+          .trim()
+          .min(1, { error: PRODUCT.attributes.value.json.key.required }),
+        value: z.string({ error: PRODUCT.attributes.value.json.value.required })
+          .trim()
+          .min(1, { error: PRODUCT.attributes.value.json.value.required }),
+      })
+    )
+      .optional(),
+  ])
+)
+
 const attributeLabel = z.string({ error: PRODUCT.attributes.label.required })
   .trim()
   .optional()
@@ -70,37 +73,34 @@ const attributeMeta = z.looseObject({})
   .optional()
 
 export const productAttributeSchema = z.object({
-  attributes: z.object({
-    properties: z.array(
-      z.object({
-        attribute: attributeId,
-        value: attributeValue,
-        label: attributeLabel,
-        meta: attributeMeta,
-      })
-    )
-      .optional(),
-    variants: z.array(
-      z.object({
-        attribute: attributeId,
-        values: z.array(
-          z.object({
-            value: attributeValue,
-            label: attributeLabel,
-            meta: attributeMeta,
-            slug: z.string({ error: PRODUCT.attributes.variants.slug.required })
-              .nonempty(PRODUCT.attributes.variants.slug.required)
-              .regex(/^[a-zA-Z0-9]+$/, {
-                error: PRODUCT.attributes.variants.slug.alphanumeric,
-              })
-              .trim(),
-          })
-        ),
-      })
-    )
-      .optional(),
-  })
-    .optional()
+  properties: z.array(
+    z.object({
+      attribute: attributeId,
+      value: attributeValue,
+      label: attributeLabel,
+      meta: attributeMeta,
+    })
+  )
+    .optional(),
+  variants: z.array(
+    z.object({
+      attribute: attributeId,
+      values: z.array(
+        z.object({
+          value: attributeValue,
+          label: attributeLabel,
+          meta: attributeMeta,
+          slug: z.string({ error: PRODUCT.attributes.variants.slug.required })
+            .nonempty(PRODUCT.attributes.variants.slug.required)
+            .regex(/^[a-zA-Z0-9]+$/, {
+              error: PRODUCT.attributes.variants.slug.alphanumeric,
+            })
+            .trim(),
+        })
+      ),
+    })
+  )
+    .optional(),
 })
   .meta({
     description: "Attribute object with properties and variants as a list",
