@@ -17,6 +17,7 @@ import type {
   Product as ProductType,
   ProductCreationData,
   ProductUpdateData,
+  ProductAttributeData,
 } from "@app/schemas/admin/catalogue/product"
 import {
   AttributeObject,
@@ -136,8 +137,7 @@ export default class ProductService extends BaseService {
     if (conflict) {
       throw {
         status: 409,
-        message: "Product is not unique",
-        name: "Product with same unique field(s) exists in this subcategory-brand",
+        message: "Product with same unique field(s) exists in this subcategory-brand",
         name: conflict.name === product.name ? "Product name exists in this subcategory-brand" : undefined,
         slug: conflict.slug === product.slug ? "Product slug exists in this subcategory-brand" : undefined,
       }
@@ -593,5 +593,12 @@ export default class ProductService extends BaseService {
     )
 
     return getBasicDetails(updatedProduct)
+  }
+
+  static async setAttributes(
+    productId: ProductObject["id"],
+    attributes: ProductAttributeData
+  ): Promise<void> {
+    console.log(attributes)    
   }
 }

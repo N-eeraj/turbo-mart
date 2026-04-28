@@ -163,7 +163,9 @@ export const productSkuListSchema = z.object({
 })
 
 export const productSchema = productCreationSchema
-  .extend(productAttributeSchema.shape)
+  .extend({
+    attributes: productAttributeSchema
+  })
   .extend(productSkuListSchema.shape)
 
 export const productUpdateSchema = productCreationSchema.partial()

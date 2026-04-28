@@ -188,10 +188,18 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     setFieldValue,
   })
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (body) => {
     try {
-      console.log(data)
+      await useApi(`/admin/catalogue/products/${productId.value}/attributes`, {
+        method: "PUT",
+        body,
+      })
+
     } catch (error: unknown) {
+      const {
+        message,
+        errors,
+      } = error as ApiError
     }
   })
 
