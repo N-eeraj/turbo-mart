@@ -2,7 +2,7 @@
 import type {
   Order,
   DataTableProps,
-} from "~/types/dataTable"
+} from "@/types/dataTable"
 
 type PropsBase = DataTableProps<TData, TValue>
 interface Props {

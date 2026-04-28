@@ -226,7 +226,7 @@ export default class CategoryService extends BaseService {
     if (hasLinkedSubcategory) {
       throw {
         status: 409,
-        message: "Cannot delete: this category has a linked subcategory",
+        message: "Cannot delete: This category has a linked subcategory",
       }
     }
 

@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { CurrentUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  CurrentUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -23,7 +27,7 @@ export const convertCurrent: ConversionFn<MeasurementType.CURRENT> = (from, to, 
   return (value * fromFactor) / toFactor
 }
 
-const CURRENT_UNITS: Record<CurrentUnits, MeasurementUnitData<CurrentUnits>> = {
+const CURRENT_UNITS: UnitsEnumMapValue<CurrentUnits> = {
   [CurrentUnits.MICROAMPERE]: {
     name: "Microampere",
     symbol: "µA",

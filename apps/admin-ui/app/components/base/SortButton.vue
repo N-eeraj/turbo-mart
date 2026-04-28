@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type {
   Order,
-} from "~/types/dataTable"
+} from "@/types/dataTable"
 
 const order = defineModel<Order>({
   default: "asc",

@@ -5,6 +5,7 @@ import Brand, {
   type BrandObject,
   type InferredBrandSchemaType,
 } from "@app/database/mongoose/models/Catalogue/Brand"
+import Product from "@app/database/mongoose/models/Catalogue/Product"
 
 import BaseService from "#services/BaseService"
 import {
@@ -211,6 +212,20 @@ export default class BrandService extends BaseService {
    * @throws If deleting the brand failed.
    */
   static async delete(brandId: BrandObject["id"]): Promise<void> {
+    const hasLinkedProduct = await Product.findOne({
+      brand: brandId,
+    })
+      .lean()
+      .select({ _id: 1 })
+
+    // throw not conflict error if a linked product exists
+    if (hasLinkedProduct) {
+      throw {
+        status: 409,
+        message: "Cannot delete: Product with this brand exists",
+      }
+    }
+
     const brand = await Brand.findByIdAndDelete(brandId)
 
     // throw not found error if brand is not found

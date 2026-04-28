@@ -48,6 +48,7 @@ import {
   productJSONSchema,
   productCreationJSONSchema,
   productUpdateJSONSchema,
+  productAttributeJSONSchema,
 } from "@app/schemas/admin/catalogue/product"
 
 const DetailedProfileSchema = {
@@ -257,6 +258,7 @@ const schemas = {
   BrandUpdateSchema: brandUpdateJSONSchema,
   ProductCreationSchema: productCreationJSONSchema,
   ProductUpdateSchema: productUpdateJSONSchema,
+  ProductAttributesSchema: productAttributeJSONSchema,
   ...ResponseSchemas,
   ...UtilitySchemas,
 }

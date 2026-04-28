@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { FuelEconomyUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  FuelEconomyUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -22,7 +26,7 @@ export const convertFuelEconomy: ConversionFn<MeasurementType.FUEL_ECONOMY> = (f
   return (value * fromFactor) / toFactor
 }
 
-const FUEL_ECONOMY_UNITS: Record<FuelEconomyUnits, MeasurementUnitData<FuelEconomyUnits>> = {
+const FUEL_ECONOMY_UNITS: UnitsEnumMapValue<FuelEconomyUnits> = {
   [FuelEconomyUnits.KILOMETER_PER_LITER]: {
     name: "Kilometer per liter",
     symbol: "km/L",

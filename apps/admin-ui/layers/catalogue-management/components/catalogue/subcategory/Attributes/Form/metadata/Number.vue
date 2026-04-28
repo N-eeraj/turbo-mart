@@ -36,7 +36,10 @@ const {
   errorMessage: measurementTypeErrorMessage,
 } = useField<AcceptableValue>(`${props.field}[${props.index}].metadata.measurementType`)
 
-const measurementTypeDescription = computed(() => measurementTypes.value?.find(({ value }) => value === measurementTypeField.value)?.description)
+const measurementTypeDescription = computed(() => (
+  measurementTypes.value
+    ?.find(({ value }) => value === measurementTypeField.value)?.description
+))
 
 const {
   value: step,

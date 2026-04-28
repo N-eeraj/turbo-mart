@@ -1,20 +1,24 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { StorageUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  StorageUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
 // Conversion factors relative to bit
 const STORAGE_CONVERSION_FACTORS: Record<StorageUnits, number> = {
   [StorageUnits.BIT]: 1,
-  [StorageUnits.BYTE]: 8, // 1 byte = 8 bits
-  [StorageUnits.KILOBYTE]: 8 * 1024,
-  [StorageUnits.MEGABYTE]: 8 * 1024 * 1024,
-  [StorageUnits.GIGABYTE]: 8 * 1024 * 1024 * 1024,
-  [StorageUnits.TERABYTE]: 8 * 1024 * 1024 * 1024 * 1024,
-  [StorageUnits.PETABYTE]: 8 * 1024 * 1024 * 1024 * 1024 * 1024,
+  [StorageUnits.BYTE]: 8, // 1 Byte = 8 bits
+  [StorageUnits.KILOBYTE]: 8192, // KB => 8 * 1024 bits,
+  [StorageUnits.MEGABYTE]: 8_388_608, // MB => 8 * 1024 * 1024 bits,
+  [StorageUnits.GIGABYTE]: 8_589_934_592, // GB => 8 * 1024 * 1024 * 1024 bits,
+  [StorageUnits.TERABYTE]: 8_796_093_022_208, // TB => 8 * 1024 * 1024 * 1024 * 1024 bits,
+  [StorageUnits.PETABYTE]: 9_007_199_254_740_992, // PB => 8 * 1024 * 1024 * 1024 * 1024 * 1024 bits,
 }
 
 /**
@@ -26,7 +30,7 @@ export const convertStorage: ConversionFn<MeasurementType.STORAGE> = (from, to, 
   return (value * fromFactor) / toFactor
 }
 
-const STORAGE_UNITS: Record<StorageUnits, MeasurementUnitData<StorageUnits>> = {
+const STORAGE_UNITS: UnitsEnumMapValue<StorageUnits> = {
   [StorageUnits.BIT]: {
     name: "Bit",
     symbol: "b",

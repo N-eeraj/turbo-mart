@@ -8,7 +8,7 @@ export default function useProductFormStepper() {
     {
       indicator: 1,
       title: productId.value ? "Update" : "Create",
-      description: `${productId.value ? "Update" : "Create"} the product`,
+      description: productId.value ? "Update product details" : "Create a product",
     },
     {
       indicator: 2,
@@ -19,7 +19,7 @@ export default function useProductFormStepper() {
     {
       indicator: 3,
       title: "Variants",
-      description: "Update product variants",
+      description: "Update product SKUs",
       disabled: !productId.value,
     },
   ]))

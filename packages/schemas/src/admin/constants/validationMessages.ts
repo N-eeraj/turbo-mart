@@ -77,6 +77,7 @@ export const CATEGORY = {
   },
   slug: {
     required: "Please enter a category slug",
+    valid: "Slug must contain only alphanumeric characters",
   },
 }
 
@@ -89,6 +90,7 @@ export const SUB_CATEGORY = {
   },
   slug: {
     required: "Please enter a subcategory slug",
+    valid: "Slug must contain only alphanumeric characters",
   },
   attributes: {
     missingFields: "At least one of \"create\", \"update\", or \"delete\" field must be provided",
@@ -208,6 +210,7 @@ export const BRAND = {
     required: "Please enter a brand name",
   },
   slug: {
+    valid: "Slug must contain only alphanumeric characters",
     required: "Please enter a brand slug",
   },
 }
@@ -222,27 +225,39 @@ export const PRODUCT = {
   name: {
     required: "Please enter a product name",
   },
+  slug: {
+    required: "Please enter a product slug",
+    valid: "Slug must contain only alphanumeric characters",
+  },
   attributes: {
     attribute: {
       required: "Please select an attribute",
       subcategoryRequired: "The selected subcategory requires this attribute",
     },
-    valueOrVariant: {
-      required: "Please enter a value or variants",
-      either: "Please enter either a value or a variant, not both",
-    },
     value: {
       required: "Please enter a value",
-      attributeRequired: "The selected attribute requires a value",
+      list: {
+        minLength: "Please select at least 1 value",
+        item: {
+          required: "Please select a value",
+        },
+      },
+      json: {
+        key: {
+          required: "Please enter a key name",
+        },
+        value: {
+          required: "Please enter a value",
+        },
+      },
+    },
+    label: {
+      required: "Please enter a label",
     },
     variants: {
-      attributeRequired: "The selected attribute requires variants",
-      minLength: "Please add at least 1 variant",
-      value: {
-        required: "Please enter a variant value",
-      },
       slug: {
-        required: "Please enter a variant slug",
+        required: "Please enter a slug",
+        alphanumeric: "Only alphanumeric characters are allowed",
       },
     },
   },
@@ -263,6 +278,7 @@ export const PRODUCT = {
     variant: {
       slug: {
         required: "Please select the slug for this variant",
+        valid: "Slug must contain only alphanumeric characters",
       },
     },
   },

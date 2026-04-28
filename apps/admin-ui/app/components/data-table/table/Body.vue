@@ -4,7 +4,9 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table"
-import type { TableBodyProps } from "~/types/dataTable"
+import type {
+  TableBodyProps,
+} from "@/types/dataTable"
 
 type PropsBase = TableBodyProps<TData, TValue>
 interface Props {

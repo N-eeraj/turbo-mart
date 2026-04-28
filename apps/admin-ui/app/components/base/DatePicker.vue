@@ -21,6 +21,15 @@ import type {
   ClassValue,
 } from "class-variance-authority/types"
 
+interface Props {
+  placeholder?: string
+  disabled?: boolean
+}
+withDefaults(defineProps<Props>(), {
+  placeholder: "Pick a date",
+  disabled: false,
+})
+
 const modelValue = defineModel<Date | string | null>()
 
 const attrs = useAttrs()
@@ -31,13 +40,19 @@ const df = new DateFormatter("en-US", {
 })
 
 // convert modelValue to Date object if it's an ISO string to handle logic
-const modelValueDate = computed(() => typeof modelValue.value === "string" ? new Date(modelValue.value) : modelValue.value)
+const modelValueDate = computed(() => {
+  if (typeof modelValue.value === "string") {
+    if (modelValue.value === "") return null
+    return new Date(modelValue.value)
+  }
+  return modelValue.value
+})
 
 const date = ref<DateValue>(fromDate(modelValueDate.value ?? new Date(), getLocalTimeZone())) as Ref<DateValue>
 
 watch(() => date.value, (value: DateValue | undefined) => {
   // always set modelValue to ISO string
-  modelValue.value = value?.toDate(getLocalTimeZone()).toISOString()
+  modelValue.value = value?.toDate(getLocalTimeZone()).toISOString() ?? null
 })
 </script>
 
@@ -46,6 +61,7 @@ watch(() => date.value, (value: DateValue | undefined) => {
     <PopoverTrigger as-child>
       <BaseButton
         variant="outline"
+        :disabled
         :class="cn(
           'justify-start text-left font-normal',
           !modelValue && 'text-muted-foreground',
@@ -54,7 +70,18 @@ watch(() => date.value, (value: DateValue | undefined) => {
         <Icon
           name="lucide:calendar"
           class="mr-2" />
-        {{ modelValueDate ? df.format(modelValueDate) : "Pick a date" }}
+        <slot
+          v-if="modelValueDate"
+          name="value"
+          :model-value-date="modelValueDate"
+          :formatted-date="df.format(modelValueDate)">
+          {{ df.format(modelValueDate) }}
+        </slot>
+        <slot
+          v-else
+          name="placeholder">
+          {{ placeholder }}
+        </slot>
       </BaseButton>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">

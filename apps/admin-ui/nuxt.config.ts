@@ -34,6 +34,8 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "@nuxt/icon",
     "pinia-plugin-persistedstate",
+    "@formkit/auto-animate/nuxt",
+    "nuxt-color-picker",
     "@nuxtjs/color-mode",
   ],
   css: [

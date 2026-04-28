@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table"
 import type {
   TableHeaderProps
-} from "~/types/dataTable"
+} from "@/types/dataTable"
 
 interface Props {
   table: TableHeaderProps<TData>["table"]

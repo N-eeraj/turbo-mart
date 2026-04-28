@@ -139,5 +139,5 @@ const {
     @capture="handleCameraCapture"
     @close="toggleCamera" />
 
-  <ProfilePictureRemove v-model="openProfilePictureRemove"/>
+  <ProfilePictureRemove v-model="openProfilePictureRemove" />
 </template>

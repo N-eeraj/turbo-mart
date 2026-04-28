@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { TimeUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  TimeUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -27,7 +31,7 @@ export const convertTime: ConversionFn<MeasurementType.TIME> = (from, to, value)
   return (value * fromFactor) / toFactor
 }
 
-const TIME_UNITS: Record<TimeUnits, MeasurementUnitData<TimeUnits>> = {
+const TIME_UNITS: UnitsEnumMapValue<TimeUnits> = {
   [TimeUnits.MILLISECOND]: {
     name: "Millisecond",
     symbol: "ms",

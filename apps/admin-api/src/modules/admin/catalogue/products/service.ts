@@ -17,6 +17,7 @@ import type {
   Product as ProductType,
   ProductCreationData,
   ProductUpdateData,
+  ProductAttributeData,
 } from "@app/schemas/admin/catalogue/product"
 import {
   AttributeObject,
@@ -34,9 +35,15 @@ export interface ListOptions {
   order?: mongoose.SortOrder
 }
 
-export type ParsedProductUpsertData<Data extends ProductCreationData | ProductUpdateData> = Omit<Data, "brand" | "subcategory"> & {
-  subcategory: Data extends ProductCreationData ? ProductObject["subcategory"] : ProductObject["subcategory"] | undefined | null
-  brand: Data extends ProductCreationData ? ProductObject["brand"] : ProductObject["brand"] | undefined | null
+export type ParsedProductUpsertData<
+  Data extends ProductCreationData | ProductUpdateData
+> = Omit<Data, "brand" | "subcategory"> & {
+  subcategory: Data extends ProductCreationData
+    ? ProductObject["subcategory"]
+    : ProductObject["subcategory"] | undefined | null
+  brand: Data extends ProductCreationData
+    ? ProductObject["brand"]
+    : ProductObject["brand"] | undefined | null
 }
 
 export enum ProductDataFieldQuery {
@@ -104,20 +111,35 @@ export default class ProductService extends BaseService {
    * 
    * @throws 409 error if product name is not unique to the brand in the subcategory.
    */
-  private static async ensureUniqueProduct(product: Omit<ProductBasicDetails, "id">, productId?: ProductBasicDetails["id"]) {
-    const existingProduct = await Product.findOne({
+  private static async ensureUniqueProduct(
+    product: Omit<ProductBasicDetails, "id">,
+    productId?: ProductBasicDetails["id"],
+  ) {
+    const conflict = await Product.findOne({
       subcategory: product.subcategory,
       brand: product.brand,
-      name: product.name,
       _id: {
         $ne: productId,
-      }
+      },
+      $or: [
+        {
+          name: product.name,
+        },
+        {
+          slug: product.slug,
+        },
+      ],
+    }).select({
+      name: 1,
+      slug: 1,
     })
-      .select({ _id: 1 })
-    if (existingProduct) {
+    
+    if (conflict) {
       throw {
         status: 409,
-        message: "Product with same name exists in this subcategory for this brand",
+        message: "Product with same unique field(s) exists in this subcategory-brand",
+        name: conflict.name === product.name ? "Product name exists in this subcategory-brand" : undefined,
+        slug: conflict.slug === product.slug ? "Product slug exists in this subcategory-brand" : undefined,
       }
     }
   }
@@ -460,6 +482,7 @@ export default class ProductService extends BaseService {
       selectFields.subcategory = 1
       selectFields.brand = 1
       selectFields.name = 1
+      selectFields.slug = 1
     }
     if (fields.includes(ProductDataFieldQuery.ATTRIBUTES)) {
       selectFields.attributes = 1
@@ -501,7 +524,34 @@ export default class ProductService extends BaseService {
     productId: ProductObject["id"],
     product: ParsedProductUpsertData<ProductUpdateData>
   ): Promise<ProductBasicDetails> {
-    const productById = await Product.findById(productId)
+    const [productById = {}] = await Product.aggregate([
+      {
+        $match: {
+          _id: productId,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          subcategory: 1,
+          brand: 1,
+          name: 1,
+          isAttributesConfigured: {
+            $gt: [
+              {
+                $size: {
+                  $objectToArray: {
+                    $ifNull: ["$attributes", {}]
+                  },
+                }
+              },
+              0
+            ],
+          },
+        },
+      },
+    ])
+
     // throw error if product is not found
     if (!productById) {
       throw {
@@ -510,6 +560,14 @@ export default class ProductService extends BaseService {
       }
     }
     const productDetails = getBasicDetails(productById)
+
+    const isAttributeChanged = String(productDetails.subcategory) !== String(product.subcategory)
+    if (isAttributeChanged && productById.isAttributesConfigured) {
+      throw {
+        status: 400,
+        message: "Cannot change the subcategory, the attributes are already configured",
+      }
+    }
 
     // ensure given brand and subcategory exist when given
     if (product.brand) {
@@ -523,6 +581,7 @@ export default class ProductService extends BaseService {
       subcategory: product.subcategory ?? productDetails.subcategory,
       brand: product.brand ?? productDetails.brand,
       name: product.name ?? productDetails.name,
+      slug: product.slug ?? productDetails.slug,
     }, productId)
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -534,5 +593,12 @@ export default class ProductService extends BaseService {
     )
 
     return getBasicDetails(updatedProduct)
+  }
+
+  static async setAttributes(
+    productId: ProductObject["id"],
+    attributes: ProductAttributeData
+  ): Promise<void> {
+    console.log(attributes)    
   }
 }

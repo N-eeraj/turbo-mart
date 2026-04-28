@@ -36,32 +36,33 @@ async function handleDelete() {
       #right
       v-if="adminData">
       <div class="flex items-center gap-x-3">
-        <BaseTooltip tooltip="Edit">
-          <NuxtLink
-            :to="`/admins/${adminData.id}/edit`"
-            :class="{
-              'pointer-events-none': isDeleting,
-            }">
-            <BaseButton
-              variant="outline"
-              size="icon"
-              :disabled="isDeleting">
-              <Icon name="lucide:pen" />
-            </BaseButton>
-          </NuxtLink>
-        </BaseTooltip>
-        <BaseTooltip
-          tooltip="Delete"
-          color="destructive">
+        <NuxtLink
+          :to="`/admins/${adminData.id}/edit`"
+          :class="{
+            'pointer-events-none': isDeleting,
+          }">
           <BaseButton
-            variant="ghost"
+            variant="outline"
             size="icon"
-            :loading="isDeleting"
-            class="hover:bg-destructive/20 text-destructive hover:text-destructive duration-300"
-            @click="handleDelete">
-            <Icon name="lucide:trash-2" />
+            :disabled="isDeleting"
+            :tooltip="{
+              content: 'Edit',
+            }">
+            <Icon name="lucide:pen" />
           </BaseButton>
-        </BaseTooltip>
+        </NuxtLink>
+        <BaseButton
+          variant="ghost"
+          size="icon"
+          :loading="isDeleting"
+          :tooltip="{
+            content: 'Delete',
+            color: 'destructive',
+          }"
+          class="hover:bg-destructive/20 text-destructive hover:text-destructive duration-300"
+          @click="handleDelete">
+          <Icon name="lucide:trash-2" />
+        </BaseButton>
       </div>
     </template>
   </BaseHeader>

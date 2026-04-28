@@ -2,7 +2,7 @@
 import type {
   Order,
   FilterProps,
-} from "~/types/dataTable"
+} from "@/types/dataTable"
 
 interface Props {
   hideSearch: FilterProps["hideSearch"]

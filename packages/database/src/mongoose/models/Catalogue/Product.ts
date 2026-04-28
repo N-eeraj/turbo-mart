@@ -8,7 +8,7 @@ export type InferredProductSchemaType = mongoose.InferSchemaType<typeof ProductS
 export type Product = mongoose.HydratedDocument<InferredProductSchemaType>
 export type ObjectKeys = keyof InferredProductSchemaType
 export type ProductObject = Pick<Product, ObjectKeys> & { id: Product["_id"] }
-export type ProductBasicDetails = Pick<ProductObject, "id" | "subcategory" | "brand" | "name">
+export type ProductBasicDetails = Pick<ProductObject, "id" | "subcategory" | "brand" | "name" | "slug">
 export type ProductAttributes = Pick<ProductObject, "id" | "attributes" | "subcategory">
 export type ProductVariants = Pick<ProductObject, "id" | "skuList">
 
@@ -40,6 +40,19 @@ const SKUSchema = new mongoose.Schema({
   strict: false,
 })
 
+const property = {
+  value: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+  },
+  label: {
+    type: mongoose.Schema.Types.String,
+  },
+  meta: {
+    type: mongoose.Schema.Types.Mixed,
+  },
+}
+
 /**
  * Mongoose schema for catalogue product.
  */
@@ -58,39 +71,48 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    required: true,
+  },
   attributes: {
-    type: [
-      {
-        attribute: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Attribute",
-          required: true,
+    type: {
+      properties: [
+        {
+          attribute: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Attribute",
+            required: true,
+          },
+          ...property,
         },
-        value: {
-          type: mongoose.Schema.Types.Mixed,
+      ],
+      variants: [
+        {
+          attribute: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Attribute",
+            required: true,
+          },
+          values: {
+            type: [
+              {
+                ...property,
+                slug: {
+                  type: String,
+                  required: true,
+                  lowercase: true,
+                },
+              }
+            ],
+          },
         },
-        variants: {
-          type: [
-            {
-              value: {
-                type: mongoose.Schema.Types.Mixed,
-                required: true,
-              },
-              slug: {
-                type: String,
-                required: true,
-                lowercase: true,
-              },
-            }
-          ],
-          default: undefined,
-        },
-      }
-    ],
+      ],
+    },
     default: undefined,
   },
   skuList: [
-    SKUSchema
+    SKUSchema,
   ],
 }, {
   timestamps: true,
@@ -98,7 +120,6 @@ const ProductSchema = new mongoose.Schema({
 
 ProductSchema.index(
   {
-    name: 1,
     "skuList.code": 1,
   },
   {
@@ -123,24 +144,19 @@ export function transformProduct({
   subcategory,
   brand,
   name,
+  slug,
   attributes,
   skuList,
   createdAt,
   updatedAt,
 }: Product): ProductObject {
-  const _attributes = !attributes ? undefined : Object.fromEntries(
-    attributes.map(({ attribute, value, variants }) => ([
-      attribute,
-      value ? { value } : { variants },
-    ]))
-  )
-
   const product: ProductObject = {
     id: _id,
     subcategory,
     brand,
     name,
-    attributes: _attributes,
+    slug,
+    attributes,
     skuList,
     createdAt,
     updatedAt,
@@ -162,12 +178,14 @@ export function getBasicDetails(product: Product): ProductBasicDetails {
     subcategory,
     brand,
     name,
+    slug,
   } = transformProduct(product)
   return {
     id,
     subcategory,
     brand,
     name,
+    slug,
   }
 }
 

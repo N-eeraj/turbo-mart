@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { SpeedUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  SpeedUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -24,7 +28,7 @@ export const convertSpeed: ConversionFn<MeasurementType.SPEED> = (from, to, valu
   return (value * fromFactor) / toFactor
 }
 
-const SPEED_UNITS: Record<SpeedUnits, MeasurementUnitData<SpeedUnits>> = {
+const SPEED_UNITS: UnitsEnumMapValue<SpeedUnits> = {
   [SpeedUnits.METER_PER_SECOND]: {
     name: "Meter per second",
     symbol: "m/s",

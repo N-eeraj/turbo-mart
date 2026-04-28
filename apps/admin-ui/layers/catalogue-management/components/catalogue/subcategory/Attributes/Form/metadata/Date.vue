@@ -10,9 +10,9 @@ defineProps<Props>()
   <div class="grid md:grid-cols-2 gap-3">
     <FormFieldDatePicker
       :name="`${field}[${index}].metadata.min`"
-      label="Minimum Date"/>
+      label="Minimum Date" />
     <FormFieldDatePicker
       :name="`${field}[${index}].metadata.max`"
-      label="Maximum Date"/>
+      label="Maximum Date" />
   </div>
 </template>

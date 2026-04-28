@@ -17,8 +17,11 @@
     "#services/*": "./src/services/*.ts",
     "#commands/*": "./src/commands/*.ts",
     "#utils/*": "./src/utils/*.ts",
+    "#config/*": "./src/config/*",
+
     "#docs/*": "./src/modules/docs/*",
     "#catalogue/*": "./src/modules/admin/catalogue/*",
+
     "#src/*": "./src/*",
     "#jsonDocs/*": "./docs/*.json",
     "#app/*": "./*"

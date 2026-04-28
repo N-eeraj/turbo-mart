@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { FlowRateUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  FlowRateUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -23,7 +27,7 @@ export const convertFlowRate: ConversionFn<MeasurementType.FLOW_RATE> = (from, t
   return (value * fromFactor) / toFactor
 }
 
-const FLOW_RATE_UNITS: Record<FlowRateUnits, MeasurementUnitData<FlowRateUnits>> = {
+const FLOW_RATE_UNITS: UnitsEnumMapValue<FlowRateUnits> = {
   [FlowRateUnits.CUBIC_METER_PER_SECOND]: {
     name: "Cubic meter per second",
     symbol: "m³/s",

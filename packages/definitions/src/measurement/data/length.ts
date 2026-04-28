@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { LengthUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  LengthUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -27,7 +31,7 @@ export const convertLength: ConversionFn<MeasurementType.LENGTH> = (from, to, va
   return (value * fromFactor) / toFactor
 }
 
-const LENGTH_UNITS: Record<LengthUnits, MeasurementUnitData<LengthUnits>> = {
+const LENGTH_UNITS: UnitsEnumMapValue<LengthUnits> = {
   [LengthUnits.MILLIMETER]: {
     name: "Millimeter",
     symbol: "mm",

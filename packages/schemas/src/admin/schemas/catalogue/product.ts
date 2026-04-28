@@ -26,91 +26,101 @@ export const productCreationSchema = z.object({
       description: "Name of the product.",
       example: "iPhone 17",
     }),
-})
-
-export const productAttributeSchema = z.object({
-  attributes: z.record(
-    z.string({ error: PRODUCT.attributes.attribute.required })
-      .nonempty(PRODUCT.attributes.attribute.required)
-      .trim(),
-    z.object({
-      value: z.unknown()
-        .optional()
-        .meta({
-          description: "Value of the attribute.",
-          example: "Snapdragon 8 Elite Gen 5",
-        }),
-      variants: z.array(
-        z.object({
-          value: z.unknown()
-            .refine((value) => ![null, undefined, ""].includes(value as any), {
-              error: PRODUCT.attributes.variants.value.required,
-            })
-            .meta({
-              description: "Variant value of the attribute.",
-              example: "Black",
-            }),
-          slug: z.string({ error: PRODUCT.attributes.variants.slug.required })
-            .nonempty(PRODUCT.attributes.variants.slug.required)
-            .trim()
-            .meta({
-              description: "Unique and short name (slug) of the variant value.",
-              example: "blk",
-            }),
-        })
-      )
-        .min(1, { error: PRODUCT.attributes.variants.minLength })
-        .optional()
-        .meta({
-          description: "List of values of a variant attribute.",
-        }),
+  slug: z.string({ error: PRODUCT.slug.required })
+    .nonempty(PRODUCT.slug.required)
+    .trim()
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: PRODUCT.slug.valid,
     })
-  )
-    .superRefine((attributes, ctx) => {
-      Object.entries(attributes)
-        .forEach(([ attribute, { value, variants } ]) => {
-          if (value === undefined && !variants) {
-            ctx.addIssue({
-              path: [attribute],
-              message: PRODUCT.attributes.valueOrVariant.required,
-              code: "custom"
-            })
-          } else if (value !== undefined && variants) {
-            ctx.addIssue({
-              path: [attribute],
-              message: PRODUCT.attributes.valueOrVariant.either,
-              code: "custom"
-            })
-          } else if (value === "" || value === null) {
-            ctx.addIssue({
-              path: [
-                attribute,
-                "value"
-              ],
-              message: PRODUCT.attributes.value.required,
-              code: "custom"
-            })
-          }
-        })
-    })
-    .optional()
     .meta({
-      description: "Attribute record with the attribute id as the key, and a value/variants as the record value",
-      example: {
-        "01abcd091ab01a0123ab012a": {
-          value: "Snapdragon 8 Elite Gen 5",
-        },
-        "01abcd091ab01a0123ab012b": {
-          variants: [
-            {
-              value: "Black",
-              slug: "blk",
-            }
-          ],
-        },
-      },
+      description: "Slug of the product.",
+      example: "iphone17",
     }),
 })
+
+const attributeId = z.string({ error: PRODUCT.attributes.attribute.required })
+  .nonempty(PRODUCT.attributes.attribute.required)
+  .trim()
+const attributeValue = z.preprocess(
+  (val) => (val === null || val === undefined ? "" : val),
+  z.union([
+    z.string({ error: PRODUCT.attributes.value.required })
+      .nonempty({ error: PRODUCT.attributes.value.required })
+      .trim(),
+    z.array(
+      z.string({ error: PRODUCT.attributes.value.list.item.required })
+        .nonempty({ error: PRODUCT.attributes.value.list.item.required })
+        .trim(),
+    ),
+    z.array(
+      z.object({
+        key: z.string({ error: PRODUCT.attributes.value.json.key.required })
+          .trim()
+          .min(1, { error: PRODUCT.attributes.value.json.key.required }),
+        value: z.string({ error: PRODUCT.attributes.value.json.value.required })
+          .trim()
+          .min(1, { error: PRODUCT.attributes.value.json.value.required }),
+      })
+    )
+      .optional(),
+  ])
+)
+
+const attributeLabel = z.string({ error: PRODUCT.attributes.label.required })
+  .trim()
+  .optional()
+const attributeMeta = z.looseObject({})
+  .optional()
+
+export const productAttributeSchema = z.object({
+  properties: z.array(
+    z.object({
+      attribute: attributeId,
+      value: attributeValue,
+      label: attributeLabel,
+      meta: attributeMeta,
+    })
+  )
+    .optional(),
+  variants: z.array(
+    z.object({
+      attribute: attributeId,
+      values: z.array(
+        z.object({
+          value: attributeValue,
+          label: attributeLabel,
+          meta: attributeMeta,
+          slug: z.string({ error: PRODUCT.attributes.variants.slug.required })
+            .nonempty(PRODUCT.attributes.variants.slug.required)
+            .regex(/^[a-zA-Z0-9]+$/, {
+              error: PRODUCT.attributes.variants.slug.alphanumeric,
+            })
+            .trim(),
+        })
+      ),
+    })
+  )
+    .optional(),
+})
+  .meta({
+    description: "Attribute object with properties and variants as a list",
+    example: {
+      properties: [
+        {
+          attribute: "01abcd091ab01a0123ab012a",
+          value: "Snapdragon 8 Elite Gen 5",
+        },
+      ],
+      variants: [
+        {
+          attribute: "01abcd091ab01a0123ab012b",
+          slug: "black",
+          value: "#111",
+          label: "Space Black",
+        },
+      ],
+    },
+  })
 
 export const productSkuListSchema = z.object({
   skuLists: z.array(
@@ -153,7 +163,9 @@ export const productSkuListSchema = z.object({
 })
 
 export const productSchema = productCreationSchema
-  .extend(productAttributeSchema.shape)
+  .extend({
+    attributes: productAttributeSchema
+  })
   .extend(productSkuListSchema.shape)
 
 export const productUpdateSchema = productCreationSchema.partial()

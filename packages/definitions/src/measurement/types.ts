@@ -1,4 +1,6 @@
-import { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
+import {
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
 import {
   LengthUnits,
   AreaUnits,
@@ -27,7 +29,7 @@ import {
   FuelEconomyUnits,
 } from "#measurement/units"
 
-type MeasurementUnitEnumMap = {
+export type MeasurementUnitEnumMap = {
   [MeasurementType.LENGTH]: LengthUnits
   [MeasurementType.AREA]: AreaUnits
   [MeasurementType.VOLUME]: VolumeUnits
@@ -67,12 +69,14 @@ export interface MeasurementUnitData<TMeasurementUnit> {
   convertTo: (_unit: TMeasurementUnit, _value: number) => number
 }
 
+export type UnitsEnumMapValue<
+  K extends MeasurementUnitEnumMap[keyof MeasurementUnitEnumMap]
+> = Record<K, MeasurementUnitData<K>>
+
 export type UnitsMap = {
-  [K in keyof MeasurementUnitEnumMap]: Record<
-    MeasurementUnitEnumMap[K],
-    MeasurementUnitData<MeasurementUnitEnumMap[K]>
-  >
+  [K in keyof MeasurementUnitEnumMap]: UnitsEnumMapValue<MeasurementUnitEnumMap[K]>
 }
+
 
 export type ConversionFnMap = {
   [K in keyof MeasurementUnitEnumMap]: ConversionFn<K>
