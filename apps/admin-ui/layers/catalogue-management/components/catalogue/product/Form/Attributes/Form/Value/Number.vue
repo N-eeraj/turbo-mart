@@ -70,9 +70,9 @@ watch(() => [
   if (
     !unitsMap.value
     ||
-    (value === '' || value == null)
+    (value === "" || value == null)
     ||
-    (metaUnit === '' || metaUnit == null)
+    (metaUnit === "" || metaUnit == null)
   ) return
 
   const unitTypeValue = metaUnit as MeasurementUnitEnum
@@ -91,6 +91,8 @@ watch(() => [
 <template>
   <FormFieldInput
     :name="`${fieldName}.value`"
+    type="number"
+    inputmode="decimal"
     :placeholder="`Enter the value for this ${attributeType}`"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>

@@ -54,9 +54,9 @@ function getFormattedDate(
 
 const formattedDate = computed(() => {
   if (
-    (value.value === '' || value.value == null)
+    (value.value === "" || value.value == null)
     ||
-    (metaFormat.value === '' || metaFormat.value == null)
+    (metaFormat.value === "" || metaFormat.value == null)
   ) return
 
   const format = DATE_FORMATS[metaFormat.value as DateFormats]
