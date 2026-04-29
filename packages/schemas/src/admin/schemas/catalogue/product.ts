@@ -41,30 +41,30 @@ export const productCreationSchema = z.object({
 const attributeId = z.string({ error: PRODUCT.attributes.attribute.required })
   .nonempty(PRODUCT.attributes.attribute.required)
   .trim()
-const attributeValue = z.preprocess(
-  (val) => (val === null || val === undefined ? "" : val),
-  z.union([
-    z.string({ error: PRODUCT.attributes.value.required })
-      .nonempty({ error: PRODUCT.attributes.value.required })
+const attributeValue = z.union([
+  z.string({ error: PRODUCT.attributes.value.required })
+    .nonempty({ error: PRODUCT.attributes.value.required })
+    .trim(),
+  z.number({ error: PRODUCT.attributes.value.required }),
+  z.boolean({ error: PRODUCT.attributes.value.required }),
+  z.iso.datetime({ error: PRODUCT.attributes.value.required }),
+  z.array(
+    z.string({ error: PRODUCT.attributes.value.list.item.required })
+      .nonempty({ error: PRODUCT.attributes.value.list.item.required })
       .trim(),
-    z.array(
-      z.string({ error: PRODUCT.attributes.value.list.item.required })
-        .nonempty({ error: PRODUCT.attributes.value.list.item.required })
-        .trim(),
-    ),
-    z.array(
-      z.object({
-        key: z.string({ error: PRODUCT.attributes.value.json.key.required })
-          .trim()
-          .min(1, { error: PRODUCT.attributes.value.json.key.required }),
-        value: z.string({ error: PRODUCT.attributes.value.json.value.required })
-          .trim()
-          .min(1, { error: PRODUCT.attributes.value.json.value.required }),
-      })
-    )
-      .optional(),
-  ])
-)
+  ),
+  z.array(
+    z.object({
+      key: z.string({ error: PRODUCT.attributes.value.json.key.required })
+        .trim()
+        .min(1, { error: PRODUCT.attributes.value.json.key.required }),
+      value: z.string({ error: PRODUCT.attributes.value.json.value.required })
+        .trim()
+        .min(1, { error: PRODUCT.attributes.value.json.value.required }),
+    })
+  )
+    .optional(),
+])
 
 const attributeLabel = z.string({ error: PRODUCT.attributes.label.required })
   .trim()

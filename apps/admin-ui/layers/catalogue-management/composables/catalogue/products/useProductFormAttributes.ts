@@ -1,7 +1,8 @@
-import type z from "zod"
+import z from "zod"
 
 import {
   productAttributeSchema,
+  type Product,
 } from "@app/schemas/admin/catalogue/product"
 import {
   AttributeType,
@@ -14,26 +15,17 @@ interface EmitsParameter {
   submit: [unknown]
 }
 
-interface ProductInfo {
+type ProductInfo = Pick<Product, "subcategory" | "attributes"> & {
   id: string
-  subcategory: string
-  attributes?: {
-    properties?: {
-      attribute: string
-      label?: string
-      value: unknown
-      meta: Record<string, unknown>
-    }
-    variants?: {
-      attribute: string
-      values: Array<{
-        label?: string
-        value: unknown
-        slug: string
-        meta: Record<string, unknown>
-      }>
-    }
-  }
+}
+interface FormValue {
+  value: unknown
+}
+interface FormValues {
+  properties: Array<FormValue & Record<string, unknown>>
+  variants: Array<Record<string, unknown> & {
+    values: Array<FormValue>
+  }>
 }
 
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
@@ -57,6 +49,23 @@ export const ATTRIBUTE_VALUE_META: Record<AttributesWithMeta, Record<string, any
     format: "",
   },
 } as const
+
+function convertAttributeValue(
+  value: FormValue["value"],
+  type: AttributeType,
+) {
+  switch (type) {
+    case AttributeType.NUMBER:
+      if (value == null || value === "") return null
+      const num = Number(value)
+      return isNaN(num) ? null : num
+    case AttributeType.BOOLEAN:
+      if (value == null || value === "") return null
+      return value === "true"
+    default:
+      return value
+  }
+}
 
 export default function useProductFormAttributes(emit: EmitsParameter) {
   const route = useRoute()
@@ -179,7 +188,29 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     setFieldValue,
   } = useForm({
     validationSchema: toTypedSchema(
-      productAttributeSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
+      z.preprocess(
+        (formValues) => {
+          const values = formValues as FormValues
+
+          values.properties.forEach((property) => {
+            const attribute = subcategoryAttributes.value.find((attribute) => attribute.id === property.attribute)
+            if (!attribute) return
+            property.value = convertAttributeValue(property.value, attribute.type)
+          })
+
+          values.variants.forEach((variant) => {
+            const attribute = subcategoryAttributes.value.find((attribute) => attribute.id === variant.attribute)
+            if (!attribute) return
+            variant.values = variant.values.map((variant) => ({
+              ...variant,
+              value: convertAttributeValue(variant.value, attribute.type),
+            }))
+          })
+
+          return values
+        },
+        productAttributeSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
+      )
     ),
   })
 
