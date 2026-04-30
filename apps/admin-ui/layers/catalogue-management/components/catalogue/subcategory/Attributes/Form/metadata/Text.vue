@@ -10,6 +10,8 @@ defineProps<Props>()
   <FormFieldInput
     :name="`${field}[${index}].metadata.maxLength`"
     type="number"
+    inputmode="decimal"
+    :min="0"
     label="Maximum Length"
     placeholder="Maximum length of the attribute value"
     clearable />

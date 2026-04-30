@@ -35,7 +35,7 @@ type AttributeValueValidation = {
   message: undefined
 } | {
   isValid: false
-  message: string
+  message: string | Array<string>
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 
@@ -91,13 +91,21 @@ function validateAttributeValue<T extends AttributeType>(
   switch (type) {
     case AttributeType.TEXT:
       const textMetadata = metadata as AttributeMetadata<AttributeType.TEXT>
-      if (
-        textMetadata?.maxLength &&
-        (value as string).length > textMetadata.maxLength
-      ) {
+      let schema = z.string({ message: "Value is required" })
+        .trim()
+        .nonempty({ message: "Value is required" })
+
+      if (textMetadata?.maxLength) {
+        schema = schema.max(textMetadata.maxLength, { message: "Value is too long" })
+      }
+      const {
+        error,
+      } = schema.safeParse(value)
+      if (error) {
+        const message = error.flatten().formErrors
         return {
           isValid: false,
-          message: "Value is too long",
+          message,
         }
       }
       return isValidValueResponse
@@ -297,7 +305,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               metadata,
             } = getSubcategoryAttribute(variant.attribute as string) ?? {}
             if (!metadata || type === undefined) return
-            variant.values.forEach((value, variantIndex) => {
+            variant.values.forEach(({ value }, variantIndex) => {
               const {
                 isValid,
                 message,
