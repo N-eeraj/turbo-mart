@@ -1,4 +1,7 @@
 import z from "zod"
+import {
+  toast,
+} from "vue-sonner"
 
 import {
   productAttributeSchema,
@@ -12,7 +15,7 @@ import {
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 
 interface EmitsParameter {
-  submit: [unknown]
+  submit: []
 }
 
 type ProductInfo = Pick<Product, "subcategory" | "attributes"> & {
@@ -192,13 +195,21 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
         (formValues) => {
           const values = formValues as FormValues
 
-          values.properties.forEach((property) => {
+          values.properties?.forEach((property) => {
             const attribute = subcategoryAttributes.value.find((attribute) => attribute.id === property.attribute)
             if (!attribute) return
             property.value = convertAttributeValue(property.value, attribute.type)
+            if (property.meta && typeof property.meta === "object") {
+              if ("unit" in property.meta) {
+                property.meta.unit = Number(property.meta.unit)
+              }
+              if ("format" in property.meta) {
+                property.meta.format = Number(property.meta.format)
+              }
+            }
           })
 
-          values.variants.forEach((variant) => {
+          values.variants?.forEach((variant) => {
             const attribute = subcategoryAttributes.value.find((attribute) => attribute.id === variant.attribute)
             if (!attribute) return
             variant.values = variant.values.map((variant) => ({
@@ -221,11 +232,15 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
 
   const onSubmit = handleSubmit(async (body) => {
     try {
-      await useApi(`/admin/catalogue/products/${productId.value}/attributes`, {
+      const {
+        message,
+      } = await useApi(`/admin/catalogue/products/${productId.value}/attributes`, {
         method: "PUT",
         body,
       })
 
+      emit("submit")
+      toast.success(message)
     } catch (error: unknown) {
       const {
         message,
@@ -238,6 +253,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     isLoadingProductAttributes,
     isLoadingSubcategoryAttributes,
     subcategoryAttributesMap,
+    isSubmitting,
     onSubmit,
   }
 }

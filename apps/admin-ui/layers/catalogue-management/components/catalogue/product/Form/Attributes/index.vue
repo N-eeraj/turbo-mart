@@ -8,6 +8,7 @@ const {
   isLoadingProductAttributes,
   isLoadingSubcategoryAttributes,
   subcategoryAttributesMap,
+  isSubmitting,
   onSubmit,
 } = useProductFormAttributes(emit)
 </script>
@@ -23,7 +24,9 @@ const {
     <hr />
     <CatalogueProductFormAttributesVariants :attributes="subcategoryAttributesMap.variants" />
     <hr />
-    <BaseButton class="ml-auto">
+    <BaseButton
+      :loading="isSubmitting"
+      class="ml-auto">
       Submit
     </BaseButton>
   </form>

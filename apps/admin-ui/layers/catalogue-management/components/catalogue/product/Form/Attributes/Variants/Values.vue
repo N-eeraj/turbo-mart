@@ -78,13 +78,13 @@ function addVariant() {
     v-auto-animate
     class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-6 w-full">
     <li
-      v-for="(variant, variantIndex) in variantFields"
+      v-for="(_variant, variantIndex) in variantFields"
       :key="variantIndex"
       class="flex flex-col gap-y-3.5 px-3.5 pb-5 rounded-md outline outline-primary/25">
       <BaseButton
         variant="destructive"
         size="icon-sm"
-        type="destructive"
+        type="button"
         :tooltip="{
           content: 'Remove this variant',
           color: 'destructive',

@@ -43,11 +43,20 @@ export default function useProductFormStepper() {
     }
   }
 
-  async function onSubmitProduct(data: any) {
+  function onSubmitProduct(data: any) {
     router.replace({
       path: `/catalogue/products/${data.id}/edit`,
       query: {
         step: 2,
+      },
+    })
+  }
+
+  function onSubmitAttributes() {
+    router.replace({
+      path: `/catalogue/products/${productId.value}/edit`,
+      query: {
+        step: 3,
       },
     })
   }
@@ -57,5 +66,6 @@ export default function useProductFormStepper() {
     steps,
     handleStepChange,
     onSubmitProduct,
+    onSubmitAttributes,
   }
 }

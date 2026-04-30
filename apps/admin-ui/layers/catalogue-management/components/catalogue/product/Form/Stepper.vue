@@ -4,6 +4,7 @@ const {
   steps,
   handleStepChange,
   onSubmitProduct,
+  onSubmitAttributes,
 } = useProductFormStepper()
 </script>
 
@@ -21,7 +22,7 @@ const {
     <template #step-2>
       <CatalogueProductFormAttributes
         class="mt-4"
-        @submit="onSubmitProduct" />
+        @submit="onSubmitAttributes" />
     </template>
     <template #step-3>
       SKU Creation Form

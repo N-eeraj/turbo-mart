@@ -41,36 +41,30 @@ export const productCreationSchema = z.object({
 const attributeId = z.string({ error: PRODUCT.attributes.attribute.required })
   .nonempty(PRODUCT.attributes.attribute.required)
   .trim()
-const attributeValue = z.union([
-  z.string({ error: PRODUCT.attributes.value.required })
-    .nonempty({ error: PRODUCT.attributes.value.required })
-    .trim(),
-  z.number({ error: PRODUCT.attributes.value.required }),
-  z.boolean({ error: PRODUCT.attributes.value.required }),
-  z.iso.datetime({ error: PRODUCT.attributes.value.required }),
-  z.array(
-    z.string({ error: PRODUCT.attributes.value.list.item.required })
-      .nonempty({ error: PRODUCT.attributes.value.list.item.required })
-      .trim(),
-  ),
-  z.array(
-    z.object({
-      key: z.string({ error: PRODUCT.attributes.value.json.key.required })
-        .trim()
-        .min(1, { error: PRODUCT.attributes.value.json.key.required }),
-      value: z.string({ error: PRODUCT.attributes.value.json.value.required })
-        .trim()
-        .min(1, { error: PRODUCT.attributes.value.json.value.required }),
-    })
-  )
-    .optional(),
-])
+  .meta({
+    description: "ID of the attribute.",
+    example: "01abcd091ab01a0123ab012a"
+  })
+const attributeValue = z.unknown()
+  .meta({
+    description: "Value of the attribute, type and structure of the value depends on the attribute type.",
+  })
 
 const attributeLabel = z.string({ error: PRODUCT.attributes.label.required })
   .trim()
   .optional()
+  .meta({
+    description: "Label name of the attribute.",
+    example: "1TB"
+  })
 const attributeMeta = z.looseObject({})
   .optional()
+  .meta({
+    description: "Additional attribute value details.",
+    example: {
+      unit: 3,
+    }
+  })
 
 export const productAttributeSchema = z.object({
   properties: z.array(
