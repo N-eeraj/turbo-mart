@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {
   DateFormatter,
+  CalendarDate,
   fromDate,
   getLocalTimeZone,
   today,
   type DateValue,
 } from "@internationalized/date"
+
 import {
   Calendar,
 } from "@/components/ui/calendar"
@@ -24,8 +26,10 @@ import type {
 interface Props {
   placeholder?: string
   disabled?: boolean
+  minDate?: Date
+  maxDate?: Date
 }
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   placeholder: "Pick a date",
   disabled: false,
 })
@@ -53,6 +57,23 @@ const date = ref<DateValue>(fromDate(modelValueDate.value ?? new Date(), getLoca
 watch(() => date.value, (value: DateValue | undefined) => {
   // always set modelValue to ISO string
   modelValue.value = value?.toDate(getLocalTimeZone()).toISOString() ?? null
+})
+
+const minValue = computed(() => {
+  if (!props.minDate) return
+  return new CalendarDate(
+    props.minDate.getFullYear(),
+    props.minDate.getMonth() + 1,
+    props.minDate.getDate()
+  )
+})
+const maxValue = computed(() => {
+  if (!props.maxDate) return
+  return new CalendarDate(
+    props.maxDate.getFullYear(),
+    props.maxDate.getMonth() + 1,
+    props.maxDate.getDate()
+  )
 })
 </script>
 
@@ -89,6 +110,8 @@ watch(() => date.value, (value: DateValue | undefined) => {
         v-model="date"
         :initial-focus="true"
         :default-placeholder
+        :min-value
+        :max-value
         layout="month-and-year" />
     </PopoverContent>
   </Popover>

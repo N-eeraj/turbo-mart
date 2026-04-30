@@ -24,12 +24,20 @@ type ProductInfo = Pick<Product, "subcategory" | "attributes"> & {
 interface FormValue {
   value: unknown
 }
-interface FormValues {
+interface FormData {
   properties: Array<FormValue & Record<string, unknown>>
   variants: Array<Record<string, unknown> & {
     values: Array<FormValue>
   }>
 }
+type AttributeValueValidation = {
+  isValid: true
+  message: undefined
+} | {
+  isValid: false
+  message: string
+}
+type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
   AttributeType.DATE
@@ -67,6 +75,40 @@ function convertAttributeValue(
       return value === "true"
     default:
       return value
+  }
+}
+
+function validateAttributeValue<T extends AttributeType>(
+  value: FormValue["value"],
+  type: T,
+  metadata: AttributeMetadata<T>,
+): AttributeValueValidation {
+  const isValidValueResponse: AttributeValueValidation = {
+    isValid: true,
+    message: undefined,
+  }
+
+  switch (type) {
+    case AttributeType.TEXT:
+      const textMetadata = metadata as AttributeMetadata<AttributeType.TEXT>
+      if (
+        textMetadata?.maxLength &&
+        (value as string).length > textMetadata.maxLength
+      ) {
+        return {
+          isValid: false,
+          message: "Value is too long",
+        }
+      }
+      return isValidValueResponse
+    case AttributeType.NUMBER:
+      const numberMetadata = metadata as AttributeMetadata<AttributeType.NUMBER>
+      return isValidValueResponse
+    case AttributeType.DATE:
+      const dateMetadata = metadata as AttributeMetadata<AttributeType.DATE>
+      return isValidValueResponse
+    default:
+      return isValidValueResponse
   }
 }
 
@@ -183,6 +225,39 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
     })
   })
 
+  const getSubcategoryAttribute = (attributeId: string) => {
+    return subcategoryAttributes.value?.find((attribute) => attribute.id as unknown as string === attributeId)
+  }
+
+  const preprocessFormData = (formData: unknown) => {
+    const values = formData as FormData
+
+    values.properties?.forEach((property) => {
+      const attribute = getSubcategoryAttribute(property.attribute as string)
+      if (!attribute) return
+      property.value = convertAttributeValue(property.value, attribute.type)
+      if (property.meta && typeof property.meta === "object") {
+        if ("unit" in property.meta) {
+          property.meta.unit = Number(property.meta.unit)
+        }
+        if ("format" in property.meta) {
+          property.meta.format = Number(property.meta.format)
+        }
+      }
+    })
+
+    values.variants?.forEach((variant) => {
+      const attribute = getSubcategoryAttribute(variant.attribute as string)
+      if (!attribute) return
+      variant.values = variant.values.map((variant) => ({
+        ...variant,
+        value: convertAttributeValue(variant.value, attribute.type),
+      }))
+    })
+
+    return values
+  }
+
   const {
     values,
     isSubmitting,
@@ -192,36 +267,51 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
   } = useForm({
     validationSchema: toTypedSchema(
       z.preprocess(
-        (formValues) => {
-          const values = formValues as FormValues
-
-          values.properties?.forEach((property) => {
-            const attribute = subcategoryAttributes.value.find((attribute) => attribute.id === property.attribute)
-            if (!attribute) return
-            property.value = convertAttributeValue(property.value, attribute.type)
-            if (property.meta && typeof property.meta === "object") {
-              if ("unit" in property.meta) {
-                property.meta.unit = Number(property.meta.unit)
-              }
-              if ("format" in property.meta) {
-                property.meta.format = Number(property.meta.format)
-              }
-            }
-          })
-
-          values.variants?.forEach((variant) => {
-            const attribute = subcategoryAttributes.value.find((attribute) => attribute.id === variant.attribute)
-            if (!attribute) return
-            variant.values = variant.values.map((variant) => ({
-              ...variant,
-              value: convertAttributeValue(variant.value, attribute.type),
-            }))
-          })
-
-          return values
-        },
+        preprocessFormData,
         productAttributeSchema as unknown as z.ZodType<any, z.ZodTypeDef, any>
       )
+        .superRefine((formData, ctx) => {
+          const values = formData as FormData
+
+          values.properties?.forEach((property, index) => {
+            const {
+              type,
+              metadata,
+            } = getSubcategoryAttribute(property.attribute as string) ?? {}
+            if (!metadata || type === undefined) return
+            const {
+              isValid,
+              message,
+            } = validateAttributeValue(property.value, type, metadata)
+            if (!isValid) {
+              ctx.addIssue({
+                code: "custom",
+                message,
+                path: [`properties[${index}].value`],
+              })
+            }
+          })
+          values.variants?.forEach((variant, index) => {
+            const {
+              type,
+              metadata,
+            } = getSubcategoryAttribute(variant.attribute as string) ?? {}
+            if (!metadata || type === undefined) return
+            variant.values.forEach((value, variantIndex) => {
+              const {
+                isValid,
+                message,
+              } = validateAttributeValue(value, type, metadata)
+              if (!isValid) {
+                ctx.addIssue({
+                  code: "custom",
+                  message,
+                  path: [`variants[${index}].values[${variantIndex}].value`],
+                })
+              }
+            })
+          })
+        })
     ),
   })
 

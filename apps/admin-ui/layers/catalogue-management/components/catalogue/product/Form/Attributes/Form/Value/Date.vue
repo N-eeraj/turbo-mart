@@ -71,10 +71,22 @@ watch(() => formattedDate.value, (formattedDate) => {
 }, {
   immediate: true,
 })
+
+const minDate = computed(() => {
+  if (!props.attribute.metadata?.min) return
+  return new Date(props.attribute.metadata.min)
+})
+const maxDate = computed(() => {
+  if (!props.attribute.metadata?.max) return
+  return new Date(props.attribute.metadata.max)
+})
 </script>
 
 <template>
-  <FormFieldDatePicker :name="`${fieldName}.value`">
+  <FormFieldDatePicker
+    :name="`${fieldName}.value`"
+    :min-date
+    :max-date>
     <template #label>
       <FormLabel class="text-xs font-medium text-muted-foreground capitalize">
         {{ attributeType }} Value

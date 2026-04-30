@@ -93,6 +93,9 @@ watch(() => [
     :name="`${fieldName}.value`"
     type="number"
     inputmode="decimal"
+    :step="attribute.metadata?.step"
+    :min="attribute.metadata?.min"
+    :max="attribute.metadata?.max"
     :placeholder="`Enter the value for this ${attributeType}`"
     class="gap-y-1.25 [&_input]:text-xs">
     <template #label>
