@@ -35,7 +35,7 @@ type AttributeValueValidation = {
   message: undefined
 } | {
   isValid: false
-  message: string | Array<string>
+  message: string
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 
@@ -91,26 +91,66 @@ function validateAttributeValue<T extends AttributeType>(
   switch (type) {
     case AttributeType.TEXT:
       const textMetadata = metadata as AttributeMetadata<AttributeType.TEXT>
-      let schema = z.string({ message: "Value is required" })
+      let textSchema = z.string({ message: "Value is required" })
         .trim()
         .nonempty({ message: "Value is required" })
 
       if (textMetadata?.maxLength) {
-        schema = schema.max(textMetadata.maxLength, { message: "Value is too long" })
+        textSchema = textSchema.max(textMetadata.maxLength, { message: "Value is too long" })
       }
+
       const {
-        error,
-      } = schema.safeParse(value)
-      if (error) {
-        const message = error.flatten().formErrors
+        error: textError,
+      } = textSchema.safeParse(value)
+      if (textError) {
+        const messages = textError.flatten().formErrors
         return {
           isValid: false,
-          message,
+          message: messages[0]!,
         }
       }
+
       return isValidValueResponse
     case AttributeType.NUMBER:
       const numberMetadata = metadata as AttributeMetadata<AttributeType.NUMBER>
+      let numberSchema = z.coerce.number({ message: "Value is required" })
+      if (!numberMetadata?.allowDecimal) {
+        numberSchema = numberSchema.int({ message: "Value cannot be decimal" })
+      }
+      if (!numberMetadata?.allowNegative) {
+        numberSchema = numberSchema.nonnegative({ message: "Value cannot be negative" })
+      }
+      if (numberMetadata?.step) {
+        numberSchema = numberSchema.step(numberMetadata.step, {
+          message: `Value must be a multiple of ${numberMetadata.step}`
+        })
+      }
+      if (numberMetadata?.min) {
+        numberSchema = numberSchema.min(numberMetadata.min, {
+          message: `Value must be greater than ${numberMetadata.min}`
+        })
+      }
+      if (numberMetadata?.max) {
+        numberSchema = numberSchema.max(numberMetadata.max, {
+          message: `Value must be lesser than ${numberMetadata.max}`
+        })
+      }
+
+      const {
+        error
+      } = numberSchema.safeParse(value)
+
+      const {
+        error: numberError,
+      } = numberSchema.safeParse(value)
+      if (numberError) {
+        const messages = numberError.flatten().formErrors
+        return {
+          isValid: false,
+          message: messages[0]!,
+        }
+      }
+
       return isValidValueResponse
     case AttributeType.DATE:
       const dateMetadata = metadata as AttributeMetadata<AttributeType.DATE>
