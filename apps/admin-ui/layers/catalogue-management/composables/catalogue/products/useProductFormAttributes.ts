@@ -38,7 +38,6 @@ type AttributeValueValidation = {
   message: string
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
-type AttributeValueZodSchema<T extends z.ZodTypeAny> = T | z.ZodNullable<z.ZodOptional<T>>
 
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
   AttributeType.DATE
@@ -90,110 +89,82 @@ function validateAttributeValue<T extends AttributeType>(
     message: undefined,
   }
 
+  let schema: z.ZodTypeAny
+
   switch (type) {
-    case AttributeType.TEXT:
-      const textMetadata = metadata as AttributeMetadata<AttributeType.TEXT>
-      let textSchema: AttributeValueZodSchema<z.ZodString> = z.string({ message: "Value is required" })
+    case AttributeType.TEXT: {
+      const meta = metadata as AttributeMetadata<AttributeType.TEXT>
+
+      let stringSchema = z.string({ message: "Value is required" })
         .trim()
-        .nonempty({ message: "Value is required" })
+        .min(1, { message: "Value is required" })
 
-      if (textMetadata?.maxLength) {
-        textSchema = textSchema.max(textMetadata.maxLength, { message: "Value is too long" })
+      if (meta?.maxLength) {
+        stringSchema = stringSchema.max(meta.maxLength, { message: "Value is too long" })
       }
-      if (!required) {
-        textSchema = textSchema
-          .optional()
-          .nullable()
-      }
+      schema = stringSchema
+      break
+    }
 
-      const {
-        error: textError,
-      } = textSchema.safeParse(value)
-      if (textError) {
-        const messages = textError.flatten().formErrors
-        return {
-          isValid: false,
-          message: messages[0]!,
-        }
-      }
+    case AttributeType.NUMBER: {
+      const meta = metadata as AttributeMetadata<AttributeType.NUMBER>
 
-      return isValidValueResponse
+      let numberSchema = z.coerce.number({ message: "Value is required" })
 
-    case AttributeType.NUMBER:
-      const numberMetadata = metadata as AttributeMetadata<AttributeType.NUMBER>
-      let numberSchema: AttributeValueZodSchema<z.ZodNumber> = z.coerce.number({ message: "Value is required" })
-      if (!numberMetadata?.allowDecimal) {
+      if (!meta?.allowDecimal) {
         numberSchema = numberSchema.int({ message: "Value cannot be decimal" })
       }
-      if (!numberMetadata?.allowNegative) {
+      if (!meta?.allowNegative) {
         numberSchema = numberSchema.nonnegative({ message: "Value cannot be negative" })
       }
-      if (numberMetadata?.step != null) {
-        numberSchema = numberSchema.step(numberMetadata.step, {
-          message: `Value must be a multiple of ${numberMetadata.step}`
+      if (meta?.step != null) {
+        numberSchema = numberSchema.step(meta.step, {
+          message: `Value must be a multiple of ${meta.step}`,
         })
       }
-      if (numberMetadata?.min != null) {
-        numberSchema = numberSchema.min(numberMetadata.min, {
-          message: `Value must be greater than ${numberMetadata.min}`
+      if (meta?.min != null) {
+        numberSchema = numberSchema.min(meta.min, {
+          message: `Value must be greater than ${meta.min}`,
         })
       }
-      if (numberMetadata?.max != null) {
-        numberSchema = numberSchema.max(numberMetadata.max, {
-          message: `Value must be lesser than ${numberMetadata.max}`
+      if (meta?.max != null) {
+        numberSchema = numberSchema.max(meta.max, {
+          message: `Value must be less than ${meta.max}`,
         })
       }
-      if (!required) {
-        numberSchema = numberSchema
-          .optional()
-          .nullable()
-      }
+      schema = numberSchema
+      break
+    }
 
-      const {
-        error
-      } = numberSchema.safeParse(value)
-
-      const {
-        error: numberError,
-      } = numberSchema.safeParse(value)
-      if (numberError) {
-        const messages = numberError.flatten().formErrors
-        return {
-          isValid: false,
-          message: messages[0]!,
-        }
-      }
-
-      return isValidValueResponse
-
-    case AttributeType.BOOLEAN:
-      let booleanSchema: AttributeValueZodSchema<z.ZodBoolean> = z.boolean({ message: "Value is required" })
-      if (!required) {
-        booleanSchema = booleanSchema
-          .optional()
-          .nullable()
-      }
-
-      const {
-        error: booleanError,
-      } = booleanSchema.safeParse(value)
-      if (booleanError) {
-        const messages = booleanError.flatten().formErrors
-        return {
-          isValid: false,
-          message: messages[0]!,
-        }
-      }
-
-      return isValidValueResponse
-
-    case AttributeType.DATE:
-      const dateMetadata = metadata as AttributeMetadata<AttributeType.DATE>
-      return isValidValueResponse
+    case AttributeType.BOOLEAN: {
+      const booleanSchema = z.boolean({ message: "Value is required" })
+      schema = booleanSchema
+      break
+    }
 
     default:
       return isValidValueResponse
   }
+
+  if (!required) {
+    schema = schema
+      .optional()
+      .nullable()
+  }
+
+  const {
+    success,
+    error,
+  } = schema.safeParse(value)
+
+  if (!success) {
+    const message = error.flatten().formErrors[0] ?? "Invalid value"
+    return {
+      isValid: false,
+      message,
+    }
+  }
+  return isValidValueResponse
 }
 
 export default function useProductFormAttributes(emit: EmitsParameter) {
