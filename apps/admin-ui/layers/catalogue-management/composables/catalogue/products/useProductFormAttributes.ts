@@ -38,6 +38,7 @@ type AttributeValueValidation = {
   message: string
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
+type AttributeValueZodSchema<T extends z.ZodTypeAny> = T | z.ZodNullable<z.ZodOptional<T>>
 
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
   AttributeType.DATE
@@ -81,6 +82,7 @@ function convertAttributeValue(
 function validateAttributeValue<T extends AttributeType>(
   value: FormValue["value"],
   type: T,
+  required: boolean,
   metadata: AttributeMetadata<T>,
 ): AttributeValueValidation {
   const isValidValueResponse: AttributeValueValidation = {
@@ -91,12 +93,17 @@ function validateAttributeValue<T extends AttributeType>(
   switch (type) {
     case AttributeType.TEXT:
       const textMetadata = metadata as AttributeMetadata<AttributeType.TEXT>
-      let textSchema = z.string({ message: "Value is required" })
+      let textSchema: AttributeValueZodSchema<z.ZodString> = z.string({ message: "Value is required" })
         .trim()
         .nonempty({ message: "Value is required" })
 
       if (textMetadata?.maxLength) {
         textSchema = textSchema.max(textMetadata.maxLength, { message: "Value is too long" })
+      }
+      if (!required) {
+        textSchema = textSchema
+          .optional()
+          .nullable()
       }
 
       const {
@@ -111,29 +118,35 @@ function validateAttributeValue<T extends AttributeType>(
       }
 
       return isValidValueResponse
+
     case AttributeType.NUMBER:
       const numberMetadata = metadata as AttributeMetadata<AttributeType.NUMBER>
-      let numberSchema = z.coerce.number({ message: "Value is required" })
+      let numberSchema: AttributeValueZodSchema<z.ZodNumber> = z.coerce.number({ message: "Value is required" })
       if (!numberMetadata?.allowDecimal) {
         numberSchema = numberSchema.int({ message: "Value cannot be decimal" })
       }
       if (!numberMetadata?.allowNegative) {
         numberSchema = numberSchema.nonnegative({ message: "Value cannot be negative" })
       }
-      if (numberMetadata?.step) {
+      if (numberMetadata?.step != null) {
         numberSchema = numberSchema.step(numberMetadata.step, {
           message: `Value must be a multiple of ${numberMetadata.step}`
         })
       }
-      if (numberMetadata?.min) {
+      if (numberMetadata?.min != null) {
         numberSchema = numberSchema.min(numberMetadata.min, {
           message: `Value must be greater than ${numberMetadata.min}`
         })
       }
-      if (numberMetadata?.max) {
+      if (numberMetadata?.max != null) {
         numberSchema = numberSchema.max(numberMetadata.max, {
           message: `Value must be lesser than ${numberMetadata.max}`
         })
+      }
+      if (!required) {
+        numberSchema = numberSchema
+          .optional()
+          .nullable()
       }
 
       const {
@@ -152,9 +165,32 @@ function validateAttributeValue<T extends AttributeType>(
       }
 
       return isValidValueResponse
+
+    case AttributeType.BOOLEAN:
+      let booleanSchema: AttributeValueZodSchema<z.ZodBoolean> = z.boolean({ message: "Value is required" })
+      if (!required) {
+        booleanSchema = booleanSchema
+          .optional()
+          .nullable()
+      }
+
+      const {
+        error: booleanError,
+      } = booleanSchema.safeParse(value)
+      if (booleanError) {
+        const messages = booleanError.flatten().formErrors
+        return {
+          isValid: false,
+          message: messages[0]!,
+        }
+      }
+
+      return isValidValueResponse
+
     case AttributeType.DATE:
       const dateMetadata = metadata as AttributeMetadata<AttributeType.DATE>
       return isValidValueResponse
+
     default:
       return isValidValueResponse
   }
@@ -324,13 +360,19 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
           values.properties?.forEach((property, index) => {
             const {
               type,
+              required,
               metadata,
             } = getSubcategoryAttribute(property.attribute as string) ?? {}
             if (!metadata || type === undefined) return
             const {
               isValid,
               message,
-            } = validateAttributeValue(property.value, type, metadata)
+            } = validateAttributeValue(
+              property.value,
+              type,
+              required,
+              metadata,
+            )
             if (!isValid) {
               ctx.addIssue({
                 code: "custom",
@@ -342,6 +384,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
           values.variants?.forEach((variant, index) => {
             const {
               type,
+              required,
               metadata,
             } = getSubcategoryAttribute(variant.attribute as string) ?? {}
             if (!metadata || type === undefined) return
@@ -349,7 +392,12 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               const {
                 isValid,
                 message,
-              } = validateAttributeValue(value, type, metadata)
+              } = validateAttributeValue(
+                value,
+                type,
+                required,
+                metadata,
+              )
               if (!isValid) {
                 ctx.addIssue({
                   code: "custom",
