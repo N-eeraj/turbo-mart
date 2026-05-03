@@ -5,6 +5,7 @@ import {
 
 import {
   productAttributeSchema,
+  validateAttributeValue,
   type Product,
 } from "@app/schemas/admin/catalogue/product"
 import {
@@ -29,13 +30,6 @@ interface FormData {
   variants: Array<Record<string, unknown> & {
     values: Array<FormValue>
   }>
-}
-type AttributeValueValidation = {
-  isValid: true
-  message: undefined
-} | {
-  isValid: false
-  message: string
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 
@@ -76,95 +70,6 @@ function convertAttributeValue(
     default:
       return value
   }
-}
-
-function validateAttributeValue<T extends AttributeType>(
-  value: FormValue["value"],
-  type: T,
-  required: boolean,
-  metadata: AttributeMetadata<T>,
-): AttributeValueValidation {
-  const isValidValueResponse: AttributeValueValidation = {
-    isValid: true,
-    message: undefined,
-  }
-
-  let schema: z.ZodTypeAny
-
-  switch (type) {
-    case AttributeType.TEXT: {
-      const meta = metadata as AttributeMetadata<AttributeType.TEXT>
-
-      let stringSchema = z.string({ message: "Value is required" })
-        .trim()
-        .min(1, { message: "Value is required" })
-
-      if (meta?.maxLength) {
-        stringSchema = stringSchema.max(meta.maxLength, { message: "Value is too long" })
-      }
-      schema = stringSchema
-      break
-    }
-
-    case AttributeType.NUMBER: {
-      const meta = metadata as AttributeMetadata<AttributeType.NUMBER>
-
-      let numberSchema = z.coerce.number({ message: "Value is required" })
-
-      if (!meta?.allowDecimal) {
-        numberSchema = numberSchema.int({ message: "Value cannot be decimal" })
-      }
-      if (!meta?.allowNegative) {
-        numberSchema = numberSchema.nonnegative({ message: "Value cannot be negative" })
-      }
-      if (meta?.step != null) {
-        numberSchema = numberSchema.step(meta.step, {
-          message: `Value must be a multiple of ${meta.step}`,
-        })
-      }
-      if (meta?.min != null) {
-        numberSchema = numberSchema.min(meta.min, {
-          message: `Value must be greater than ${meta.min}`,
-        })
-      }
-      if (meta?.max != null) {
-        numberSchema = numberSchema.max(meta.max, {
-          message: `Value must be less than ${meta.max}`,
-        })
-      }
-      schema = numberSchema
-      break
-    }
-
-    case AttributeType.BOOLEAN: {
-      const booleanSchema = z.boolean({ message: "Value is required" })
-      schema = booleanSchema
-      break
-    }
-
-    default:
-      return isValidValueResponse
-  }
-
-  if (!required) {
-    schema = schema
-      .optional()
-      .nullable()
-  }
-
-  const {
-    success,
-    error,
-  } = schema.safeParse(value)
-
-  if (!success) {
-    const message = error.flatten().formErrors[0] ?? "Invalid value"
-    return {
-      isValid: false,
-      message,
-    }
-  }
-  return isValidValueResponse
 }
 
 export default function useProductFormAttributes(emit: EmitsParameter) {
