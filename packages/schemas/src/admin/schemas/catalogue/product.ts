@@ -9,17 +9,25 @@ import {
   PRODUCT,
 } from "#admin/constants/validationMessages"
 
+interface JsonAttributeValueError {
+  key?: string
+  value?: string
+}
 type AttributeValueValidation = {
   isValid: true
-  message: undefined
+  error: undefined
 } | {
   isValid: false
-  message: string
+  error: string | Array<JsonAttributeValueError>
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 type OptionsWithId<
   T extends Array<AttributeMetadata<AttributeType.SELECT | AttributeType.MULTI_SELECT>["options"][number]>
 > = Array<T[number] & { id: string }>
+interface ZodErrorTree {
+  errors: Array<string>
+  items?: Array<unknown>
+}
 
 export const productCreationSchema = z.object({
   subcategory: z.string({ error: PRODUCT.subcategory.required })
@@ -47,7 +55,7 @@ export const productCreationSchema = z.object({
     .nonempty(PRODUCT.slug.required)
     .trim()
     .regex(/^[a-zA-Z0-9]+$/, {
-      message: PRODUCT.slug.valid,
+      error: PRODUCT.slug.valid,
     })
     .meta({
       description: "Slug of the product.",
@@ -92,7 +100,7 @@ export function validateAttributeValue<T extends AttributeType>(
 ): AttributeValueValidation {
   const isValidValueResponse: AttributeValueValidation = {
     isValid: true,
-    message: undefined,
+    error: undefined,
   }
 
   let schema: z.ZodTypeAny
@@ -152,9 +160,10 @@ export function validateAttributeValue<T extends AttributeType>(
       const meta = metadata as AttributeMetadata<AttributeType.SELECT>
 
       const selectSchema = z.string({ error: "Please select an option" })
+        .nonempty({ error: "Please select an option" })
         .refine((value) => {
-          return (meta.options as OptionsWithId<typeof meta.options>).some((option) => option.id as string === value)
-        })
+          return !(meta.options as OptionsWithId<typeof meta.options>).some((option) => option.id as string === value)
+        }, { error: "Please select a valid option" })
       schema = selectSchema
       break
     }
@@ -162,15 +171,20 @@ export function validateAttributeValue<T extends AttributeType>(
     case AttributeType.MULTI_SELECT: {
       const meta = metadata as AttributeMetadata<AttributeType.SELECT>
 
-      const selectSchema = z.array(
+      let multiSelectSchema = z.array(
         z.string({ error: "Please select an option" })
+          .nonempty({ error: "Please select an option" })
       )
         .refine((values) => {
           return values.every((value) => {
             return (meta.options as OptionsWithId<typeof meta.options>).some((option) => option.id as string === value)
           })
-        })
-      schema = selectSchema
+        }, { error: "Please select a valid option" })
+      if (required) {
+        multiSelectSchema = multiSelectSchema
+          .min(1, { error: "Please select at least 1 option" })
+      }
+      schema = multiSelectSchema
       break
     }
 
@@ -187,6 +201,15 @@ export function validateAttributeValue<T extends AttributeType>(
     }
 
     case AttributeType.JSON: {
+      const jsonSchema = z.array(
+        z.object({
+          key: z.string({ error: "Please enter a key name" })
+            .nonempty({ error: "Please enter a key name" }),
+          value: z.string({ error: "Please enter a value" })
+            .nonempty({ error: "Please enter a value" }),
+        })
+      )
+      schema = jsonSchema
       break
     }
 
@@ -194,7 +217,10 @@ export function validateAttributeValue<T extends AttributeType>(
       return isValidValueResponse
   }
 
-  if (!required) {
+  if (
+    !required ||
+    type === AttributeType.JSON
+  ) {
     schema = schema
       .optional()
       .nullable()
@@ -202,16 +228,50 @@ export function validateAttributeValue<T extends AttributeType>(
 
   const {
     success,
-    error,
+    error: parseError,
   } = schema.safeParse(value)
 
+  // handle value errors
   if (!success) {
-    const message = z.treeifyError(error).errors[0] ?? "Invalid value"
+    const errorTree: ZodErrorTree = z.treeifyError(parseError)
+    let error: AttributeValueValidation["error"] = errorTree.errors[0]
+
+    if (type === AttributeType.MULTI_SELECT && !error) { // multi select item error handling
+      const multiSelectItemErrors = errorTree.items?.[0]
+      if (
+        multiSelectItemErrors
+        && typeof multiSelectItemErrors === "object"
+        && "errors" in multiSelectItemErrors
+        && Array.isArray(multiSelectItemErrors.errors)
+      ) {
+        error = multiSelectItemErrors.errors[0]
+      }
+    } else if (type === AttributeType.JSON) { // JSON key-value error handling
+      const jsonErrors = errorTree.items?.map((item) => {
+        if (
+          item &&
+          typeof item === "object" &&
+          "properties" in item
+        ) {
+          const properties = item.properties as Record<"key" | "value", any>
+          return {
+            key: properties?.key?.errors?.[0],
+            value: properties?.value?.errors?.[0],
+          }
+        }
+        return {}
+      })
+      if (jsonErrors) {
+        error = jsonErrors
+      }
+    }
+
     return {
       isValid: false,
-      message,
+      error: (error || "Invalid value") satisfies NonNullable<AttributeValueValidation["error"]>,
     }
   }
+
   return isValidValueResponse
 }
 

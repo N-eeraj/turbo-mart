@@ -31,7 +31,6 @@ interface FormData {
     values: Array<FormValue>
   }>
 }
-type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
   AttributeType.DATE
@@ -234,15 +233,16 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
           const values = formData as FormData
 
           values.properties?.forEach((property, index) => {
+            const attribute = getSubcategoryAttribute(property.attribute as string)
+            if (!attribute) return
             const {
               type,
               required,
               metadata,
-            } = getSubcategoryAttribute(property.attribute as string) ?? {}
-            if (!metadata || type === undefined) return
+            } = attribute
             const {
               isValid,
-              message,
+              error,
             } = validateAttributeValue(
               property.value,
               type,
@@ -250,24 +250,44 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               metadata,
             )
             if (!isValid) {
-              ctx.addIssue({
-                code: "custom",
-                message,
-                path: [`properties[${index}].value`],
-              })
+              if (typeof error === "string") {
+                ctx.addIssue({
+                  code: "custom",
+                  message: error,
+                  path: [`properties[${index}].value`],
+                })
+              } else {
+                error.forEach((err, keyValueIndex) => {
+                  if (err.key) {
+                    ctx.addIssue({
+                      code: "custom",
+                      message: err.key,
+                      path: [`properties[${index}].value[${keyValueIndex}].key`],
+                    })
+                  }
+                  if (err.value) {
+                    ctx.addIssue({
+                      code: "custom",
+                      message: err.value,
+                      path: [`properties[${index}].value[${keyValueIndex}].value`],
+                    })
+                  }
+                })
+              }
             }
           })
           values.variants?.forEach((variant, index) => {
+            const attribute = getSubcategoryAttribute(variant.attribute as string)
+            if (!attribute) return
             const {
               type,
               required,
               metadata,
-            } = getSubcategoryAttribute(variant.attribute as string) ?? {}
-            if (!metadata || type === undefined) return
+            } = attribute
             variant.values.forEach(({ value }, variantIndex) => {
               const {
                 isValid,
-                message,
+                error,
               } = validateAttributeValue(
                 value,
                 type,
@@ -275,11 +295,30 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
                 metadata,
               )
               if (!isValid) {
-                ctx.addIssue({
-                  code: "custom",
-                  message,
-                  path: [`variants[${index}].values[${variantIndex}].value`],
-                })
+                if (typeof error === "string") {
+                  ctx.addIssue({
+                    code: "custom",
+                    message: error,
+                    path: [`variants[${index}].values[${variantIndex}].value`],
+                  })
+                } else {
+                  error.forEach((err, keyValueIndex) => {
+                    if (err.key) {
+                      ctx.addIssue({
+                        code: "custom",
+                        message: err.key,
+                        path: [`variants[${index}].values[${variantIndex}].value[${keyValueIndex}].key`],
+                      })
+                    }
+                    if (err.value) {
+                      ctx.addIssue({
+                        code: "custom",
+                        message: err.value,
+                        path: [`variants[${index}].values[${variantIndex}].value[${keyValueIndex}].value`],
+                      })
+                    }
+                  })
+                }
               }
             })
           })
