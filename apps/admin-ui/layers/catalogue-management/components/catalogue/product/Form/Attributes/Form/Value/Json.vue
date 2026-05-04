@@ -54,15 +54,27 @@ function addKeyValuePair() {
     <li
       v-for="(keyValue, keyValueIndex) in keyValueFields"
       :key="keyValue.key"
-      class="flex justify-between items-center">
+      class="flex justify-between items-start">
       <FormFieldInput
         :name="`${fieldName}.value[${keyValueIndex}].key`"
         placeholder="Enter key name"
-        class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none" />
+        class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none">
+        <template #error="{ errorMessage }">
+          <small class="text-[10px] mt-px mb-1 text-destructive">
+            {{ errorMessage }}
+          </small>
+        </template>
+      </FormFieldInput>
       <FormFieldInput
         :name="`${fieldName}.value[${keyValueIndex}].value`"
         placeholder="Enter value"
-        class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none" />
+        class="flex-1 gap-y-0.5 [&_input]:text-xs **:data-[slot=form-control]:rounded-none">
+        <template #error="{ errorMessage }">
+          <small class="text-[10px] mt-px mb-1 text-destructive">
+            {{ errorMessage }}
+          </small>
+        </template>
+      </FormFieldInput>
       <BaseButton
         variant="destructive"
         type="button"
@@ -71,7 +83,7 @@ function addKeyValuePair() {
           content: 'Remove this key value fields',
           color: 'destructive',
         }"
-        class="size-7 ml-2 bg-destructive/10! hover:bg-destructive/20! border border-destructive/30 duration-400"
+        class="size-7 ml-2 my-1 bg-destructive/10! hover:bg-destructive/20! border border-destructive/30 duration-400"
         @click="keyValueRemove(keyValueIndex)">
         <Icon
           name="ic:round-minus"

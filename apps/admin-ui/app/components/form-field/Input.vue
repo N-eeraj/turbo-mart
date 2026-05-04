@@ -145,6 +145,7 @@ function toggleInputType() {
 
         <slot
           name="error"
+          v-if="errors?.length || errorMessage"
           :errors
           :errorMessage>
           <FormMessage class="text-xs" />
