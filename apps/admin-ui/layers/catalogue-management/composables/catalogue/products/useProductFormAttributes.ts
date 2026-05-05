@@ -31,6 +31,13 @@ interface FormData {
     values: Array<FormValue>
   }>
 }
+interface AttributeValueValidation {
+  value: unknown
+  type: AttributeType
+  required: AttributeObject<AttributeType>["required"]
+  metadata: AttributeObject<AttributeType>["metadata"]
+  basePath: string
+}
 
 export const ATTRIBUTES_WITH_READONLY_LABEL: Array<AttributeType> = [
   AttributeType.DATE
@@ -69,6 +76,67 @@ function convertAttributeValue(
     default:
       return value
   }
+}
+
+/**
+ * Runs attribute value validation and reports any resulting issues to the given Zod refinement context.
+ *
+ * Uses `validateAttributeValue` to check the provided value and, if invalid,
+ * adds one or more issues to `ctx` with appropriate error messages and paths.
+ *
+ * @param ctx - Zod refinement context used to collect validation issues.
+ * @param params - Validation parameters.
+ * @param params.value - The value to validate.
+ * @param params.type - The expected attribute type.
+ * @param params.required - Whether the value is required.
+ * @param params.metadata - Additional metadata used during validation.
+ * @param params.basePath - Base path used to construct issue paths in the context.
+ */
+function applyValidation(ctx: z.RefinementCtx, {
+  value,
+  type,
+  required,
+  metadata,
+  basePath,
+}: AttributeValueValidation) {
+  const {
+    isValid,
+    error,
+  } = validateAttributeValue(
+    value,
+    type,
+    required,
+    metadata,
+  )
+
+  if (isValid) return
+
+  if (typeof error === "string") {
+    ctx.addIssue({
+      code: "custom",
+      message: error,
+      path: [basePath],
+    })
+    return
+  }
+
+  error.forEach((err, keyValueIndex) => {
+    if (err.key) {
+      ctx.addIssue({
+        code: "custom",
+        message: err.key,
+        path: [`${basePath}[${keyValueIndex}].key`],
+      })
+    }
+
+    if (err.value) {
+      ctx.addIssue({
+        code: "custom",
+        message: err.value,
+        path: [`${basePath}[${keyValueIndex}].value`],
+      })
+    }
+  })
 }
 
 export default function useProductFormAttributes(emit: EmitsParameter) {
@@ -151,7 +219,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
       const metaData = ATTRIBUTE_VALUE_META[type] ? { ...ATTRIBUTE_VALUE_META[type] } : undefined
 
       const existingPropertyValue = existingProperties
-        ?.find((property) => property.attribute === id)
+        ?.find((property) => property.attribute === String(id))
       if (existingPropertyValue) return existingPropertyValue
 
       let value: string | Array<string> = ""
@@ -169,7 +237,7 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
 
     const variants = data.variants.map(({ id }) => {
       const existingPropertyValue = existingVariants
-        ?.find((variant) => variant.attribute === id)
+        ?.find((variant) => variant.attribute === String(id))
       if (existingPropertyValue) return existingPropertyValue
 
       return {
@@ -240,42 +308,15 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               required,
               metadata,
             } = attribute
-            const {
-              isValid,
-              error,
-            } = validateAttributeValue(
-              property.value,
+            applyValidation(ctx, {
+              value: property.value,
               type,
               required,
               metadata,
-            )
-            if (!isValid) {
-              if (typeof error === "string") {
-                ctx.addIssue({
-                  code: "custom",
-                  message: error,
-                  path: [`properties[${index}].value`],
-                })
-              } else {
-                error.forEach((err, keyValueIndex) => {
-                  if (err.key) {
-                    ctx.addIssue({
-                      code: "custom",
-                      message: err.key,
-                      path: [`properties[${index}].value[${keyValueIndex}].key`],
-                    })
-                  }
-                  if (err.value) {
-                    ctx.addIssue({
-                      code: "custom",
-                      message: err.value,
-                      path: [`properties[${index}].value[${keyValueIndex}].value`],
-                    })
-                  }
-                })
-              }
-            }
+              basePath: `properties[${index}].value`,
+            })
           })
+
           values.variants?.forEach((variant, index) => {
             const attribute = getSubcategoryAttribute(variant.attribute as string)
             if (!attribute) return
@@ -285,41 +326,13 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               metadata,
             } = attribute
             variant.values.forEach(({ value }, variantIndex) => {
-              const {
-                isValid,
-                error,
-              } = validateAttributeValue(
+              applyValidation(ctx, {
                 value,
                 type,
                 required,
                 metadata,
-              )
-              if (!isValid) {
-                if (typeof error === "string") {
-                  ctx.addIssue({
-                    code: "custom",
-                    message: error,
-                    path: [`variants[${index}].values[${variantIndex}].value`],
-                  })
-                } else {
-                  error.forEach((err, keyValueIndex) => {
-                    if (err.key) {
-                      ctx.addIssue({
-                        code: "custom",
-                        message: err.key,
-                        path: [`variants[${index}].values[${variantIndex}].value[${keyValueIndex}].key`],
-                      })
-                    }
-                    if (err.value) {
-                      ctx.addIssue({
-                        code: "custom",
-                        message: err.value,
-                        path: [`variants[${index}].values[${variantIndex}].value[${keyValueIndex}].value`],
-                      })
-                    }
-                  })
-                }
-              }
+                basePath: `variants[${index}].values[${variantIndex}].value`,
+              })
             })
           })
         })
