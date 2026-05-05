@@ -6,6 +6,7 @@ import {
 import {
   productAttributeSchema,
   validateAttributeValue,
+  validateAttributeMeta,
   type Product,
 } from "@app/schemas/admin/catalogue/product"
 import {
@@ -22,13 +23,15 @@ interface EmitsParameter {
 type ProductInfo = Pick<Product, "subcategory" | "attributes"> & {
   id: string
 }
-interface FormValue {
+interface FormValueMeta {
   value: unknown
+  meta: Record<string, unknown> | undefined
 }
+type FormItems = Array<FormValueMeta & Record<string, unknown>>
 interface FormData {
-  properties: Array<FormValue & Record<string, unknown>>
+  properties: FormItems
   variants: Array<Record<string, unknown> & {
-    values: Array<FormValue>
+    values: FormItems
   }>
 }
 interface AttributeValueValidation {
@@ -62,7 +65,7 @@ export const ATTRIBUTE_VALUE_META: Record<AttributesWithMeta, Record<string, any
 } as const
 
 function convertAttributeValue(
-  value: FormValue["value"],
+  value: FormValueMeta["value"],
   type: AttributeType,
 ) {
   switch (type) {
@@ -92,7 +95,7 @@ function convertAttributeValue(
  * @param params.metadata - Additional metadata used during validation.
  * @param params.basePath - Base path used to construct issue paths in the context.
  */
-function applyValidation(ctx: z.RefinementCtx, {
+function applyValueValidation(ctx: z.RefinementCtx, {
   value,
   type,
   required,
@@ -137,6 +140,58 @@ function applyValidation(ctx: z.RefinementCtx, {
       })
     }
   })
+}
+
+/**
+ * Validates attribute metadata using `validateAttributeMeta` and reports
+ * any validation errors to a Zod refinement context.
+ *
+ * If validation fails, this function maps the error to a specific nested
+ * path based on the attribute type and adds a custom issue to the Zod
+ * context so it can be surfaced in schema validation errors.
+ *
+ * Path mapping rules:
+ * - NUMBER → `${basePath}.unit`
+ * - DATE → `${basePath}.format`
+ *
+ * @param ctx - Zod refinement context used to register validation issues.
+ * @param meta - Attribute metadata passed to `validateAttributeMeta`.
+ * @param type - Attribute type used to determine validation rules and error path mapping.
+ * @param metadata - Additional metadata required by `validateAttributeMeta`.
+ * @param basePath - Base object path where the validation error should be attached.
+ */
+function applyMetaValidation(
+  ctx: z.RefinementCtx,
+  meta: Parameters<typeof validateAttributeMeta>[0],
+  type: Parameters<typeof validateAttributeMeta>[1],
+  metadata: Parameters<typeof validateAttributeMeta>[2],
+  basePath: string,
+) {
+  const {
+    isValid,
+    error,
+  } = validateAttributeMeta(
+    meta,
+    type,
+    metadata
+  )
+  if (!isValid) {
+    let path = basePath
+    switch (type) {
+      case AttributeType.NUMBER:
+        path += ".unit"
+        break
+      case AttributeType.DATE:
+        path += ".format"
+        break
+    }
+    
+    ctx.addIssue({
+      code: "custom",
+      message: error,
+      path: [path],
+    })
+  }
 }
 
 export default function useProductFormAttributes(emit: EmitsParameter) {
@@ -264,11 +319,19 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
       if (!attribute) return
       property.value = convertAttributeValue(property.value, attribute.type)
       if (property.meta && typeof property.meta === "object") {
-        if ("unit" in property.meta) {
-          property.meta.unit = Number(property.meta.unit)
+        if ( "unit" in property.meta) {
+          if (property.meta.unit || property.meta.unit === 0) {
+            property.meta.unit = Number(property.meta.unit)
+          } else {
+            property.meta.unit = null
+          }
         }
-        if ("format" in property.meta) {
-          property.meta.format = Number(property.meta.format)
+        if ( "format" in property.meta) {
+          if (property.meta.format || property.meta.format === 0) {
+            property.meta.format = Number(property.meta.format)
+          } else {
+            property.meta.format = null
+          }
         }
       }
     })
@@ -308,12 +371,22 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               required,
               metadata,
             } = attribute
-            applyValidation(ctx, {
+            const propertyPath = `properties[${index}]`
+
+            applyMetaValidation(
+              ctx,
+              property.meta,
+              type,
+              metadata,
+              `${propertyPath}.meta`
+            )
+
+            applyValueValidation(ctx, {
               value: property.value,
               type,
               required,
               metadata,
-              basePath: `properties[${index}].value`,
+              basePath: `${propertyPath}.value`,
             })
           })
 
@@ -325,13 +398,23 @@ export default function useProductFormAttributes(emit: EmitsParameter) {
               required,
               metadata,
             } = attribute
-            variant.values.forEach(({ value }, variantIndex) => {
-              applyValidation(ctx, {
-                value,
+            variant.values.forEach((variantProperty, variantIndex) => {
+            const variantPath = `variants[${index}].values[${variantIndex}]`
+
+              applyMetaValidation(
+                ctx,
+                variantProperty.meta,
+                type,
+                metadata,
+                `${variantPath}.meta`,
+              )
+
+              applyValueValidation(ctx, {
+                value: variantProperty.value,
                 type,
                 required,
                 metadata,
-                basePath: `variants[${index}].values[${variantIndex}].value`,
+                basePath: `${variantPath}.value`,
               })
             })
           })

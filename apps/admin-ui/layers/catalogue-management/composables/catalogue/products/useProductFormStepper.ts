@@ -44,7 +44,7 @@ export default function useProductFormStepper() {
   }
 
   function onSubmitProduct(data: any) {
-    router.replace({
+    router.push({
       path: `/catalogue/products/${data.id}/edit`,
       query: {
         step: 2,
@@ -53,7 +53,7 @@ export default function useProductFormStepper() {
   }
 
   function onSubmitAttributes() {
-    router.replace({
+    router.push({
       path: `/catalogue/products/${productId.value}/edit`,
       query: {
         step: 3,

@@ -6,6 +6,9 @@ import type {
   AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
 import {
+  DateFormats,
+} from "@app/definitions/date"
+import {
   PRODUCT,
 } from "#admin/constants/validationMessages"
 
@@ -13,12 +16,12 @@ interface JsonAttributeValueError {
   key?: string
   value?: string
 }
-type AttributeValueValidation = {
+type AttributeValidationResponse<T extends boolean = false> = {
   isValid: true
   error: undefined
 } | {
   isValid: false
-  error: string | Array<JsonAttributeValueError>
+  error: T extends true ? string | Array<JsonAttributeValueError> : string
 }
 type AttributeMetadata<T extends AttributeType> = AttributeObject<T>["metadata"]
 type OptionsWithId<
@@ -90,20 +93,21 @@ const attributeMeta = z.looseObject({})
       unit: 3,
     }
   })
-
+export const numberAttributeMetaFormat = z.number({ error: "Please select a unit" })
+export const dateAttributeMetaFormat = z.enum(DateFormats, { error: "Please select a date format" })
 
 export function validateAttributeValue<T extends AttributeType>(
   value: unknown,
   type: T,
   required: boolean,
   metadata: AttributeMetadata<T>,
-): AttributeValueValidation {
-  const isValidValueResponse: AttributeValueValidation = {
+): AttributeValidationResponse<true> {
+  const isValidValueResponse: AttributeValidationResponse<true> = {
     isValid: true,
     error: undefined,
   }
 
-  let schema: z.ZodTypeAny
+  let schema: z.ZodType
 
   switch (type) {
     case AttributeType.TEXT: {
@@ -234,7 +238,7 @@ export function validateAttributeValue<T extends AttributeType>(
   // handle value errors
   if (!success) {
     const errorTree: ZodErrorTree = z.treeifyError(parseError)
-    let error: AttributeValueValidation["error"] = errorTree.errors[0]
+    let error: AttributeValidationResponse<true>["error"] = errorTree.errors[0]
 
     if (type === AttributeType.MULTI_SELECT && !error) { // multi select item error handling
       const multiSelectItemErrors = errorTree.items?.[0]
@@ -268,10 +272,50 @@ export function validateAttributeValue<T extends AttributeType>(
 
     return {
       isValid: false,
-      error: (error || "Invalid value") satisfies NonNullable<AttributeValueValidation["error"]>,
+      error: (error || "Invalid value") satisfies NonNullable<AttributeValidationResponse<true>["error"]>,
     }
   }
 
+  return isValidValueResponse
+}
+export function validateAttributeMeta(
+  meta: Record<string, unknown> | undefined,
+  type: AttributeType,
+  metadata: any,
+): AttributeValidationResponse {
+  const isValidValueResponse: AttributeValidationResponse = {
+    isValid: true,
+    error: undefined,
+  }
+  let value: unknown
+  let schema: z.ZodType
+
+  switch (type) {
+    case AttributeType.NUMBER: {
+      schema = numberAttributeMetaFormat
+      value = meta?.unit
+      break
+    }
+
+    case AttributeType.DATE: {
+      schema = dateAttributeMetaFormat
+      value = meta?.format
+      break
+    }
+
+    default:
+      return isValidValueResponse
+  }
+
+  const {
+    error,
+  } = schema.safeParse(value)
+  if (error) {
+    return {
+      isValid: false,
+      error: z.treeifyError(error).errors[0],
+    }
+  }
   return isValidValueResponse
 }
 
