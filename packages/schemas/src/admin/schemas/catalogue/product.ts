@@ -93,8 +93,8 @@ const attributeMeta = z.looseObject({})
       unit: 3,
     }
   })
-export const numberAttributeMetaFormat = z.number({ error: "Please select a unit" })
-export const dateAttributeMetaFormat = z.enum(DateFormats, { error: "Please select a date format" })
+export const numberAttributeMetaFormat = z.number({ error: PRODUCT.attributes.meta.number.unit.required })
+export const dateAttributeMetaFormat = z.enum(DateFormats, { error: PRODUCT.attributes.meta.date.format.valid })
 
 export function validateAttributeValue<T extends AttributeType>(
   value: unknown,
@@ -113,12 +113,11 @@ export function validateAttributeValue<T extends AttributeType>(
     case AttributeType.TEXT: {
       const meta = metadata as AttributeMetadata<AttributeType.TEXT>
 
-      let stringSchema = z.string({ error: "Please enter a value" })
-        .trim()
-        .min(1, { error: "Please enter a value" })
+      let stringSchema = z.string({ error: PRODUCT.attributes.value.text.required })
+        .nonempty({ error: PRODUCT.attributes.value.text.required })
 
       if (meta?.maxLength) {
-        stringSchema = stringSchema.max(meta.maxLength, { error: "Value is too long" })
+        stringSchema = stringSchema.max(meta.maxLength, { error: PRODUCT.attributes.value.text.maxLength })
       }
       schema = stringSchema
       break
@@ -127,27 +126,27 @@ export function validateAttributeValue<T extends AttributeType>(
     case AttributeType.NUMBER: {
       const meta = metadata as AttributeMetadata<AttributeType.NUMBER>
 
-      let numberSchema = z.coerce.number({ error: "Please enter a valid number" })
+      let numberSchema = z.coerce.number({ error: PRODUCT.attributes.value.number.required })
 
       if (!meta?.allowDecimal) {
-        numberSchema = numberSchema.int({ error: "Value cannot be decimal" })
+        numberSchema = numberSchema.int({ error: PRODUCT.attributes.value.number.nonDecimal })
       }
       if (!meta?.allowNegative) {
-        numberSchema = numberSchema.nonnegative({ error: "Value cannot be negative" })
+        numberSchema = numberSchema.nonnegative({ error: PRODUCT.attributes.value.number.nonNegative })
       }
       if (meta?.step != null) {
-        numberSchema = numberSchema.step(meta.step, {
-          error: `Value must be a multiple of ${meta.step}`,
+        numberSchema = numberSchema.multipleOf(meta.step, {
+          error: `${PRODUCT.attributes.value.number.step} ${meta.step}`,
         })
       }
       if (meta?.min != null) {
         numberSchema = numberSchema.min(meta.min, {
-          error: `Value must be greater than ${meta.min}`,
+          error: `${PRODUCT.attributes.value.number.min} ${meta.min}`,
         })
       }
       if (meta?.max != null) {
         numberSchema = numberSchema.max(meta.max, {
-          error: `Value must be less than ${meta.max}`,
+          error: `${PRODUCT.attributes.value.number.max} ${meta.max}`,
         })
       }
       schema = numberSchema
@@ -155,7 +154,7 @@ export function validateAttributeValue<T extends AttributeType>(
     }
 
     case AttributeType.BOOLEAN: {
-      const booleanSchema = z.boolean({ error: "Please select a valid boolean" })
+      const booleanSchema = z.boolean({ error: PRODUCT.attributes.value.boolean.required })
       schema = booleanSchema
       break
     }
@@ -163,11 +162,11 @@ export function validateAttributeValue<T extends AttributeType>(
     case AttributeType.SELECT: {
       const meta = metadata as AttributeMetadata<AttributeType.SELECT>
 
-      const selectSchema = z.string({ error: "Please select an option" })
-        .nonempty({ error: "Please select an option" })
+      const selectSchema = z.string({ error: PRODUCT.attributes.value.select.required })
+        .nonempty({ error: PRODUCT.attributes.value.select.required })
         .refine((value) => {
           return !(meta.options as OptionsWithId<typeof meta.options>).some((option) => option.id as string === value)
-        }, { error: "Please select a valid option" })
+        }, { error: PRODUCT.attributes.value.select.valid })
       schema = selectSchema
       break
     }
@@ -176,30 +175,30 @@ export function validateAttributeValue<T extends AttributeType>(
       const meta = metadata as AttributeMetadata<AttributeType.SELECT>
 
       let multiSelectSchema = z.array(
-        z.string({ error: "Please select an option" })
-          .nonempty({ error: "Please select an option" })
+        z.string({ error: PRODUCT.attributes.value.select.required })
+          .nonempty({ error: PRODUCT.attributes.value.select.required })
       )
         .refine((values) => {
           return values.every((value) => {
             return (meta.options as OptionsWithId<typeof meta.options>).some((option) => option.id as string === value)
           })
-        }, { error: "Please select a valid option" })
+        }, { error: PRODUCT.attributes.value.select.valid })
       if (required) {
         multiSelectSchema = multiSelectSchema
-          .min(1, { error: "Please select at least 1 option" })
+          .min(1, { error: PRODUCT.attributes.value.multiSelect.minLength })
       }
       schema = multiSelectSchema
       break
     }
 
     case AttributeType.COLOR: {
-      const colorSchema = z.string({ error: "Please select a color" })
+      const colorSchema = z.string({ error: PRODUCT.attributes.value.color.required })
       schema = colorSchema
       break
     }
 
     case AttributeType.DATE: {
-      const colorSchema = z.iso.datetime({ error: "Please enter a valid date" })
+      const colorSchema = z.iso.datetime({ error: PRODUCT.attributes.value.date.valid })
       schema = colorSchema
       break
     }
@@ -207,10 +206,10 @@ export function validateAttributeValue<T extends AttributeType>(
     case AttributeType.JSON: {
       const jsonSchema = z.array(
         z.object({
-          key: z.string({ error: "Please enter a key name" })
-            .nonempty({ error: "Please enter a key name" }),
-          value: z.string({ error: "Please enter a value" })
-            .nonempty({ error: "Please enter a value" }),
+          key: z.string({ error: PRODUCT.attributes.value.json.key.required })
+            .nonempty({ error: PRODUCT.attributes.value.json.key.required }),
+          value: z.string({ error: PRODUCT.attributes.value.json.value.required })
+            .nonempty({ error: PRODUCT.attributes.value.json.value.required }),
         })
       )
       schema = jsonSchema
@@ -278,6 +277,7 @@ export function validateAttributeValue<T extends AttributeType>(
 
   return isValidValueResponse
 }
+
 export function validateAttributeMeta(
   meta: Record<string, unknown> | undefined,
   type: AttributeType,

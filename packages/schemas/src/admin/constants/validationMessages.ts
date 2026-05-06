@@ -1,3 +1,5 @@
+// auth & user
+
 export const EMAIL = {
   required: "Please enter an email",
   valid: "Please enter a valid email",
@@ -70,6 +72,8 @@ export const NOTIFICATION_IDS = {
     minLength: "Please select at least 1 notification",
   },
 }
+
+// catalogue
 
 export const CATEGORY = {
   name: {
@@ -236,11 +240,33 @@ export const PRODUCT = {
     },
     value: {
       required: "Please enter a value",
-      list: {
-        minLength: "Please select at least 1 value",
-        item: {
-          required: "Please select a value",
-        },
+      text: {
+        required: "Please enter a value",
+        maxLength: "Please enter a shorter value",
+      },
+      number: {
+        required: "Please enter a valid number",
+        nonDecimal: "Value cannot be decimal",
+        nonNegative: "Value cannot be negative",
+        step: "Value must be a multiple of",
+        min: "Value must be greater than",
+        max: "Value must be less than",
+      },
+      boolean: {
+        required: "Please select a valid boolean",
+      },
+      select: {
+        required: "Please select an option",
+        valid: "Please select a valid option",
+      },
+      multiSelect: {
+        minLength: "Please select at least 1 option",
+      },
+      color: {
+        required: "Please select a color",
+      },
+      date: {
+        valid: "Please enter a valid date",
       },
       json: {
         key: {
@@ -258,6 +284,18 @@ export const PRODUCT = {
       slug: {
         required: "Please enter a slug",
         alphanumeric: "Only alphanumeric characters are allowed",
+      },
+    },
+    meta: {
+      number: {
+        unit: {
+          required: "Please select a unit",
+        },
+      },
+      date: {
+        format: {
+          valid: "Please select a date format",
+        },
       },
     },
   },
