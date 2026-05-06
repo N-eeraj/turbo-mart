@@ -16,6 +16,8 @@ interface Props {
   disabled?: boolean
   readonly?: boolean
   clearable?: boolean
+  minDate?: Date
+  maxDate?: Date
 }
 const props = defineProps<Props>()
 
@@ -55,7 +57,20 @@ const attrs = useAttrs()
               v-bind="componentField"
               :placeholder
               :disabled="disabled || readonly"
-              class="flex-1" />
+              :min-date
+              :max-date
+              class="flex-1">
+            <template #value="data">
+              <slot
+                name="value"
+                v-bind="data" />
+            </template>
+            <template #placeholder="data">
+              <slot
+                name="placeholder"
+                v-bind="data" />
+            </template>
+            </BaseDatePicker>
             <BaseButton
               variant="ghost"
               type="button"

@@ -8,15 +8,26 @@ const {
   isLoadingProductAttributes,
   isLoadingSubcategoryAttributes,
   subcategoryAttributesMap,
+  isSubmitting,
+  onSubmit,
 } = useProductFormAttributes(emit)
 </script>
 
 <template>
   <BaseLinearProgress v-if="isLoadingProductAttributes || isLoadingSubcategoryAttributes" />
+
   <form
     v-else
-    class="space-y-3">
-    <CatalogueProductFormAttributesBaseAttributes :attributes="subcategoryAttributesMap.base" />
-    <CatalogueProductFormAttributesVariantAttributes :attributes="subcategoryAttributesMap.variant" />
+    class="flex flex-col gap-y-6"
+    @submit="onSubmit">
+    <CatalogueProductFormAttributesProperties :attributes="subcategoryAttributesMap.properties" />
+    <hr />
+    <CatalogueProductFormAttributesVariants :attributes="subcategoryAttributesMap.variants" />
+    <hr />
+    <BaseButton
+      :loading="isSubmitting"
+      class="ml-auto">
+      Submit
+    </BaseButton>
   </form>
 </template>

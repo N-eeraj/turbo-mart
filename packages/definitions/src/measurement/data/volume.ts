@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { VolumeUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  VolumeUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -28,7 +32,7 @@ export const convertVolume: ConversionFn<MeasurementType.VOLUME> = (from, to, va
   return (value * fromFactor) / toFactor
 }
 
-const VOLUME_UNITS: Record<VolumeUnits, MeasurementUnitData<VolumeUnits>> = {
+const VOLUME_UNITS: UnitsEnumMapValue<VolumeUnits> = {
   [VolumeUnits.CUBIC_MILLIMETER]: {
     name: "Cubic Millimeter",
     symbol: "mm³",

@@ -29,11 +29,13 @@ interface InfinityProps {
 interface Props extends SelectRootProps, InfinityProps {
   options: Array<SelectItemProps>
   placeholder?: string
+  searchPlaceholder?: string
   loading?: boolean
   clearable?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   hasMoreItems: true,
+  searchPlaceholder: "Search",
 })
 const modelValue = defineModel<AcceptableValue | Array<AcceptableValue> | undefined>()
 const search = defineModel<string>("search", {
@@ -42,7 +44,7 @@ const search = defineModel<string>("search", {
 
 interface Emits {
   scrollEnd: []
-  change: [AcceptableValue | Array<AcceptableValue> | undefined]
+  valueChange: [AcceptableValue | Array<AcceptableValue> | undefined]
 }
 const emit = defineEmits<Emits>()
 
@@ -67,7 +69,7 @@ function selectOptions(selectedValue: AcceptableValue) {
   }
 }
 watch(() => modelValue.value, (value) => {
-  emit("change", value)
+  emit("valueChange", value)
 })
 
 function isSelected(option: AcceptableValue): boolean {
@@ -102,7 +104,7 @@ const selectedOptions = computed(() => {
   const value = modelValue.value
 
   // handle empty state
-  const isEmpty = props.multiple ? !(value as Array<AcceptableValue>).length : !value
+  const isEmpty = props.multiple ? !(value as Array<AcceptableValue> ?? []).length : !value
   if (isEmpty) return undefined
 
   // handle single select
@@ -144,6 +146,19 @@ watch(() => open.value, () => {
   search.value = ""
   reset()
 })
+
+watch(() => props.multiple, (isMultiple) => {
+  if (isMultiple) {
+    if (!(modelValue.value as Array<AcceptableValue> ?? []).length) {
+      modelValue.value = ""
+    }
+    modelValue.value = []
+  } else if (!modelValue.value) {
+    modelValue.value = null
+  }
+}, {
+  immediate: true,
+})
 </script>
 
 <template>
@@ -161,14 +176,16 @@ watch(() => open.value, () => {
             :model-value
             :selected-options>
             <slot
-              v-if="multiple ? (modelValue as Array<string>).length : modelValue"
+              v-if="multiple ? (modelValue as Array<string> ?? []).length : modelValue"
               name="trigger-value"
               :model-value
               :selected-options>
               {{ selectedOptions }}
             </slot>
             <template v-else>
-              {{ placeholder }}
+              <slot name="placeholder">
+                {{ placeholder }}
+              </slot>
             </template>
             <Icon
               name="lucide:chevrons-up-down"
@@ -212,7 +229,7 @@ watch(() => open.value, () => {
       <Command>
         <CommandInput
           v-model="search"
-          :placeholder
+          :placeholder="searchPlaceholder"
           class="h-9"
           @vue:mounted="handleSearchMount" />
         <CommandList ref="options-list">

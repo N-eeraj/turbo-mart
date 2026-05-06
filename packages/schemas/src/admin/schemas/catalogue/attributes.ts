@@ -43,7 +43,7 @@ const attributeBaseSchemaWithoutId = attributeBaseSchema.omit({
 const textAttributeTypeMetadata = {
   type: z.literal(AttributeType.TEXT),
   metadata: z.object({
-    maxLength: z.number({ error: ATTRIBUTE.metadata.text.maxLength.valid })
+    maxLength: z.coerce.number({ error: ATTRIBUTE.metadata.text.maxLength.valid })
       .positive({ error: ATTRIBUTE.metadata.text.maxLength.positive })
       .optional()
       .meta({

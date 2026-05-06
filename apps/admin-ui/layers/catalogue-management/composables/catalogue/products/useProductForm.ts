@@ -60,7 +60,9 @@ export default function useProductForm(emit: EmitsParameter) {
     search: brandSearch,
   } = useInfiniteBrandSelect()
 
-  const isInvalid = computed(() => !isFieldValid("name")
+  const isInvalid = computed(() => 
+    !isFieldValid("name")
+    || !isFieldValid("slug")
     || !isFieldValid("subcategory")
     || !isFieldValid("brand")
   )

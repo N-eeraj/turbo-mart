@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { FrequencyUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  FrequencyUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -23,7 +27,7 @@ export const convertFrequency: ConversionFn<MeasurementType.FREQUENCY> = (from, 
   return (value * fromFactor) / toFactor
 }
 
-const FREQUENCY_UNITS: Record<FrequencyUnits, MeasurementUnitData<FrequencyUnits>> = {
+const FREQUENCY_UNITS: UnitsEnumMapValue<FrequencyUnits> = {
   [FrequencyUnits.HERTZ]: {
     name: "Hertz",
     symbol: "Hz",

@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { TorqueUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  TorqueUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -21,7 +25,7 @@ export const convertTorque: ConversionFn<MeasurementType.TORQUE> = (from, to, va
   return (value * fromFactor) / toFactor
 }
 
-const TORQUE_UNITS: Record<TorqueUnits, MeasurementUnitData<TorqueUnits>> = {
+const TORQUE_UNITS: UnitsEnumMapValue<TorqueUnits> = {
   [TorqueUnits.NEWTON_METER]: {
     name: "Newton meter",
     symbol: "N·m",

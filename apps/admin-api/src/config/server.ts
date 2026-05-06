@@ -21,11 +21,11 @@ export const ALLOWED_ORIGINS = [
 ]
 
 // all folder names
-export const STORAGE_DIR_NAME = "/storage"
-export const PUBLIC_FILE_STORAGE_DIR_NAME = "/storage/files/public"
-export const PRIVATE_FILE_STORAGE_DIR_NAME = "/storage/files/private"
-export const PUBLIC_DIR_NAME = "/public"
-export const TEMPLATE_DIR_NAME = "/templates"
+export const STORAGE_DIR_NAME = "/storage" as const
+export const PUBLIC_FILE_STORAGE_DIR_NAME = "/storage/files/public" as const
+export const PRIVATE_FILE_STORAGE_DIR_NAME = "/storage/files/private" as const
+export const PUBLIC_DIR_NAME = "/public" as const
+export const TEMPLATE_DIR_NAME = "/templates" as const
 
 // server path configurations
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -35,3 +35,5 @@ export const PUBLIC_FILE_STORAGE_PATH = path.resolve(__dirname, `../..${PUBLIC_F
 export const PRIVATE_FILE_STORAGE_PATH = path.resolve(__dirname, `../..${PRIVATE_FILE_STORAGE_DIR_NAME}`)
 export const PUBLIC_PATH = path.resolve(__dirname, `../..${PUBLIC_DIR_NAME}`)
 export const TEMPLATE_PATH = path.resolve(__dirname, `..${TEMPLATE_DIR_NAME}`)
+
+export const REQUEST_PER_MINUTE = Number(env.ADMIN_REQUEST_PER_MINUTE) || 120

@@ -10,7 +10,7 @@ interface RandomStringOptions {
   specialChars?: boolean
 }
 
-type AllChars = `${typeof UPPERCASE | ''}${typeof LOWERCASE | ''}${typeof NUMBERS | ''}${typeof SPECIAL_CHARS | ''}`
+type AllChars = `${typeof UPPERCASE | ""}${typeof LOWERCASE | ""}${typeof NUMBERS | ""}${typeof SPECIAL_CHARS | ""}`
 
 export function generateRandomString(
   length: number,

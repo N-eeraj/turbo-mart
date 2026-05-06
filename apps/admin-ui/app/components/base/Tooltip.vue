@@ -5,10 +5,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"  
+import type {
+  TooltipColor,
+} from "@/types/base"
 
 interface Props {
   tooltip?: string
-  color?: "primary" | "secondary" | "destructive" | "neutral"
+  color?: TooltipColor
 }
 const props = defineProps<Props>()
 

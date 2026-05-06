@@ -10,6 +10,7 @@ import ProductService, {
 import {
   productCreationSchema,
   productUpdateSchema,
+  productAttributeSchema,
 } from "@app/schemas/admin/catalogue/product"
 
 /**
@@ -106,6 +107,30 @@ export default class ProductController extends BaseController {
       subcategory,
       brand
     })
+
+    super.sendSuccess(res, {
+      message: "Updated Product Details",
+      data,
+      status: 200,
+    })
+  }
+
+  /**
+   * @route PUT /api/admin/catalogue/products/:productId/attributes
+   * 
+   * Set/Update product attributes.
+   */
+  static async setAttributes({ params, body }: Request, res: Response) {
+    const attributes = super.validateRequest(productAttributeSchema, body)
+    const productId = super.parseObjectId(params.productId)
+    if (!productId) {
+      throw {
+        status: 400,
+        message: "Invalid product id",
+      }
+    }
+
+    const data = await ProductService.setAttributes(productId, attributes)
 
     super.sendSuccess(res, {
       message: "Updated Product Details",

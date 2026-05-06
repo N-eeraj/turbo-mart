@@ -1,4 +1,6 @@
-import { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
+import {
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
 
 import LENGTH_UNITS, {
   convertLength,
@@ -76,7 +78,10 @@ import FUEL_ECONOMY_UNITS, {
   convertFuelEconomy,
 } from "#measurement/data/fuelEconomy"
 
-import type { ConversionFnMap, UnitsMap } from "#measurement/types"
+import type {
+  ConversionFnMap,
+  UnitsMap,
+} from "#measurement/types"
 
 export const MEASUREMENT_UNITS: UnitsMap = {
   [MeasurementType.LENGTH]: LENGTH_UNITS,

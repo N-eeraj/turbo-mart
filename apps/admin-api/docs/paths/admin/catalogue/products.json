@@ -230,8 +230,8 @@
     },
     "patch": {
       "tags": ["Product Management"],
-      "summary": "Fetch Product",
-      "description": "Fetch product details.",
+      "summary": "Update Product",
+      "description": "Update product details.",
       "parameters": [
         {
           "name": "productId",
@@ -372,6 +372,70 @@
                   "name": [
                     "Please enter a product name"
                   ]
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "#/components/responses/InternalServerError"
+        }
+      }
+    }
+  },
+  "/api/admin/catalogue/products/{productId}/attributes": {
+    "put": {
+      "tags": ["Product Management"],
+      "summary": "Set Attributes",
+      "description": "Update product attributes.",
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the product.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProductAttributesSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "400": {
+          "$ref": "#/components/responses/InvalidProductId"
+        },
+        "401": {
+          "$ref": "#/components/responses/UnauthenticatedUser"
+        },
+        "403": {
+          "$ref": "#/components/responses/UnauthorizedUser"
+        },
+        "404": {
+          "description": "Product not found.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Indicates the request failed."
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Product not found",
+                    "description": "Error message: Couldn't find the product."
+                  }
                 }
               }
             }

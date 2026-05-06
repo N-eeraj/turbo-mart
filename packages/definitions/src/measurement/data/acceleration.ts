@@ -1,9 +1,13 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { AccelerationUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  AccelerationUnits,
+} from "#measurement/units"
+import type {
   ConversionFn,
+  UnitsEnumMapValue,
 } from "#measurement/types"
 
 // Conversion factors relative to meter per second squared
@@ -22,7 +26,7 @@ export const convertAcceleration: ConversionFn<MeasurementType.ACCELERATION> = (
   return (value * fromFactor) / toFactor
 }
 
-const ACCELERATION_UNITS: Record<AccelerationUnits, MeasurementUnitData<AccelerationUnits>> = {
+const ACCELERATION_UNITS: UnitsEnumMapValue<AccelerationUnits> = {
   [AccelerationUnits.METER_PER_SECOND_SQUARED]: {
     name: "Meter per second squared",
     symbol: "m/s²",

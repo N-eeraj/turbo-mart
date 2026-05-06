@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { TemperatureUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  TemperatureUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -41,7 +45,7 @@ export const convertTemperature: ConversionFn<MeasurementType.TEMPERATURE> = (fr
   }
 }
 
-const TEMPERATURE_UNITS: Record<TemperatureUnits, MeasurementUnitData<TemperatureUnits>> = {
+const TEMPERATURE_UNITS: UnitsEnumMapValue<TemperatureUnits> = {
   [TemperatureUnits.CELSIUS]: {
     name: "Degree Celsius",
     symbol: "°C",

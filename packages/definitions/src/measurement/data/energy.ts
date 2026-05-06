@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { EnergyUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  EnergyUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -26,7 +30,7 @@ export const convertEnergy: ConversionFn<MeasurementType.ENERGY> = (from, to, va
   return (value * fromFactor) / toFactor
 }
 
-const ENERGY_UNITS: Record<EnergyUnits, MeasurementUnitData<EnergyUnits>> = {
+const ENERGY_UNITS: UnitsEnumMapValue<EnergyUnits> = {
   [EnergyUnits.JOULE]: {
     name: "Joule",
     symbol: "J",

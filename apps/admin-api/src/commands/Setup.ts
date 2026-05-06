@@ -8,7 +8,7 @@ import connectMongoDB from "@app/database/mongoose/connect"
 import {
   PRIVATE_FILE_STORAGE_PATH,
   PUBLIC_FILE_STORAGE_PATH,
-} from "#src/config/server.ts"
+} from "#config/server.ts"
 import {
   withStoragePath,
 } from "#utils/pathUtils"

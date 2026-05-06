@@ -39,7 +39,9 @@ const MetadataComponent = computed<DefineComponent | undefined>(() => MetadataCo
       {{ name }}
     </strong>
 
-    <div class="flex items-center text-sm">
+    <div
+      v-if="type !== AttributeType.JSON"
+      class="flex items-center text-sm">
       <div class="flex-1 flex items-center gap-x-1">
         <span class="text-foreground/75">
           Required:

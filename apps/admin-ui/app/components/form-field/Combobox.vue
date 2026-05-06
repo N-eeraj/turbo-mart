@@ -18,6 +18,7 @@ interface Props extends SelectRootProps {
   options: Array<SelectItemProps>
   label?: string
   placeholder?: string
+  searchPlaceholder?: string
   description?: any
   loading?: boolean
   clearable?: boolean
@@ -37,6 +38,10 @@ interface Emits {
   change: [AcceptableValue | Array<AcceptableValue> | undefined]
 }
 const emit = defineEmits<Emits>()
+
+function handleChange(value: AcceptableValue | Array<AcceptableValue> | undefined) {
+  emit("change", value)
+}
 </script>
 
 <template>
@@ -72,12 +77,13 @@ const emit = defineEmits<Emits>()
             :options
             :loading
             :placeholder
+            :search-placeholder
             :clearable
             :disabled="disabled || readonly || loading"
             :is-infinite
             :has-more-items
             @scroll-end="emit('scrollEnd')"
-            @change="v => emit('change', v)">
+            @change="handleChange">
             <template #trigger="data">
               <slot
                 name="trigger"
@@ -86,6 +92,11 @@ const emit = defineEmits<Emits>()
             <template #trigger-value="data">
               <slot
                 name="trigger-value"
+                v-bind="data" />
+            </template>
+            <template #placeholder="data">
+              <slot
+                name="placeholder"
                 v-bind="data" />
             </template>
             <template #empty="data">

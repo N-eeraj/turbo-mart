@@ -2,6 +2,9 @@
 import type {
   InputTypeHTMLAttribute,
 } from "vue"
+import type {
+  MaskInputOptions,
+} from "maska"
 
 import {
   FormField,
@@ -30,8 +33,12 @@ interface Props {
   readonly?: boolean
   clearable?: boolean
   loading?: boolean
+  mask?: string | MaskInputOptions
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    type: "text",
+  }
+)
 
 const attrs = useAttrs()
 const nonClassAttrs = computed(() => {
@@ -85,6 +92,7 @@ function toggleInputType() {
                 v-bind="{
                   ...componentField,
                   ...nonClassAttrs,
+                  ...(type === 'text' ? { 'v-maska': mask } : {})
                 }"
                 :type="inputType"
                 :placeholder
@@ -137,6 +145,7 @@ function toggleInputType() {
 
         <slot
           name="error"
+          v-if="errors?.length || errorMessage"
           :errors
           :errorMessage>
           <FormMessage class="text-xs" />

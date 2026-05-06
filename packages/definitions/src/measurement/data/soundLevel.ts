@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { SoundLevelUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  SoundLevelUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -14,7 +18,7 @@ export const convertSoundLevel: ConversionFn<MeasurementType.SOUND_LEVEL> = (_fr
   return value
 }
 
-const SOUND_LEVEL_UNITS: Record<SoundLevelUnits, MeasurementUnitData<SoundLevelUnits>> = {
+const SOUND_LEVEL_UNITS: UnitsEnumMapValue<SoundLevelUnits> = {
   [SoundLevelUnits.DECIBEL]: {
     name: "Decibel",
     symbol: "dB",

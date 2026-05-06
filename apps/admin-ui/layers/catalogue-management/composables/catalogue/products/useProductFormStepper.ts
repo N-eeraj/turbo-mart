@@ -8,7 +8,7 @@ export default function useProductFormStepper() {
     {
       indicator: 1,
       title: productId.value ? "Update" : "Create",
-      description: `${productId.value ? "Update" : "Create"} the product`,
+      description: productId.value ? "Update product details" : "Create a product",
     },
     {
       indicator: 2,
@@ -19,7 +19,7 @@ export default function useProductFormStepper() {
     {
       indicator: 3,
       title: "Variants",
-      description: "Update product variants",
+      description: "Update product SKUs",
       disabled: !productId.value,
     },
   ]))
@@ -43,11 +43,20 @@ export default function useProductFormStepper() {
     }
   }
 
-  async function onSubmitProduct(data: any) {
-    router.replace({
+  function onSubmitProduct(data: any) {
+    router.push({
       path: `/catalogue/products/${data.id}/edit`,
       query: {
         step: 2,
+      },
+    })
+  }
+
+  function onSubmitAttributes() {
+    router.push({
+      path: `/catalogue/products/${productId.value}/edit`,
+      query: {
+        step: 3,
       },
     })
   }
@@ -57,5 +66,6 @@ export default function useProductFormStepper() {
     steps,
     handleStepChange,
     onSubmitProduct,
+    onSubmitAttributes,
   }
 }

@@ -36,7 +36,10 @@ const {
   errorMessage: measurementTypeErrorMessage,
 } = useField<AcceptableValue>(`${props.field}[${props.index}].metadata.measurementType`)
 
-const measurementTypeDescription = computed(() => measurementTypes.value?.find(({ value }) => value === measurementTypeField.value)?.description)
+const measurementTypeDescription = computed(() => (
+  measurementTypes.value
+    ?.find(({ value }) => value === measurementTypeField.value)?.description
+))
 
 const {
   value: step,
@@ -95,6 +98,7 @@ const {
       :name="`${field}[${index}].metadata.step`"
       v-model="step"
       type="number"
+      inputmode="decimal"
       placeholder="Value steps"
       :step="0.001"
       :min="0.001"
@@ -123,6 +127,7 @@ const {
     <FormFieldInput
       :name="`${field}[${index}].metadata.min`"
       type="number"
+      inputmode="decimal"
       label="Minimum Value"
       placeholder="Minimum value of the attribute"
       :step
@@ -130,6 +135,7 @@ const {
     <FormFieldInput
       :name="`${field}[${index}].metadata.max`"
       type="number"
+      inputmode="decimal"
       label="Maximum Value"
       placeholder="Maximum value of the attribute"
       :step

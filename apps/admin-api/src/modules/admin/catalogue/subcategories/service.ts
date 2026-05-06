@@ -15,6 +15,7 @@ import {
   transformAttribute,
   type AttributeObject,
 } from "@app/database/mongoose/models/Catalogue/Attributes"
+import Product from "@app/database/mongoose/models/Catalogue/Product"
 
 import BaseService from "#services/BaseService"
 import {
@@ -41,6 +42,9 @@ export interface ListOptions {
 
 type CategoryId = CategoryObject["id"]
 type AttributeId = AttributeObject<AttributeType>["id"]
+type CreateSubCategoryParams = Omit<SubcategoryCreationData, "category"> & {
+  category: CategoryId
+}
 
 type ParseStringId<TItem> =
   // if the item is a string,
@@ -140,7 +144,7 @@ export default class SubcategoryService extends BaseService {
    * @throws 409 error if slug is already in use.
    * @throws If subcategory creation fails.
    */
-  static async create({ category, name, slug }: Omit<SubcategoryCreationData, "category"> & { category: CategoryId }): Promise<SubcategoryObject> {
+  static async create({ category, name, slug }: CreateSubCategoryParams): Promise<SubcategoryObject> {
     try {
       const subcategory = await Subcategory.create({
         category,
@@ -324,6 +328,20 @@ export default class SubcategoryService extends BaseService {
    * @throws If deleting the subcategory failed.
    */
   static async delete(subcategoryId: SubcategoryObject["id"]): Promise<void> {
+    const hasLinkedProduct = await Product.findOne({
+      subcategory: subcategoryId,
+    })
+      .lean()
+      .select({ _id: 1 })
+
+    // throw not conflict error if a linked product exists
+    if (hasLinkedProduct) {
+      throw {
+        status: 409,
+        message: "Cannot delete: Product with this subcategory exists",
+      }
+    }
+
     const subcategory = await Subcategory.findByIdAndDelete(subcategoryId)
 
     // throw not found error if subcategory is not found
@@ -400,6 +418,18 @@ export default class SubcategoryService extends BaseService {
     return subcategory.attributes?.map(transformAttribute)
   }
 
+  private static stripInvalidAttributesData<T extends "create" | "update">(
+    attributes: ParsedSubcategoryAttributeUpdateData[T]
+  ): ParsedSubcategoryAttributeUpdateData[T] {
+    const stripped = attributes.map(({ type, required, variant, ...attribute }) => ({
+      ...attribute,
+      type,
+      required: type === AttributeType.JSON ? false : required,
+      variant: type === AttributeType.JSON ? false : variant,
+    }))
+    return stripped as ParsedSubcategoryAttributeUpdateData[T]
+  }
+
   /**
    * Updates the subcategory attributes.
    * 
@@ -444,6 +474,9 @@ export default class SubcategoryService extends BaseService {
         ...(invalidDeleteAttributes.length && { delete: invalidDeleteAttributes }),
       }
     }
+
+    attributeData.create = this.stripInvalidAttributesData<"create">(attributeData.create)
+    attributeData.update = this.stripInvalidAttributesData<"update">(attributeData.update)
 
     // create attributes
     if (attributeData.create.length) {

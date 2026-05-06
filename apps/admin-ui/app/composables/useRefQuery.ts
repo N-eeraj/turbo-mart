@@ -1,4 +1,6 @@
-import type { LocationQueryValueRaw } from "vue-router"
+import type {
+  LocationQueryValueRaw,
+} from "vue-router"
 
 export default function useRefQuery<T extends LocationQueryValueRaw>(
   key: string,

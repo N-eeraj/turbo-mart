@@ -1,8 +1,12 @@
-import type { MeasurementType } from "@app/database/mongoose/enums/catalogue/attribute"
-
-import { WeightUnits } from "#measurement/units"
 import type {
-  MeasurementUnitData,
+  MeasurementType,
+} from "@app/database/mongoose/enums/catalogue/attribute"
+
+import {
+  WeightUnits,
+} from "#measurement/units"
+import type {
+  UnitsEnumMapValue,
   ConversionFn,
 } from "#measurement/types"
 
@@ -26,7 +30,7 @@ export const convertWeight: ConversionFn<MeasurementType.WEIGHT> = (from, to, va
   return (value * fromFactor) / toFactor
 }
 
-const WEIGHT_UNITS: Record<WeightUnits, MeasurementUnitData<WeightUnits>> = {
+const WEIGHT_UNITS: UnitsEnumMapValue<WeightUnits> = {
   [WeightUnits.MILLIGRAM]: {
     name: "Milligram",
     symbol: "mg",
